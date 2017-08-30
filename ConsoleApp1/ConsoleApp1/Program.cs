@@ -11,11 +11,11 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.BackgroundColor = ConsoleColor.DarkGray;
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.Write("Hello World");
+            Console.Write("Aestheticc is everything");
             Console.Read();
         }
     }
