@@ -3,9 +3,17 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FormulaEvaluatorTest
 {
+    /// <summary>
+    /// Tests for the Evaluator in the FormulaEvaluator class. 
+    /// Evaluates mathematical expressions. 
+    /// </summary>
     [TestClass]
     public class FormulaEvaluatorTest
     {
+        /// <summary>
+        /// Testing one integer or one variable input, and odd spacing
+        /// edge cases for these one value cases.
+        /// </summary>
         [TestMethod]
         public void OneValue()
         {
@@ -16,6 +24,10 @@ namespace FormulaEvaluatorTest
             Assert.AreEqual(8, ForumlaEvaluator.Evaluator.Evaluate("    8   ", Lookup));
         }
 
+        /// <summary>
+        /// Testing with addition and subtraction expressions, including weird 
+        /// spacing cases.
+        /// </summary>
         [TestMethod]
         public void PlusMinusOperator()
         {
@@ -26,6 +38,10 @@ namespace FormulaEvaluatorTest
             Assert.AreEqual(-2, ForumlaEvaluator.Evaluator.Evaluate("UAB89 - 5    - 2", Lookup));
         }
 
+        /// <summary>
+        /// Testing with multiplication and division expressions, including weird 
+        /// spacing cases.
+        /// </summary>
         [TestMethod]
         public void MultiplyDivideOperator()
         {
@@ -35,14 +51,22 @@ namespace FormulaEvaluatorTest
             Assert.AreEqual(2, ForumlaEvaluator.Evaluator.Evaluate("28 / SEVEN77 / 2 ", Lookup));
         }
 
+        /// <summary>
+        /// Testing expressions with parenthesis, including weird 
+        /// spacing cases.
+        /// </summary>
         [TestMethod]
         public void Parenthesis()
         {
             Assert.AreEqual(5, ForumlaEvaluator.Evaluator.Evaluate("(5   * 2) / a8", Lookup));
-            Assert.AreEqual(1, ForumlaEvaluator.Evaluator.Evaluate(" (5 + 12) / 17", Lookup));
+            Assert.AreEqual(1, ForumlaEvaluator.Evaluator.Evaluate(" (   5 + 12) / 17", Lookup));
             Assert.AreEqual(2, ForumlaEvaluator.Evaluator.Evaluate(" ((5 + 1) * 2) / 6", Lookup));
         }
 
+        /// <summary>
+        /// Tests to ensure that order of operations is followed
+        /// when expressions are evaluated. 
+        /// </summary>
         [TestMethod]
         public void PEMDAS()
         {
@@ -51,6 +75,9 @@ namespace FormulaEvaluatorTest
             Assert.AreEqual(2, ForumlaEvaluator.Evaluator.Evaluate(" ((5 + 1 * 2 - 3) * 2) / 4", Lookup));
         }
 
+        /// <summary>
+        /// Various invalid input tests which should all throw ArgumentExceptions. 
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void invalidInput()

@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 namespace ForumlaEvaluator
 {
     /// <summary>
-    /// 
+    /// Holds the method that parses and evaluates mathematical expressions
+    /// that are input into the spreadsheet. Can evluate addition, subtraction,
+    /// multiplication, and division. 
     /// </summary>
     public static class Evaluator
     {
@@ -16,6 +18,17 @@ namespace ForumlaEvaluator
         public static Regex isVariable = new Regex("^[a-zA-Z]+[0-9]+");
         public delegate int Lookup(String v);
 
+        /// <summary>
+        /// Returns the value that the parameter expression evaluates to or throws 
+        /// an ArgumentException if the input expression is invalid. 
+        /// Can evluate addition, subtraction, multiplication, and division in 
+        /// accordance to order of operations (including use of parenthesis). 
+        /// Variables can be input, but signed integers may not be. 
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="lookup"></param>
+        /// <returns>integer value that the expression param evaluates to.</returns>
         public static int Evaluate(String expression, Lookup lookup)
         {
             Stack<String> operatorStack = new Stack<String>();
