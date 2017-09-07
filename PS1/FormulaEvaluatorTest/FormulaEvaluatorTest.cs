@@ -56,9 +56,11 @@ namespace FormulaEvaluatorTest
         public void invalidInput()
         {
             ForumlaEvaluator.Evaluator.Evaluate("6 + 53ri * 2 + 1", Lookup);
+            ForumlaEvaluator.Evaluator.Evaluate("i", Lookup);
             ForumlaEvaluator.Evaluator.Evaluate("6 + -1", Lookup);
             ForumlaEvaluator.Evaluator.Evaluate("6 + 1 * 8 )", Lookup);
             ForumlaEvaluator.Evaluator.Evaluate("9/0", Lookup);
+            ForumlaEvaluator.Evaluator.Evaluate("", Lookup);
         }
 
         public static int Lookup(String variable)
