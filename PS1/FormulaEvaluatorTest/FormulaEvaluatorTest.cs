@@ -88,6 +88,7 @@ namespace FormulaEvaluatorTest
             ForumlaEvaluator.Evaluator.Evaluate("6 + 1 * 8 )", Lookup);
             ForumlaEvaluator.Evaluator.Evaluate("9/0", Lookup);
             ForumlaEvaluator.Evaluator.Evaluate("", Lookup);
+            ForumlaEvaluator.Evaluator.Evaluate("56 8 - 2", Lookup);
         }
 
         public static int Lookup(String variable)
