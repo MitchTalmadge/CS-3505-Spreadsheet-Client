@@ -67,7 +67,15 @@ namespace ForumlaEvaluator
                 //handling variable token
                 else if (isVariable.IsMatch(token.Trim()))
                 {
-                    int value = lookup(token.Trim());
+                    int value;
+                    try
+                    {
+                        value = lookup(token.Trim());
+                    }
+                    catch
+                    {
+                        throw new ArgumentException("This variable does not exist!");
+                    }
                     if (operatorStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
                     {
                         if (valueStack.Count() == 0)
