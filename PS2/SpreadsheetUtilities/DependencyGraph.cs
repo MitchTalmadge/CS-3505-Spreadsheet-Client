@@ -72,7 +72,14 @@ namespace SpreadsheetUtilities
         /// </summary>
         public int Size
         {
-            get { return getTotalDependencies(); }
+            get {
+                int total = 0;
+                foreach (var dependeesSet in dependees.Values)
+                {
+                    total += dependeesSet.Count;
+                }
+                return total;
+            }
         }
 
         /// <summary>
@@ -237,20 +244,6 @@ namespace SpreadsheetUtilities
         }
 
         /////////////////   H E L P E R   M E T H O D S   ////////////////
-
-        /// <summary>
-        /// Helper method to get the total number of dependency 
-        /// relationships present in this DependencyGraph.
-        /// </summary>
-        private int getTotalDependencies()
-        {
-            int total = 0;
-            foreach (var dependeesSet in dependees.Values)
-            {
-                total += dependeesSet.Count;
-            }
-            return total;
-        }
 
         /// <summary>
         /// Gets the number of dependees the parameter string/dependent has.
