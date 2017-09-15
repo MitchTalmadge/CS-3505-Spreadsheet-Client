@@ -202,15 +202,19 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependents(string dependee, IEnumerable<string> newDependents)
         {
-            if (dependents.ContainsKey(dependee))
+            if (dependents.TryGetValue(dependee, out HashSet<string> removed))
             {
-                dependents.Remove(dependee);
-
-                HashSet<string> replacementDeps = new HashSet<string>(newDependents);
-                dependents.Add(dependee, replacementDeps);
+                for (int i = removed.Count - 1; i >= 0; i--)
+                {
+                    this.RemoveDependency(dependee, removed.ElementAt(i));
+                }
+            }
+            HashSet<string> replacementDeps = new HashSet<string>(newDependents);
+            foreach (string newDep in replacementDeps)
+            {
+                this.AddDependency(dependee, newDep);
             }
         }
-
 
         /// <summary>
         /// Removes all existing ordered pairs of the form (r,s).  Then, for each 
@@ -218,12 +222,17 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependees(string dependent, IEnumerable<string> newDependees)
         {
-            if (dependees.ContainsKey(dependent))
+            if (dependees.TryGetValue(dependent, out HashSet<string> removed))
             {
-                dependees.Remove(dependent);
-
-                HashSet<string> replacementDeps = new HashSet<string>(newDependees);
-                dependees.Add(dependent, replacementDeps);
+                for(int i = removed.Count - 1; i >= 0; i --)
+                {
+                    this.RemoveDependency(removed.ElementAt(i), dependent);
+                }
+            }
+            HashSet<string> replacementDeps = new HashSet<string>(newDependees);
+            foreach(string newDep in replacementDeps)
+            {
+                this.AddDependency(newDep, dependent);
             }
         }
 

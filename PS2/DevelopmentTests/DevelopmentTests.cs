@@ -18,7 +18,7 @@ namespace PS2GradingTests
     ///  way toward ensuring correctness.
     /// 
     ///  You are strongly encouraged to write additional tests as you think about the required
-    ///  functionality of yoru library.
+    ///  functionality of your library.
     /// 
     ///</summary>
     [TestClass()]
@@ -131,6 +131,27 @@ namespace PS2GradingTests
             Assert.AreEqual(0, t.Size);
         }
 
+        [TestMethod]
+        public void TestEmptyReplaceDependees()
+        {
+            DependencyGraph dg = new DependencyGraph();
+
+            dg.ReplaceDependees("b", new HashSet<string> { "a" });
+
+            Assert.AreEqual(1, dg.Size);
+            Assert.IsTrue(new HashSet<string> { "b" }.SetEquals(dg.GetDependents("a")));
+        }
+
+        [TestMethod]
+        public void TestEmptyReplaceDependents()
+        {
+            DependencyGraph dg = new DependencyGraph();
+
+            dg.ReplaceDependents("b", new HashSet<string> { "a" });
+
+            Assert.AreEqual(1, dg.Size);
+            Assert.IsTrue(new HashSet<string> { "b" }.SetEquals(dg.GetDependees("a")));
+        }
 
         /**************************** SIMPLE NON-EMPTY TESTS ****************************/
 
@@ -323,8 +344,6 @@ namespace PS2GradingTests
                 Assert.IsTrue(dees[i].SetEquals(new HashSet<string>(t.GetDependees(letters[i]))));
             }
         }
-
-
 
         // ********************************** ANOTHER STESS TEST ******************** //
         /// <summary>
