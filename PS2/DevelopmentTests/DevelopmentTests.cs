@@ -43,7 +43,9 @@ namespace PS2GradingTests
         public void HasNoDependees()
         {
             DependencyGraph t = new DependencyGraph();
+            t.AddDependency("8", "9");
             Assert.IsFalse(t.HasDependees("a"));
+            Assert.IsTrue(t.HasDependees("9"));
         }
 
         /// <summary>
