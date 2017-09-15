@@ -274,6 +274,21 @@ namespace PS2GradingTests
         }
 
         /// <summary>
+        ///Replace on a DG with empty replacement
+        ///</summary>
+        [TestMethod()]
+        public void ReplaceDependentsWithEmpty()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.ReplaceDependents("a", new HashSet<string>() {});
+            HashSet<String> aPends = new HashSet<string>(t.GetDependents("a"));
+            Assert.IsTrue(aPends.SetEquals(new HashSet<string>() {}));
+        }
+
+        /// <summary>
         ///Replace on a DG
         ///</summary>
         [TestMethod()]
@@ -286,6 +301,21 @@ namespace PS2GradingTests
             t.ReplaceDependees("c", new HashSet<string>() { "x", "y", "z" });
             HashSet<String> cDees = new HashSet<string>(t.GetDependees("c"));
             Assert.IsTrue(cDees.SetEquals(new HashSet<string>() { "x", "y", "z" }));
+        }
+
+        /// <summary>
+        ///Replace on a DG with empty replacement
+        ///</summary>
+        [TestMethod()]
+        public void ReplaceDependeesWithEmpty()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.ReplaceDependees("a", new HashSet<string>() { });
+            HashSet<String> aPends = new HashSet<string>(t.GetDependees("a"));
+            Assert.IsTrue(aPends.SetEquals(new HashSet<string>() { }));
         }
 
         // ************************** STRESS TESTS ******************************** //
