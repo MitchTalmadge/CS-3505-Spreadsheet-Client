@@ -209,12 +209,14 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependents(string dependee, IEnumerable<string> newDependents)
         {
+            //if the dependee already has dependents, remove them
             if (dependents.TryGetValue(dependee, out HashSet<string> removed))
             {
-                for (int i = removed.Count - 1; i >= 0; i--)
+                foreach (string removedDep in removed)
                 {
-                    this.RemoveDependency(dependee, removed.ElementAt(i));
+                    dependees[removedDep].Remove(dependee);
                 }
+                removed.Clear();
             }
             HashSet<string> replacementDeps = new HashSet<string>(newDependents);
             foreach (string newDep in replacementDeps)
@@ -229,12 +231,14 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependees(string dependent, IEnumerable<string> newDependees)
         {
+            //if the dependent already has dependees, remove them
             if (dependees.TryGetValue(dependent, out HashSet<string> removed))
             {
-                for(int i = removed.Count - 1; i >= 0; i --)
+                foreach (string removedDep in removed)
                 {
-                    this.RemoveDependency(removed.ElementAt(i), dependent);
+                    dependents[removedDep].Remove(dependent);
                 }
+                removed.Clear();
             }
             HashSet<string> replacementDeps = new HashSet<string>(newDependees);
             foreach(string newDep in replacementDeps)

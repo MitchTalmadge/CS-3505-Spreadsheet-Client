@@ -271,6 +271,9 @@ namespace PS2GradingTests
             t.ReplaceDependents("a", new HashSet<string>() { "x", "y", "z" });
             HashSet<String> aPends = new HashSet<string>(t.GetDependents("a"));
             Assert.IsTrue(aPends.SetEquals(new HashSet<string>() { "x", "y", "z" }));
+
+            HashSet<String> yDeps = new HashSet<string>(t.GetDependees("y"));
+            Assert.IsTrue(yDeps.SetEquals(new HashSet<String>() { "a" }));
         }
 
         /// <summary>
@@ -301,6 +304,9 @@ namespace PS2GradingTests
             t.ReplaceDependees("c", new HashSet<string>() { "x", "y", "z" });
             HashSet<String> cDees = new HashSet<string>(t.GetDependees("c"));
             Assert.IsTrue(cDees.SetEquals(new HashSet<string>() { "x", "y", "z" }));
+
+            HashSet<String> yDeps = new HashSet<string>(t.GetDependents("y"));
+            Assert.IsTrue(yDeps.SetEquals(new HashSet<String>() { "c"}));
         }
 
         /// <summary>
