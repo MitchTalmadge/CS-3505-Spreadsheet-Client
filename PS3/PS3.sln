@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formula", "Formula\Formula.csproj", "{79B11C41-B269-42A6-96C3-A53B53C2B940}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormulaTester", "FormulaTester\FormulaTester.csproj", "{42CC1D8B-A1F9-4058-996E-B0CE5346450A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79B11C41-B269-42A6-96C3-A53B53C2B940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79B11C41-B269-42A6-96C3-A53B53C2B940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79B11C41-B269-42A6-96C3-A53B53C2B940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79B11C41-B269-42A6-96C3-A53B53C2B940}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42CC1D8B-A1F9-4058-996E-B0CE5346450A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42CC1D8B-A1F9-4058-996E-B0CE5346450A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42CC1D8B-A1F9-4058-996E-B0CE5346450A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42CC1D8B-A1F9-4058-996E-B0CE5346450A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0BCC3DB-34AB-4305-AC6F-762857B55C99}
+	EndGlobalSection
+EndGlobal
