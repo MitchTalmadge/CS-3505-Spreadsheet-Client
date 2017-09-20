@@ -133,6 +133,10 @@ namespace ForumlaEvaluator
                     {
                         throw new ArgumentException("Unclosed set of parenthesis!");
                     }
+                    if (operatorStack.Count == 0)
+                    {
+                        throw new ArgumentException("Extra set of parenthesis!");
+                    }
                     operatorStack.Pop();
                     if (operatorStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
                     {
@@ -162,7 +166,8 @@ namespace ForumlaEvaluator
             }
             else
             {
-                if (operatorStack.Count != 1 && valueStack.Count != 2 && (operatorStack.Pop() != "+" || operatorStack.Pop() != "-"))
+                if (valueStack.Count == 0 || valueStack.Count == 1 || (operatorStack.Count != 1 && valueStack.Count != 2 
+                    && (operatorStack.Pop() != "+" || operatorStack.Pop() != "-")))
                 {
                     throw new ArgumentException("Input expression has been read, invalid format!");
                 }
