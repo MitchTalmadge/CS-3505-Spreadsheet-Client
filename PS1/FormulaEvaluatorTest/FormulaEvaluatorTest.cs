@@ -61,6 +61,8 @@ namespace FormulaEvaluatorTest
             Assert.AreEqual(5, ForumlaEvaluator.Evaluator.Evaluate("(5   * 2) / a8", Lookup));
             Assert.AreEqual(1, ForumlaEvaluator.Evaluator.Evaluate(" (   5 + 12) / 17", Lookup));
             Assert.AreEqual(2, ForumlaEvaluator.Evaluator.Evaluate(" ((5 + 1) * 2) / 6", Lookup));
+            Assert.AreEqual(2, ForumlaEvaluator.Evaluator.Evaluate("(2)", Lookup));
+            Assert.AreEqual(2, ForumlaEvaluator.Evaluator.Evaluate("(4)/ (2)", Lookup));
         }
 
         /// <summary>
@@ -236,13 +238,6 @@ namespace FormulaEvaluatorTest
     public void TestPlusInvalidVariable()
     {
             ForumlaEvaluator.Evaluator.Evaluate("5+xx", s => 0);
-    }
-
-    [TestMethod()]
-    [ExpectedException(typeof(ArgumentException))]
-    public void TestParensNoOperator()
-    {
-            ForumlaEvaluator.Evaluator.Evaluate("5+7+(5)8", s => 0);
     }
 
     [TestMethod()]

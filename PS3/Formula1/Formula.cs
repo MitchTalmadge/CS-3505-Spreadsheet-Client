@@ -247,7 +247,7 @@ namespace SpreadsheetUtilities
         /// symbols +, -, *, and /.  
         /// </summary>
         /// <param name="tokens"></param>
-        private static void ValidateSyntax(IEnumerable<string> tokens) 
+        private static void ValidateSyntax(IEnumerable<string> tokens)
         {
             if (tokens.Count() < 1)
             {
@@ -263,8 +263,9 @@ namespace SpreadsheetUtilities
             bool followingOpenParen = false;
             bool followingCloseParen = false;
 
-            foreach (string token in tokens)
+            /*foreach (string token in tokens)*/ for (int i = 0; i < tokens.Count(); i ++)
             {
+                string token = tokens.ElementAt(i);
                 if (firstToken == null)
                 {
                     firstToken = token;
@@ -316,7 +317,7 @@ namespace SpreadsheetUtilities
                 {
                     throw new FormulaFormatException("Number of closing parenthesis is greater than opening parenthesis!");
                 }
-                if (!enumerator.MoveNext())
+                if (i == tokens.Count() - 1)
                 {
                     lastToken = token;
                     //the last token of an expression must be a number, a variable, or a closing parenthesis.

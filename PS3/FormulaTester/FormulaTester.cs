@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpreadsheetUtilities;
 
 namespace FormulaTester
 {
@@ -16,6 +17,7 @@ namespace FormulaTester
     [TestClass]
     public class FormulaTester
     {
+        ///////////////////////////////////////////////  S Y N T A X     T E S T S    /////////////////////////////////////////////////
         #region Additional test attributes
         //
         // You can use the following additional attributes as you write your tests:
@@ -37,13 +39,135 @@ namespace FormulaTester
         // public void MyTestCleanup() { }
         //
         #endregion
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestValidTokens1()
+        {
+            Formula invalid1 = new Formula("^");
+        }
 
         [TestMethod]
-        public void TestMethod1()
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestValidTokens2()
         {
-            //
-            // TODO: Add test logic here
-            //
+            Formula invalid2 = new Formula("45 #");
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestValidTokens3()
+        {
+            Formula invalid2 = new Formula("45 + (7 - 3) - 90) % 3");
+        }
+
+        [TestMethod]
+        public void TestValidVariableNames()
+        {
+            Formula underscoreAfter = new Formula("U_67");
+            Assert.IsNotNull(underscoreAfter);
+
+            Formula underscoreFirst = new Formula(" _89");
+            Assert.IsNotNull(underscoreFirst);
+            Formula underscoreFirst1 = new Formula("__u70");
+            Assert.IsNotNull(underscoreFirst1);
+
+            Formula onlyLetter = new Formula("i");
+            Assert.IsNotNull(onlyLetter);
+
+            Formula onlyUnderscore = new Formula("________");
+            Assert.IsNotNull(onlyUnderscore);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestOneTokens()
+        {
+            Formula invalid1 = new Formula("      ");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestClosingParenthesis()
+        {
+            Formula invalid1 = new Formula("(1 + 3) + 5)");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestParenthesisMatch()
+        {
+            Formula invalid1 = new Formula("(1 + (3 + 5)");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestStartingToken()
+        {
+            Formula invalid1 = new Formula(") 89");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestEndingToken()
+        {
+            //Formula invalid1 = new Formula("7 * 9 -");
+            Formula invalid = new Formula("9 -");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestOneTokenInvalid()
+        {
+            Formula invalid1 = new Formula("+");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestTwoTokenInvalid()
+        {
+            Formula invalid1 = new Formula("( )");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestOpParenFollow()
+        {
+            Formula inavlid = new Formula("78 + 9 * ( ( + 7 ))");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestOperatorFollow()
+        {
+            Formula inavlid = new Formula("7.8 + 9 * 0.0 + (");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestCloseParenFollow()
+        {
+            Formula inavlid = new Formula("7.8 + (9 * 0.0) 89");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestNumFollow()
+        {
+            Formula inavlid = new Formula("4.20 + 9.67 89");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestVarFollow()
+        {
+            Formula inavlid = new Formula("4.20 + 9.67 E78 E_98");
+        }
+
+        //[TestMethod]
+        //[ExpectedException(typeof(FormulaFormatException))]
+        //public void TestParenthesis()
+        //{
+        //    Formula invalid2 = new Formula("8 + (9)");
+        //}
     }
 }
