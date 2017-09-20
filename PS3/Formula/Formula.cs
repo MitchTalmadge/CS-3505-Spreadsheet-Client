@@ -16,7 +16,11 @@
 //  (Version 1.2) Changed the definition of equality with regards
 //                to numeric tokens
 
-
+///
+/// Jiahui Chen
+/// u0980890
+/// CS 3500 PS#
+///
 using System;
 using System.Collections.Generic;
 using System.Linq;
