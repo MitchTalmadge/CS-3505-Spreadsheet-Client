@@ -163,6 +163,25 @@ namespace FormulaTester
             Formula inavlid = new Formula("4.20 + 9.67 E78 E_98");
         }
 
+        /// <summary>
+        /// Testing to see if a variable validator returning false will be caught.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestFalseValidator()
+        {
+            Formula inavlid = new Formula("4.20 + E90", s => s, s => false);
+        }
+
+        /// <summary>
+        /// Testing to see if an invalid variable normalizer will be caught.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestInvalidNormalizer()
+        {
+            Formula inavlid = new Formula("4.20 + E90", s => "^E", s => true);
+        }
         //[TestMethod]
         //[ExpectedException(typeof(FormulaFormatException))]
         //public void TestParenthesis()

@@ -85,13 +85,11 @@ namespace SpreadsheetUtilities
         /// </summary>
         public Formula(String formula, Func<string, string> normalize, Func<string, bool> isValid)
         {
+            //Getting the normalized tokens in the input string
             List<string> tokens = new List<string>(GetTokens(formula));
-            ValidateSyntax(tokens);
-
-            if (!isValid(normalize(formula)))
-            {
-                throw new FormulaFormatException("A variable in the input formula is invalid!");
-            }
+            
+            //All syntax and delegate normalizing/validating is done in this method
+            ValidateSyntax(tokens, normalize, isValid);
         }
 
         /// <summary>
@@ -133,7 +131,8 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<String> GetVariables()
         {
-            return null;
+            HashSet<string> variables = new HashSet<string>();
+            return variables;
         }
 
         /// <summary>
@@ -247,7 +246,7 @@ namespace SpreadsheetUtilities
         /// symbols +, -, *, and /.  
         /// </summary>
         /// <param name="tokens"></param>
-        private static void ValidateSyntax(IEnumerable<string> tokens)
+        private static void ValidateSyntax(IEnumerable<string> tokens, Func<string, string> normalizer, Func<string, bool> validator)
         {
             if (tokens.Count() < 1)
             {
@@ -270,7 +269,7 @@ namespace SpreadsheetUtilities
                 {
                     firstToken = token;
                     //the first token of an expression must be a number, a variable, or an opening parenthesis.
-                    if (!FollowingRule(firstToken, "("))
+                    if (!FollowingRule(firstToken, "(", normalizer, validator))
                     {
                         throw new FormulaFormatException("The first token of the formula must be a number, variable, or openeing parenthesis!");
                     }
@@ -278,7 +277,7 @@ namespace SpreadsheetUtilities
                 //token after an opening parenthesis or operator must be a number, variable, or opening parenthesis.
                 if (followingOpenParen == true)
                 {
-                    if (!FollowingRule(token, "("))
+                    if (!FollowingRule(token, "(", normalizer, validator))
                     {
                         throw new FormulaFormatException("Any token after an opening parenthesis or an operator" +
                             " must be either a number, a variable, or an opening parenthesis!");
@@ -309,7 +308,7 @@ namespace SpreadsheetUtilities
                 {
                     followingOpenParen = true;
                 }
-                if (IsNumOrVar(token))
+                if (IsNumOrVar(token, normalizer, validator))
                 {
                     followingCloseParen = true;
                 }
@@ -321,7 +320,7 @@ namespace SpreadsheetUtilities
                 {
                     lastToken = token;
                     //the last token of an expression must be a number, a variable, or a closing parenthesis.
-                    if (!FollowingRule(lastToken, ")"))
+                    if (!FollowingRule(lastToken, ")", normalizer, validator))
                     {
                         throw new FormulaFormatException("The last token of the formula must be a number, variable, or closing parenthesis!");
                     }
@@ -343,9 +342,9 @@ namespace SpreadsheetUtilities
         /// <param name="token"></param>
         /// <param name="paren"></param>
         /// <returns></returns>
-        private static bool FollowingRule(string token, string paren)
+        private static bool FollowingRule(string token, string paren, Func<string, string> normalizer, Func<string, bool> validator)
         {
-            return Double.TryParse(token, out double _) || token == paren || ValidVariable(token);
+            return Double.TryParse(token, out double _) || token == paren || ValidVariable(token, normalizer, validator);
         }
 
         /// <summary>
@@ -357,9 +356,9 @@ namespace SpreadsheetUtilities
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private static bool ValidVariable(String token)
+        private static bool ValidVariable(String token, Func<string, string> normalizer, Func<string, bool> validator)
         {
-            return Regex.IsMatch(token, @"[a-zA-Z_](?: [a-zA-Z_]|\d)*");
+            return Regex.IsMatch(normalizer(token), @"[a-zA-Z_](?: [a-zA-Z_]|\d)*") && validator(normalizer(token));
         }
 
         /// <summary>
@@ -374,13 +373,13 @@ namespace SpreadsheetUtilities
         }
 
         /// <summary>
-        /// Determines if the token is a variable or double.
+        /// Determines if the token is a valid variable or double.
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private static bool IsNumOrVar(String token)
+        private static bool IsNumOrVar(String token, Func<string, string> normalizer, Func<string, bool> validator)
         {
-            return Regex.IsMatch(token, @"[a-zA-Z_](?: [a-zA-Z_]|\d)*") || Double.TryParse(token, out _);
+            return ValidVariable(token, normalizer, validator) || Double.TryParse(token, out _);
         }
     }
 
