@@ -79,6 +79,23 @@ namespace FormulaTester
         }
 
         [TestMethod]
+        public void TestScientificNotation()
+        {
+            Formula simpleSci = new Formula("2.378E-09");
+            Assert.IsNotNull(simpleSci);
+
+            Formula simpleSci1 = new Formula("2.378E30");
+            Assert.IsNotNull(simpleSci1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void TestInvalidDecimal()
+        {
+            Formula invalid1 = new Formula("9.08.0");
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
         public void TestOneTokens()
         {
@@ -181,6 +198,22 @@ namespace FormulaTester
         public void TestInvalidNormalizer()
         {
             Formula inavlid = new Formula("4.20 + E90", s => "^E", s => true);
+        }
+
+        /// <summary>
+        /// Tests the get variables method.
+        /// </summary>
+        [TestMethod]
+        public void TestGetVariables()
+        {
+            string none = String.Join(",", new Formula("8.90 + 8").GetVariables());
+            Assert.AreEqual("", none);
+
+            string one = String.Join(",", new Formula("_U89 + 0").GetVariables());
+            Assert.AreEqual("_U89", one);
+
+            string two = String.Join(" ", new Formula("_U89 + 0 * Ab78").GetVariables());
+            Assert.AreEqual("_U89 Ab78", two);
         }
         //[TestMethod]
         //[ExpectedException(typeof(FormulaFormatException))]

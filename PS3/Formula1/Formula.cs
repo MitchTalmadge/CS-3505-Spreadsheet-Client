@@ -49,6 +49,17 @@ namespace SpreadsheetUtilities
     public class Formula
     {
         /// <summary>
+        /// Array storing the tokens of this Formula object.
+        /// </summary>
+        private string[] tokens;
+
+        /// <summary>
+        /// Array storing the normalized version of variables of this Formula object,
+        /// in order in which they occur in the formula.
+        /// </summary>
+        private string[] variables; 
+        
+        /// <summary>
         /// Creates a Formula from a string that consists of an infix expression written as
         /// described in the class comment.  If the expression is syntactically invalid,
         /// throws a FormulaFormatException with an explanatory Message.
@@ -86,7 +97,7 @@ namespace SpreadsheetUtilities
         public Formula(String formula, Func<string, string> normalize, Func<string, bool> isValid)
         {
             //Getting the normalized tokens in the input string
-            List<string> tokens = new List<string>(GetTokens(formula));
+            tokens = GetTokens(formula).ToArray();
             
             //All syntax and delegate normalizing/validating is done in this method
             ValidateSyntax(tokens, normalize, isValid);
@@ -131,8 +142,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<String> GetVariables()
         {
-            HashSet<string> variables = new HashSet<string>();
-            return variables;
+           return this.variables;
         }
 
         /// <summary>
@@ -246,23 +256,24 @@ namespace SpreadsheetUtilities
         /// symbols +, -, *, and /.  
         /// </summary>
         /// <param name="tokens"></param>
-        private static void ValidateSyntax(IEnumerable<string> tokens, Func<string, string> normalizer, Func<string, bool> validator)
+        private void ValidateSyntax(IEnumerable<string> tokens, Func<string, string> normalizer, Func<string, bool> validator)
         {
             if (tokens.Count() < 1)
             {
                 throw new FormulaFormatException("Formula must have at least one token!");
             }
 
-            IEnumerator<string> enumerator = tokens.GetEnumerator();
             //counter, pointer, and boolean flag variables to check syntax
-            int leftParenthesisCount = 0;
-            int rightParenthesisCount = 0;
-            string firstToken = null;
-            string lastToken = null;
-            bool followingOpenParen = false;
-            bool followingCloseParen = false;
+            int leftParenthesisCount = 0, rightParenthesisCount = 0;
+            string firstToken = null, lastToken = null;
+            bool followingOpenParen = false, followingCloseParen = false;
 
-            /*foreach (string token in tokens)*/ for (int i = 0; i < tokens.Count(); i ++)
+            //Set to ensure no repeat variables are added in constant lookup time
+            HashSet<string> varSet = new HashSet<string>();
+            //List to hold valid variables in this formula
+            List<string> varList = new List<string>();
+
+            for (int i = 0; i < tokens.Count(); i ++)
             {
                 string token = tokens.ElementAt(i);
                 if (firstToken == null)
@@ -308,8 +319,18 @@ namespace SpreadsheetUtilities
                 {
                     followingOpenParen = true;
                 }
-                if (IsNumOrVar(token, normalizer, validator))
+                if (IsNum(token) || ValidVariable(token, normalizer, validator))
                 {
+                    //if the token is a valid variable, handle it so it's added to the variables field array
+                    if (ValidVariable(token, normalizer, validator))
+                    {
+                        string var = normalizer(token);
+                        if (!varSet.Contains(var))
+                        {
+                            varSet.Add(var);
+                            varList.Add(var);
+                        }
+                    }
                     followingCloseParen = true;
                 }
                 if (rightParenthesisCount > leftParenthesisCount)
@@ -332,6 +353,8 @@ namespace SpreadsheetUtilities
             {
                 throw new FormulaFormatException("Unmatched parenthesis in input formula!");
             }
+
+            this.variables = varList.ToArray();
         }
 
         /// <summary>
@@ -342,7 +365,7 @@ namespace SpreadsheetUtilities
         /// <param name="token"></param>
         /// <param name="paren"></param>
         /// <returns></returns>
-        private static bool FollowingRule(string token, string paren, Func<string, string> normalizer, Func<string, bool> validator)
+        private bool FollowingRule(string token, string paren, Func<string, string> normalizer, Func<string, bool> validator)
         {
             return Double.TryParse(token, out double _) || token == paren || ValidVariable(token, normalizer, validator);
         }
@@ -356,7 +379,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private static bool ValidVariable(String token, Func<string, string> normalizer, Func<string, bool> validator)
+        private bool ValidVariable(String token, Func<string, string> normalizer, Func<string, bool> validator)
         {
             return Regex.IsMatch(normalizer(token), @"[a-zA-Z_](?: [a-zA-Z_]|\d)*") && validator(normalizer(token));
         }
@@ -377,9 +400,9 @@ namespace SpreadsheetUtilities
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private static bool IsNumOrVar(String token, Func<string, string> normalizer, Func<string, bool> validator)
+        private bool IsNum(String token)
         {
-            return ValidVariable(token, normalizer, validator) || Double.TryParse(token, out _);
+            return Double.TryParse(token, out _);
         }
     }
 
