@@ -172,6 +172,13 @@ namespace FormulaTester
         {
             Formula inavlid = new Formula("4.20 + 9.67 89");
         }
+        
+        [TestMethod]
+        public void TestValidParenthesis()
+        {
+            Formula valid = new Formula("8 + (9)");
+            Assert.IsNotNull(valid);
+        }
 
         [TestMethod]
         [ExpectedException(typeof(FormulaFormatException))]
@@ -191,17 +198,7 @@ namespace FormulaTester
         }
 
         /// <summary>
-        /// Testing to see if an invalid variable normalizer will be caught.
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(FormulaFormatException))]
-        public void TestInvalidNormalizer()
-        {
-            Formula inavlid = new Formula("4.20 + E90", s => "^E", s => true);
-        }
-
-        /// <summary>
-        /// Tests the get variables method.
+        /// Tests the GetVariables method.
         /// </summary>
         [TestMethod]
         public void TestGetVariables()
@@ -214,12 +211,25 @@ namespace FormulaTester
 
             string two = String.Join(" ", new Formula("_U89 + 0 * Ab78").GetVariables());
             Assert.AreEqual("_U89 Ab78", two);
+
+            string justScientific = String.Join(" ", new Formula("3.89E9").GetVariables());
+            Assert.AreEqual("", justScientific);
+
+            string withScientific = String.Join(" ", new Formula("_U89 + 0 + 7.8E35 * Ab78 / xu89 + 7.8E4").GetVariables());
+            Assert.AreEqual("_U89 Ab78 xu89", withScientific);
         }
-        //[TestMethod]
-        //[ExpectedException(typeof(FormulaFormatException))]
-        //public void TestParenthesis()
-        //{
-        //    Formula invalid2 = new Formula("8 + (9)");
-        //}
+
+        /// <summary>
+        /// Tests the ToString method.
+        /// </summary>
+        [TestMethod]
+        public void TestToString()
+        {
+            Assert.AreEqual("78", new Formula("78  ").ToString());
+
+            Assert.AreEqual("var+890.79+var", new Formula("x89   +   890.79 + hb89", s => "var", s => true).ToString());
+
+            Assert.AreEqual("4.56E34+89+cs3500", new Formula("4.56E34   +89+  cs2420", s => "cs3500", s => true).ToString());
+        }
     }
 }

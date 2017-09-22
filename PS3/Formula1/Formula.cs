@@ -56,9 +56,21 @@ namespace SpreadsheetUtilities
         /// <summary>
         /// Array storing the normalized version of variables of this Formula object,
         /// in order in which they occur in the formula.
+        /// 
+        /// Storing variables here makes GetVariables() much more efficient.
         /// </summary>
-        private string[] variables; 
-        
+        private string[] variables;
+
+        /// <summary>
+        /// Normalizer delegate function passed in and set in the constructor.
+        /// </summary>
+        private Func<string, string> normalizer;
+
+        /// <summary>
+        /// Normalizer delegate function passed in and set in the constructor.
+        /// </summary>
+        private Func<string, bool> validator;
+
         /// <summary>
         /// Creates a Formula from a string that consists of an infix expression written as
         /// described in the class comment.  If the expression is syntactically invalid,
@@ -96,11 +108,12 @@ namespace SpreadsheetUtilities
         /// </summary>
         public Formula(String formula, Func<string, string> normalize, Func<string, bool> isValid)
         {
-            //Getting the normalized tokens in the input string
             tokens = GetTokens(formula).ToArray();
+            normalizer = normalize;
+            validator = isValid;
             
             //All syntax and delegate normalizing/validating is done in this method
-            ValidateSyntax(tokens, normalize, isValid);
+            ValidateSyntax(tokens);
         }
 
         /// <summary>
@@ -157,7 +170,19 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override string ToString()
         {
-            return null;
+            string stringFormula = "";
+
+            foreach (string token in tokens)
+            {
+                if (ValidVariable(token)){
+                    stringFormula += normalizer(token);
+                }
+                else
+                {
+                    stringFormula += token;
+                }
+            }
+            return stringFormula;
         }
 
         /// <summary>
@@ -182,7 +207,11 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override bool Equals(object obj)
         {
-            return false;
+            if (ReferenceEquals(obj, null) || !(obj is Formula))
+            {
+                return false; 
+            }
+            return this.GetHashCode() == obj.GetHashCode();
         }
 
         /// <summary>
@@ -212,7 +241,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override int GetHashCode()
         {
-            return 0;
+            return this.ToString().GetHashCode();
         }
 
         /// <summary>
@@ -248,7 +277,8 @@ namespace SpreadsheetUtilities
 
         /// <summary>
         /// Method that ensures the overall syntax of the input formula,
-        /// as well if the tokens are valid. 
+        /// as well if the tokens are valid. Also adds valid variables to the
+        /// variables field array. 
         /// 
         /// The allowed symbols are non-negative numbers written using double-precision 
         /// floating-point syntax; variables that consist of a letter or underscore followed by 
@@ -256,7 +286,7 @@ namespace SpreadsheetUtilities
         /// symbols +, -, *, and /.  
         /// </summary>
         /// <param name="tokens"></param>
-        private void ValidateSyntax(IEnumerable<string> tokens, Func<string, string> normalizer, Func<string, bool> validator)
+        private void ValidateSyntax(IEnumerable<string> tokens)
         {
             if (tokens.Count() < 1)
             {
@@ -319,10 +349,10 @@ namespace SpreadsheetUtilities
                 {
                     followingOpenParen = true;
                 }
-                if (IsNum(token) || ValidVariable(token, normalizer, validator))
+                if (IsNum(token) || ValidVariable(token))
                 {
                     //if the token is a valid variable, handle it so it's added to the variables field array
-                    if (ValidVariable(token, normalizer, validator))
+                    if (ValidVariable(token))
                     {
                         string var = normalizer(token);
                         if (!varSet.Contains(var))
@@ -367,7 +397,7 @@ namespace SpreadsheetUtilities
         /// <returns></returns>
         private bool FollowingRule(string token, string paren, Func<string, string> normalizer, Func<string, bool> validator)
         {
-            return Double.TryParse(token, out double _) || token == paren || ValidVariable(token, normalizer, validator);
+            return Double.TryParse(token, out double _) || token == paren || ValidVariable(token);
         }
 
         /// <summary>
@@ -379,9 +409,9 @@ namespace SpreadsheetUtilities
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private bool ValidVariable(String token, Func<string, string> normalizer, Func<string, bool> validator)
+        private bool ValidVariable(String token)
         {
-            return Regex.IsMatch(normalizer(token), @"[a-zA-Z_](?: [a-zA-Z_]|\d)*") && validator(normalizer(token));
+            return Regex.IsMatch(token, @"^[a-zA-Z_](?:[a-zA-Z_]|\d)*$") && validator(this.normalizer(token));
         }
 
         /// <summary>
@@ -400,7 +430,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private bool IsNum(String token)
+        private static bool IsNum(String token)
         {
             return Double.TryParse(token, out _);
         }
