@@ -232,9 +232,6 @@ namespace FormulaTester
             Formula formula4 = new Formula("x78 * 67");
             Formula formula5 = new Formula("x78 * 67");
             Assert.IsTrue(formula4.Equals(formula5));
-
-            Formula nullFormula1 = null;
-            Assert.IsFalse(nullFormula.Equals(nullFormula1));
         }
 
         /// <summary>
