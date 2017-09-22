@@ -206,7 +206,11 @@ namespace SpreadsheetUtilities
         /// new Formula("2.0 + x7").Equals(new Formula("2.000 + x7")) is true
         /// </summary>
         public override bool Equals(object obj)
-        {
+        {//TODO can .Equals be called on 2 null objects
+            if (ReferenceEquals(obj, null) && ReferenceEquals(this, null))
+            {
+                return true;
+            }
             if (ReferenceEquals(obj, null) || !(obj is Formula))
             {
                 return false; 
@@ -221,7 +225,15 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator ==(Formula f1, Formula f2)
         {
-            return false;
+            if (ReferenceEquals(f1, null))
+            {
+                if (ReferenceEquals(f2, null))
+                {
+                    return true;
+                }
+                return false;
+            }
+            return f1.Equals(f2);
         }
 
         /// <summary>
@@ -231,7 +243,15 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator !=(Formula f1, Formula f2)
         {
-            return false;
+            if (ReferenceEquals(f1, null))
+            {
+                if (ReferenceEquals(f2, null))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return !f1.Equals(f2);
         }
 
         /// <summary>
