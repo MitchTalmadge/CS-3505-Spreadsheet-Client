@@ -1,7 +1,7 @@
 ﻿///
 /// Jiahui Chen
 /// u0980890
-/// CS 3500 PS#
+/// CS 3500 PS3
 ///
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
