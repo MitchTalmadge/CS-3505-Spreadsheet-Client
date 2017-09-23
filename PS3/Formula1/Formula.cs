@@ -143,25 +143,23 @@ namespace SpreadsheetUtilities
                 Stack<String> operatorStack = new Stack<String>();
                 Stack<double> valueStack = new Stack<double>();
 
+            try
+            {
                 for (int tokenIndex = 0; tokenIndex < tokens.Length; tokenIndex++)
                 {
                     String token = tokens[tokenIndex];
 
-                    //ignore empty strings
-                    if (token == " " || token == "")
-                    {
-                        continue;
-                    }
+                    ////ignore empty strings
+                    //if (token == " " || token == "")
+                    //{
+                    //    continue;
+                    //}
 
                     //handling int token
-                    else if (Int32.TryParse(token, out int t))
+                    if (Double.TryParse(token, out double t))
                     {
                         if (operatorStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
                         {
-                            if (valueStack.Count() == 0)
-                            {
-                                throw new ArgumentException("The multiply and divide operations must be done on two values!");
-                            }
                             valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), t));
                         }
                         else
@@ -184,10 +182,6 @@ namespace SpreadsheetUtilities
                         }
                         if (operatorStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
                         {
-                            if (valueStack.Count() == 0)
-                            {
-                                throw new ArgumentException("The multiply and divide operations must be done on two values!");
-                            }
                             valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), value));
                         }
                         else
@@ -201,15 +195,8 @@ namespace SpreadsheetUtilities
                     {
                         if (operatorStack.Count != 0 && (operatorStack.Peek() == "+" || operatorStack.Peek() == "-"))
                         {
-                            if (valueStack.Count() < 2)
-                            {
-                                throw new ArgumentException("Operations in input string must be between two values!");
-                            }
-                            else
-                            {
-                                double right = valueStack.Pop();
-                                valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), right));
-                            }
+                            double right = valueStack.Pop();
+                            valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), right));
                         }
                         operatorStack.Push(token);
                     }
@@ -225,62 +212,45 @@ namespace SpreadsheetUtilities
                     {
                         if (operatorStack.Count != 0 && (operatorStack.Peek() == "+" || operatorStack.Peek() == "-"))
                         {
-                            if (valueStack.Count() < 2)
-                            {
-                                throw new ArgumentException("Operations in input string must be between two values!");
-                            }
-                            else
-                            {
-                                double right = valueStack.Pop();
-                                valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), right));
-                            }
-                        }
-                        if (operatorStack.Count != 0 && operatorStack.Peek() != "(")
-                        {
-                            throw new ArgumentException("Unclosed set of parenthesis!");
-                        }
-                        if (operatorStack.Count == 0)
-                        {
-                            throw new ArgumentException("Extra set of parenthesis!");
+                            double right = valueStack.Pop();
+                            valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), right));
                         }
                         operatorStack.Pop();
                         if (operatorStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
                         {
-                            if (valueStack.Count() < 2)
-                            {
-                                throw new ArgumentException("The multiply and divide operations must be done on two values!");
-                            }
-                            else
-                            {
-                                double right = valueStack.Pop(); //order matters for division
-                                valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), right));
-                            }
+                            double right = valueStack.Pop(); //order matters for division
+                            valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), right));
                         }
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Invalid token in the input expression!");
                     }
                 }
                 if (operatorStack.Count() == 0)
                 {
-                    if (valueStack.Count != 1)
-                    {
-                        throw new ArgumentException("Read all operators and there's no single, final value of expression!");
-                    }
+                    //if (valueStack.Count != 1)
+                    //{
+                    //    throw new ArgumentException("Read all operators and there's no single, final value of expression!");
+                    //}
                     return valueStack.Pop();
                 }
                 else
                 {
-                    if (valueStack.Count == 0 || valueStack.Count == 1 || (operatorStack.Count != 1 && valueStack.Count != 2
-                        && (operatorStack.Pop() != "+" || operatorStack.Pop() != "-")))
-                    {
-                        throw new ArgumentException("Input expression has been read, invalid format!");
-                    }
+                    //    if (valueStack.Count == 0 || valueStack.Count == 1 || (operatorStack.Count != 1 && valueStack.Count != 2
+                    //        && (operatorStack.Pop() != "+" || operatorStack.Pop() != "-")))
+                    //    {
+                    //        throw new ArgumentException("Input expression has been read, invalid format!");
+                    //    }
                     double right = valueStack.Pop();
                     return Operation(operatorStack.Pop(), valueStack.Pop(), right);
                 }
             }
+            catch (DivideByZeroException)
+            {
+                return new FormulaError("Can't divide by zero!");
+            }
+            catch (ArgumentException)
+            {
+                return new FormulaError("Lookup method did not find a value for a variable in the formula!");
+            }
+        }
         
         /// <summary>
         /// Enumerates the normalized versions of all of the variables that occur in this 
@@ -609,20 +579,13 @@ namespace SpreadsheetUtilities
             {
                 return left * right;
             }
-            if (operation == "/")
+            else //the only other operator is a / and now the check for dividing by 0 occurs
             {
-                try
+                if (right == 0)
                 {
-                    return left / right;
+                    throw new DivideByZeroException("Can't divide by 0!");
                 }
-                catch
-                {
-                    throw new ArgumentException("Can't divide by 0!");
-                }
-            }
-            else
-            {
-                throw new ArgumentException("The only valid operations are: + - * and /");
+                return left / right;
             }
         }
     }
