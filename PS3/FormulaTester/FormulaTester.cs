@@ -4,8 +4,6 @@
 /// CS 3500 PS#
 ///
 using System;
-using System.Text;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpreadsheetUtilities;
 
@@ -208,7 +206,9 @@ namespace FormulaTester
 
             Assert.AreEqual("var+890.79+var", new Formula("x89   +   890.79 + hb89", s => "var", s => true).ToString());
 
-            Assert.AreEqual("4.56E34+89+cs3500", new Formula("4.56E34   +89+  cs2420", s => "cs3500", s => true).ToString());
+            Assert.AreEqual("4.56E+34+89+cs3500", new Formula("4.56E34   +89+  cs2420", s => "cs3500", s => true).ToString());
+
+            Assert.IsTrue(new Formula("4.56E+34+89+cs3500").Equals(new Formula(new Formula("4.56E34   +89+  cs2420", s => "cs3500", s => true).ToString())));
         }
 
         /// <summary>
@@ -350,25 +350,33 @@ namespace FormulaTester
             Assert.AreEqual(6.4, (double)new Formula("2 + x1").Evaluate(s => 4.4), 1e-9);
         }
 
-        //    [testmethod()]
-        //    [expectedexception(typeof(argumentexception))]
-        //    public void testunknownvariable()
-        //    {
-        //         .evaluator.evaluate("2+x1", s => { throw new argumentexception("unknown variable"); });
-        //    }
-
-        [TestMethod()]
-        public void PublicTestUnknownVar()
-        {
-            Assert.AreEqual(new FormulaError("Lookup method did not find a value for a variable in the formula!"),
-                new Formula("2 + x1").Evaluate(s => throw new ArgumentException()));
-        }
-
-        [TestMethod()]
+        /// <summary>
+        /// Tests expressions with divide-by-zero errors.
+        /// </summary>
+        [TestMethod]
         public void PublicTestDivideByZero()
         {
-            Assert.AreEqual(new FormulaError("Can't divide by zero!"),
-                new Formula("2.89 / 0 ").Evaluate(s => 8));
+            Assert.IsInstanceOfType(new Formula("5 / (10.98 - 10.98)").Evaluate(s => s.Length), typeof(FormulaError));
+            Assert.IsInstanceOfType(new Formula("0.12345 / (5.00 - (5.25 - 0.25))").Evaluate(s => s.Length),
+                typeof(FormulaError));
+            Assert.IsInstanceOfType(new Formula("89 / (Yikes - 5)").Evaluate(s => s.Length), typeof(FormulaError));
+            Assert.IsInstanceOfType(new Formula("4.20 / 0").Evaluate(s => s.Length), typeof(FormulaError));
+        }
+
+        /// <summary>
+        /// Tests expressions with variable(s) that have no value.
+        /// </summary>
+        [TestMethod]
+        public void PublicTestEvaluateVariableHasNoValue()
+        {
+            Assert.IsInstanceOfType(new Formula("Ui89 / (AB - 19.0)").Evaluate(s => throw new ArgumentException()),
+                typeof(FormulaError));
+            Assert.IsInstanceOfType(new Formula("69.12345 / (5.00 - (_123 - 0.25))").Evaluate(s => throw new ArgumentException()),
+                typeof(FormulaError));
+            Assert.IsInstanceOfType(new Formula("89 / (Yikes - 5)").Evaluate(s => throw new ArgumentException()),
+                typeof(FormulaError));
+            Assert.IsInstanceOfType(new Formula("1 / yodawg").Evaluate(s => throw new ArgumentException()),
+                typeof(FormulaError));
         }
 
         /// <summary>

@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SpreadsheetUtilities
@@ -108,6 +107,10 @@ namespace SpreadsheetUtilities
         /// </summary>
         public Formula(String formula, Func<string, string> normalize, Func<string, bool> isValid)
         {
+            if (formula == null)
+            {
+                throw new FormulaFormatException("Input formula can't be null!");
+            }
             tokens = GetTokens(formula).ToArray();
             normalizer = normalize;
             validator = isValid;
@@ -272,6 +275,10 @@ namespace SpreadsheetUtilities
                 if (ValidVariable(token))
                 {
                     stringFormula += normalizer(token);
+                }
+                else if (Double.TryParse(token, out double num))
+                {
+                    stringFormula += num;
                 }
                 else
                 {
@@ -534,7 +541,7 @@ namespace SpreadsheetUtilities
         /// <returns></returns>
         private static bool IsOperator(String token)
         {
-            return Regex.IsMatch(token, @"[\+\-*/]");
+            return Regex.IsMatch(token, @"^[\+\-*/]$");
         }
 
         /// <summary>
