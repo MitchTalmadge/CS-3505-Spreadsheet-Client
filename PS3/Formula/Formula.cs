@@ -49,6 +49,29 @@ namespace SpreadsheetUtilities
     public class Formula
     {
         /// <summary>
+        /// Array storing the tokens of this Formula object.
+        /// </summary>
+        private string[] tokens;
+
+        /// <summary>
+        /// Array storing the normalized version of variables of this Formula object,
+        /// in order in which they occur in the formula.
+        /// 
+        /// Storing variables here makes GetVariables() much more efficient.
+        /// </summary>
+        private string[] variables;
+
+        /// <summary>
+        /// Normalizer delegate function passed in and set in the constructor.
+        /// </summary>
+        private Func<string, string> normalizer;
+
+        /// <summary>
+        /// Normalizer delegate function passed in and set in the constructor.
+        /// </summary>
+        private Func<string, bool> validator;
+
+        /// <summary>
         /// Creates a Formula from a string that consists of an infix expression written as
         /// described in the class comment.  If the expression is syntactically invalid,
         /// throws a FormulaFormatException with an explanatory Message.
@@ -85,14 +108,14 @@ namespace SpreadsheetUtilities
         /// </summary>
         public Formula(String formula, Func<string, string> normalize, Func<string, bool> isValid)
         {
-            List<string> tokens = new List<string>(GetTokens(formula));
-            ValidateSyntax(tokens);
+            tokens = GetTokens(formula).ToArray();
+            normalizer = normalize;
+            validator = isValid;
 
-            if (!isValid(normalize(formula)))
-            {
-                throw new FormulaFormatException("A variable in the input formula is invalid!");
-            }
+            //All syntax and delegate normalizing/validating is done in this method
+            ValidateSyntax(tokens);
         }
+
 
         /// <summary>
         /// Evaluates this Formula, using the lookup delegate to determine the values of
@@ -117,7 +140,101 @@ namespace SpreadsheetUtilities
         /// </summary>
         public object Evaluate(Func<string, double> lookup)
         {
-            return null;
+            Stack<String> operatorStack = new Stack<String>();
+            Stack<double> valueStack = new Stack<double>();
+
+            try
+            {
+                for (int tokenIndex = 0; tokenIndex < tokens.Length; tokenIndex++)
+                {
+                    String token = tokens[tokenIndex];
+
+                    //handling int token
+                    if (Double.TryParse(token, out double t))
+                    {
+                        if (operatorStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
+                        {
+                            valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), t));
+                        }
+                        else
+                        {
+                            valueStack.Push(t);
+                        }
+                    }
+
+                    //handling variable token
+                    else if (ValidVariable(token))
+                    {
+                        double value;
+                        try
+                        {
+                            value = lookup(token.Trim());
+                        }
+                        catch
+                        {
+                            throw new ArgumentException("This variable does not exist!");
+                        }
+                        if (operatorStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
+                        {
+                            valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), value));
+                        }
+                        else
+                        {
+                            valueStack.Push(value);
+                        }
+                    }
+
+                    //handling plus or minus token
+                    else if (token == "+" || token == "-")
+                    {
+                        if (operatorStack.Count != 0 && (operatorStack.Peek() == "+" || operatorStack.Peek() == "-"))
+                        {
+                            double right = valueStack.Pop();
+                            valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), right));
+                        }
+                        operatorStack.Push(token);
+                    }
+
+                    //handling multiplication or division token and left parenthesis
+                    else if (token == "/" || token == "*" || token == "(")
+                    {
+                        operatorStack.Push(token);
+                    }
+
+                    //handling right parenthesis
+                    else if (token == ")")
+                    {
+                        if (operatorStack.Count != 0 && (operatorStack.Peek() == "+" || operatorStack.Peek() == "-"))
+                        {
+                            double right = valueStack.Pop();
+                            valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), right));
+                        }
+                        operatorStack.Pop();
+                        if (operatorStack.Count != 0 && (operatorStack.Peek() == "*" || operatorStack.Peek() == "/"))
+                        {
+                            double right = valueStack.Pop(); //order matters for division
+                            valueStack.Push(Operation(operatorStack.Pop(), valueStack.Pop(), right));
+                        }
+                    }
+                }
+                if (operatorStack.Count() == 0)
+                {
+                    return valueStack.Pop();
+                }
+                else
+                {
+                    double right = valueStack.Pop();
+                    return Operation(operatorStack.Pop(), valueStack.Pop(), right);
+                }
+            }
+            catch (DivideByZeroException)
+            {
+                return new FormulaError("Can't divide by zero!");
+            }
+            catch (ArgumentException)
+            {
+                return new FormulaError("Lookup method did not find a value for a variable in the formula!");
+            }
         }
 
         /// <summary>
@@ -133,7 +250,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<String> GetVariables()
         {
-            return null;
+            return this.variables;
         }
 
         /// <summary>
@@ -148,7 +265,20 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override string ToString()
         {
-            return null;
+            string stringFormula = "";
+
+            foreach (string token in tokens)
+            {
+                if (ValidVariable(token))
+                {
+                    stringFormula += normalizer(token);
+                }
+                else
+                {
+                    stringFormula += token;
+                }
+            }
+            return stringFormula;
         }
 
         /// <summary>
@@ -173,7 +303,15 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override bool Equals(object obj)
         {
-            return false;
+            if (ReferenceEquals(obj, null) && ReferenceEquals(this, null))
+            {
+                throw new ArgumentException("Equals may not be called on a null object!");
+            }
+            if (ReferenceEquals(obj, null) || !(obj is Formula))
+            {
+                return false;
+            }
+            return this.GetHashCode() == obj.GetHashCode();
         }
 
         /// <summary>
@@ -183,7 +321,15 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator ==(Formula f1, Formula f2)
         {
-            return false;
+            if (ReferenceEquals(f1, null))
+            {
+                if (ReferenceEquals(f2, null))
+                {
+                    return true;
+                }
+                return false;
+            }
+            return f1.Equals(f2);
         }
 
         /// <summary>
@@ -193,7 +339,15 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator !=(Formula f1, Formula f2)
         {
-            return false;
+            if (ReferenceEquals(f1, null))
+            {
+                if (ReferenceEquals(f2, null))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return !f1.Equals(f2);
         }
 
         /// <summary>
@@ -203,7 +357,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override int GetHashCode()
         {
-            return 0;
+            return this.ToString().GetHashCode();
         }
 
         /// <summary>
@@ -239,7 +393,8 @@ namespace SpreadsheetUtilities
 
         /// <summary>
         /// Method that ensures the overall syntax of the input formula,
-        /// as well if the tokens are valid. 
+        /// as well if the tokens are valid. Also adds valid variables to the
+        /// variables field array. 
         /// 
         /// The allowed symbols are non-negative numbers written using double-precision 
         /// floating-point syntax; variables that consist of a letter or underscore followed by 
@@ -247,29 +402,31 @@ namespace SpreadsheetUtilities
         /// symbols +, -, *, and /.  
         /// </summary>
         /// <param name="tokens"></param>
-        private static void ValidateSyntax(IEnumerable<string> tokens) 
+        private void ValidateSyntax(IEnumerable<string> tokens)
         {
             if (tokens.Count() < 1)
             {
                 throw new FormulaFormatException("Formula must have at least one token!");
             }
 
-            IEnumerator<string> enumerator = tokens.GetEnumerator();
             //counter, pointer, and boolean flag variables to check syntax
-            int leftParenthesisCount = 0;
-            int rightParenthesisCount = 0;
-            string firstToken = null;
-            string lastToken = null;
-            bool followingOpenParen = false;
-            bool followingCloseParen = false;
+            int leftParenthesisCount = 0, rightParenthesisCount = 0;
+            string firstToken = null, lastToken = null;
+            bool followingOpenParen = false, followingCloseParen = false;
 
-            foreach (string token in tokens)
+            //Set to ensure no repeat variables are added in constant lookup time
+            HashSet<string> varSet = new HashSet<string>();
+            //List to hold valid variables in this formula
+            List<string> varList = new List<string>();
+
+            for (int i = 0; i < tokens.Count(); i++)
             {
+                string token = tokens.ElementAt(i);
                 if (firstToken == null)
                 {
                     firstToken = token;
                     //the first token of an expression must be a number, a variable, or an opening parenthesis.
-                    if (!FollowingRule(firstToken, "("))
+                    if (!FollowingRule(firstToken, "(", normalizer, validator))
                     {
                         throw new FormulaFormatException("The first token of the formula must be a number, variable, or openeing parenthesis!");
                     }
@@ -277,7 +434,7 @@ namespace SpreadsheetUtilities
                 //token after an opening parenthesis or operator must be a number, variable, or opening parenthesis.
                 if (followingOpenParen == true)
                 {
-                    if (!FollowingRule(token, "("))
+                    if (!FollowingRule(token, "(", normalizer, validator))
                     {
                         throw new FormulaFormatException("Any token after an opening parenthesis or an operator" +
                             " must be either a number, a variable, or an opening parenthesis!");
@@ -308,19 +465,29 @@ namespace SpreadsheetUtilities
                 {
                     followingOpenParen = true;
                 }
-                if (IsNumOrVar(token))
+                if (IsNum(token) || ValidVariable(token))
                 {
+                    //if the token is a valid variable, handle it so it's added to the variables field array
+                    if (ValidVariable(token))
+                    {
+                        string var = normalizer(token);
+                        if (!varSet.Contains(var))
+                        {
+                            varSet.Add(var);
+                            varList.Add(var);
+                        }
+                    }
                     followingCloseParen = true;
                 }
                 if (rightParenthesisCount > leftParenthesisCount)
                 {
                     throw new FormulaFormatException("Number of closing parenthesis is greater than opening parenthesis!");
                 }
-                if (!enumerator.MoveNext())
+                if (i == tokens.Count() - 1)
                 {
                     lastToken = token;
                     //the last token of an expression must be a number, a variable, or a closing parenthesis.
-                    if (!FollowingRule(lastToken, ")"))
+                    if (!FollowingRule(lastToken, ")", normalizer, validator))
                     {
                         throw new FormulaFormatException("The last token of the formula must be a number, variable, or closing parenthesis!");
                     }
@@ -332,6 +499,8 @@ namespace SpreadsheetUtilities
             {
                 throw new FormulaFormatException("Unmatched parenthesis in input formula!");
             }
+
+            this.variables = varList.ToArray();
         }
 
         /// <summary>
@@ -342,7 +511,7 @@ namespace SpreadsheetUtilities
         /// <param name="token"></param>
         /// <param name="paren"></param>
         /// <returns></returns>
-        private static bool FollowingRule(string token, string paren)
+        private bool FollowingRule(string token, string paren, Func<string, string> normalizer, Func<string, bool> validator)
         {
             return Double.TryParse(token, out double _) || token == paren || ValidVariable(token);
         }
@@ -356,9 +525,9 @@ namespace SpreadsheetUtilities
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private static bool ValidVariable(String token)
+        private bool ValidVariable(String token)
         {
-            return Regex.IsMatch(token, @"[a-zA-Z_](?: [a-zA-Z_]|\d)*");
+            return Regex.IsMatch(token, @"^[a-zA-Z_](?:[a-zA-Z_]|\d)*$") && validator(this.normalizer(token));
         }
 
         /// <summary>
@@ -373,13 +542,37 @@ namespace SpreadsheetUtilities
         }
 
         /// <summary>
-        /// Determines if the token is a variable or double.
+        /// Determines if the token is a valid variable or double.
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private static bool IsNumOrVar(String token)
+        private static bool IsNum(String token)
         {
-            return Regex.IsMatch(token, @"[a-zA-Z_](?: [a-zA-Z_]|\d)*") || Double.TryParse(token, out _);
+            return Double.TryParse(token, out _);
+        }
+
+        private static double Operation(String operation, double left, double right)
+        {
+            if (operation == "+")
+            {
+                return left + right;
+            }
+            if (operation == "-")
+            {
+                return left - right;
+            }
+            if (operation == "*")
+            {
+                return left * right;
+            }
+            else //the only other operator is a / and now the check for dividing by 0 occurs
+            {
+                if (right == 0)
+                {
+                    throw new DivideByZeroException("Can't divide by 0!");
+                }
+                return left / right;
+            }
         }
     }
 

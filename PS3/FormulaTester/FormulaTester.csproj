@@ -55,8 +55,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Formula1\Formula.csproj">
-      <Project>{02b58baf-6569-4110-8858-e2408d69a96b}</Project>
+    <ProjectReference Include="..\Formula\Formula.csproj">
+      <Project>{7ebfc72b-9445-4872-8239-bac92ef64d21}</Project>
       <Name>Formula</Name>
     </ProjectReference>
   </ItemGroup>

@@ -354,7 +354,7 @@ namespace FormulaTester
         //    [expectedexception(typeof(argumentexception))]
         //    public void testunknownvariable()
         //    {
-        //        forumlaevaluator.evaluator.evaluate("2+x1", s => { throw new argumentexception("unknown variable"); });
+        //         .evaluator.evaluate("2+x1", s => { throw new argumentexception("unknown variable"); });
         //    }
 
         [TestMethod()]
@@ -364,118 +364,82 @@ namespace FormulaTester
                 new Formula("2 + x1").Evaluate(s => throw new ArgumentException()));
         }
 
-        //    [testmethod()]
-        //    public void testlefttoright()
-        //    {
-        //        assert.areequal(15, forumlaevaluator.evaluator.evaluate("2*6+3", s => 0));
-        //    }
+        [TestMethod()]
+        public void PublicTestDivideByZero()
+        {
+            Assert.AreEqual(new FormulaError("Can't divide by zero!"),
+                new Formula("2.89 / 0 ").Evaluate(s => 8));
+        }
 
-        //    [testmethod()]
-        //    public void testorderoperations()
-        //    {
-        //        assert.areequal(20, forumlaevaluator.evaluator.evaluate("2+6*3", s => 0));
-        //    }
+        /// <summary>
+        /// Testing with multiplication and division expressions, including weird 
+        /// spacing cases.
+        /// </summary>
+        [TestMethod]
+        public void MultiplyDivideOperator()
+        {
+            Assert.AreEqual(10.0,  new Formula("5   * 2").Evaluate(s => s.Length));
+            Assert.AreEqual(24.0,  new Formula("UB9 * 2 * 4").Evaluate( s => s.Length));
+            Assert.AreEqual(7.0, new Formula("21 /   S33").Evaluate( s => s.Length));
+            Assert.AreEqual(2.0, new Formula("28 / SEVEN77 / 2 ").Evaluate( s => s.Length));
+        }
 
-        //    [testmethod()]
-        //    public void testparenthesestimes()
-        //    {
-        //        assert.areequal(24, forumlaevaluator.evaluator.evaluate("(2+6)*3", s => 0));
-        //    }
+        /// <summary>
+        /// Testing expressions with parenthesis, including weird 
+        /// spacing cases.
+        /// </summary>
+        [TestMethod]
+        public void Parenthesis()
+        {
+            Assert.AreEqual(5.0, new Formula("(5   * 2) / a8").Evaluate( s => s.Length));
+            Assert.AreEqual(1.0, new Formula(" (   5 + 12) / 17").Evaluate( s => s.Length));
+            Assert.AreEqual(2.0, new Formula(" ((5 + 1) * 2) / 6").Evaluate( s => s.Length));
+            Assert.AreEqual(2.0, new Formula("(2)").Evaluate( s => s.Length));
+            Assert.AreEqual(2.15, new Formula("(4.3)/ (2)").Evaluate( s => s.Length));
+        }
 
-        //    [testmethod()]
-        //    public void testtimesparentheses()
-        //    {
-        //        assert.areequal(16, forumlaevaluator.evaluator.evaluate("2*(3+5)", s => 0));
-        //    }
-
-        //    [testmethod()]
-        //    public void testplusparentheses()
-        //    {
-        //        assert.areequal(10, forumlaevaluator.evaluator.evaluate("2+(3+5)", s => 0));
-        //    }
+        /// <summary>
+        /// Tests to ensure that order of operations is followed
+        /// when expressions are evaluated. 
+        /// </summary>
+        [TestMethod]
+        public void PEMDAS()
+        {
+            Assert.AreEqual(17.0, new Formula("6 + 5 * 2 + 1").Evaluate( s => s.Length));
+            Assert.AreEqual(15.4, new Formula("2*6+3.4").Evaluate(s => s.Length));
+            Assert.AreEqual(-6.0, new Formula(" 5 + 12 / 2 - 17").Evaluate( s => s.Length));
+            Assert.AreEqual(2.0, new Formula(" ((5 + 1 * 2 - 3) * 2) / 4").Evaluate(s => s.Length));
+        }
 
         //    [testmethod()]
         //    public void testpluscomplex()
         //    {
-        //        assert.areequal(50, forumlaevaluator.evaluator.evaluate("2+(3+5*9)", s => 0));
+        //        assert.areequal(50,  .evaluator.evaluate("2+(3+5*9)", s => 0));
         //    }
 
-        //    [testmethod()]
-        //    public void testcomplextimesparentheses()
-        //    {
-        //        assert.areequal(26, forumlaevaluator.evaluator.evaluate("2+3*(3+5)", s => 0));
-        //    }
+        [TestMethod()]
+        public void PublicTestComplexParentheses()
+        {
+            Assert.AreEqual(26.0, new Formula("2+3*(3+5)").Evaluate(s => 0));
+            Assert.AreEqual(194.0, new Formula("2+3*5+(3+4*8)*5+2").Evaluate(s => 0));
+        }
 
-        //    [testmethod()]
-        //    public void testcomplexandparentheses()
-        //    {
-        //        assert.areequal(194, forumlaevaluator.evaluator.evaluate("2+3*5+(3+4*8)*5+2", s => 0));
-        //    }
+        [TestMethod()]
+        public void PublicTestComplexMultiVar()
+        {
+            Assert.AreEqual(-2.25, (double)new Formula("y1*3-8.5/2+4*(8-9*2)/4*x7").Evaluate(s => (s == "x7") ? 1 : 4), 1e-9);
+            Assert.AreEqual(6.0, new Formula("x1+(x2+(x3+(x4+(x5+x6))))").Evaluate(s => 1));
+            Assert.AreEqual(12.0, new Formula("((((x1+x2)+x3)+x4)+x5)+x6").Evaluate(s => 2));
+            Assert.AreEqual(0.0, new Formula("a4-a4*a4/a4").Evaluate(s => 3));
+        }
 
-        //    [testmethod()]
-        //    [expectedexception(typeof(argumentexception))]
-        //    public void testdividebyzero()
-        //    {
-        //        forumlaevaluator.evaluator.evaluate("5/0", s => 0);
-        //    }
-
-        //    [testmethod()]
-        //    [expectedexception(typeof(argumentexception))]
-        //    public void testsingleoperator()
-        //    {
-        //        forumlaevaluator.evaluator.evaluate("+", s => 0);
-        //    }
-
-        //    [testmethod()]
-        //    [expectedexception(typeof(argumentexception))]
-        //    public void testextraoperator()
-        //    {
-        //        forumlaevaluator.evaluator.evaluate("2+5+", s => 0);
-        //    }
-
-        //    [testmethod()]
-        //    [expectedexception(typeof(argumentexception))]
-        //    public void testextraparentheses()
-        //    {
-        //        forumlaevaluator.evaluator.evaluate("2+5*7)", s => 0);
-        //    }
-
-        //    [testmethod()]
-        //    [expectedexception(typeof(argumentexception))]
-        //    public void testinvalidvariable()
-        //    {
-        //        forumlaevaluator.evaluator.evaluate("xx", s => 0);
-        //    }
-
-        //    [testmethod()]
-        //    [expectedexception(typeof(argumentexception))]
-        //    public void testempty()
-        //    {
-        //        forumlaevaluator.evaluator.evaluate("", s => 0);
-        //    }
-
-        //    [testmethod()]
-        //    public void testcomplexmultivar()
-        //    {
-        //        assert.areequal(6, forumlaevaluator.evaluator.evaluate("y1*3-8/2+4*(8-9*2)/14*x7", s => (s == "x7") ? 1 : 4));
-        //    }
-
-        //    [testmethod()]
-        //    public void testcomplexnestedparensright()
-        //    {
-        //        assert.areequal(6, forumlaevaluator.evaluator.evaluate("x1+(x2+(x3+(x4+(x5+x6))))", s => 1));
-        //    }
-
-        //    [testmethod()]
-        //    public void testcomplexnestedparensleft()
-        //    {
-        //        assert.areequal(12, forumlaevaluator.evaluator.evaluate("((((x1+x2)+x3)+x4)+x5)+x6", s => 2));
-        //    }
-
-        //    [testmethod()]
-        //    public void testrepeatedvar()
-        //    {
-        //        assert.areequal(0, forumlaevaluator.evaluator.evaluate("a4-a4*a4/a4", s => 3));
-        //    }
+        [TestMethod()]
+        public void PublicTestEval2Formulas()
+        {
+            Formula six = new Formula("3 * 2");
+            Assert.AreEqual(6.0, six.Evaluate(s => 1));
+            Formula seven = new Formula("i9 + 4");
+            Assert.AreEqual(7.0, seven.Evaluate(s => 3));
+        }
     }
 }
