@@ -303,10 +303,6 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(obj, null) && ReferenceEquals(this, null))
-            {
-                throw new ArgumentException("Equals may not be called on a null object!");
-            }
             if (ReferenceEquals(obj, null) || !(obj is Formula))
             {
                 return false;
