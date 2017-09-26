@@ -200,7 +200,12 @@ namespace SS
         /// <summary>
         /// A helper for the GetCellsToRecalculate method.
         /// 
-        ///   -- You should fully comment what is going on below --
+        /// Recursively "visits" all direct dependents of the cell
+        /// corresponding to the name parameter. Recursively gets the dependents of
+        /// each cell and adds each dependent cell into the visited Set
+        /// if it isn't already in it to mark it as visited. After all
+        /// dependent cells of the parameter dependent cell have been added and no circular
+        /// dependency was found, the parameter cell is marked as changed.        
         /// </summary>
         private void Visit(String start, String name, ISet<String> visited, LinkedList<String> changed)
         {
