@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SpreadsheetUtilities</name>
+    </assembly>
+    <members>
+        <!-- Badly formed XML comment ignored for member "T:SpreadsheetUtilities.DependencyGraph" -->
+        <member name="F:SpreadsheetUtilities.DependencyGraph.dependents">
+            <summary>
+            This Dictionary maps a string to a HashSet of its dependents,
+            the strings that depend on it and must be evaluated after.
+            
+            The Keys are the dependees. 
+            </summary>
+        </member>
+        <member name="F:SpreadsheetUtilities.DependencyGraph.dependees">
+            <summary>
+            This Dictionary maps a string to a HashSet of the strings it's a dependee of,
+            the strings that it depends on and must be evaluated before.
+            
+            The keys are the dependents. 
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.DependencyGraph.#ctor">
+            <summary>
+            Creates an empty DependencyGraph.
+            </summary>
+        </member>
+        <member name="P:SpreadsheetUtilities.DependencyGraph.Size">
+            <summary>
+            The number of ordered pairs in the DependencyGraph.
+            </summary>
+        </member>
+        <member name="P:SpreadsheetUtilities.DependencyGraph.Item(System.String)">
+            <summary>
+            The size of dependees(s).
+            This property is an example of an indexer.  If dg is a DependencyGraph, you would
+            invoke it like this:
+            dg["a"]
+            It should return the size of dependees("a"), how many 
+            
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.DependencyGraph.HasDependents(System.String)">
+            <summary>
+            Reports whether dependents(s) is non-empty.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.DependencyGraph.HasDependees(System.String)">
+            <summary>
+            Reports whether dependees(s) is non-empty.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.DependencyGraph.GetDependents(System.String)">
+            <summary>
+            Enumerates dependents(s).
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.DependencyGraph.GetDependees(System.String)">
+            <summary>
+            Enumerates dependees(s).
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.DependencyGraph.AddDependency(System.String,System.String)">
+             <summary>
+             <para>Adds the ordered pair (dependee,dependent), if it doesn't exist</para>
+             
+             <para>This should be thought of as:</para>   
+             
+               dependent depends on dependee
+            
+             </summary>
+             <param name="dependee"> dependee must be evaluated first. T depends on S</param>
+             <param name="dependent"> dependent cannot be evaluated until s is</param>        /// 
+        </member>
+        <member name="M:SpreadsheetUtilities.DependencyGraph.RemoveDependency(System.String,System.String)">
+            <summary>
+            Removes the ordered pair (dependee,dependent), if it exists
+            </summary>
+            <param name="dependee"></param>
+            <param name="dependent"></param>
+        </member>
+        <member name="M:SpreadsheetUtilities.DependencyGraph.ReplaceDependents(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Removes all existing ordered pairs of the form (dependee,r).  Then, for each
+            t in newDependents, adds the ordered pair (dependee,t).
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.DependencyGraph.ReplaceDependees(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Removes all existing ordered pairs of the form (r,s).  Then, for each 
+            t in newDependees, adds the ordered pair (t,s).
+            </summary>
+        </member>
+        <member name="M:SpreadsheetUtilities.DependencyGraph.getDependeesSize(System.String)">
+            <summary>
+            Gets the number of dependees the parameter string/dependent has.
+            (Gets number of strings the paramater depends on)
+            If the param string is not mapped 0 is returned. 
+            </summary>
+        </member>
+    </members>
+</doc>
