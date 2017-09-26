@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SpreadsheetTests
 {
     [TestClass]
-    public class UnitTest1
+    public class SpreadsheetTests
     {
         [TestMethod]
         public void TestMethod1()
