@@ -32,7 +32,7 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-            return cell.getContents();
+            return cell.contents;
         }
 
         /// <summary>

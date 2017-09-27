@@ -12,7 +12,14 @@ namespace Spreadsheet
         /// <summary>
         /// A cell can either hold a string, double, or Formula as its contents.
         /// </summary>
-        private object contents;
+        internal object contents
+        {
+            get
+            {
+                return contents;
+            }
+            private set { }
+        }
 
         /// <summary>
         ///Master constructor which takes in all 3 content types but isn't 
@@ -63,14 +70,5 @@ namespace Spreadsheet
         /// <param name="name"></param>
         /// <param name="formula"></param>
         public Cell(string name, Formula formula) : this(name, null, null, formula){ }
-
-        /// <summary>
-        /// Getter method for private contents of the Cell.
-        /// </summary>
-        /// <returns></returns>
-        public object getContents()
-        {
-            return this.contents;
-        }
     }
 }
