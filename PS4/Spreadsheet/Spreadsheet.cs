@@ -4,11 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SpreadsheetUtilities;
+using Spreadsheet;
+using System.Text.RegularExpressions;
 
 namespace SS
 {
     public class Spreadsheet : AbstractSpreadsheet
     {
+        /// <summary>
+        /// Maps cell names to their Cell object. Only contains non-empty cells. 
+        /// </summary>
+        private Dictionary<string, Cell> cells = new Dictionary<string, Cell>();
+
+        /// <summary>
+        /// Dependency Graph mapping each cell to its dependents and dependees. 
+        /// </summary>
+        private DependencyGraph dependencyGraph = new DependencyGraph();
+
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
         /// 
@@ -16,7 +28,11 @@ namespace SS
         /// value should be either a string, a double, or a Formula.
         public override object GetCellContents(string name)
         {
-            throw new NotImplementedException();
+            if (name == null || !cells.TryGetValue(name, out var cell))
+            {
+                throw new InvalidNameException();
+            }
+            return cell;
         }
 
         /// <summary>
@@ -39,6 +55,14 @@ namespace SS
         /// </summary>
         public override ISet<string> SetCellContents(string name, double number)
         {
+            if (cells.ContainsKey(name))
+            {
+
+            }
+            else
+            {
+
+            }
             throw new NotImplementedException();
         }
 
@@ -97,7 +121,29 @@ namespace SS
         /// </summary>
         protected override IEnumerable<string> GetDirectDependents(string name)
         {
-            throw new NotImplementedException();
+            if (name == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (!ValidVariable(name))
+            {
+                throw new InvalidNameException();
+            }
+            return dependencyGraph.GetDependents(name);
+        }
+
+        /// <summary>
+        /// Helper method to determining if the token is a valid variable by the base rules:
+        /// 
+        /// A string is a valid cell name if and only if:
+        ///   (1) its first character is an underscore or a letter.
+        ///   (2) its remaining characters (if any) are underscores and/or letters and/or digits.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        private bool ValidVariable(String name)
+        {
+            return Regex.IsMatch(name, @"^[a-zA-Z_](?:[a-zA-Z_]|\d)*$");
         }
     }
 }
