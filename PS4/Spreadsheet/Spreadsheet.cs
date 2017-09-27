@@ -28,9 +28,13 @@ namespace SS
         /// value should be either a string, a double, or a Formula.
         public override object GetCellContents(string name)
         {
-            if (name == null || !cells.TryGetValue(name, out var cell))
+            if (name == null || ValidVariable(name))
             {
                 throw new InvalidNameException();
+            }
+            if (!cells.TryGetValue(name, out var cell))
+            {
+                return "";
             }
             return cell.contents;
         }
@@ -55,15 +59,7 @@ namespace SS
         /// </summary>
         public override ISet<string> SetCellContents(string name, double number)
         {
-            if (cells.ContainsKey(name))
-            {
-
-            }
-            else
-            {
-
-            }
-            throw new NotImplementedException();
+            return SetCell(name, number);
         }
 
         /// <summary>
@@ -80,7 +76,7 @@ namespace SS
         /// </summary>
         public override ISet<string> SetCellContents(string name, string text)
         {
-            throw new NotImplementedException();
+            return SetCell(name, text);
         }
 
         /// <summary>
@@ -99,7 +95,7 @@ namespace SS
         /// set {A1, B1, C1} is returned.
         public override ISet<string> SetCellContents(string name, Formula formula)
         {
-            throw new NotImplementedException();
+            return SetCell(name, formula);
         }
 
         /// <summary>
@@ -130,6 +126,26 @@ namespace SS
                 throw new InvalidNameException();
             }
             return dependencyGraph.GetDependents(name);
+        }
+
+        /// <summary>
+        /// Helper method for all SetCellContent methods. 
+        /// 
+        /// If name is null or invalid, throws an InvalidNameException.
+        /// Otherwise, the contents of the named cell becomes object parameter which can
+        /// be a double, Formula, or string. The method returns a
+        /// set consisting of name plus the names of all other cells whose value depends, 
+        /// directly or indirectly, on the named cell.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="contents"></param>
+        /// <returns></returns>
+        private ISet<string> SetCell(string name, object contents)
+        {
+            if (name == null || !ValidVariable(name))
+            {
+                throw new InvalidNameException();
+            }
         }
 
         /// <summary>
