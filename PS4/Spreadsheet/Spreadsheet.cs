@@ -32,7 +32,7 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-            return cell;
+            return cell.getContents();
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace SS
         /// </summary>
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
-            throw new NotImplementedException();
+            return new List<string>(cells.Keys);
         }
 
         /// <summary>

@@ -63,5 +63,14 @@ namespace Spreadsheet
         /// <param name="name"></param>
         /// <param name="formula"></param>
         public Cell(string name, Formula formula) : this(name, null, null, formula){ }
+
+        /// <summary>
+        /// Getter method for private contents of the Cell.
+        /// </summary>
+        /// <returns></returns>
+        public object getContents()
+        {
+            return this.contents;
+        }
     }
 }
