@@ -59,7 +59,7 @@ namespace SS
         /// </summary>
         public override ISet<string> SetCellContents(string name, double number)
         {
-            return SetCell(name, number);
+            return SetCellNumOrText(name, number);
         }
 
         /// <summary>
@@ -76,7 +76,11 @@ namespace SS
         /// </summary>
         public override ISet<string> SetCellContents(string name, string text)
         {
-            return SetCell(name, text);
+            if (text == null)
+            {
+                throw new ArgumentNullException("A cell can't have a null value!);");
+            }
+            return SetCellNumOrText(name, text);
         }
 
         /// <summary>
@@ -95,7 +99,14 @@ namespace SS
         /// set {A1, B1, C1} is returned.
         public override ISet<string> SetCellContents(string name, Formula formula)
         {
-            return SetCell(name, formula);
+            if (formula == null)
+            {
+                throw new ArgumentNullException("A cell can't have a null value!);");
+            }
+            if (!cells.ContainsKey(name))
+            {
+
+            }
         }
 
         /// <summary>
@@ -125,26 +136,53 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
+            //dependency graph's get dependents enumerates all unique dependents 
+            //and returns an empty list if the cell does not have dependents
             return dependencyGraph.GetDependents(name);
         }
 
         /// <summary>
-        /// Helper method for all SetCellContent methods. 
+        /// Helper method for SetCellContent methods where content of Cell is double or string. 
         /// 
         /// If name is null or invalid, throws an InvalidNameException.
         /// Otherwise, the contents of the named cell becomes object parameter which can
-        /// be a double, Formula, or string. The method returns a
-        /// set consisting of name plus the names of all other cells whose value depends, 
-        /// directly or indirectly, on the named cell.
+        /// be a double, Formula, or string. The method returns a set consisting of name 
+        /// plus the names of all other cells whose value depends, directly or indirectly, 
+        /// on the named cell.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="contents"></param>
         /// <returns></returns>
-        private ISet<string> SetCell(string name, object contents)
+        private ISet<string> SetCellNumOrText(string name, object contents)
         {
             if (name == null || !ValidVariable(name))
             {
                 throw new InvalidNameException();
+            }
+            //cell that was previiously empty
+            if (!cells.ContainsKey(name))
+            {
+                Cell cell = new Cell(contents);
+                cells.Add(name, cell);
+                
+                return new HashSet<string>(GetCellsToRecalculate(name));
+            }    
+            else //if the cell wasn't empty 
+            {
+                cells.TryGetValue(name, out var oldContents);
+                //dependencies must be removed if the old contents are a formula with variables
+                if (oldContents.contents is Formula)
+                {
+                    Formula oldFormula = (Formula)oldContents.contents;
+                    
+                    foreach (var oldCell in oldFormula.GetVariables())
+                    {
+                        dependencyGraph.RemoveDependency(oldCell, name);
+                    }
+                }
+                cells.Remove(name);
+                cells.Add(name, new Cell(contents));
+                return new HashSet<string>(GetCellsToRecalculate(name));
             }
         }
 

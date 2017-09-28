@@ -22,53 +22,15 @@ namespace Spreadsheet
         }
 
         /// <summary>
-        ///Master constructor which takes in all 3 content types but isn't 
-        ///callable outside of this class. Sets cell's contents to whichever value is
-        ///non-null.
+        ///Sets cell's contents property to whichever parameter. 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="text"></param>
         /// <param name="value"></param>
         /// <param name="formula"></param>
-        private Cell(string name, string text, Double ? val, Formula formula)
+        public Cell(object contents)
         {
-            if (text != null)
-            {
-                contents = text;
-            }
-            else if (val != null)
-            {
-                contents = val;
-            }
-            else if (formula != null)
-            {
-                contents = formula;
-            }
-            else
-            {
-                throw new ArgumentException("Cell's contents may not be null!");
-            }
+            this.contents = contents;
         }
-
-        /// <summary>
-        /// Creates a cell that holds string contents. 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="val"></param>
-        public Cell(string name, string text) : this(name, text, null, null) { }
-
-        /// <summary>
-        /// Creates a cell that holds double contents. 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="val"></param>
-        public Cell(string name, double val) : this(name, null, val, null){ }
-
-        /// <summary>
-        /// Creates a cell that holds Formula contents. 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="formula"></param>
-        public Cell(string name, Formula formula) : this(name, null, null, formula){ }
     }
 }
