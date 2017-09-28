@@ -5,24 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Spreadsheet
+namespace SS
 {
-    class Cell
+    internal class Cell
     {
         /// <summary>
         /// A cell can either hold a string, double, or Formula as its contents.
         /// </summary>
-        internal object contents
-        {
-            get
-            {
-                return contents;
-            }
-            private set { }
-        }
+        internal object Contents { get; }
 
         /// <summary>
-        ///Sets cell's contents property to whichever parameter. 
+        ///Sets cell's contents property to parameter, which
+        ///can be a double, string, or Formula. 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="text"></param>
@@ -30,7 +24,7 @@ namespace Spreadsheet
         /// <param name="formula"></param>
         public Cell(object contents)
         {
-            this.contents = contents;
+            Contents = contents;
         }
     }
 }

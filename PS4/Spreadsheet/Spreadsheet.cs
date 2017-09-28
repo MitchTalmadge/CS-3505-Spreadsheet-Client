@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SpreadsheetUtilities;
-using Spreadsheet;
 using System.Text.RegularExpressions;
 
 namespace SS
@@ -14,12 +13,21 @@ namespace SS
         /// <summary>
         /// Maps cell names to their Cell object. Only contains non-empty cells. 
         /// </summary>
-        private Dictionary<string, Cell> cells = new Dictionary<string, Cell>();
+        private Dictionary<string, Cell> cells;
 
         /// <summary>
         /// Dependency Graph mapping each cell to its dependents and dependees. 
         /// </summary>
-        private DependencyGraph dependencyGraph = new DependencyGraph();
+        private DependencyGraph dependencyGraph;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public Spreadsheet()
+        {
+            cells =  new Dictionary<string, Cell>();
+            dependencyGraph = new DependencyGraph();
+        }
 
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
@@ -28,7 +36,7 @@ namespace SS
         /// value should be either a string, a double, or a Formula.
         public override object GetCellContents(string name)
         {
-            if (name == null || ValidVariable(name))
+            if (name == null || !ValidVariable(name))
             {
                 throw new InvalidNameException();
             }
@@ -36,7 +44,7 @@ namespace SS
             {
                 return "";
             }
-            return cell.contents;
+            return cell.Contents;
         }
 
         /// <summary>
@@ -103,10 +111,39 @@ namespace SS
             {
                 throw new ArgumentNullException("A cell can't have a null value!);");
             }
+            //cell that was previously empty
             if (!cells.ContainsKey(name))
             {
+                Cell cell = new Cell(formula);
+                cells.Add(name, cell);
 
+                return new HashSet<string>(GetCellsToRecalculate(name));
             }
+            else //if the cell wasn't empty 
+            {
+                //saving old dependees and contents in case a circular dependency is found
+                List<string> oldDependees = new List<string>(dependencyGraph.GetDependees(name));
+                cells.TryGetValue(name, out var oldContents);
+
+                //dependees are replaced with dependees (variables) of new formula
+                dependencyGraph.ReplaceDependees(name, formula.GetVariables());
+                cells.Remove(name);
+                cells.Add(name, new Cell(formula));
+
+                //a circular dependency is checked for, old dependees and content are kept if one is found
+                try
+                {
+                    return new HashSet<string>(GetCellsToRecalculate(name));
+                }
+                catch (CircularException)
+                {
+                    cells.Remove(name);
+                    cells.Add(name, oldContents);
+                    dependencyGraph.ReplaceDependees(name, oldDependees);
+                    throw;
+                }
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -159,7 +196,7 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-            //cell that was previiously empty
+            //cell that was previously empty
             if (!cells.ContainsKey(name))
             {
                 Cell cell = new Cell(contents);
@@ -171,9 +208,9 @@ namespace SS
             {
                 cells.TryGetValue(name, out var oldContents);
                 //dependencies must be removed if the old contents are a formula with variables
-                if (oldContents.contents is Formula)
+                if (oldContents.Contents is Formula)
                 {
-                    Formula oldFormula = (Formula)oldContents.contents;
+                    Formula oldFormula = (Formula)oldContents.Contents;
                     
                     foreach (var oldCell in oldFormula.GetVariables())
                     {

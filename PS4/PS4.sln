@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spreadsheet", "Spreadsheet\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{35957445-4760-4B01-A95B-379F55E6C3F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetTests", "SpreadsheetTests\SpreadsheetTests.csproj", "{7879F0C0-30FF-4DB4-963E-3765E8462F92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetTests", "SpreadsheetTests\SpreadsheetTests.csproj", "{E500A019-467C-42B2-988E-9380980280D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +22,10 @@ Global
 		{35957445-4760-4B01-A95B-379F55E6C3F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{35957445-4760-4B01-A95B-379F55E6C3F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35957445-4760-4B01-A95B-379F55E6C3F7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7879F0C0-30FF-4DB4-963E-3765E8462F92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7879F0C0-30FF-4DB4-963E-3765E8462F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7879F0C0-30FF-4DB4-963E-3765E8462F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7879F0C0-30FF-4DB4-963E-3765E8462F92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E500A019-467C-42B2-988E-9380980280D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E500A019-467C-42B2-988E-9380980280D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E500A019-467C-42B2-988E-9380980280D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E500A019-467C-42B2-988E-9380980280D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
