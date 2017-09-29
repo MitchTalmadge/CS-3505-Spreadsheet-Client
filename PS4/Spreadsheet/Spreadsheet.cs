@@ -111,6 +111,10 @@ namespace SS
             {
                 throw new ArgumentNullException("A cell can't have a null value!);");
             }
+            if (name == null || !ValidVariable(name))
+            {
+                throw new InvalidNameException();
+            }
 
             //saving old dependees and contents in case a circular dependency is found
             List<string> oldDependees = new List<string>(dependencyGraph.GetDependees(name));

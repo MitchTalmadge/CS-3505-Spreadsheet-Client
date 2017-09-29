@@ -267,5 +267,30 @@ namespace SpreadsheetTests
             spreadsheet.SetCellContents("a1", 9.43);
             Assert.IsFalse(deps.HasDependees("a1"));
         }
+
+        /// <summary>
+        /// Tests setting cells with null or invalid names.
+        /// </summary>
+        [TestMethod]
+        public void TestSetInvalidNames()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            // invalid variable name
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents("AB!", "yikes"));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents("yeet 89", "test"));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents("  ", "no"));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents("89u", 2.3));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents("UI.9", 2.56));
+            Assert.ThrowsException<InvalidNameException>(
+                () => spreadsheet.SetCellContents("d-85", "hi"));
+
+            // null name
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents(null, "daenyris"));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents(null, 9.8));
+            Assert.ThrowsException<InvalidNameException>(() =>
+                spreadsheet.SetCellContents(null, new Formula("6.8 * 8 + 2.32")));
+        }
+
     }
 }
