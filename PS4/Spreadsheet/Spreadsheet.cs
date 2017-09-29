@@ -199,6 +199,10 @@ namespace SS
             //don't add an empty cell 
             if (contents is string && (string)contents == "")
             {
+                if (oldContents != null)
+                {
+                    cells.Remove(name);
+                }
                 return new HashSet<string>(GetCellsToRecalculate(name));
             }
             cells[name] = new Cell(contents);

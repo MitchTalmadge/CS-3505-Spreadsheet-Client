@@ -137,8 +137,7 @@ namespace SpreadsheetTests
 
         /// <summary>
         /// When a cell is set to an empty string, it should be removed
-        /// from the dictionary keeping track of non-empty cells, and as
-        /// well removed from the dependency graph.
+        /// from the dictionary keeping track of non-empty cells.
         /// </summary>
         [TestMethod]
         public void TestSetCellEmptyContents()
@@ -147,14 +146,27 @@ namespace SpreadsheetTests
 
             //adding a new cell with contents
             spreadsheet.SetCellContents("a1", 10.78);
+            Assert.IsTrue(spreadsheet.GetNamesOfAllNonemptyCells().Contains("a1"));
 
             //setting it to an empty string
             spreadsheet.SetCellContents("a1", "");
 
-            //ensuring cell gets removed from dependency graph and inner dictionary
-            PrivateObject sheetAccessor = new PrivateObject(spreadsheet);
-            DependencyGraph depGraph = (DependencyGraph)sheetAccessor.GetField("dependencyGraph");
-            object cells = sheetAccessor.Invoke("cells", new String[] { });
+            //ensuring cell gets removed from inner dictionary
+            Assert.IsFalse(spreadsheet.GetNamesOfAllNonemptyCells().Contains("a1"));
+        }
+
+        /// <summary>
+        /// When a previously empty cell is set to an empty string, it should 
+        /// not be added to the dictionary keeping track of non-empty cells.
+        /// </summary>
+        [TestMethod]
+        public void TestSetNewCellEmptyContents()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            //adding a new cell with contents
+            spreadsheet.SetCellContents("a1", "");
+            Assert.IsFalse(spreadsheet.GetNamesOfAllNonemptyCells().Contains("a1"));
         }
 
         /// <summary>
@@ -170,6 +182,23 @@ namespace SpreadsheetTests
             Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
 
             // Adding this cell will cause the circular dependency.
+            Assert.ThrowsException<CircularException>(() => spreadsheet.SetCellContents("a2", new Formula("a1 + d3")));
+
+            // Make sure nothing was changed since circular dependency was found
+            Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
+        }
+
+        /// <summary>
+        /// Tests creating a circular dependency with a previously
+        /// empty cell's new contents.
+        /// </summary>
+        [TestMethod]
+        public void TestCircularDependencyNewCell()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            spreadsheet.SetCellContents("a1", new Formula("a3 * d3"));
+            spreadsheet.SetCellContents("a3", new Formula("a2 - 5"));
+
             Assert.ThrowsException<CircularException>(() => spreadsheet.SetCellContents("a2", new Formula("a1 + d3")));
 
             // Make sure nothing was changed since circular dependency was found
