@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 using SpreadsheetUtilities;
 using System.Text.RegularExpressions;
 
+///
+/// Jiahui Chen
+/// u0980890
+/// CS 3500 PS4
+///
 namespace SS
 {
     public class Spreadsheet : AbstractSpreadsheet

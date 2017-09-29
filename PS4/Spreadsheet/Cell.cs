@@ -5,6 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+///
+/// Jiahui Chen
+/// u0980890
+/// CS 3500 PS4
+///
 namespace SS
 {
     internal class Cell

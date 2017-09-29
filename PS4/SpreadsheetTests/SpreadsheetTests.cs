@@ -6,6 +6,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpreadsheetUtilities;
 using SS;
 
+///
+/// Jiahui Chen
+/// u0980890
+/// CS 3500 PS4
+///
 namespace SpreadsheetTests
 {
     [TestClass]
@@ -267,10 +272,7 @@ namespace SpreadsheetTests
             spreadsheet.SetCellContents("a1", 9.43);
             Assert.IsFalse(deps.HasDependees("a1"));
         }
-
-        /// <summary>
-        /// Tests setting cells with null or invalid names.
-        /// </summary>
+        
         [TestMethod]
         public void TestSetInvalidNames()
         {
@@ -282,14 +284,83 @@ namespace SpreadsheetTests
             Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents("  ", "no"));
             Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents("89u", 2.3));
             Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents("UI.9", 2.56));
-            Assert.ThrowsException<InvalidNameException>(
-                () => spreadsheet.SetCellContents("d-85", "hi"));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents("d-85", "hi"));
 
             // null name
             Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents(null, "daenyris"));
             Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents(null, 9.8));
-            Assert.ThrowsException<InvalidNameException>(() =>
-                spreadsheet.SetCellContents(null, new Formula("6.8 * 8 + 2.32")));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.SetCellContents(null, new Formula("6.8 * 8 + 2.32")));
+        }
+
+        /// <summary>
+        /// Tests the set returned when cell is set is correct. 
+        /// </summary>
+        [TestMethod]
+        public void TestSetReturnsDependencies()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            //no dependencies expected
+            CollectionAssert.AreEqual(new[] { "a1" }, spreadsheet.SetCellContents("a1", 3.48).ToArray());
+
+            //direct dependency
+            spreadsheet.SetCellContents("a2", new Formula("a1 + 7.8"));
+            CollectionAssert.AreEqual(new[] { "a1", "a2" }, spreadsheet.SetCellContents("a1", "yo").ToArray());
+
+            //indirect dependency
+            spreadsheet.SetCellContents("a3", new Formula("a2 + 7.8"));
+            spreadsheet.SetCellContents("a4", new Formula("a3 + 7.8"));
+            CollectionAssert.AreEquivalent(new[] { "a1", "a2", "a3", "a4" }, spreadsheet.SetCellContents("a1", 78).ToArray());
+        }
+
+        [TestMethod]
+        public void TestGetInvalidNames()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            //trying to get a null name cell
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellContents((string)null));
+
+            //trying to get an invalid named cell
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellContents("8.9i"));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellContents("AB!"));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellContents("yeet 89"));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellContents("  "));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellContents("89u"));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellContents("UI.9"));
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellContents("d-85"));
+        }
+
+        [TestMethod]
+        public void TestGetDependentsNullName()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            PrivateObject sheetAccessor = new PrivateObject(spreadsheet);
+
+            try
+            {
+                sheetAccessor.Invoke("GetDirectDependents", new String[1] { (string)null });
+            }
+            catch (TargetInvocationException e)
+            {
+                Assert.IsInstanceOfType(e.InnerException, typeof(ArgumentNullException));
+            }
+        }
+
+        [TestMethod]
+        public void TestGetDependentsInalidName()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            PrivateObject sheetAccessor = new PrivateObject(spreadsheet);
+
+            try
+            {
+                sheetAccessor.Invoke("GetDirectDependents", new String[1] { "87ei" });
+            }
+            catch (TargetInvocationException e)
+            {
+                Assert.IsInstanceOfType(e.InnerException, typeof(InvalidNameException));
+            }
         }
 
     }
