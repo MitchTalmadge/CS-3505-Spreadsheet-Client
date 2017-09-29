@@ -127,7 +127,14 @@ namespace SS
             }
             catch (CircularException)
             {
-                cells[name] = new Cell(oldContents.Contents);
+                if (oldContents != null)
+                {
+                    cells[name] = new Cell(oldContents.Contents);
+                }
+                else //if the cell was empty before setting to this invalid formula, leave it empty
+                {
+                    cells.Remove(name);
+                }
                 dependencyGraph.ReplaceDependees(name, oldDependees);
                 throw;
             }

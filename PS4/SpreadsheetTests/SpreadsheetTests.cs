@@ -201,13 +201,10 @@ namespace SpreadsheetTests
 
             Assert.ThrowsException<CircularException>(() => spreadsheet.SetCellContents("a2", new Formula("a1 + d3")));
 
-            // Make sure nothing was changed since circular dependency was found
-            Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
+            // Make sure the cell wasn't added since a circular dependency was found
+            Assert.IsFalse(spreadsheet.GetNamesOfAllNonemptyCells().Contains("a2"));
         }
 
-        /// <summary>
-        /// Tests creating a circular dependency.
-        /// </summary>
         [TestMethod]
         public void TestGetNonEmptyCells()
         {
@@ -222,6 +219,53 @@ namespace SpreadsheetTests
 
             spreadsheet.SetCellContents("empty1", "");
             Assert.AreEqual(5, spreadsheet.GetNamesOfAllNonemptyCells().Count());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestSetNullFormula()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            Formula nullFormula = null;
+
+           spreadsheet.SetCellContents("a1", nullFormula);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestSetNullString()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            string nullString = null;
+
+            spreadsheet.SetCellContents("a1", nullString);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestReplaceWithNull()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            string nullString = null;
+
+            spreadsheet.SetCellContents("a1", "yay");
+            spreadsheet.SetCellContents("a1", nullString);
+        }
+
+        [TestMethod]
+        public void TestReplaceFormula()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            PrivateObject accessSheet = new PrivateObject(spreadsheet);
+            DependencyGraph deps =  (DependencyGraph) accessSheet.GetField("dependencyGraph");
+
+            //setting cell to formula with dependees
+            spreadsheet.SetCellContents("a1", new Formula("9.8 + u1 + dannyboi__9 + 8.7"));
+            Assert.IsTrue(deps.HasDependees("a1"));
+
+            //replacing cell with double contents with no dependees
+            spreadsheet.SetCellContents("a1", 9.43);
+            Assert.IsFalse(deps.HasDependees("a1"));
         }
     }
 }
