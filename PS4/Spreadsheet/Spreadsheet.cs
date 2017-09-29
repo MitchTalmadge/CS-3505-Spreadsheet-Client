@@ -111,39 +111,26 @@ namespace SS
             {
                 throw new ArgumentNullException("A cell can't have a null value!);");
             }
-            //cell that was previously empty
-            if (!cells.ContainsKey(name))
-            {
-                Cell cell = new Cell(formula);
-                cells.Add(name, cell);
 
+            //saving old dependees and contents in case a circular dependency is found
+            List<string> oldDependees = new List<string>(dependencyGraph.GetDependees(name));
+            cells.TryGetValue(name, out var oldContents);
+
+            //dependees are replaced with dependees (variables) of new formula
+            dependencyGraph.ReplaceDependees(name, formula.GetVariables());
+            cells[name] =  new Cell(formula);
+
+            //a circular dependency is checked for, old dependees and content are kept if one is found
+            try
+            {
                 return new HashSet<string>(GetCellsToRecalculate(name));
             }
-            else //if the cell wasn't empty 
+            catch (CircularException)
             {
-                //saving old dependees and contents in case a circular dependency is found
-                List<string> oldDependees = new List<string>(dependencyGraph.GetDependees(name));
-                cells.TryGetValue(name, out var oldContents);
-
-                //dependees are replaced with dependees (variables) of new formula
-                dependencyGraph.ReplaceDependees(name, formula.GetVariables());
-                cells.Remove(name);
-                cells.Add(name, new Cell(formula));
-
-                //a circular dependency is checked for, old dependees and content are kept if one is found
-                try
-                {
-                    return new HashSet<string>(GetCellsToRecalculate(name));
-                }
-                catch (CircularException)
-                {
-                    cells.Remove(name);
-                    cells.Add(name, oldContents);
-                    dependencyGraph.ReplaceDependees(name, oldDependees);
-                    throw;
-                }
+                cells[name] = new Cell(oldContents.Contents);
+                dependencyGraph.ReplaceDependees(name, oldDependees);
+                throw;
             }
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -196,31 +183,26 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-            //cell that was previously empty
-            if (!cells.ContainsKey(name))
+            if (cells.TryGetValue(name, out var oldContents))
             {
-                Cell cell = new Cell(contents);
-                cells.Add(name, cell);
-                
-                return new HashSet<string>(GetCellsToRecalculate(name));
-            }    
-            else //if the cell wasn't empty 
-            {
-                cells.TryGetValue(name, out var oldContents);
                 //dependencies must be removed if the old contents are a formula with variables
                 if (oldContents.Contents is Formula)
                 {
                     Formula oldFormula = (Formula)oldContents.Contents;
-                    
+
                     foreach (var oldCell in oldFormula.GetVariables())
                     {
                         dependencyGraph.RemoveDependency(oldCell, name);
                     }
                 }
-                cells.Remove(name);
-                cells.Add(name, new Cell(contents));
+            }
+            //don't add an empty cell 
+            if (contents is string && (string)contents == "")
+            {
                 return new HashSet<string>(GetCellsToRecalculate(name));
             }
+            cells[name] = new Cell(contents);
+            return new HashSet<string>(GetCellsToRecalculate(name));
         }
 
         /// <summary>

@@ -118,21 +118,21 @@ namespace SpreadsheetTests
 
             // These cells depend on "a1"
             spreadsheet.SetCellContents("b1", new Formula("a1 + independent1"));
-            spreadsheet.SetCellContents("c1", new Formula("1.10 + 8 * a1)"));
+            spreadsheet.SetCellContents("c1", new Formula("1.10 + 8 * a1"));
 
             // These cells do not depend on a1
             spreadsheet.SetCellContents("independent1", new Formula("5 + 10"));
             spreadsheet.SetCellContents("dannyboii", new Formula("4.0 * 3500"));
 
-            // Check direct dependents.
+            // Check direct dependents of a1
             PrivateObject sheetAccessor = new PrivateObject(spreadsheet);
-            object directDependents = sheetAccessor.Invoke("GetDirectDependents", new String[1] { "a1" });
+            IEnumerable<string> directDependents = (IEnumerable < string >)sheetAccessor.Invoke("GetDirectDependents", new String[1] {"a1"});
 
-            Assert.AreEqual(2, dependents.Length, "There were too many direct dependents.");
-            CollectionAssert.Contains(dependents, "b1", "The direct dependents does not include b1.");
-            CollectionAssert.Contains(dependents, "d1", "The direct dependents does not include d1.");
-            CollectionAssert.DoesNotContain(dependents, "c2", "The direct dependents includes c2.");
-            CollectionAssert.DoesNotContain(dependents, "daniel_kopta", "The direct dependents includes daniel_kopta.");
+            Assert.AreEqual(2, directDependents.Count());
+            Assert.IsTrue(directDependents.Contains("b1"));
+            Assert.IsTrue(directDependents.Contains("c1"));
+            Assert.IsFalse(directDependents.Contains("independent1"));
+            Assert.IsFalse(directDependents.Contains("dannyboii"));
         }
 
         /// <summary>
@@ -145,6 +145,54 @@ namespace SpreadsheetTests
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
 
+            //adding a new cell with contents
+            spreadsheet.SetCellContents("a1", 10.78);
+
+            //setting it to an empty string
+            spreadsheet.SetCellContents("a1", "");
+
+            //ensuring cell gets removed from dependency graph and inner dictionary
+            PrivateObject sheetAccessor = new PrivateObject(spreadsheet);
+            DependencyGraph depGraph = (DependencyGraph)sheetAccessor.GetField("dependencyGraph");
+            object cells = sheetAccessor.Invoke("cells", new String[] { });
+        }
+
+        /// <summary>
+        /// Tests creating a circular dependency.
+        /// </summary>
+        [TestMethod]
+        public void TestCircularDependency()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            spreadsheet.SetCellContents("a1", new Formula("a3 * d3"));
+            spreadsheet.SetCellContents("a3", new Formula("a2 - 5"));
+            spreadsheet.SetCellContents("a2", 2.3);
+            Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
+
+            // Adding this cell will cause the circular dependency.
+            Assert.ThrowsException<CircularException>(() => spreadsheet.SetCellContents("a2", new Formula("a1 + d3")));
+
+            // Make sure nothing was changed since circular dependency was found
+            Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
+        }
+
+        /// <summary>
+        /// Tests creating a circular dependency.
+        /// </summary>
+        [TestMethod]
+        public void TestGetNonEmptyCells()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            spreadsheet.SetCellContents("a1", new Formula("a3 * d3"));
+            spreadsheet.SetCellContents("a3", new Formula("a2 - 5"));
+            spreadsheet.SetCellContents("hy1", new Formula("3 + 4"));
+            spreadsheet.SetCellContents("h78", new Formula("a1 + 7"));
+            spreadsheet.SetCellContents("a2", new Formula("t3 + 4.5"));
+
+            Assert.AreEqual(5, spreadsheet.GetNamesOfAllNonemptyCells().Count());
+
+            spreadsheet.SetCellContents("empty1", "");
+            Assert.AreEqual(5, spreadsheet.GetNamesOfAllNonemptyCells().Count());
         }
     }
 }
