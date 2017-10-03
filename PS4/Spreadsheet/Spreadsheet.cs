@@ -59,6 +59,11 @@ namespace SS
         public Spreadsheet(string filePath, Func<string, bool> isValid, Func<string, string> normalize, string version) :
             base(isValid, normalize, version)
         {
+            // Make sure version of file matches parameter version
+            if (GetSavedVersion(filePath) != version)
+            {
+                throw new SpreadsheetReadWriteException("The provided version does not match the version of the passed in file!");
+            }
             //////TODO: READ FROM FILE AND CONSTRUCT NEW SPREADSHEET FROM IT////
             cells = new Dictionary<string, Cell>();
             dependencyGraph = new DependencyGraph();
@@ -98,11 +103,41 @@ namespace SS
             return new List<string>(cells.Keys);
         }
 
+        /// <summary>
+        /// Returns the version information of the spreadsheet saved in the named file.
+        /// If there are any problems opening, reading, or closing the file, the method
+        /// should throw a SpreadsheetReadWriteException with an explanatory message.
+        /// </summary>
         public override string GetSavedVersion(string filename)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Writes the contents of this spreadsheet to the named file using an XML format.
+        /// The XML elements should be structured as follows:
+        /// 
+        /// <spreadsheet version="version information goes here">
+        /// 
+        /// <cell>
+        /// <name>
+        /// cell name goes here
+        /// </name>
+        /// <contents>
+        /// cell contents goes here
+        /// </contents>    
+        /// </cell>
+        /// 
+        /// </spreadsheet>
+        /// 
+        /// There should be one cell element for each non-empty cell in the spreadsheet.  
+        /// If the cell contains a string, it should be written as the contents.  
+        /// If the cell contains a double d, d.ToString() should be written as the contents.  
+        /// If the cell contains a Formula f, f.ToString() with "=" prepended should be written as the contents.
+        /// 
+        /// If there are any problems opening, writing, or closing the file, the method should throw a
+        /// SpreadsheetReadWriteException with an explanatory message.
+        /// </summary>
         public override void Save(string filename)
         {
             throw new NotImplementedException();
@@ -197,8 +232,43 @@ namespace SS
             }
         }
 
+        /// If content is null, throws an ArgumentNullException.
+        /// 
+        /// Otherwise, if name is null or invalid, throws an InvalidNameException.
+        /// 
+        /// Otherwise, if content parses as a double, the contents of the named
+        /// cell becomes that double.
+        /// 
+        /// Otherwise, if content begins with the character '=', an attempt is made
+        /// to parse the remainder of content into a Formula f using the Formula
+        /// constructor.  There are then three possibilities:
+        /// 
+        ///   (1) If the remainder of content cannot be parsed into a Formula, a 
+        ///       SpreadsheetUtilities.FormulaFormatException is thrown.
+        ///       
+        ///   (2) Otherwise, if changing the contents of the named cell to be f
+        ///       would cause a circular dependency, a CircularException is thrown.
+        ///       
+        ///   (3) Otherwise, the contents of the named cell becomes f.
+        /// 
+        /// Otherwise, the contents of the named cell becomes content.
+        /// 
+        /// If an exception is not thrown, the method returns a set consisting of
+        /// name plus the names of all other cells whose value depends, directly
+        /// or indirectly, on the named cell.
+        /// 
+        /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
+        /// set {A1, B1, C1} is returned.
         public override ISet<string> SetContentsOfCell(string name, string content)
         {
+            if (content == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (name == null || !ValidVariable(name))
+            {
+                throw new InvalidNameException();
+            }
             throw new NotImplementedException();
         }
 
@@ -279,17 +349,14 @@ namespace SS
         }
 
         /// <summary>
-        /// Helper method to determining if the token is a valid variable by the base rules:
-        /// 
-        /// A string is a valid cell name if and only if:
-        ///   (1) its first character is an underscore or a letter.
-        ///   (2) its remaining characters (if any) are underscores and/or letters and/or digits.
+        /// Helper method to determining if the token is a valid variable by the base rule:
+        /// The string starts with one or more letters and is followed by one or more numbers.
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
         private bool ValidVariable(String name)
         {
-            return Regex.IsMatch(name, @"^[a-zA-Z_](?:[a-zA-Z_]|\d)*$");
+            return Regex.IsMatch(name, @"^[A-Z]+\d+$");
         }
     }
 }
