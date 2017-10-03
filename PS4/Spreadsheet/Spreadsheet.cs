@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 ///
 /// Jiahui Chen
 /// u0980890
-/// CS 3500 PS4
+/// CS 3500 PS5
 ///
 namespace SS
 {
@@ -34,6 +34,8 @@ namespace SS
             dependencyGraph = new DependencyGraph();
         }
 
+        public override bool Changed { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
+
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
         /// 
@@ -52,12 +54,27 @@ namespace SS
             return cell.Contents;
         }
 
+        public override object GetCellValue(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Enumerates the names of all the non-empty cells in the spreadsheet.
         /// </summary>
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
             return new List<string>(cells.Keys);
+        }
+
+        public override string GetSavedVersion(string filename)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Save(string filename)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -147,6 +164,11 @@ namespace SS
                 dependencyGraph.ReplaceDependees(name, oldDependees);
                 throw;
             }
+        }
+
+        public override ISet<string> SetContentsOfCell(string name, string content)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
