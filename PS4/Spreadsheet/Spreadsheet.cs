@@ -26,14 +26,45 @@ namespace SS
         private DependencyGraph dependencyGraph;
 
         /// <summary>
-        /// Constructor
+        /// 0 argument constructor: has no extra validity conditions, 
+        /// normalizes every cell name to itself, and has version "default".
         /// </summary>
-        public Spreadsheet()
+        public Spreadsheet() :
+            base(v => true, s => s, "default")
+        {
+            cells = new Dictionary<string, Cell>();
+            dependencyGraph = new DependencyGraph();
+        }
+
+        /// <summary>
+        /// 3 argument constructor: allows the user to provide a validity delegate
+        /// (first parameter), a normalization delegate (second parameter),
+        /// and a version (third parameter).
+        /// </summary>
+        public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize, string version): 
+            base (isValid, normalize, version)
         {
             cells =  new Dictionary<string, Cell>();
             dependencyGraph = new DependencyGraph();
         }
 
+        /// <summary>
+        /// 4 argument constructor: allows the user to provide a string representing 
+        /// a path to a file (first parameter), a validity delegate (second parameter), 
+        /// a normalization delegate (third parameter), and a version (fourth parameter).
+        /// Reads a saved spreadsheet from a file and uses it to construct a new spreadsheet. 
+        /// New spreadsheet should use the provided validity delegate, normalization delegate, 
+        /// and version.
+        /// </summary>
+        public Spreadsheet(string filePath, Func<string, bool> isValid, Func<string, string> normalize, string version) :
+            base(isValid, normalize, version)
+        {
+            //////TODO: READ FROM FILE AND CONSTRUCT NEW SPREADSHEET FROM IT////
+            cells = new Dictionary<string, Cell>();
+            dependencyGraph = new DependencyGraph();
+        }
+
+        //TODO
         public override bool Changed { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
 
         /// <summary>
@@ -87,7 +118,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public override ISet<string> SetCellContents(string name, double number)
+        protected override ISet<string> SetCellContents(string name, double number)
         {
             return SetCellNumOrText(name, number);
         }
@@ -104,7 +135,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public override ISet<string> SetCellContents(string name, string text)
+        protected override ISet<string> SetCellContents(string name, string text)
         {
             if (text == null)
             {
@@ -127,7 +158,7 @@ namespace SS
         /// 
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
-        public override ISet<string> SetCellContents(string name, Formula formula)
+        protected override ISet<string> SetCellContents(string name, Formula formula)
         {
             if (formula == null)
             {
