@@ -20,6 +20,18 @@ namespace SS
         internal object Contents { get; }
 
         /// <summary>
+        /// The cell's or variable's name, used to map to it in 
+        /// the Spreadsheet class. 
+        /// </summary>
+        private string Name;
+
+        /// <summary>
+        /// A cell's value can either be a string, a double, or a 
+        /// SpreadsheetUtilities.FormulaError.
+        /// </summary>
+        internal object Value { get; private set; }
+
+        /// <summary>
         ///Sets cell's contents property to parameter, which
         ///can be a double, string, or Formula. 
         /// </summary>
@@ -27,9 +39,26 @@ namespace SS
         /// <param name="text"></param>
         /// <param name="value"></param>
         /// <param name="formula"></param>
-        public Cell(object contents)
+        public Cell(string name, object contents)
         {
             Contents = contents;
+            Name = name;
+            
+            //setting this Cell's initial value based on contents type
+            if (Contents is double)
+            {
+                Value = Contents;
+            }
+            if (Contents is string)
+            {
+                Value = Contents;
+            }
+            else if (Contents is Formula)
+            {
+                Formula contentFormula = (Formula)Contents;
+                ////////// WHAT DO WE USE FOR LOOKUP???? GETCELLCONTENTS DOES NOT MATCH RETURN TYPE!!!!!!////////
+                Value = contentFormula.Evaluate(GetCellContents(Name));
+            }
         }
     }
 }

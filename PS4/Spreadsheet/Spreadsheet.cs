@@ -101,6 +101,17 @@ namespace SS
         /// </summary>
         public override object GetCellValue(string name)
         {
+            if (name == null || !ValidVariable(name))
+            {
+                throw new InvalidNameException();
+            }
+
+            string normalizedName = Normalize(name);
+            //an empty or umapped cell should have a value of an empty string
+            if (!cells.TryGetValue(normalizedName, out var contents))
+            {
+                return "";
+            }
             throw new NotImplementedException();
         }
 
@@ -152,95 +163,6 @@ namespace SS
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// If name is null or invalid, throws an InvalidNameException.
-        /// 
-        /// Otherwise, the contents of the named cell becomes number.  The method returns a
-        /// set consisting of name plus the names of all other cells whose value depends, 
-        /// directly or indirectly, on the named cell.
-        /// 
-        /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
-        /// set {A1, B1, C1} is returned.
-        /// </summary>
-        protected override ISet<string> SetCellContents(string name, double number)
-        {
-            return SetCellNumOrText(name, number);
-        }
-
-        /// <summary>
-        /// If text is null, throws an ArgumentNullException.
-        /// 
-        /// Otherwise, if name is null or invalid, throws an InvalidNameException.
-        /// 
-        /// Otherwise, the contents of the named cell becomes text.  The method returns a
-        /// set consisting of name plus the names of all other cells whose value depends, 
-        /// directly or indirectly, on the named cell.
-        /// 
-        /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
-        /// set {A1, B1, C1} is returned.
-        /// </summary>
-        protected override ISet<string> SetCellContents(string name, string text)
-        {
-            if (text == null)
-            {
-                throw new ArgumentNullException("A cell can't have a null value!);");
-            }
-            return SetCellNumOrText(name, text);
-        }
-
-        /// <summary>
-        /// If the formula parameter is null, throws an ArgumentNullException.
-        /// 
-        /// Otherwise, if name is null or invalid, throws an InvalidNameException.
-        /// 
-        /// Otherwise, if changing the contents of the named cell to be the formula would cause a 
-        /// circular dependency, throws a CircularException.  (No change is made to the spreadsheet.)
-        /// 
-        /// Otherwise, the contents of the named cell becomes formula.  The method returns a
-        /// Set consisting of name plus the names of all other cells whose value depends,
-        /// directly or indirectly, on the named cell.
-        /// 
-        /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
-        /// set {A1, B1, C1} is returned.
-        protected override ISet<string> SetCellContents(string name, Formula formula)
-        {
-            if (formula == null)
-            {
-                throw new ArgumentNullException("A cell can't have a null value!);");
-            }
-            if (name == null || !ValidVariable(name))
-            {
-                throw new InvalidNameException();
-            }
-
-            //saving old dependees and contents in case a circular dependency is found
-            List<string> oldDependees = new List<string>(dependencyGraph.GetDependees(name));
-            cells.TryGetValue(name, out var oldContents);
-
-            //dependees are replaced with dependees (variables) of new formula
-            dependencyGraph.ReplaceDependees(name, formula.GetVariables());
-            cells[name] =  new Cell(formula);
-
-            //a circular dependency is checked for, old dependees and content are kept if one is found
-            try
-            {
-                return new HashSet<string>(GetCellsToRecalculate(name));
-            }
-            catch (CircularException)
-            {
-                if (oldContents != null)
-                {
-                    cells[name] = new Cell(oldContents.Contents);
-                }
-                else //if the cell was empty before setting to this invalid formula, leave it empty
-                {
-                    cells.Remove(name);
-                }
-                dependencyGraph.ReplaceDependees(name, oldDependees);
-                throw;
-            }
-        }
-
         /// If content is null, throws an ArgumentNullException.
         /// 
         /// Otherwise, if name is null or invalid, throws an InvalidNameException.
@@ -268,6 +190,10 @@ namespace SS
         /// 
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
+        /// 
+        /// The returned cells are passed into the RecalculateCellValues helper method
+        /// where their values are updated. 
+        /// 
         public override ISet<string> SetContentsOfCell(string name, string content)
         {
             if (content == null)
@@ -278,19 +204,128 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-            string normalizedName = Normalize(name);
 
+            string normalizedName = Normalize(name);
+            ISet<string> recalculatedCells;
             if (Double.TryParse(content, out var num) == true)
             {
-                return SetCellContents(normalizedName, num);
+                recalculatedCells = SetCellContents(normalizedName, num);
+                RecalculateCellValues(recalculatedCells);
+                return recalculatedCells;
             }
-
             char first = content.Trim()[0];
             if (first == '=')
             {
-
+                recalculatedCells = SetCellContents(normalizedName, new Formula(content.Substring(1), Normalize, IsValid));
+                RecalculateCellValues(recalculatedCells);
+                return recalculatedCells;
             }
-            throw new NotImplementedException();
+            else
+            {
+                recalculatedCells = SetCellContents(normalizedName, content);
+                RecalculateCellValues(recalculatedCells);
+                return recalculatedCells;
+            }
+        }
+
+        /// <summary>
+        /// Recalculates and resaves cell values of all Cells corresponding
+        /// to names in parameter string Set. 
+        /// </summary>
+        /// <param name="recalculatedCells"></param>
+        private void RecalculateCellValues(ISet<string> recalculatedCells)
+        {
+
+        }
+
+        /// <summary>
+        /// If name is null or invalid, throws an InvalidNameException.
+        /// 
+        /// Otherwise, the contents of the named cell becomes number.  The method returns a
+        /// set consisting of name plus the names of all other cells whose value depends, 
+        /// directly or indirectly, on the named cell.
+        /// 
+        /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
+        /// set {A1, B1, C1} is returned.
+        /// </summary>
+        protected override ISet<string> SetCellContents(string name, double number)
+        {
+            return SetCellNumOrText(Normalize(name), number);
+        }
+
+        /// <summary>
+        /// If text is null, throws an ArgumentNullException.
+        /// 
+        /// Otherwise, if name is null or invalid, throws an InvalidNameException.
+        /// 
+        /// Otherwise, the contents of the named cell becomes text.  The method returns a
+        /// set consisting of name plus the names of all other cells whose value depends, 
+        /// directly or indirectly, on the named cell.
+        /// 
+        /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
+        /// set {A1, B1, C1} is returned.
+        /// </summary>
+        protected override ISet<string> SetCellContents(string name, string text)
+        {
+            if (text == null)
+            {
+                throw new ArgumentNullException("A cell can't have a null value!);");
+            }
+            return SetCellNumOrText(Normalize(name), text);
+        }
+
+        /// <summary>
+        /// If the formula parameter is null, throws an ArgumentNullException.
+        /// 
+        /// Otherwise, if name is null or invalid, throws an InvalidNameException.
+        /// 
+        /// Otherwise, if changing the contents of the named cell to be the formula would cause a 
+        /// circular dependency, throws a CircularException.  (No change is made to the spreadsheet.)
+        /// 
+        /// Otherwise, the contents of the named cell becomes formula.  The method returns a
+        /// Set consisting of name plus the names of all other cells whose value depends,
+        /// directly or indirectly, on the named cell.
+        /// 
+        /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
+        /// set {A1, B1, C1} is returned.
+        protected override ISet<string> SetCellContents(string name, Formula formula)
+        {
+            if (formula == null)
+            {
+                throw new ArgumentNullException("A cell can't have a null value!);");
+            }
+            if (name == null || !ValidVariable(name))
+            {
+                throw new InvalidNameException();
+            }
+            string normalizedName = Normalize(name);
+
+            //saving old dependees and contents in case a circular dependency is found
+            List<string> oldDependees = new List<string>(dependencyGraph.GetDependees(normalizedName));
+            cells.TryGetValue(normalizedName, out var oldContents);
+
+            //dependees are replaced with dependees (variables) of new formula
+            dependencyGraph.ReplaceDependees(normalizedName, formula.GetVariables());
+            cells[normalizedName] =  new Cell(normalizedName, formula);
+
+            //a circular dependency is checked for, old dependees and content are kept if one is found
+            try
+            {
+                return new HashSet<string>(GetCellsToRecalculate(normalizedName));
+            }
+            catch (CircularException)
+            {
+                if (oldContents != null)
+                {
+                    cells[normalizedName] = new Cell(normalizedName, oldContents.Contents);
+                }
+                else //if the cell was empty before setting to this invalid formula, leave it empty
+                {
+                    cells.Remove(normalizedName);
+                }
+                dependencyGraph.ReplaceDependees(normalizedName, oldDependees);
+                throw;
+            }
         }
 
         /// <summary>
@@ -322,13 +357,14 @@ namespace SS
             }
             //dependency graph's get dependents enumerates all unique dependents 
             //and returns an empty list if the cell does not have dependents
-            return dependencyGraph.GetDependents(name);
+            return dependencyGraph.GetDependents(Normalize(name));
         }
 
         /// <summary>
         /// Helper method for SetCellContent methods where content of Cell is double or string. 
         /// 
         /// If name is null or invalid, throws an InvalidNameException.
+        /// Name is already normalized by the Normalize delegate. 
         /// Otherwise, the contents of the named cell becomes object parameter which can
         /// be a double, Formula, or string. The method returns a set consisting of name 
         /// plus the names of all other cells whose value depends, directly or indirectly, 
@@ -365,7 +401,7 @@ namespace SS
                 }
                 return new HashSet<string>(GetCellsToRecalculate(name));
             }
-            cells[name] = new Cell(contents);
+            cells[name] = new Cell(name, contents);
             return new HashSet<string>(GetCellsToRecalculate(name));
         }
 
@@ -373,14 +409,14 @@ namespace SS
         /// Helper method to determining if the token is a valid variable by the base syntax rule:
         /// The string starts with one or more letters and is followed by one or more numbers.
         /// 
-        /// Input name is normalized already, and if syntax check passes also checks 
-        /// if the variable name passes the input IsValid function.
+        /// Input name is normalized and checked if it follows base syntax rule, 
+        /// if syntax check passes, name is also checked if the variable name passes the input IsValid function.
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
         private bool ValidVariable(String name)
         {
-            return Regex.IsMatch(name, @"^[A-Za-z]+\d+$") && IsValid(name);
+            return Regex.IsMatch(Normalize(name), @"^[A-Za-z]+\d+$") && IsValid(Normalize(name));
         }
     }
 }
