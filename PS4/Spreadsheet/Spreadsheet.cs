@@ -108,11 +108,13 @@ namespace SS
 
             string normalizedName = Normalize(name);
             //an empty or umapped cell should have a value of an empty string
-            if (!cells.TryGetValue(normalizedName, out var contents))
+            if (!cells.TryGetValue(normalizedName, out var cell))
             {
                 return "";
             }
-            throw new NotImplementedException();
+
+            //IDEAL IMPLEMENTATION:  /////////////
+            return cell.Value;
         }
 
         /// <summary>
@@ -191,8 +193,9 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// 
-        /// The returned cells are passed into the RecalculateCellValues helper method
-        /// where their values are updated. 
+        /// The returned cells that need to be recalculated are passed into the RecalculateCellValues 
+        /// helper method, where their values are updated, in the corresponding SetCellContents helper
+        /// method. 
         /// 
         public override ISet<string> SetContentsOfCell(string name, string content)
         {
@@ -206,36 +209,36 @@ namespace SS
             }
 
             string normalizedName = Normalize(name);
-            ISet<string> recalculatedCells;
             if (Double.TryParse(content, out var num) == true)
             {
-                recalculatedCells = SetCellContents(normalizedName, num);
-                RecalculateCellValues(recalculatedCells);
-                return recalculatedCells;
+                return SetCellContents(normalizedName, num);
             }
             char first = content.Trim()[0];
             if (first == '=')
             {
-                recalculatedCells = SetCellContents(normalizedName, new Formula(content.Substring(1), Normalize, IsValid));
-                RecalculateCellValues(recalculatedCells);
-                return recalculatedCells;
+                return SetCellContents(normalizedName, new Formula(content.Substring(1), Normalize, IsValid));
             }
             else
             {
-                recalculatedCells = SetCellContents(normalizedName, content);
-                RecalculateCellValues(recalculatedCells);
-                return recalculatedCells;
+                return SetCellContents(normalizedName, content);
             }
         }
 
         /// <summary>
-        /// Recalculates and resaves cell values of all Cells corresponding
-        /// to names in parameter string Set. 
+        /// Recalculates and stores cell values of all Cells corresponding
+        /// to names in parameter string Set, in the order they occur in the parameter.
+        /// 
+        /// Will never find empty cell, since the passed in cells were found to 
+        /// be dependent on a changed cell. 
         /// </summary>
         /// <param name="recalculatedCells"></param>
-        private void RecalculateCellValues(ISet<string> recalculatedCells)
+        private void RecalculateCellValues(IEnumerable<string> recalculatedCells)
         {
-
+            foreach (string cellName in recalculatedCells)
+            {
+                cells.TryGetValue(cellName, out Cell recalcCell);
+                recalcCell.Recalculate();
+            }
         }
 
         /// <summary>
@@ -306,18 +309,22 @@ namespace SS
 
             //dependees are replaced with dependees (variables) of new formula
             dependencyGraph.ReplaceDependees(normalizedName, formula.GetVariables());
-            cells[normalizedName] =  new Cell(normalizedName, formula);
+            cells[normalizedName] =  new Cell(normalizedName, formula, LookupCellValue);
 
             //a circular dependency is checked for, old dependees and content are kept if one is found
             try
             {
-                return new HashSet<string>(GetCellsToRecalculate(normalizedName));
+                //recalculating necessary cell values
+                List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(normalizedName));
+                RecalculateCellValues(recalculatedCells);
+
+                return new HashSet<string>(recalculatedCells);
             }
             catch (CircularException)
             {
                 if (oldContents != null)
                 {
-                    cells[normalizedName] = new Cell(normalizedName, oldContents.Contents);
+                    cells[normalizedName] = new Cell(normalizedName, oldContents.Contents, LookupCellValue);
                 }
                 else //if the cell was empty before setting to this invalid formula, leave it empty
                 {
@@ -401,8 +408,13 @@ namespace SS
                 }
                 return new HashSet<string>(GetCellsToRecalculate(name));
             }
-            cells[name] = new Cell(name, contents);
-            return new HashSet<string>(GetCellsToRecalculate(name));
+            cells[name] = new Cell(name, contents, LookupCellValue);
+
+            //recalculating necessary cell values
+            List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(name));
+            RecalculateCellValues(recalculatedCells);
+
+            return new HashSet<string>(recalculatedCells);
         }
 
         /// <summary>
@@ -417,6 +429,25 @@ namespace SS
         private bool ValidVariable(String name)
         {
             return Regex.IsMatch(Normalize(name), @"^[A-Za-z]+\d+$") && IsValid(Normalize(name));
+        }
+
+        /// <summary>
+        /// Looks up a Cell's value, is delegate that's passed into the Evaluate method
+        /// of a Formula object. Used and passed into the Cell object. 
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        private double LookupCellValue(String name)
+        {
+            //an empty or umapped cell should have a value of an empty string
+            if (cells.TryGetValue(name, out var cell))
+            {
+                if (cell.Value is double num)
+                {
+                    return num;
+                }
+            }
+            throw new ArgumentException("Lookup did not find double cell value!");
         }
     }
 }

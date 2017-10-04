@@ -20,16 +20,16 @@ namespace SS
         internal object Contents { get; }
 
         /// <summary>
-        /// The cell's or variable's name, used to map to it in 
-        /// the Spreadsheet class. 
-        /// </summary>
-        private string Name;
-
-        /// <summary>
         /// A cell's value can either be a string, a double, or a 
         /// SpreadsheetUtilities.FormulaError.
         /// </summary>
         internal object Value { get; private set; }
+
+        /// <summary>
+        /// Finds values of other cells in Spreadsheet, is implemented
+        /// in Spreadsheet. 
+        /// </summary>
+        private Func <string, double> Lookup;
 
         /// <summary>
         ///Sets cell's contents property to parameter, which
@@ -39,25 +39,27 @@ namespace SS
         /// <param name="text"></param>
         /// <param name="value"></param>
         /// <param name="formula"></param>
-        public Cell(string name, object contents)
+        public Cell(string name, object contents, Func<string, double> lookup)
         {
             Contents = contents;
-            Name = name;
-            
-            //setting this Cell's initial value based on contents type
-            if (Contents is double)
+            Lookup = lookup;
+            Recalculate();
+        }
+
+        /// <summary>
+        /// Recalculates cell's value based on changed contents, (method is 
+        /// called when contents of this or a dependee are changed) and sets
+        /// Value property to new value. 
+        /// </summary>
+        internal void Recalculate()
+        {
+            if (Contents is Formula formula)
+            {
+                Value = formula.Evaluate(Lookup);
+            }
+            else 
             {
                 Value = Contents;
-            }
-            if (Contents is string)
-            {
-                Value = Contents;
-            }
-            else if (Contents is Formula)
-            {
-                Formula contentFormula = (Formula)Contents;
-                ////////// WHAT DO WE USE FOR LOOKUP???? GETCELLCONTENTS DOES NOT MATCH RETURN TYPE!!!!!!////////
-                Value = contentFormula.Evaluate(GetCellContents(Name));
             }
         }
     }
