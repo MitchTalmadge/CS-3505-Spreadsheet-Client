@@ -69,7 +69,10 @@ namespace SS
             dependencyGraph = new DependencyGraph();
         }
 
-        //TODO
+        /// <summary>
+        /// True if this spreadsheet has been modified since it was created or saved                  
+        /// (whichever happened most recently); false otherwise.
+        /// </summary>
         public override bool Changed { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
 
         /// <summary>
@@ -90,6 +93,12 @@ namespace SS
             return cell.Contents;
         }
 
+        /// <summary>
+        /// If name is null or invalid, throws an InvalidNameException.
+        /// 
+        /// Otherwise, returns the value (as opposed to the contents) of the named cell.  The return
+        /// value should be either a string, a double, or a SpreadsheetUtilities.FormulaError.
+        /// </summary>
         public override object GetCellValue(string name)
         {
             throw new NotImplementedException();
@@ -269,6 +278,18 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
+            string normalizedName = Normalize(name);
+
+            if (Double.TryParse(content, out var num) == true)
+            {
+                return SetCellContents(normalizedName, num);
+            }
+
+            char first = content.Trim()[0];
+            if (first == '=')
+            {
+
+            }
             throw new NotImplementedException();
         }
 
@@ -349,14 +370,17 @@ namespace SS
         }
 
         /// <summary>
-        /// Helper method to determining if the token is a valid variable by the base rule:
+        /// Helper method to determining if the token is a valid variable by the base syntax rule:
         /// The string starts with one or more letters and is followed by one or more numbers.
+        /// 
+        /// Input name is normalized already, and if syntax check passes also checks 
+        /// if the variable name passes the input IsValid function.
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
         private bool ValidVariable(String name)
         {
-            return Regex.IsMatch(name, @"^[A-Z]+\d+$");
+            return Regex.IsMatch(name, @"^[A-Za-z]+\d+$") && IsValid(name);
         }
     }
 }
