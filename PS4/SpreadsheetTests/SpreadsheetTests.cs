@@ -16,6 +16,98 @@ namespace SpreadsheetTests
     [TestClass]
     public class SpreadsheetTests
     {
+        [TestMethod]
+        public void TestFormulaErrorValue()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            //a1 depends on no0 but no0 hasn't been set yet, so value of a1 should be FormulaError
+            spreadsheet.SetContentsOfCell("a1", "= no0 + 1.0");
+            Assert.IsTrue(spreadsheet.GetCellValue("a1") is FormulaError);
+
+            //cell contains formula referencing string value cell
+            spreadsheet.SetContentsOfCell("string69", "ayyyeelmao");
+            Assert.AreEqual("ayyyeelmao", spreadsheet.GetCellValue("string69"));
+            spreadsheet.SetContentsOfCell("badForm01", "= string69 * 7.2");
+            Assert.IsTrue(spreadsheet.GetCellValue("badForm01") is FormulaError);
+        }
+
+        [TestMethod]
+        public void TestRecalculateValueInvalidFormula()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            //a1 depends on no0 but no0 hasn't been set yet, so value of a1 should be FormulaError
+            spreadsheet.SetContentsOfCell("a1", "= no0 + 1.0");
+            Assert.IsTrue(spreadsheet.GetCellValue("a1") is FormulaError);
+
+            //no0 gets set, so a1 should be a value now
+            spreadsheet.SetContentsOfCell("no0", "3.5");
+            Assert.AreEqual(3.5, spreadsheet.GetCellValue("no0"));
+            Assert.AreEqual(4.5, spreadsheet.GetCellValue("a1"));
+        }
+
+        [TestMethod]
+        public void TestSetAndGetCellValueEmpty()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            //empty/never set cell
+            Assert.AreEqual("", spreadsheet.GetCellValue("a1"));
+
+            //cell is set than emptied
+            spreadsheet.SetContentsOfCell("A2", " plz8");
+            Assert.AreEqual(" plz8", spreadsheet.GetCellValue("A2"));
+            spreadsheet.SetContentsOfCell("A2", "");
+            Assert.AreEqual("", spreadsheet.GetCellValue("A2"));
+        }
+
+        /// <summary>
+        /// Change these tests if spaces are considered characters
+        /// when trying to parse for formula!!!!
+        /// </summary>
+        [TestMethod]
+        public void TestSetAndGetCellValueFormula()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            spreadsheet.SetContentsOfCell("a1", "= 90 + 1");
+            Assert.AreEqual(new Formula ("90 + 1"), spreadsheet.GetCellContents("a1"));
+            Assert.AreEqual((double)91, spreadsheet.GetCellValue("a1"));
+
+            //due to the space before the '=' this would not be a formula (but a string) if spaces are considered in parsing
+            spreadsheet.SetContentsOfCell("A2", " = 9 * 8");
+            Assert.AreEqual((double) 72, spreadsheet.GetCellValue("A2"));
+        }
+
+        [TestMethod]
+        public void TestRecalculateValueFormula()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            spreadsheet.SetContentsOfCell("a1", "= 1 * 0.5");
+            Assert.AreEqual(0.5, spreadsheet.GetCellValue("a1"));
+
+            //a2 is dependent on a1
+            spreadsheet.SetContentsOfCell("a2", "  = a1 * 2");
+            Assert.AreEqual((double) 1, spreadsheet.GetCellValue("a2"));
+
+            //a3 depends on a1
+            spreadsheet.SetContentsOfCell("a3", " = 2 + a1");
+            Assert.AreEqual(2.5, spreadsheet.GetCellValue("a3"));
+
+            //a4 depends on a3 and a2
+            spreadsheet.SetContentsOfCell("a4", "=  a3 + a2");
+            Assert.AreEqual(3.5, spreadsheet.GetCellValue("a4"));
+
+            //setting a1 to something new, and checking if a2 - a4 update accordingly
+            spreadsheet.SetContentsOfCell("a1", "1.0  ");
+            Assert.AreEqual(1.0, spreadsheet.GetCellValue("a1"));
+            Assert.AreEqual(2.0, spreadsheet.GetCellValue("a2"));
+            Assert.AreEqual(3.0, spreadsheet.GetCellValue("a3"));
+            Assert.AreEqual(5.0, spreadsheet.GetCellValue("a4"));
+        }
+
+        [TestMethod]
         public void TestSetAndGetCellValueString()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
@@ -34,6 +126,7 @@ namespace SpreadsheetTests
             Assert.AreEqual("i = 908 + 89", spreadsheet.GetCellValue("A32"));
         }
 
+        [TestMethod]
         public void TestRecalculateValueString()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
@@ -53,6 +146,7 @@ namespace SpreadsheetTests
             Assert.AreEqual("  + -9.8 ", spreadsheet.GetCellValue("A2"));
         }
 
+        [TestMethod]
         public void TestSetAndGetCellValueDouble()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
@@ -71,7 +165,7 @@ namespace SpreadsheetTests
             Assert.AreEqual(-4.6, spreadsheet.GetCellValue("A32"));
         }
 
-
+        [TestMethod]
         public void TestRecalculateValueDouble()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
