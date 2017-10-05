@@ -82,27 +82,80 @@ namespace SS
                 IgnoreWhitespace = true
             };
 
-            using (XmlReader reader = XmlReader.Create(filepath, readerSettings))
+            try {
+                using (XmlReader reader = XmlReader.Create(filepath, readerSettings))
+                {
+                    //reading the auto-generated XML header
+                    reader.Read();
+                    //first element should always be: <spreadsheet>
+                    reader.Read();
+                    if (reader.Name != "spreadsheet")
+                    {
+                        throw new SpreadsheetReadWriteException("XML file is not of a spreadsheet!");
+                    }
+
+                    while (reader.Read())
+                    {
+                        //stop reading if closing spreadsheet tag is reached
+                        if (reader.Name == "spreadsheet" && reader.NodeType == XmlNodeType.EndElement)
+                        {
+                            break;
+                        }
+
+                        string name;
+                        string contents
+                        if (reader.Name == "cell")
+                        {
+                            //this should read in the cell's name
+                            reader.Read(); 
+                            if (reader.Name == "name")
+                            {
+                                name = reader.ReadContentAsString();
+                                
+                                //this should read in cell's contents
+                                if (reader.Name == "contents")
+                                {
+                                    contents = reader.ReadContentAsString();
+                                }
+                                else throw new SpreadsheetReadWriteException("XML file's cell element did not have contents!");
+                            }
+                            else throw new SpreadsheetReadWriteException("XML file's cell element did not have a name!");
+                        }
+                        else throw new SpreadsheetReadWriteException("XML file contained an element other than a cell!");
+                        
+                        //checks for closing tag of cell
+                        if (reader.Name != "cell" || reader.NodeType != XmlNodeType.EndElement)
+                        {
+                            throw new SpreadsheetReadWriteException("XML file contained cell element without closing tag!");
+                        }
+                        //loads each cell element
+                        LoadCell(name, contents);
+                    }
+                }
+            }
+            catch (Exception e)
             {
-                //first element should always be: <spreadsheet>
-                reader.Read();
-                if (reader.Name != "spreadsheet")
-                {
-                    throw new SpreadsheetReadWriteException("XML file is not of a spreadsheet!");
-                }
+                throw new SpreadsheetReadWriteException(e.Message);
+            }
+        }
 
-                while (reader.Read())
-                {
-                    //stop reading if closing spreadsheet tag is reached
-                    if (reader.Name == "spreadsheet" && reader.NodeType == XmlNodeType.EndElement)
-                    {
-                        break;
-                    }
-                    if (reader.Name != "cell")
-                    {
-
-                    }
-                }
+        private void LoadCell(string name, string contents)
+        {
+            try
+            {
+                SetContentsOfCell(name, contents);
+            }
+            catch (InvalidNameException)
+            {
+                throw new SpreadsheetReadWriteException("An invalid cell name was in the XML file!");
+            }
+            catch (FormulaFormatException)
+            {
+                throw new SpreadsheetReadWriteException("An invalid formula was in the XML file!");
+            }
+            catch (CircularException)
+            {
+                throw new SpreadsheetReadWriteException("A Circular Dependency was found within a formula in this XML file!");
             }
         }
 
@@ -172,6 +225,9 @@ namespace SS
             {
                 using (XmlReader reader = XmlReader.Create(filename))
                 {
+                    //reading the default generated XML header
+                    reader.Read();
+                    //reading in first element
                     reader.Read();
                     if (reader.Name == "spreadsheet")
                     {
