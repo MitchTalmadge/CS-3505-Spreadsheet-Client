@@ -112,8 +112,7 @@ namespace SS
             {
                 return "";
             }
-
-            //IDEAL IMPLEMENTATION:  /////////////
+            
             return cell.Value;
         }
 
@@ -213,10 +212,10 @@ namespace SS
             {
                 return SetCellContents(normalizedName, num);
             }
-            char first = content.Trim()[0];
-            if (first == '=')
+            /////////////TRIM STRING??? OR DOES FIRST CHAR HAVE TO BE = NOT ANY SPACES?????////////
+            if (content.Trim().StartsWith("="))
             {
-                return SetCellContents(normalizedName, new Formula(content.Substring(1), Normalize, IsValid));
+                return SetCellContents(normalizedName, new Formula(content.Trim().Substring(1), Normalize, ValidVariable));
             }
             else
             {
