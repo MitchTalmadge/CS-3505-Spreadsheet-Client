@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SpreadsheetUtilities;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 ///
 /// Jiahui Chen
@@ -64,9 +65,19 @@ namespace SS
             {
                 throw new SpreadsheetReadWriteException("The provided version does not match the version of the passed in file!");
             }
-            //////TODO: READ FROM FILE AND CONSTRUCT NEW SPREADSHEET FROM IT////
+            
             cells = new Dictionary<string, Cell>();
             dependencyGraph = new DependencyGraph();
+        }
+
+        /// <summary>
+        /// Helper method that reads an input XML file and tries to construct
+        /// a new spreadhseet from the it. 
+        /// </summary>
+        /// <param name="filename"></param>
+        private void LoadSpreadsheet(string filepath)
+        {
+
         }
 
         /// <summary>
@@ -131,7 +142,17 @@ namespace SS
         /// </summary>
         public override string GetSavedVersion(string filename)
         {
-            throw new NotImplementedException();
+            using (XmlReader reader = XmlReader.Create(filename))
+            {
+                if (reader.Name == "spreadsheet")
+                {
+                    if (reader.GetAttribute("version") != null)
+                    {
+                        return reader.GetAttribute("version");
+                    }
+                }
+                throw new SpreadsheetReadWriteException("");
+            }
         }
 
         /// <summary>
