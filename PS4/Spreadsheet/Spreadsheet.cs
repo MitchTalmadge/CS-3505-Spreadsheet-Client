@@ -77,7 +77,33 @@ namespace SS
         /// <param name="filename"></param>
         private void LoadSpreadsheet(string filepath)
         {
+            XmlReaderSettings readerSettings = new XmlReaderSettings
+            {
+                IgnoreWhitespace = true
+            };
 
+            using (XmlReader reader = XmlReader.Create(filepath, readerSettings))
+            {
+                //first element should always be: <spreadsheet>
+                reader.Read();
+                if (reader.Name != "spreadsheet")
+                {
+                    throw new SpreadsheetReadWriteException("XML file is not of a spreadsheet!");
+                }
+
+                while (reader.Read())
+                {
+                    //stop reading if closing spreadsheet tag is reached
+                    if (reader.Name == "spreadsheet" && reader.NodeType == XmlNodeType.EndElement)
+                    {
+                        break;
+                    }
+                    if (reader.Name != "cell")
+                    {
+
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -142,16 +168,24 @@ namespace SS
         /// </summary>
         public override string GetSavedVersion(string filename)
         {
-            using (XmlReader reader = XmlReader.Create(filename))
+            try
             {
-                if (reader.Name == "spreadsheet")
+                using (XmlReader reader = XmlReader.Create(filename))
                 {
-                    if (reader.GetAttribute("version") != null)
+                    reader.Read();
+                    if (reader.Name == "spreadsheet")
                     {
-                        return reader.GetAttribute("version");
+                        if (reader.GetAttribute("version") != null)
+                        {
+                            return reader.GetAttribute("version");
+                        }
                     }
+                    throw new SpreadsheetReadWriteException("XML File does not contain spreadsheet or does not have Version!");
                 }
-                throw new SpreadsheetReadWriteException("");
+            }
+            catch (Exception e)
+            {
+                throw new SpreadsheetReadWriteException(e.Message);
             }
         }
 
@@ -234,10 +268,9 @@ namespace SS
             {
                 return SetCellContents(normalizedName, num);
             }
-            /////////////TRIM STRING??? OR DOES FIRST CHAR HAVE TO BE = NOT ANY SPACES?????////////
-            if (content.Trim().StartsWith("="))
+            if (content.StartsWith("="))
             {
-                return SetCellContents(normalizedName, new Formula(content.Trim().Substring(1), Normalize, ValidVariable));
+                return SetCellContents(normalizedName, new Formula(content.Substring(1), Normalize, ValidVariable));
             }
             else
             {

@@ -17,6 +17,14 @@ namespace SpreadsheetTests
     public class SpreadsheetTests
     {
         [TestMethod]
+        public void TestGetSaveVersion()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            Assert.AreEqual("default", spreadsheet.GetSavedVersion("TestSpreadsheets/Simple Valid.xml"));
+        }
+
+        [TestMethod]
         public void TestFormulaErrorValue()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
@@ -29,6 +37,9 @@ namespace SpreadsheetTests
             spreadsheet.SetContentsOfCell("string69", "ayyyeelmao");
             Assert.AreEqual("ayyyeelmao", spreadsheet.GetCellValue("string69"));
             spreadsheet.SetContentsOfCell("badForm01", "= string69 * 7.2");
+            Assert.IsTrue(spreadsheet.GetCellValue("badForm01") is FormulaError);
+
+            spreadsheet.SetContentsOfCell("string69", " = 8 + 9");
             Assert.IsTrue(spreadsheet.GetCellValue("badForm01") is FormulaError);
         }
 
@@ -60,11 +71,7 @@ namespace SpreadsheetTests
             spreadsheet.SetContentsOfCell("A2", "");
             Assert.AreEqual("", spreadsheet.GetCellValue("A2"));
         }
-
-        /// <summary>
-        /// Change these tests if spaces are considered characters
-        /// when trying to parse for formula!!!!
-        /// </summary>
+        
         [TestMethod]
         public void TestSetAndGetCellValueFormula()
         {
@@ -74,9 +81,9 @@ namespace SpreadsheetTests
             Assert.AreEqual(new Formula ("90 + 1"), spreadsheet.GetCellContents("a1"));
             Assert.AreEqual((double)91, spreadsheet.GetCellValue("a1"));
 
-            //due to the space before the '=' this would not be a formula (but a string) if spaces are considered in parsing
+            //due to the space before the '=' this should not be a formula (but a string) 
             spreadsheet.SetContentsOfCell("A2", " = 9 * 8");
-            Assert.AreEqual((double) 72, spreadsheet.GetCellValue("A2"));
+            Assert.AreEqual(" = 9 * 8", spreadsheet.GetCellValue("A2"));
         }
 
         [TestMethod]
@@ -88,11 +95,11 @@ namespace SpreadsheetTests
             Assert.AreEqual(0.5, spreadsheet.GetCellValue("a1"));
 
             //a2 is dependent on a1
-            spreadsheet.SetContentsOfCell("a2", "  = a1 * 2");
+            spreadsheet.SetContentsOfCell("a2", "= a1 * 2");
             Assert.AreEqual((double) 1, spreadsheet.GetCellValue("a2"));
 
             //a3 depends on a1
-            spreadsheet.SetContentsOfCell("a3", " = 2 + a1");
+            spreadsheet.SetContentsOfCell("a3", "= 2 + a1");
             Assert.AreEqual(2.5, spreadsheet.GetCellValue("a3"));
 
             //a4 depends on a3 and a2
@@ -267,15 +274,15 @@ namespace SpreadsheetTests
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
 
             // Set once
-            spreadsheet.SetContentsOfCell("a1", " = 1 + 5");
+            spreadsheet.SetContentsOfCell("a1", "= 1 + 5");
             Assert.AreEqual(new Formula("1 + 5"), spreadsheet.GetCellContents("a1"));
 
             // Replace
-            spreadsheet.SetContentsOfCell("a1", " = .5 * (4.4 + 5)");
+            spreadsheet.SetContentsOfCell("a1", "= .5 * (4.4 + 5)");
             Assert.AreEqual(new Formula(".5 * (4.4 + 5)"), spreadsheet.GetCellContents("a1"));
 
             // Set another new cell
-            spreadsheet.SetContentsOfCell("A2", " = 18.1 - Bee5 + (0.9 * Cat3)");
+            spreadsheet.SetContentsOfCell("A2", "= 18.1 - Bee5 + (0.9 * Cat3)");
             Assert.AreEqual(new Formula("18.1 - Bee5 + (0.9 * Cat3)"), spreadsheet.GetCellContents("A2"));
 
             // Make sure new cell didn't interfere with old cell
@@ -290,12 +297,12 @@ namespace SpreadsheetTests
             spreadsheet.SetContentsOfCell("a1", "10.78");
 
             // These cells depend on "a1"
-            spreadsheet.SetContentsOfCell("b1", " = a1 + independent1");
+            spreadsheet.SetContentsOfCell("b1", "= a1 + independent1");
             spreadsheet.SetContentsOfCell("c1", "=1.10 + 8 * a1");
 
             // These cells do not depend on a1
-            spreadsheet.SetContentsOfCell("independent1", " = 5 + 10");
-            spreadsheet.SetContentsOfCell("dannyboii2", " = 4.0 * 3500");
+            spreadsheet.SetContentsOfCell("independent1", "= 5 + 10");
+            spreadsheet.SetContentsOfCell("dannyboii2", "= 4.0 * 3500");
 
             // Check direct dependents of a1
             PrivateObject sheetAccessor = new PrivateObject(spreadsheet);
@@ -350,12 +357,12 @@ namespace SpreadsheetTests
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
             spreadsheet.SetContentsOfCell("a1", "= a3 * d3");
-            spreadsheet.SetContentsOfCell("a3", " = a2 - 5");
+            spreadsheet.SetContentsOfCell("a3", "= a2 - 5");
             spreadsheet.SetContentsOfCell("a2", "2.3");
             Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
 
             // Adding this cell will cause the circular dependency.
-            Assert.ThrowsException<CircularException>(() => spreadsheet.SetContentsOfCell("a2", " = a1 + d3"));
+            Assert.ThrowsException<CircularException>(() => spreadsheet.SetContentsOfCell("a2", "= a1 + d3"));
 
             // Make sure nothing was changed since circular dependency was found
             Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
@@ -369,10 +376,10 @@ namespace SpreadsheetTests
         public void TestCircularDependencyNewCell()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
-            spreadsheet.SetContentsOfCell("a1", " =  a3 * d3");
-            spreadsheet.SetContentsOfCell("a3", " = a2 - 5");
+            spreadsheet.SetContentsOfCell("a1", "=  a3 * d3");
+            spreadsheet.SetContentsOfCell("a3", "= a2 - 5");
 
-            Assert.ThrowsException<CircularException>(() => spreadsheet.SetContentsOfCell("a2", " = a1 + d3"));
+            Assert.ThrowsException<CircularException>(() => spreadsheet.SetContentsOfCell("a2", "= a1 + d3"));
 
             // Make sure the cell wasn't added since a circular dependency was found
             Assert.IsFalse(spreadsheet.GetNamesOfAllNonemptyCells().Contains("a2"));
@@ -462,12 +469,12 @@ namespace SpreadsheetTests
             CollectionAssert.AreEqual(new[] { "a1" }, spreadsheet.SetContentsOfCell("a1", "3.48").ToArray());
 
             //direct dependency
-            spreadsheet.SetContentsOfCell("a2", " = a1 + 7.8");
+            spreadsheet.SetContentsOfCell("a2", "= a1 + 7.8");
             CollectionAssert.AreEqual(new[] { "a1", "a2" }, spreadsheet.SetContentsOfCell("a1", "yo").ToArray());
 
             //indirect dependency
-            spreadsheet.SetContentsOfCell("a3"," = a2 + 7.8");
-            spreadsheet.SetContentsOfCell("a4", " = a3 + 7.8");
+            spreadsheet.SetContentsOfCell("a3","= a2 + 7.8");
+            spreadsheet.SetContentsOfCell("a4", "= a3 + 7.8");
             CollectionAssert.AreEquivalent(new[] { "a1", "a2", "a3", "a4" }, spreadsheet.SetContentsOfCell("a1", "78").ToArray());
         }
 
