@@ -73,7 +73,7 @@ namespace SS
         /// True if this spreadsheet has been modified since it was created or saved                  
         /// (whichever happened most recently); false otherwise.
         /// </summary>
-        public override bool Changed { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
+        public override bool Changed { get; protected set; }
 
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
@@ -161,6 +161,7 @@ namespace SS
         /// </summary>
         public override void Save(string filename)
         {
+            Changed = false;
             throw new NotImplementedException();
         }
 
@@ -317,6 +318,8 @@ namespace SS
                 List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(normalizedName));
                 RecalculateCellValues(recalculatedCells);
 
+                //successful return means spreadsheet is changed
+                Changed = true;
                 return new HashSet<string>(recalculatedCells);
             }
             catch (CircularException)
@@ -413,6 +416,8 @@ namespace SS
             List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(name));
             RecalculateCellValues(recalculatedCells);
 
+            //successful return means spreadsheet is changed
+            Changed = true;
             return new HashSet<string>(recalculatedCells);
         }
 
