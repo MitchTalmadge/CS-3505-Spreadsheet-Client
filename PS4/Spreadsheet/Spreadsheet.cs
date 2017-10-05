@@ -103,7 +103,7 @@ namespace SS
                         }
 
                         string name;
-                        string contents
+                        string contents;
                         if (reader.Name == "cell")
                         {
                             //this should read in the cell's name
