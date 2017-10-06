@@ -71,7 +71,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestSpreadsheets\NoVersion.xml" />
-    <Content Include="TestSpreadsheets\Simple Valid.xml">
+    <Content Include="TestSpreadsheets\ValidThreeTypes.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

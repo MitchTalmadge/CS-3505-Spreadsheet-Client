@@ -19,13 +19,16 @@ namespace SpreadsheetTests
         [TestMethod]
         public void TestValidLoad()
         {
-            AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/Simple Valid.xml", s => true, s => s, "default");
+            AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/ValidThreeTypes.xml", s => true, s => s, "default");
 
             Assert.AreEqual(10.01, spreadsheet.GetCellContents("a1"));
             Assert.AreEqual(10.01, spreadsheet.GetCellValue("a1"));
-            //Assert.ThrowsException<SpreadsheetReadWriteException>(() => spreadsheet.GetSavedVersion("TestSpreadsheets/NotSpreadsheet.XML"));
 
-            //Assert.ThrowsException<SpreadsheetReadWriteException>(() => spreadsheet.GetSavedVersion("TestSpreadsheets/NoVersion.xml"));
+            Assert.AreEqual("yoooooooooooo", spreadsheet.GetCellContents("a2"));
+            Assert.AreEqual("yoooooooooooo", spreadsheet.GetCellValue("a2"));
+
+            Assert.AreEqual(new Formula("8 + 9"), spreadsheet.GetCellContents("a3"));
+            Assert.AreEqual((double)17, spreadsheet.GetCellValue("a3"));
         }
 
         [TestMethod]
@@ -33,11 +36,11 @@ namespace SpreadsheetTests
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
 
-            Assert.AreEqual("default", spreadsheet.GetSavedVersion("TestSpreadsheets/Simple Valid.xml"));
-
             Assert.ThrowsException<SpreadsheetReadWriteException>(() => spreadsheet.GetSavedVersion("TestSpreadsheets/NotSpreadsheet.XML"));
 
             Assert.ThrowsException<SpreadsheetReadWriteException>(() => spreadsheet.GetSavedVersion("TestSpreadsheets/NoVersion.xml"));
+
+            Assert.AreEqual("default", spreadsheet.GetSavedVersion("TestSpreadsheets/ValidThreeTypes.xml"));
         }
 
         [TestMethod]

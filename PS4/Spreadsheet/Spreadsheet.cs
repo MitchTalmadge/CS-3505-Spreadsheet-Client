@@ -73,7 +73,7 @@ namespace SS
 
         /// <summary>
         /// Helper method that reads an input XML file and tries to construct
-        /// a new spreadhseet from the it. 
+        /// a new spreadsheet from the it. 
         /// </summary>
         /// <param name="filename"></param>
         private void LoadSpreadsheet(string filepath)
@@ -279,6 +279,17 @@ namespace SS
         /// </summary>
         public override void Save(string filename)
         {
+            try
+            {
+                using (XmlWriter writer = XmlWriter.Create(filename))
+                {
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw new SpreadsheetReadWriteException(e.Message);
+            }
             Changed = false;
             throw new NotImplementedException();
         }
