@@ -22,12 +22,12 @@ namespace SpreadsheetTests
         [TestMethod]
         public void TestChanged()
         {
-            AbstractSpreadsheet spreadsheet = new Spreadsheet(s => true, s => s.ToLower(), "trial");
-            Assert.AreEqual("", spreadsheet.GetCellContents("nonexistent4"));
-
-            //ensure the passed in normalizer is being used
-            spreadsheet.SetContentsOfCell("HEY01", "food is good");
-            Assert.AreEqual("food is good", spreadsheet.GetCellContents("hey01"));
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            Assert.IsFalse(spreadsheet.Changed);
+            spreadsheet.SetContentsOfCell("a1", "change it!");
+            Assert.IsTrue(spreadsheet.Changed);
+            spreadsheet.Save("TestSpreadsheets/ChangedTest.xml");
+            Assert.IsFalse(spreadsheet.Changed);
         }
 
         [TestMethod]
