@@ -17,6 +17,33 @@ namespace SpreadsheetTests
     public class SpreadsheetTests
     {
         [TestMethod]
+        public void TestValidSave()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            spreadsheet.SetContentsOfCell("a1", " 10.01 ");
+            spreadsheet.SetContentsOfCell("a2", "yoooooooooooo");
+            spreadsheet.SetContentsOfCell("a3", "= 8 + 9 ");
+            Assert.AreEqual(10.01, spreadsheet.GetCellValue("a1"));
+            Assert.AreEqual("yoooooooooooo", spreadsheet.GetCellValue("a2"));
+            Assert.AreEqual((double)17, spreadsheet.GetCellValue("a3"));
+
+            //saving this spreadsheet to a file, then building a spreadsheet out of that file to check for same
+            //contents as spreadhseet
+            spreadsheet.Save("TestSpreadsheets/SameAsValidThreeTypes.xml");
+
+            AbstractSpreadsheet spreadsheetCopy = new Spreadsheet("TestSpreadsheets/SameAsValidThreeTypes.xml", s => true, s => s, "default");
+            Assert.AreEqual(10.01, spreadsheetCopy.GetCellContents("a1"));
+            Assert.AreEqual(10.01, spreadsheetCopy.GetCellValue("a1"));
+
+            Assert.AreEqual("yoooooooooooo", spreadsheetCopy.GetCellContents("a2"));
+            Assert.AreEqual("yoooooooooooo", spreadsheetCopy.GetCellValue("a2"));
+
+            Assert.AreEqual(new Formula("8 + 9"), spreadsheetCopy.GetCellContents("a3"));
+            Assert.AreEqual((double)17, spreadsheetCopy.GetCellValue("a3"));
+        }
+
+        [TestMethod]
         public void TestValidLoad()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/ValidThreeTypes.xml", s => true, s => s, "default");
