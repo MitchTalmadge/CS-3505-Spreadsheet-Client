@@ -16,6 +16,18 @@ namespace SpreadsheetTests
     [TestClass]
     public class SpreadsheetTests
     {
+
+        [TestMethod]
+        public void Test3ParamConstructor()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet(s => true, s => s.ToLower(), "trial");
+            Assert.AreEqual("", spreadsheet.GetCellContents("nonexistent4"));
+            
+            //ensure the passed in normalizer is being used
+            spreadsheet.SetContentsOfCell("HEY01", "food is good");
+            Assert.AreEqual("food is good", spreadsheet.GetCellContents("hey01"));
+        }
+
         [TestMethod]
         public void TestValidSave()
         {
@@ -41,6 +53,13 @@ namespace SpreadsheetTests
 
             Assert.AreEqual(new Formula("8 + 9"), spreadsheetCopy.GetCellContents("a3"));
             Assert.AreEqual((double)17, spreadsheetCopy.GetCellValue("a3"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void TestLoadWrongVersion()
+        {
+           AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/ValidThreeTypes.xml", s => true, s => s, "2.008");
         }
 
         [TestMethod]
