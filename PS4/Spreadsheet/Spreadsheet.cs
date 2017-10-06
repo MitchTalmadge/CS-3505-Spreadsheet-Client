@@ -68,6 +68,7 @@ namespace SS
             
             cells = new Dictionary<string, Cell>();
             dependencyGraph = new DependencyGraph();
+            LoadSpreadsheet(filePath);
         }
 
         /// <summary>
@@ -108,14 +109,14 @@ namespace SS
                         {
                             //this should read in the cell's name
                             reader.Read(); 
-                            if (reader.Name == "name")
+                            if (reader.Name == "name") 
                             {
-                                name = reader.ReadContentAsString();
+                                name = reader.ReadElementContentAsString();
                                 
                                 //this should read in cell's contents
                                 if (reader.Name == "contents")
                                 {
-                                    contents = reader.ReadContentAsString();
+                                    contents = reader.ReadElementContentAsString();
                                 }
                                 else throw new SpreadsheetReadWriteException("XML file's cell element did not have contents!");
                             }
@@ -221,12 +222,18 @@ namespace SS
         /// </summary>
         public override string GetSavedVersion(string filename)
         {
+            XmlReaderSettings readerSettings = new XmlReaderSettings
+            {
+                IgnoreWhitespace = true
+            };
+
             try
             {
-                using (XmlReader reader = XmlReader.Create(filename))
+                using (XmlReader reader = XmlReader.Create(filename, readerSettings))
                 {
                     //reading the default generated XML header
                     reader.Read();
+
                     //reading in first element
                     reader.Read();
                     if (reader.Name == "spreadsheet")

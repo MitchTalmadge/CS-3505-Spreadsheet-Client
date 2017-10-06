@@ -67,9 +67,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestSpreadsheets\Empty.xml">
+    <Content Include="TestSpreadsheets\NotSpreadsheet.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestSpreadsheets\NoVersion.xml" />
     <Content Include="TestSpreadsheets\Simple Valid.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
