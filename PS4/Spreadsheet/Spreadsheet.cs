@@ -279,11 +279,47 @@ namespace SS
         /// </summary>
         public override void Save(string filename)
         {
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Indent = true,
+                IndentChars = ("  ")
+            };
             try
             {
                 using (XmlWriter writer = XmlWriter.Create(filename))
                 {
+                    writer.WriteStartDocument();
+                    //writing spreadsheet element with version attribute
+                    writer.WriteStartElement("spreadsheet");
+                    writer.WriteAttributeString("version", Version);
 
+                    //writing each cell into the XML document
+                    foreach (KeyValuePair<string, Cell> cell in cells)
+                    {
+                        writer.WriteStartElement("cell");
+
+                        //writing cell's name
+                        writer.WriteStartElement("name");
+                        writer.WriteString(cell.Key);
+                        writer.WriteEndElement(); //ends cell name element
+
+                        //writing cell's contents
+                        writer.WriteStartElement("contents");
+                        if (cell.Value.Contents is Formula formula)
+                        {
+                            writer.WriteString("=" + formula.ToString());
+                        }
+                        else if (cell.Value.Contents is double num)
+                        {
+                            writer.WriteString(num.ToString());
+                        }
+                        else writer.WriteString((string)cell.Value.Contents);
+                        writer.WriteEndElement(); //ends cell contents element
+
+                        writer.WriteEndElement(); //ends cell element
+                    }
+                    writer.WriteEndElement(); //ends spreadsheet element
+                    writer.WriteEndDocument();
                 }
             }
             catch (Exception e)
@@ -291,7 +327,6 @@ namespace SS
                 throw new SpreadsheetReadWriteException(e.Message);
             }
             Changed = false;
-            throw new NotImplementedException();
         }
 
         /// If content is null, throws an ArgumentNullException.
