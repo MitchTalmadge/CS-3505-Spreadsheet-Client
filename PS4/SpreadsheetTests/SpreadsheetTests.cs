@@ -9,13 +9,87 @@ using SS;
 ///
 /// Jiahui Chen
 /// u0980890
-/// CS 3500 PS4
+/// CS 3500 PS5
 ///
 namespace SpreadsheetTests
 {
+    /// <summary>
+    /// Tests for the Spreadsheet class.
+    /// </summary>
     [TestClass]
     public class SpreadsheetTests
     {
+        [TestMethod]
+        public void TestChanged()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet(s => true, s => s.ToLower(), "trial");
+            Assert.AreEqual("", spreadsheet.GetCellContents("nonexistent4"));
+
+            //ensure the passed in normalizer is being used
+            spreadsheet.SetContentsOfCell("HEY01", "food is good");
+            Assert.AreEqual("food is good", spreadsheet.GetCellContents("hey01"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void TestLoadCircularDependency()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/Circular.xml", s => true, s => s, "default");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void TestLoadInvalidCellName()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/InvalidCellName.xml", s => true, s => s, "default");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void TestLoadInvalidFormula()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/BadFormula.xml", s => true, s => s, "default");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void TestLoadUnclosedCell()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/UnclosedCell.xml", s => true, s => s, "default");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void TestLoadNoCellName()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/NoCellName.xml", s => true, s => s, "2.008");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void TestLoadNoCell()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/NoCell.xml", s => true, s => s, "default");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SpreadsheetReadWriteException))]
+        public void TestLoadNoCellContents()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/NoCellContents.xml", s => true, s => s, "2.008");
+        }
+
+        [TestMethod]
+        public void TestGetCellValueInvalidName()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+            
+            //null name
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellValue((string)null));
+            
+            //syntactically invalid name
+            Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellValue("Ui8.7"));
+        }
 
         [TestMethod]
         public void Test3ParamConstructor()

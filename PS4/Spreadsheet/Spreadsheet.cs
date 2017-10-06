@@ -88,12 +88,8 @@ namespace SS
                 {
                     //reading the auto-generated XML header
                     reader.Read();
-                    //first element should always be: <spreadsheet>
+                    //first element will always be spreadhseet since previous checks in constructor/GetSavedVersion already checked
                     reader.Read();
-                    if (reader.Name != "spreadsheet")
-                    {
-                        throw new SpreadsheetReadWriteException("XML file is not of a spreadsheet!");
-                    }
 
                     while (reader.Read())
                     {
@@ -140,6 +136,13 @@ namespace SS
             }
         }
 
+        /// <summary>
+        /// Helper method that loads the Cell corresponding to the ame parameter. 
+        /// Tries to add the Cell to the spreadsheet and throws a SpreadsheetReadWrite 
+        /// Exception reporting the specific error if it fails to do so. 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="contents"></param>
         private void LoadCell(string name, string contents)
         {
             try

@@ -67,10 +67,33 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestSpreadsheets\BadFormula.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestSpreadsheets\Circular.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestSpreadsheets\InvalidCellName.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestSpreadsheets\NoCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestSpreadsheets\NoCellContents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestSpreadsheets\NoCellName.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestSpreadsheets\NotSpreadsheet.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestSpreadsheets\NoVersion.xml" />
+    <Content Include="TestSpreadsheets\NoVersion.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestSpreadsheets\UnclosedCell.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestSpreadsheets\ValidThreeTypes.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

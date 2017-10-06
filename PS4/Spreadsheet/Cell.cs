@@ -12,6 +12,11 @@ using System.Threading.Tasks;
 ///
 namespace SS
 {
+    /// <summary>
+    /// Cell object is what the Spreadsheet object stores.
+    /// Each cell contains its contents, value, and the lookup
+    /// function used to find values of other cells in the Spreadsheet. 
+    /// </summary>
     internal class Cell
     {
         /// <summary>

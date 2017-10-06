@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<spreadsheet version ="default">
+  <cell>
+    <name>a1</name>
+    <contents> 10.01 </contents>
+  </cell>
+  <cell>
+    <name>a2</name>
+    <contents>yoooooooooooo</contents>
+  </cell>
+  <cell>
+    <name>a3</name>
+    <contents>= 8 + 9 </contents>
+</spreadsheet>
