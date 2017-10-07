@@ -612,6 +612,21 @@ namespace SpreadsheetTests
         }
 
         /// <summary>
+        /// Stress test to ensure replacement/get value is efficient. 
+        /// </summary>
+        [TestMethod]
+        public void StressTestFormula()
+        {
+            AbstractSpreadsheet spreadsheet = new Spreadsheet();
+
+            for (int i = 0; i < 10000; i++)
+            {
+                spreadsheet.SetContentsOfCell("a1", "= 8 + 4 -" + i.ToString());
+                spreadsheet.GetCellValue("a1");
+            }
+        }
+
+        /// <summary>
         /// Tests the set returned when cell is set is correct. 
         /// </summary>
         [TestMethod]
