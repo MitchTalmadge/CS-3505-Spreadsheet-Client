@@ -5,6 +5,7 @@ using SS;
 
 namespace SpreadsheetGUI
 {
+    /// <inheritdoc />
     /// <summary>
     /// The controller for the Spreadsheet GUI.
     /// </summary>
@@ -27,6 +28,9 @@ namespace SpreadsheetGUI
         /// </summary>
         private Spreadsheet _spreadsheet;
 
+        /// <summary>
+        /// Creates a SpreadsheetForm with a new, empty spreadsheet.
+        /// </summary>
         public SpreadsheetForm()
         {
             InitializeComponent();
@@ -68,5 +72,7 @@ namespace SpreadsheetGUI
             throw new NotImplementedException();
             //TODO: User has selected a cell in the spreadsheet
         }
+
+
     }
 }
