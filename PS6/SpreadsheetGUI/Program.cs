@@ -6,6 +6,11 @@ using System.Windows.Forms;
 
 namespace SpreadsheetGUI
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// An application context for the Spreadsheet GUI which keeps track of multiple spreadsheet windows.
+    /// </summary>
+    /// <authors>Jiahui Chen and Mitch Talmadge</authors>
     internal class SpreadsheetApplicationContext : ApplicationContext
     {
         private static SpreadsheetApplicationContext _instance;
@@ -49,13 +54,17 @@ namespace SpreadsheetGUI
         }
     }
 
-    static class Program
+    /// <summary>
+    /// The main entry class for the Spreadsheet GUI.
+    /// </summary>
+    /// <authors>Jiahui Chen and Mitch Talmadge</authors>
+    internal static class Program
     {
         /// <summary>
         /// Creates an application context and opens a single spreadsheet.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
