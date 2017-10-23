@@ -5,6 +5,9 @@ using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpreadsheetUtilities;
 using SS;
+using System.Threading;
+using System.Xml;
+using System.IO;
 
 ///
 /// Jiahui Chen
@@ -83,10 +86,10 @@ namespace SpreadsheetTests
         public void TestGetCellValueInvalidName()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
-            
+
             //null name
             Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellValue((string)null));
-            
+
             //syntactically invalid name
             Assert.ThrowsException<InvalidNameException>(() => spreadsheet.GetCellValue("Ui8.7"));
         }
@@ -96,7 +99,7 @@ namespace SpreadsheetTests
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet(s => true, s => s.ToLower(), "trial");
             Assert.AreEqual("", spreadsheet.GetCellContents("nonexistent4"));
-            
+
             //ensure the passed in normalizer is being used
             spreadsheet.SetContentsOfCell("HEY01", "food is good");
             Assert.AreEqual("food is good", spreadsheet.GetCellContents("hey01"));
@@ -133,7 +136,7 @@ namespace SpreadsheetTests
         [ExpectedException(typeof(SpreadsheetReadWriteException))]
         public void TestLoadWrongVersion()
         {
-           AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/ValidThreeTypes.xml", s => true, s => s, "2.008");
+            AbstractSpreadsheet spreadsheet = new Spreadsheet("TestSpreadsheets/ValidThreeTypes.xml", s => true, s => s, "2.008");
         }
 
         [TestMethod]
@@ -210,14 +213,14 @@ namespace SpreadsheetTests
             spreadsheet.SetContentsOfCell("A2", "");
             Assert.AreEqual("", spreadsheet.GetCellValue("A2"));
         }
-        
+
         [TestMethod]
         public void TestSetAndGetCellValueFormula()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
 
             spreadsheet.SetContentsOfCell("a1", "= 90 + 1");
-            Assert.AreEqual(new Formula ("90 + 1"), spreadsheet.GetCellContents("a1"));
+            Assert.AreEqual(new Formula("90 + 1"), spreadsheet.GetCellContents("a1"));
             Assert.AreEqual((double)91, spreadsheet.GetCellValue("a1"));
 
             //due to the space before the '=' this should not be a formula (but a string) 
@@ -235,7 +238,7 @@ namespace SpreadsheetTests
 
             //a2 is dependent on a1
             spreadsheet.SetContentsOfCell("a2", "= a1 * 2");
-            Assert.AreEqual((double) 1, spreadsheet.GetCellValue("a2"));
+            Assert.AreEqual((double)1, spreadsheet.GetCellValue("a2"));
 
             //a3 depends on a1
             spreadsheet.SetContentsOfCell("a3", "= 2 + a1");
@@ -296,7 +299,7 @@ namespace SpreadsheetTests
         public void TestSetAndGetCellValueDouble()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
-            
+
             spreadsheet.SetContentsOfCell("a1", "18.9");
             Assert.AreEqual(18.9, spreadsheet.GetCellContents("a1"));
             Assert.AreEqual(18.9, spreadsheet.GetCellValue("a1"));
@@ -377,7 +380,7 @@ namespace SpreadsheetTests
             // Make sure new cell didn't interfere with old cell
             Assert.AreEqual("ayyyelmao", spreadsheet.GetCellContents("a1"));
         }
-        
+
         [TestMethod]
         public void TestSetAndGetCellContentsEmpty()
         {
@@ -427,7 +430,7 @@ namespace SpreadsheetTests
             // Make sure new cell didn't interfere with old cell
             Assert.AreEqual(new Formula(".5 * (4.4 + 5)"), spreadsheet.GetCellContents("a1"));
         }
-        
+
         [TestMethod]
         public void TestGetDirectDependents()
         {
@@ -445,7 +448,7 @@ namespace SpreadsheetTests
 
             // Check direct dependents of a1
             PrivateObject sheetAccessor = new PrivateObject(spreadsheet);
-            IEnumerable<string> directDependents = (IEnumerable < string >)sheetAccessor.Invoke("GetDirectDependents", new String[1] {"a1"});
+            IEnumerable<string> directDependents = (IEnumerable<string>)sheetAccessor.Invoke("GetDirectDependents", new String[1] { "a1" });
 
             Assert.AreEqual(2, directDependents.Count());
             Assert.IsTrue(directDependents.Contains("b1"));
@@ -539,7 +542,7 @@ namespace SpreadsheetTests
             spreadsheet.SetContentsOfCell("empty1", "");
             Assert.AreEqual(5, spreadsheet.GetNamesOfAllNonemptyCells().Count());
         }
-        
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestSetNullString()
@@ -566,7 +569,7 @@ namespace SpreadsheetTests
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
             PrivateObject accessSheet = new PrivateObject(spreadsheet);
-            DependencyGraph deps =  (DependencyGraph) accessSheet.GetField("dependencyGraph");
+            DependencyGraph deps = (DependencyGraph)accessSheet.GetField("dependencyGraph");
 
             //setting cell to formula with dependees
             spreadsheet.SetContentsOfCell("a1", "=9.8 + u1 + dannyboi9 + 8.7");
@@ -576,7 +579,7 @@ namespace SpreadsheetTests
             spreadsheet.SetContentsOfCell("a1", "9.43");
             Assert.IsFalse(deps.HasDependees("a1"));
         }
-        
+
         [TestMethod]
         public void TestSetInvalidNames()
         {
@@ -642,7 +645,7 @@ namespace SpreadsheetTests
             CollectionAssert.AreEqual(new[] { "a1", "a2" }, spreadsheet.SetContentsOfCell("a1", "yo").ToArray());
 
             //indirect dependency
-            spreadsheet.SetContentsOfCell("a3","= a2 + 7.8");
+            spreadsheet.SetContentsOfCell("a3", "= a2 + 7.8");
             spreadsheet.SetContentsOfCell("a4", "= a3 + 7.8");
             CollectionAssert.AreEquivalent(new[] { "a1", "a2", "a3", "a4" }, spreadsheet.SetContentsOfCell("a1", "78").ToArray());
         }
@@ -696,6 +699,5 @@ namespace SpreadsheetTests
                 Assert.IsInstanceOfType(e.InnerException, typeof(InvalidNameException));
             }
         }
-
     }
 }
