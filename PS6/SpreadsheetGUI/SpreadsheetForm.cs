@@ -16,7 +16,7 @@ namespace SpreadsheetGUI
         /// The regex pattern used for validating cell names.
         /// This pattern only allows cells with columns from A to Z, and rows from 1 to 99.
         /// </summary>
-        private static readonly Regex CellValidityPattern = new Regex("^[A-Z][0-9]{1,2}$");
+        private static readonly Regex CellValidityPattern = new Regex("^[A-Z][1-9][0-9]?$");
 
         /// <summary>
         /// The backing spreadsheet for this form.
