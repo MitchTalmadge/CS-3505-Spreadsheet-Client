@@ -180,7 +180,7 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-            if (!cells.TryGetValue(name, out var cell))
+            if (!cells.TryGetValue(Normalize(name), out var cell))
             {
                 return "";
             }
@@ -610,7 +610,7 @@ namespace SS
         private double LookupCellValue(String name)
         {
             //an empty or umapped cell should have a value of an empty string
-            if (cells.TryGetValue(name, out var cell))
+            if (cells.TryGetValue(Normalize(name), out var cell))
             {
                 if (cell.Value is double num)
                 {
