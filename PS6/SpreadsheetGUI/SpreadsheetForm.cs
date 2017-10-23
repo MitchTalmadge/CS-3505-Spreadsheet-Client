@@ -5,6 +5,10 @@ using SS;
 
 namespace SpreadsheetGUI
 {
+    /// <summary>
+    /// The controller for the Spreadsheet GUI.
+    /// </summary>
+    /// <authors>Jiahui Chen and Mitch Talmadge</authors>
     public partial class SpreadsheetForm : Form
     {
         /// <summary>
