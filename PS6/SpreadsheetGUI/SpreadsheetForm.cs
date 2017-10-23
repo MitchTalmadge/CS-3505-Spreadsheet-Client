@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using SS;
 
@@ -10,6 +11,12 @@ namespace SpreadsheetGUI
         /// The version of this spreadsheet application.
         /// </summary>
         private const string SpreadsheetVersion = "ps6";
+
+        /// <summary>
+        /// The regex pattern used for validating cell names.
+        /// This pattern only allows cells with columns from A to Z, and rows from 1 to 99.
+        /// </summary>
+        private static readonly Regex CellValidityPattern = new Regex("^[A-Z][0-9]{1,2}$");
 
         /// <summary>
         /// The backing spreadsheet for this form.
@@ -32,9 +39,9 @@ namespace SpreadsheetGUI
         /// </summary>
         /// <param name="cellName">The name of the cell to validate.</param>
         /// <returns>True if the cell name is valid, false otherwise.</returns>
-        private bool IsValid(string cellName)
+        private static bool IsValid(string cellName)
         {
-            throw new NotImplementedException();
+            return CellValidityPattern.IsMatch(cellName);
         }
 
         /// <summary>
@@ -43,9 +50,9 @@ namespace SpreadsheetGUI
         /// </summary>
         /// <param name="cellName">The name of the cell to normalize.</param>
         /// <returns>The normalized cell name.</returns>
-        private string Normalize(string cellName)
+        private static string Normalize(string cellName)
         {
-            throw new NotImplementedException();
+            return cellName.ToUpper();
         }
 
         /// <summary>
