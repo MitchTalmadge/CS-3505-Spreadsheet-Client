@@ -32,6 +32,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Formula">
+      <HintPath>..\Resources\Libraries\Formula.dll</HintPath>
+    </Reference>
+    <Reference Include="Spreadsheet">
+      <HintPath>..\Resources\Libraries\Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="SpreadsheetPanel">
+      <HintPath>..\Resources\Libraries\SpreadsheetPanel.dll</HintPath>
+    </Reference>
+    <Reference Include="SpreadsheetUtilities">
+      <HintPath>..\Resources\Libraries\SpreadsheetUtilities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
