@@ -11,6 +11,11 @@ using SS;
 
 namespace SpreadsheetGUI
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// A partial class of SpreadsheetForm to organize menu strip logic.
+    /// </summary>
+    /// <authors>Jiahui Chen and Mitch Talmadge</authors>
     public partial class SpreadsheetForm
     {
         /// <summary>
