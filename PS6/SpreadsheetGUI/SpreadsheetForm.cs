@@ -74,6 +74,10 @@ namespace SpreadsheetGUI
             return cellName.ToUpper();
         }
 
+        /// <summary>
+        /// Determines the name of the currently selected cell in the Spreadsheet Panel.
+        /// </summary>
+        /// <returns>The selected cell's name.</returns>
         private string GetSelectedCellName()
         {
             spreadsheetPanel.GetSelection(out var col, out var row);
@@ -88,12 +92,12 @@ namespace SpreadsheetGUI
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanelOnSelectionChanged(SpreadsheetPanel sender)
         {
-            // Move the text cursor to the content input text box.
-            inputTextBox.Focus();
+            // Move the text cursor to the content edit text box.
+            editorContentTextBox.Focus();
 
             // Display the cell name in the editor.
             var cellName = GetSelectedCellName();
-            cellNameTextBox.Text = cellName;
+            editorNameTextBox.Text = cellName;
 
             // Display the cell value in the editor.
             object value;
@@ -101,7 +105,7 @@ namespace SpreadsheetGUI
             {
                 value = Resources.SpreadsheetForm_Formula_Error_Value;
             }
-            valueTextBox.Text = value.ToString();
+            editorValueTextBox.Text = value.ToString();
 
             // Display the cell contents in the editor (and add an equals sign to formulas).
             var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
@@ -110,7 +114,7 @@ namespace SpreadsheetGUI
                 contents = "=" + contents;
             }
 
-            inputTextBox.Text = contents.ToString();
+            editorContentTextBox.Text = contents.ToString();
         }
     }
 }

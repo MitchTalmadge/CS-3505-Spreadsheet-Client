@@ -40,9 +40,9 @@
             this.aboutSpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.cellNameLabel = new System.Windows.Forms.TextBox();
-            this.cellNameTextBox = new System.Windows.Forms.TextBox();
-            this.inputTextBox = new System.Windows.Forms.TextBox();
-            this.valueTextBox = new System.Windows.Forms.TextBox();
+            this.editorNameTextBox = new System.Windows.Forms.TextBox();
+            this.editorContentTextBox = new System.Windows.Forms.TextBox();
+            this.editorValueTextBox = new System.Windows.Forms.TextBox();
             this.inputLabel = new System.Windows.Forms.TextBox();
             this.cellValueLabel = new System.Windows.Forms.TextBox();
             this.menuStrip.SuspendLayout();
@@ -146,9 +146,9 @@
             this.topTableLayoutPanel.Controls.Add(this.cellNameLabel, 0, 1);
             this.topTableLayoutPanel.Controls.Add(this.menuStrip, 0, 0);
             this.topTableLayoutPanel.Controls.Add(this.spreadsheetPanel, 0, 3);
-            this.topTableLayoutPanel.Controls.Add(this.cellNameTextBox, 0, 2);
-            this.topTableLayoutPanel.Controls.Add(this.inputTextBox, 1, 2);
-            this.topTableLayoutPanel.Controls.Add(this.valueTextBox, 2, 2);
+            this.topTableLayoutPanel.Controls.Add(this.editorNameTextBox, 0, 2);
+            this.topTableLayoutPanel.Controls.Add(this.editorContentTextBox, 1, 2);
+            this.topTableLayoutPanel.Controls.Add(this.editorValueTextBox, 2, 2);
             this.topTableLayoutPanel.Controls.Add(this.inputLabel, 1, 1);
             this.topTableLayoutPanel.Controls.Add(this.cellValueLabel, 2, 1);
             this.topTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -174,32 +174,32 @@
             this.cellNameLabel.TabIndex = 5;
             this.cellNameLabel.Text = "Cell Name:";
             // 
-            // cellNameTextBox
+            // editorNameTextBox
             // 
-            this.cellNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cellNameTextBox.Location = new System.Drawing.Point(3, 83);
-            this.cellNameTextBox.Name = "cellNameTextBox";
-            this.cellNameTextBox.ReadOnly = true;
-            this.cellNameTextBox.Size = new System.Drawing.Size(533, 31);
-            this.cellNameTextBox.TabIndex = 2;
+            this.editorNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editorNameTextBox.Location = new System.Drawing.Point(3, 83);
+            this.editorNameTextBox.Name = "editorNameTextBox";
+            this.editorNameTextBox.ReadOnly = true;
+            this.editorNameTextBox.Size = new System.Drawing.Size(533, 31);
+            this.editorNameTextBox.TabIndex = 2;
             // 
-            // inputTextBox
+            // editorContentTextBox
             // 
-            this.inputTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inputTextBox.Location = new System.Drawing.Point(542, 83);
-            this.inputTextBox.Name = "inputTextBox";
-            this.inputTextBox.Size = new System.Drawing.Size(1072, 31);
-            this.inputTextBox.TabIndex = 3;
-            this.inputTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputTextBox_KeyPress);
+            this.editorContentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editorContentTextBox.Location = new System.Drawing.Point(542, 83);
+            this.editorContentTextBox.Name = "editorContentTextBox";
+            this.editorContentTextBox.Size = new System.Drawing.Size(1072, 31);
+            this.editorContentTextBox.TabIndex = 3;
+            this.editorContentTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputTextBox_KeyPress);
             // 
-            // valueTextBox
+            // editorValueTextBox
             // 
-            this.valueTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.valueTextBox.Location = new System.Drawing.Point(1620, 83);
-            this.valueTextBox.Name = "valueTextBox";
-            this.valueTextBox.ReadOnly = true;
-            this.valueTextBox.Size = new System.Drawing.Size(534, 31);
-            this.valueTextBox.TabIndex = 4;
+            this.editorValueTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editorValueTextBox.Location = new System.Drawing.Point(1620, 83);
+            this.editorValueTextBox.Name = "editorValueTextBox";
+            this.editorValueTextBox.ReadOnly = true;
+            this.editorValueTextBox.Size = new System.Drawing.Size(534, 31);
+            this.editorValueTextBox.TabIndex = 4;
             // 
             // inputLabel
             // 
@@ -253,9 +253,9 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutSpreadsheetToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel topTableLayoutPanel;
-        private System.Windows.Forms.TextBox valueTextBox;
-        private System.Windows.Forms.TextBox inputTextBox;
-        private System.Windows.Forms.TextBox cellNameTextBox;
+        private System.Windows.Forms.TextBox editorValueTextBox;
+        private System.Windows.Forms.TextBox editorContentTextBox;
+        private System.Windows.Forms.TextBox editorNameTextBox;
         private System.Windows.Forms.TextBox cellNameLabel;
         private System.Windows.Forms.TextBox inputLabel;
         private System.Windows.Forms.TextBox cellValueLabel;

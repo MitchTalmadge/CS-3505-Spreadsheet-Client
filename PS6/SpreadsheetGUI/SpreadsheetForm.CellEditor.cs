@@ -21,7 +21,7 @@ namespace SpreadsheetGUI
             try
             {
                 // Set the contents of the cell, and update the values of any dependents.
-                UpdateCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), inputTextBox.Text));
+                UpdateCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), editorContentTextBox.Text));
 
                 // Reselect the current cell to update its displayed value.
                 SpreadsheetPanelOnSelectionChanged(spreadsheetPanel);
