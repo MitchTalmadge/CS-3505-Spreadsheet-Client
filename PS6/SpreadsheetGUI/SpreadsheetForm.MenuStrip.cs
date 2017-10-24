@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SpreadsheetGUI.Properties;
+using SS;
 
 namespace SpreadsheetGUI
 {
@@ -79,7 +80,28 @@ namespace SpreadsheetGUI
         /// <param name="e">A click event.</param>
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: Open a file
+            Open();
+        }
+
+        /// <summary>
+        /// Opens a spreadsheet file from the File Explorer method.
+        /// </summary>
+        private void Open()
+        {
+            //opens menu for user to choose file to open
+            var fileDialogue = new OpenFileDialog { Filter = Resources.SpreadsheetForm_File_Extension_Filter };
+
+            //if no file was opened, then return.
+            if (fileDialogue.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            //saves current spreadsheet, clears current contents, then open new spreadsheet in current window
+            if (Changes() == true)
+            {
+                spreadsheetPanel.Clear();
+                string filepath = fileDialogue.FileName;
+                _spreadsheet = new Spreadsheet(filepath, IsValid, Normalize, SpreadsheetVersion);
+            }
         }
 
         /// <summary>
@@ -88,6 +110,19 @@ namespace SpreadsheetGUI
         /// <param name="sender">The menu item clicked.</param>
         /// <param name="e">A click event.</param>
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Changes() == true) {
+                // Close the window.
+                Close();
+            }            
+        }
+
+        /// <summary>
+        /// Helper method for opening and closing spreadsheet files.
+        /// Saves changes in current spreadsheet before closing current 
+        /// spreadsheet or opening a new spreadsheet.
+        /// </summary>
+        private bool Changes()
         {
             // Allow the user to save changes first.
             if (_spreadsheet.Changed)
@@ -103,12 +138,10 @@ namespace SpreadsheetGUI
                         break;
                     case DialogResult.Cancel:
                         // Don't do anything if we cancel.
-                        return;
+                        return false;
                 }
             }
-
-            // Close the window.
-            Close();
+            return true;
         }
 
         /// <summary>

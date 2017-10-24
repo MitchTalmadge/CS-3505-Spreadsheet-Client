@@ -97,7 +97,5 @@ namespace SpreadsheetGUI
             valueTextBox.Text = value.ToString();
             inputTextBox.Text = _spreadsheet.GetCellContents(GetSelectedCellName()).ToString();
         }
-
-       
     }
 }
