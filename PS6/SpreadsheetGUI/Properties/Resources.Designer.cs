@@ -88,6 +88,51 @@ namespace SpreadsheetGUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N O !.
+        /// </summary>
+        internal static string SpreadsheetForm_Formula_Error_Value {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_Formula_Error_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A circular dependency was found!.
+        /// </summary>
+        internal static string SpreadsheetForm_inputTextBox_Circular_Dependency {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_inputTextBox_Circular_Dependency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Cell Input.
+        /// </summary>
+        internal static string SpreadsheetForm_inputTextBox_Invalid_Cell_Input {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_inputTextBox_Invalid_Cell_Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the cell is invalid!.
+        /// </summary>
+        internal static string SpreadsheetForm_inputTextBox_Invalid_Cell_Name {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_inputTextBox_Invalid_Cell_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The syntax of the formula entered is invalid!.
+        /// </summary>
+        internal static string SpreadsheetForm_inputTextBox_Invalid_Formula {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_inputTextBox_Invalid_Formula", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unsaved Changes.
         /// </summary>
         internal static string SpreadsheetForm_Unsaved_Changes_Caption {
