@@ -41,7 +41,7 @@
             this.topTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.cellNameLabel = new System.Windows.Forms.TextBox();
             this.cellNameTextBox = new System.Windows.Forms.TextBox();
-            this.contentTextBox = new System.Windows.Forms.TextBox();
+            this.inputTextBox = new System.Windows.Forms.TextBox();
             this.valueTextBox = new System.Windows.Forms.TextBox();
             this.inputLabel = new System.Windows.Forms.TextBox();
             this.cellValueLabel = new System.Windows.Forms.TextBox();
@@ -147,7 +147,7 @@
             this.topTableLayoutPanel.Controls.Add(this.menuStrip, 0, 0);
             this.topTableLayoutPanel.Controls.Add(this.spreadsheetPanel, 0, 3);
             this.topTableLayoutPanel.Controls.Add(this.cellNameTextBox, 0, 2);
-            this.topTableLayoutPanel.Controls.Add(this.contentTextBox, 1, 2);
+            this.topTableLayoutPanel.Controls.Add(this.inputTextBox, 1, 2);
             this.topTableLayoutPanel.Controls.Add(this.valueTextBox, 2, 2);
             this.topTableLayoutPanel.Controls.Add(this.inputLabel, 1, 1);
             this.topTableLayoutPanel.Controls.Add(this.cellValueLabel, 2, 1);
@@ -183,13 +183,14 @@
             this.cellNameTextBox.Size = new System.Drawing.Size(533, 31);
             this.cellNameTextBox.TabIndex = 2;
             // 
-            // contentTextBox
+            // inputTextBox
             // 
-            this.contentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contentTextBox.Location = new System.Drawing.Point(542, 83);
-            this.contentTextBox.Name = "contentTextBox";
-            this.contentTextBox.Size = new System.Drawing.Size(1072, 31);
-            this.contentTextBox.TabIndex = 3;
+            this.inputTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inputTextBox.Location = new System.Drawing.Point(542, 83);
+            this.inputTextBox.Name = "inputTextBox";
+            this.inputTextBox.Size = new System.Drawing.Size(1072, 31);
+            this.inputTextBox.TabIndex = 3;
+            this.inputTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.contentTextBox_KeyPress);
             // 
             // valueTextBox
             // 
@@ -253,7 +254,7 @@
         private System.Windows.Forms.ToolStripMenuItem aboutSpreadsheetToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel topTableLayoutPanel;
         private System.Windows.Forms.TextBox valueTextBox;
-        private System.Windows.Forms.TextBox contentTextBox;
+        private System.Windows.Forms.TextBox inputTextBox;
         private System.Windows.Forms.TextBox cellNameTextBox;
         private System.Windows.Forms.TextBox cellNameLabel;
         private System.Windows.Forms.TextBox inputLabel;
