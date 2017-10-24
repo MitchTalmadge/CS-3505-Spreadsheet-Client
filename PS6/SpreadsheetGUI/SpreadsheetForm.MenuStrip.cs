@@ -48,7 +48,17 @@ namespace SpreadsheetGUI
         /// <param name="e">A click event.</param>
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: Save to specified file
+            var fileDialog = new SaveFileDialog {Filter = Resources.SpreadsheetForm_File_Extension_Filter};
+
+            // If no file was chosen (cancelled) then return.
+            if (fileDialog.ShowDialog(this) != DialogResult.OK)
+                return;
+
+
+            // Save the spreadsheet and record its path.
+            var filePath = fileDialog.FileName;
+            _spreadsheet.Save(filePath);
+            _openedFilePath = filePath;
         }
 
         /// <summary>
@@ -80,7 +90,8 @@ namespace SpreadsheetGUI
         {
             var instructions = Resources.ResourceManager.GetObject("Instructions");
             // ReSharper disable once PossibleNullReferenceException
-            MessageBox.Show(instructions.ToString(), Resources.SpreadsheetForm_About_Spreadsheet_Dialog_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(instructions.ToString(), Resources.SpreadsheetForm_About_Spreadsheet_Dialog_Caption,
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

@@ -125,4 +125,7 @@
     <value>About Spreadsheet</value>
     <comment>The caption for the "About Spreadsheet" dialog box.</comment>
   </data>
+  <data name="SpreadsheetForm_File_Extension_Filter" xml:space="preserve">
+    <value>Spreadsheet files (*.sprd)|*.sprd|All files (*.*)|*.*</value>
+  </data>
 </root>
