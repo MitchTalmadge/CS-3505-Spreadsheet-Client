@@ -1,7 +1,8 @@
-Spreadsheet Application
+Spreadsheet 3500
+~~~~~~~~~~~~~~~~
 Designed by Jiahui Chen (u0980890) and Mitch Talmadge (u1031378)
 
-Instructions for usage:
+INSTRUCTIONS:
 
 Menu Bar
 --------------------------------------------------

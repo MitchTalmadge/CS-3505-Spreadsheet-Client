@@ -61,10 +61,11 @@ namespace SpreadsheetGUI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spreadsheet Application
+        ///   Looks up a localized string similar to Spreadsheet 3500
+        ///~~~~~~~~~~~~~~~~
         ///Designed by Jiahui Chen (u0980890) and Mitch Talmadge (u1031378)
         ///
-        ///Instructions for usage:
+        ///INSTRUCTIONS:
         ///
         ///Menu Bar
         ///--------------------------------------------------
@@ -73,7 +74,7 @@ namespace SpreadsheetGUI.Properties {
         ///
         ///- Saving a Spreadsheet:
         ///    - There are two ways to save a Spreadsheet: &quot;Save&quot; and &quot;Save As&quot;.
-        ///        - Save: If the spreadsheet has been opened from an existing file, or has been sav [rest of string was truncated]&quot;;.
+        ///        - Save: If the spreadsheet has been opened from an existing file, or has been sa [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Instructions {
             get {
