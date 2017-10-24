@@ -29,16 +29,7 @@ namespace SpreadsheetGUI
         /// <param name="e">A click event.</param>
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // If we know where we opened from, save there. Otherwise act like the "Save As" button.
-            if (_openedFilePath != null)
-            {
-                _spreadsheet.Save(_openedFilePath);
-            }
-            else
-            {
-                // Trigger the "File -> Save As" event listener.
-                SaveAsToolStripMenuItem_Click(sender, e);
-            }
+            Save();
         }
 
         /// <summary>
@@ -48,17 +39,37 @@ namespace SpreadsheetGUI
         /// <param name="e">A click event.</param>
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var fileDialog = new SaveFileDialog {Filter = Resources.SpreadsheetForm_File_Extension_Filter};
+            Save(true);
+        }
 
-            // If no file was chosen (cancelled) then return.
-            if (fileDialog.ShowDialog(this) != DialogResult.OK)
-                return;
+        /// <summary>
+        /// Saves the spreadsheet to the most recently opened or saved file path. 
+        /// If no file was opened/saved before, or chooseFile is true, asks the user to select a place to save.
+        /// </summary>
+        /// <param name="chooseFile">True if the user should choose a file to save to.</param>
+        private void Save(bool chooseFile = false)
+        {
+            // Save to the currently open file (if we have saved/opened before)
+            if (!chooseFile && _openedFilePath != null)
+            {
+                _spreadsheet.Save(_openedFilePath);
+            }
+            else
+            {
+                // File was not opened or has not been saved before.
 
+                // Ask the user to select a file to save to.
+                var fileDialog = new SaveFileDialog {Filter = Resources.SpreadsheetForm_File_Extension_Filter};
 
-            // Save the spreadsheet and record its path.
-            var filePath = fileDialog.FileName;
-            _spreadsheet.Save(filePath);
-            _openedFilePath = filePath;
+                // If no file was chosen (cancelled) then return.
+                if (fileDialog.ShowDialog(this) != DialogResult.OK)
+                    return;
+
+                // Save the spreadsheet and record its path.
+                var filePath = fileDialog.FileName;
+                _spreadsheet.Save(filePath);
+                _openedFilePath = filePath;
+            }
         }
 
         /// <summary>
@@ -78,7 +89,26 @@ namespace SpreadsheetGUI
         /// <param name="e">A click event.</param>
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: Close spreadsheet
+            // Allow the user to save changes first.
+            if (_spreadsheet.Changed)
+            {
+                var result = MessageBox.Show(Resources.SpreadsheetForm_Unsaved_Changes_Text,
+                    Resources.SpreadsheetForm_Unsaved_Changes_Caption,
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button3);
+
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        Save();
+                        break;
+                    case DialogResult.Cancel:
+                        // Don't do anything if we cancel.
+                        return;
+                }
+            }
+
+            // Close the window.
+            Close();
         }
 
         /// <summary>

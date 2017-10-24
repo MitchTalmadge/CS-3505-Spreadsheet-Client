@@ -86,5 +86,23 @@ namespace SpreadsheetGUI.Properties {
                 return ResourceManager.GetString("SpreadsheetForm_File_Extension_Filter", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsaved Changes.
+        /// </summary>
+        internal static string SpreadsheetForm_Unsaved_Changes_Caption {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_Unsaved_Changes_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to save your changes to the spreadsheet?.
+        /// </summary>
+        internal static string SpreadsheetForm_Unsaved_Changes_Text {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_Unsaved_Changes_Text", resourceCulture);
+            }
+        }
     }
 }

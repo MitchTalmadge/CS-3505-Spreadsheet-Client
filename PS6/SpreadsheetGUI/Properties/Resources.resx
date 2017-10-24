@@ -128,4 +128,10 @@
   <data name="SpreadsheetForm_File_Extension_Filter" xml:space="preserve">
     <value>Spreadsheet files (*.sprd)|*.sprd|All files (*.*)|*.*</value>
   </data>
+  <data name="SpreadsheetForm_Unsaved_Changes_Text" xml:space="preserve">
+    <value>Would you like to save your changes to the spreadsheet?</value>
+  </data>
+  <data name="SpreadsheetForm_Unsaved_Changes_Caption" xml:space="preserve">
+    <value>Unsaved Changes</value>
+  </data>
 </root>
