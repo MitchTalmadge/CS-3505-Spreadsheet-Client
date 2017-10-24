@@ -127,11 +127,30 @@
   </data>
   <data name="SpreadsheetForm_File_Extension_Filter" xml:space="preserve">
     <value>Spreadsheet files (*.sprd)|*.sprd|All files (*.*)|*.*</value>
+    <comment>The pattern for file type selectors in file dialogs.</comment>
   </data>
   <data name="SpreadsheetForm_Unsaved_Changes_Text" xml:space="preserve">
     <value>Would you like to save your changes to the spreadsheet?</value>
+    <comment>The text for the popup when changes may be overwritten.</comment>
   </data>
   <data name="SpreadsheetForm_Unsaved_Changes_Caption" xml:space="preserve">
     <value>Unsaved Changes</value>
+    <comment>The caption for the popup when changes may be overwritten.</comment>
+  </data>
+  <data name="SpreadsheetForm_inputTextBox_Invalid_Cell_Input" xml:space="preserve">
+    <value>Invalid Cell Input</value>
+  </data>
+  <data name="SpreadsheetForm_inputTextBox_Circular_Dependency" xml:space="preserve">
+    <value>A circular dependency was found!</value>
+  </data>
+  <data name="SpreadsheetForm_inputTextBox_Invalid_Cell_Name" xml:space="preserve">
+    <value>The name of the cell is invalid!</value>
+  </data>
+  <data name="SpreadsheetForm_inputTextBox_Invalid_Formula" xml:space="preserve">
+    <value>The syntax of the formula entered is invalid!</value>
+  </data>
+  <data name="SpreadsheetForm_Formula_Error_Value" xml:space="preserve">
+    <value>N O !</value>
+    <comment>The value of a FormulaError in the spreadsheet.</comment>
   </data>
 </root>

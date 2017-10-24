@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using SpreadsheetGUI.Properties;
 using SS;
 using SpreadsheetUtilities;
 
@@ -34,6 +35,7 @@ namespace SpreadsheetGUI
         /// </summary>
         private string _openedFilePath;
 
+        /// <inheritdoc />
         /// <summary>
         /// Creates a SpreadsheetForm with a new, empty spreadsheet.
         /// </summary>
@@ -72,7 +74,7 @@ namespace SpreadsheetGUI
         private string GetSelectedCellName()
         {
             spreadsheetPanel.GetSelection(out var col, out var row);
-            string cellName = ((char)('A' + col)) + (++row).ToString();
+            var cellName = (char) ('A' + col) + (++row).ToString();
 
             return cellName;
         }
@@ -84,20 +86,29 @@ namespace SpreadsheetGUI
         private void SpreadsheetPanelOnSelectionChanged(SpreadsheetPanel sender)
         {
             inputTextBox.Focus();
+
             //displays cell's name
             var cellName = GetSelectedCellName();
             cellNameTextBox.Text = cellName;
             inputTextBox.Clear();
+
             //display cell's value
             object value;
-            if ( (value = _spreadsheet.GetCellValue(cellName)) is FormulaError error)
+            if ((value = _spreadsheet.GetCellValue(cellName)) is FormulaError)
             {
-                value = "N O !";
+                value = Resources.SpreadsheetForm_Formula_Error_Value;
             }
-            valueTextBox.Text = value.ToString();
-            inputTextBox.Text = _spreadsheet.GetCellContents(GetSelectedCellName()).ToString();
-        }
 
-       
+            valueTextBox.Text = value.ToString();
+
+            // Display the cell contents (and add an equals sign to formulas).
+            var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
+            if (contents is Formula)
+            {
+                contents = "=" + contents;
+            }
+
+            inputTextBox.Text = contents.ToString();
+        }
     }
 }
