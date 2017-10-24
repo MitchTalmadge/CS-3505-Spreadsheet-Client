@@ -134,6 +134,9 @@ namespace SS
             {
                 throw new SpreadsheetReadWriteException(e.Message);
             }
+
+            // Set changed to false since nothing was truly changed.
+            Changed = false;
         }
 
         /// <summary>
