@@ -23,9 +23,8 @@ namespace SpreadsheetGUI
                 // Set the contents of the cell, and update the values of any dependents.
                 UpdateCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), inputTextBox.Text));
 
-                // Reselect the current cell.
-                spreadsheetPanel.GetSelection(out var col, out var row);
-                spreadsheetPanel.SetSelection(col, row);
+                // Reselect the current cell to update its displayed value.
+                SpreadsheetPanelOnSelectionChanged(spreadsheetPanel);
             }
             catch (CircularException)
             {

@@ -48,6 +48,9 @@ namespace SpreadsheetGUI
 
             // Register a listener for when a spreadsheet cell has been selected.
             spreadsheetPanel.SelectionChanged += SpreadsheetPanelOnSelectionChanged;
+
+            // Select A1 by default.
+            SpreadsheetPanelOnSelectionChanged(spreadsheetPanel);
         }
 
         /// <summary>
@@ -85,23 +88,22 @@ namespace SpreadsheetGUI
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanelOnSelectionChanged(SpreadsheetPanel sender)
         {
+            // Move the text cursor to the content input text box.
             inputTextBox.Focus();
 
-            //displays cell's name
+            // Display the cell name in the editor.
             var cellName = GetSelectedCellName();
             cellNameTextBox.Text = cellName;
-            inputTextBox.Clear();
 
-            //display cell's value
+            // Display the cell value in the editor.
             object value;
             if ((value = _spreadsheet.GetCellValue(cellName)) is FormulaError)
             {
                 value = Resources.SpreadsheetForm_Formula_Error_Value;
             }
-
             valueTextBox.Text = value.ToString();
 
-            // Display the cell contents (and add an equals sign to formulas).
+            // Display the cell contents in the editor (and add an equals sign to formulas).
             var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
             if (contents is Formula)
             {
