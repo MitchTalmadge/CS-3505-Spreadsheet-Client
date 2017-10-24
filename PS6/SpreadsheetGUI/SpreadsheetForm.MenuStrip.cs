@@ -99,6 +99,9 @@ namespace SpreadsheetGUI
             if (Changes() == true)
             {
                 spreadsheetPanel.Clear();
+                inputTextBox.Clear();
+                valueTextBox.Clear();
+                cellNameTextBox.Clear();
                 string filepath = fileDialogue.FileName;
                 _spreadsheet = new Spreadsheet(filepath, IsValid, Normalize, SpreadsheetVersion);
             }
