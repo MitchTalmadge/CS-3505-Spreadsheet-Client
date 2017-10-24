@@ -104,6 +104,7 @@ namespace SpreadsheetGUI
                 cellNameTextBox.Clear();
                 string filepath = fileDialogue.FileName;
                 _spreadsheet = new Spreadsheet(filepath, IsValid, Normalize, SpreadsheetVersion);
+                _openedFilePath = filepath;
             }
         }
 
