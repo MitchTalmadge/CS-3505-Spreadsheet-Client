@@ -29,6 +29,11 @@ namespace SpreadsheetGUI
         private Spreadsheet _spreadsheet;
 
         /// <summary>
+        /// The path to the file that was opened for this spreadsheet, if any.
+        /// </summary>
+        private string _openedFilePath;
+
+        /// <summary>
         /// Creates a SpreadsheetForm with a new, empty spreadsheet.
         /// </summary>
         public SpreadsheetForm()

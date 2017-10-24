@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace SpreadsheetGUI
 {
-    public partial class SpreadsheetForm : Form
+    public partial class SpreadsheetForm
     {
         /// <summary>
         /// Called when the File -> New menu item is clicked.
@@ -26,7 +26,16 @@ namespace SpreadsheetGUI
         /// <param name="e">A click event.</param>
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: Save to current file
+            // If we know where we opened from, save there. Otherwise act like the "Save As" button.
+            if (_openedFilePath != null)
+            {
+                _spreadsheet.Save(_openedFilePath);
+            }
+            else
+            {
+                // Trigger the "File -> Save As" event listener.
+                SaveAsToolStripMenuItem_Click(sender, e);
+            }
         }
 
         /// <summary>
