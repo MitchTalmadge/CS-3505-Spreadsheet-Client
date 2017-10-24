@@ -9,6 +9,6 @@ For our spreadsheet, our extra features are:
 	  location without opening the file-choosing dialog.
 	- There is a "Professional Version"
 
-A design decision we made was to split up the listener methods and functionality of the Menu and cell input 
-portions of the GUI into partial classes, so not all our code was in SpreadsheetForm.cs.  
-Another design decisions made include using many helper methods within SpreadSheetForm.cs and its partial classes.
+A design decision we made was to split up the listener methods and functionality of the menu strip, cell editor, and spreadsheet panel
+portions of the GUI into partial classes, so that we did not have one massive SpreadsheetForm.cs class. We kept related helper methods
+in these partial classes as well.
