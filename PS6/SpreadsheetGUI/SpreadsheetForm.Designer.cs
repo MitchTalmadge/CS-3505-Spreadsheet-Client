@@ -190,7 +190,7 @@
             this.inputTextBox.Name = "inputTextBox";
             this.inputTextBox.Size = new System.Drawing.Size(1072, 31);
             this.inputTextBox.TabIndex = 3;
-            this.inputTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.contentTextBox_KeyPress);
+            this.inputTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputTextBox_KeyPress);
             // 
             // valueTextBox
             // 

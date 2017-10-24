@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using SS;
+using SpreadsheetUtilities;
 
 namespace SpreadsheetGUI
 {
@@ -68,6 +69,14 @@ namespace SpreadsheetGUI
             return cellName.ToUpper();
         }
 
+        private string GetSelectedCellName()
+        {
+            spreadsheetPanel.GetSelection(out var col, out var row);
+            string cellName = ((char)('A' + col)) + (++row).ToString();
+
+            return cellName;
+        }
+
         /// <summary>
         /// Called when a cell in the spreadsheet has been selected.
         /// </summary>
@@ -75,7 +84,18 @@ namespace SpreadsheetGUI
         private void SpreadsheetPanelOnSelectionChanged(SpreadsheetPanel sender)
         {
             inputTextBox.Focus();
-            //TODO: User has selected a cell in the spreadsheet
+            //displays cell's name
+            var cellName = GetSelectedCellName();
+            cellNameTextBox.Text = cellName;
+            inputTextBox.Clear();
+            //display cell's value
+            object value;
+            if ( (value = _spreadsheet.GetCellValue(cellName)) is FormulaError error)
+            {
+                value = "N O !";
+            }
+            valueTextBox.Text = value.ToString();
+            inputTextBox.Text = _spreadsheet.GetCellContents(GetSelectedCellName()).ToString();
         }
 
        
