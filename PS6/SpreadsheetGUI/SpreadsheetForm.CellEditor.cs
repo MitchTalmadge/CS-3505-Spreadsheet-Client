@@ -10,9 +10,20 @@ using SpreadsheetGUI.Properties;
 
 namespace SpreadsheetGUI
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// A partial class of SpreadsheetForm to organize cell editor logic.
+    /// </summary>
+    /// <authors>Jiahui Chen and Mitch Talmadge</authors>
     partial class SpreadsheetForm
     {
-        private void inputTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        /// <summary>
+        /// Called when a key is pressed while the editor content text box is focused.
+        /// Saves the contents when the enter key is pressed.
+        /// </summary>
+        /// <param name="sender">The focused text box.</param>
+        /// <param name="e">An event containing the key that was pressed.</param>
+        private void InputTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Make sure the enter button was pressed in the input box.
             if (e.KeyChar != 13)
@@ -21,11 +32,10 @@ namespace SpreadsheetGUI
             try
             {
                 // Set the contents of the cell, and update the values of any dependents.
-                UpdateCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), inputTextBox.Text));
+                UpdateCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), editorContentTextBox.Text));
 
-                // Reselect the current cell.
-                spreadsheetPanel.GetSelection(out var col, out var row);
-                spreadsheetPanel.SetSelection(col, row);
+                // Reselect the current cell to update its displayed value.
+                SpreadsheetPanelOnSelectionChanged(spreadsheetPanel);
             }
             catch (CircularException)
             {

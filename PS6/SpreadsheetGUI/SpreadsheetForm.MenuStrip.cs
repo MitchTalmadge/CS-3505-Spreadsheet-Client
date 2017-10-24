@@ -11,6 +11,11 @@ using SS;
 
 namespace SpreadsheetGUI
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// A partial class of SpreadsheetForm to organize menu strip logic.
+    /// </summary>
+    /// <authors>Jiahui Chen and Mitch Talmadge</authors>
     public partial class SpreadsheetForm
     {
         /// <summary>
@@ -99,9 +104,9 @@ namespace SpreadsheetGUI
             if (Changes() == true)
             {
                 spreadsheetPanel.Clear();
-                inputTextBox.Clear();
-                valueTextBox.Clear();
-                cellNameTextBox.Clear();
+                editorContentTextBox.Clear();
+                editorValueTextBox.Clear();
+                editorNameTextBox.Clear();
                 string filepath = fileDialogue.FileName;
                 _spreadsheet = new Spreadsheet(filepath, IsValid, Normalize, SpreadsheetVersion);
                 _openedFilePath = filepath;
