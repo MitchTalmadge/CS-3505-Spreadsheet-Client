@@ -69,7 +69,7 @@ namespace SpreadsheetGUI
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanelOnSelectionChanged(SpreadsheetPanel sender)
         {
-            throw new NotImplementedException();
+            inputTextBox.Focus();
             //TODO: User has selected a cell in the spreadsheet
         }
 
