@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SpreadsheetGUI.Properties;
 using SS;
+using SpreadsheetUtilities;
 
 namespace SpreadsheetGUI
 {
@@ -109,6 +110,18 @@ namespace SpreadsheetGUI
                 editorNameTextBox.Clear();
                 string filepath = fileDialogue.FileName;
                 _spreadsheet = new Spreadsheet(filepath, IsValid, Normalize, SpreadsheetVersion);
+                
+                //load data from old spreadsheet into GUI
+                foreach (var cell in _spreadsheet.GetNamesOfAllNonemptyCells())
+                {
+                    GetColumnAndRowFromCellName(cell, out var col, out var row);
+                    object value = _spreadsheet.GetCellValue(cell);
+                    if (value is FormulaError)
+                    {
+                        value = value = Resources.SpreadsheetForm_Formula_Error_Value;
+                    }
+                    spreadsheetPanel.SetValue(col, row, value.ToString());
+                }
                 _openedFilePath = filepath;
             }
         }
