@@ -1,1 +1,29 @@
-TODO: Instructions
+Spreadsheet Application
+Designed by Jiahui Chen (u0980890) and Mitch Talmadge (u1031378)
+
+Instructions for usage:
+
+Menu Bar
+--------------------------------------------------
+- Creating a new Spreadsheet:
+    - Click on the File -> New menu item, which will create a brand new (unsaved) spreadsheet in a new window.
+
+- Saving a Spreadsheet:
+    - There are two ways to save a Spreadsheet: "Save" and "Save As".
+        - Save: If the spreadsheet has been opened from an existing file, or has been saved before, this menu item will save to the same location. If not, then this menu item will act like the "Save As" menu item.
+        - Save As: This will allow you to choose a location to save the file, which will be used the next time you click the "Save" menu item.
+
+- Opening a Spreadsheet:
+    - Be aware that if you open another Spreadsheet, it will replace the contents of the current window. You will be given the ability to save your changes first.
+    - Click on the File -> Open menu item, and navigate to the Spreadsheet to be opened.
+
+- Closing a Spreadsheet:
+    - Either click on the top right "X" button, or click File -> Close. You will be given a chance to save your changes if needed.
+
+Spreadsheet
+--------------------------------------------------
+- Editing a Cell:
+    - To edit a cell, click on any cell in the spreadsheet and begin typing. You can put words, numbers, or formulas in any cell.
+    - To enter a formula, start your cell contents with =. For example, =5 + 5 will result in 10.
+        - If a formula will result in a circular dependency or contains invalid characters, a message box will be displayed.
+        - If a formula cannot evaluate (due to referenced cell not evaluating to a number), the cell will display "N O !".
