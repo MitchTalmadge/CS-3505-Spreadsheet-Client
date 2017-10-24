@@ -231,6 +231,7 @@
             this.Name = "SpreadsheetForm";
             this.ShowIcon = false;
             this.Text = "Spreadsheet - Jiahui Chen & Mitch Talmadge";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SpreadsheetForm_FormClosing);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.topTableLayoutPanel.ResumeLayout(false);

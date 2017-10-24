@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using SpreadsheetGUI.Properties;
 using SS;
@@ -54,6 +53,18 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
+        /// Called when the form has been requested to be closed.
+        /// Checks for changes before allowing the form to close.
+        /// </summary>
+        /// <param name="sender">The form.</param>
+        /// <param name="e">The form closing event.</param>
+        private void SpreadsheetForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Cancels the close if the form needs to be saved.
+            e.Cancel = !SaveIfNeeded();
+        }
+
+        /// <summary>
         /// Determines if a cell name is valid (exists within the spreadsheet panel).
         /// </summary>
         /// <param name="cellName">The name of the cell to validate.</param>
@@ -75,46 +86,101 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Determines the name of the currently selected cell in the Spreadsheet Panel.
+        /// Checks if the spreadsheet has been changed, and if so, asks the user if they want to save their changes.
+        /// The spreadsheet will be saved as needed.
+        /// 
+        /// Alternatively, the user has the ability to cancel the operation that called this method, 
+        /// which will cause this method to return false.
         /// </summary>
-        /// <returns>The selected cell's name.</returns>
-        private string GetSelectedCellName()
+        /// <returns>True if the spreadsheet is saved/not saved as desired, false if the user chose to cancel the operation.</returns>
+        private bool SaveIfNeeded()
         {
-            spreadsheetPanel.GetSelection(out var col, out var row);
-            var cellName = (char) ('A' + col) + (++row).ToString();
+            // Check for changes.
+            if (!_spreadsheet.Changed)
+                return true;
 
-            return cellName;
+            var result = MessageBox.Show(Resources.SpreadsheetForm_Unsaved_Changes_Text,
+                Resources.SpreadsheetForm_Unsaved_Changes_Caption,
+                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button3);
+
+            switch (result)
+            {
+                case DialogResult.Cancel:
+                    // Cancel the operation.
+                    return false;
+                case DialogResult.Yes:
+                    SaveSpreadsheet();
+                    break;
+            }
+
+            return true;
         }
 
         /// <summary>
-        /// Called when a cell in the spreadsheet has been selected.
+        /// Saves the spreadsheet to the most recently opened or saved file path. 
+        /// If no file was opened/saved before, or chooseFile is true, asks the user to select a place to save.
         /// </summary>
-        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
-        private void SpreadsheetPanelOnSelectionChanged(SpreadsheetPanel sender)
+        /// <param name="chooseFile">True if the user should choose a file to save to.</param>
+        private void SaveSpreadsheet(bool chooseFile = false)
         {
-            // Move the text cursor to the content edit text box.
-            editorContentTextBox.Focus();
-
-            // Display the cell name in the editor.
-            var cellName = GetSelectedCellName();
-            editorNameTextBox.Text = cellName;
-
-            // Display the cell value in the editor.
-            object value;
-            if ((value = _spreadsheet.GetCellValue(cellName)) is FormulaError)
+            // Save to the currently open file (if we have saved/opened before)
+            if (!chooseFile && _openedFilePath != null)
             {
-                value = Resources.SpreadsheetForm_Formula_Error_Value;
+                _spreadsheet.Save(_openedFilePath);
             }
-            editorValueTextBox.Text = value.ToString();
-
-            // Display the cell contents in the editor (and add an equals sign to formulas).
-            var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
-            if (contents is Formula)
+            else
             {
-                contents = "=" + contents;
-            }
+                // File was not opened or has not been saved before.
 
-            editorContentTextBox.Text = contents.ToString();
+                // Ask the user to select a file to save to.
+                var fileDialog = new SaveFileDialog {Filter = Resources.SpreadsheetForm_File_Extension_Filter};
+
+                // If no file was chosen (cancelled) then return.
+                if (fileDialog.ShowDialog(this) != DialogResult.OK)
+                    return;
+
+                // Save the spreadsheet and record its path.
+                var filePath = fileDialog.FileName;
+                _spreadsheet.Save(filePath);
+                _openedFilePath = filePath;
+            }
+        }
+
+        /// <summary>
+        /// Opens a spreadsheet from a file, replacing the contents of the current spreadsheet (saving if needed).
+        /// </summary>
+        private void OpenSpreadsheet()
+        {
+            //opens menu for user to choose file to open
+            var fileDialogue = new OpenFileDialog {Filter = Resources.SpreadsheetForm_File_Extension_Filter};
+
+            //if no file was opened, then return.
+            if (fileDialogue.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            //saves current spreadsheet, clears current contents, then open new spreadsheet in current window
+            if (!SaveIfNeeded())
+                return;
+
+            spreadsheetPanel.Clear();
+            editorContentTextBox.Clear();
+            editorValueTextBox.Clear();
+            editorNameTextBox.Clear();
+            string filepath = fileDialogue.FileName;
+            _spreadsheet = new Spreadsheet(filepath, IsValid, Normalize, SpreadsheetVersion);
+
+            //load data from old spreadsheet into GUI
+            foreach (var cell in _spreadsheet.GetNamesOfAllNonemptyCells())
+            {
+                GetColumnAndRowFromCellName(cell, out var col, out var row);
+                var value = _spreadsheet.GetCellValue(cell);
+                if (value is FormulaError)
+                {
+                    value = Resources.SpreadsheetForm_Formula_Error_Value;
+                }
+                spreadsheetPanel.SetValue(col, row, value.ToString());
+            }
+            _openedFilePath = filepath;
         }
     }
 }
