@@ -39,10 +39,10 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutSpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.cellNameLabel = new System.Windows.Forms.TextBox();
             this.cellNameTextBox = new System.Windows.Forms.TextBox();
             this.contentTextBox = new System.Windows.Forms.TextBox();
             this.valueTextBox = new System.Windows.Forms.TextBox();
-            this.cellNameLabel = new System.Windows.Forms.TextBox();
             this.inputLabel = new System.Windows.Forms.TextBox();
             this.cellValueLabel = new System.Windows.Forms.TextBox();
             this.menuStrip.SuspendLayout();
@@ -164,6 +164,16 @@
             this.topTableLayoutPanel.Size = new System.Drawing.Size(2157, 1115);
             this.topTableLayoutPanel.TabIndex = 3;
             // 
+            // cellNameLabel
+            // 
+            this.cellNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cellNameLabel.Location = new System.Drawing.Point(3, 43);
+            this.cellNameLabel.Name = "cellNameLabel";
+            this.cellNameLabel.ReadOnly = true;
+            this.cellNameLabel.Size = new System.Drawing.Size(533, 31);
+            this.cellNameLabel.TabIndex = 5;
+            this.cellNameLabel.Text = "Cell Name:";
+            // 
             // cellNameTextBox
             // 
             this.cellNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -189,16 +199,6 @@
             this.valueTextBox.ReadOnly = true;
             this.valueTextBox.Size = new System.Drawing.Size(534, 31);
             this.valueTextBox.TabIndex = 4;
-            // 
-            // cellNameLabel
-            // 
-            this.cellNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cellNameLabel.Location = new System.Drawing.Point(3, 43);
-            this.cellNameLabel.Name = "cellNameLabel";
-            this.cellNameLabel.ReadOnly = true;
-            this.cellNameLabel.Size = new System.Drawing.Size(533, 31);
-            this.cellNameLabel.TabIndex = 5;
-            this.cellNameLabel.Text = "Cell Name:";
             // 
             // inputLabel
             // 

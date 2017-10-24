@@ -16,7 +16,7 @@ namespace SpreadsheetGUI
         /// <param name="e">A click event.</param>
         private void NewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: New spreadsheet
+            SpreadsheetApplicationContext.Instance.OpenSpreadsheet();
         }
 
         /// <summary>
