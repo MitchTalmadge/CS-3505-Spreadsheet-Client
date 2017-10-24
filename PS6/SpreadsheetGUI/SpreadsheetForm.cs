@@ -73,6 +73,5 @@ namespace SpreadsheetGUI
             //TODO: User has selected a cell in the spreadsheet
         }
 
-
     }
 }
