@@ -28,10 +28,10 @@ namespace SpreadsheetGUI
             try
             {
                 // Set the contents of the cell, and update the values of any dependents.
-                UpdateCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), editorContentTextBox.Text));
+                RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), editorContentTextBox.Text));
 
-                // Reselect the current cell to update its displayed value.
-                SpreadsheetPanelOnSelectionChanged(spreadsheetPanel);
+                // Update the cell editor with the new data of the current cell.
+                DisplayCurrentCellInEditor();
             }
             catch (CircularException)
             {
@@ -51,40 +51,43 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Updates the values of the given cells in the spreadsheet.
+        /// Using the currently selected cell in the spreadsheet panel, displays the name, content, and value in the cell editor.
         /// </summary>
-        /// <param name="cellNames">The names of the cells to update.</param>
-        private void UpdateCellValues(IEnumerable<string> cellNames)
+        private void DisplayCurrentCellInEditor()
         {
-            foreach (var cell in cellNames)
-            {
-                // Get the new value.
-                var value = _spreadsheet.GetCellValue(cell);
-                if (value is FormulaError)
-                {
-                    value = Resources.SpreadsheetForm_Formula_Error_Value;
-                }
+            // Move the text cursor to the content edit text box.
+            editorContentTextBox.Focus();
 
-                // Update the value in the spreadsheet panel.
-                GetColumnAndRowFromCellName(cell, out var col, out var row);
-                spreadsheetPanel.SetValue(col, row, value.ToString());
+            // Display the cell name in the editor.
+            var cellName = GetSelectedCellName();
+            editorNameTextBox.Text = cellName;
+
+            // Display the cell value in the editor.
+            var value = _spreadsheet.GetCellValue(cellName);
+            if (value is FormulaError)
+            {
+                value = Resources.SpreadsheetForm_Formula_Error_Value;
             }
+            editorValueTextBox.Text = value.ToString();
+
+            // Display the cell contents in the editor (and add an equals sign to formulas).
+            var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
+            if (contents is Formula)
+            {
+                contents = "=" + contents;
+            }
+
+            editorContentTextBox.Text = contents.ToString();
         }
 
         /// <summary>
-        /// From a cell name, determines the column and row of the cell in the spreadsheet panel.
+        /// Clears the cell editor.
         /// </summary>
-        /// <param name="cellName">The name of the cell.</param>
-        /// <param name="col">The variable to store the column in.</param>
-        /// <param name="row">The variable to store the row in.</param>
-        private void GetColumnAndRowFromCellName(string cellName, out int col, out int row)
+        private void ClearCellEditor()
         {
-            // Column
-            col = cellName[0] - 'A';
-
-            // Row
-            int.TryParse(cellName.Substring(1), out row);
-            row = row - 1;
+            editorNameTextBox.Clear();
+            editorContentTextBox.Clear();
+            editorValueTextBox.Clear();
         }
     }
 }

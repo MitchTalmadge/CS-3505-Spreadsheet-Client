@@ -58,6 +58,7 @@
             this.spreadsheetPanel.Name = "spreadsheetPanel";
             this.spreadsheetPanel.Size = new System.Drawing.Size(2157, 998);
             this.spreadsheetPanel.TabIndex = 0;
+            this.spreadsheetPanel.SelectionChanged += new SS.SelectionChangedHandler(this.SpreadsheetPanel_SelectionChanged);
             // 
             // menuStrip
             // 

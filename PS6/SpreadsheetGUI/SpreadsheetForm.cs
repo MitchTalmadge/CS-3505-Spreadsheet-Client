@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using SpreadsheetGUI.Properties;
 using SS;
-using SpreadsheetUtilities;
 
 namespace SpreadsheetGUI
 {
@@ -45,11 +44,8 @@ namespace SpreadsheetGUI
             // Create a new, empty spreadsheet.
             _spreadsheet = new Spreadsheet(IsValid, Normalize, SpreadsheetVersion);
 
-            // Register a listener for when a spreadsheet cell has been selected.
-            spreadsheetPanel.SelectionChanged += SpreadsheetPanelOnSelectionChanged;
-
-            // Select A1 by default.
-            SpreadsheetPanelOnSelectionChanged(spreadsheetPanel);
+            // Display the initially selected cell in the editor.
+            DisplayCurrentCellInEditor();
         }
 
         /// <summary>
@@ -151,36 +147,41 @@ namespace SpreadsheetGUI
         /// </summary>
         private void OpenSpreadsheet()
         {
-            //opens menu for user to choose file to open
+            // Opens the menu for user to choose file to open
             var fileDialogue = new OpenFileDialog {Filter = Resources.SpreadsheetForm_File_Extension_Filter};
 
-            //if no file was opened, then return.
+            // If no file was opened, then return.
             if (fileDialogue.ShowDialog(this) != DialogResult.OK)
                 return;
 
-            //saves current spreadsheet, clears current contents, then open new spreadsheet in current window
+            // Allow the user to save their changes if needed.
             if (!SaveIfNeeded())
                 return;
 
-            spreadsheetPanel.Clear();
-            editorContentTextBox.Clear();
-            editorValueTextBox.Clear();
-            editorNameTextBox.Clear();
-            string filepath = fileDialogue.FileName;
-            _spreadsheet = new Spreadsheet(filepath, IsValid, Normalize, SpreadsheetVersion);
+            // Clear the current spreadsheet.
+            ClearSpreadsheet();
 
-            //load data from old spreadsheet into GUI
-            foreach (var cell in _spreadsheet.GetNamesOfAllNonemptyCells())
-            {
-                GetColumnAndRowFromCellName(cell, out var col, out var row);
-                var value = _spreadsheet.GetCellValue(cell);
-                if (value is FormulaError)
-                {
-                    value = Resources.SpreadsheetForm_Formula_Error_Value;
-                }
-                spreadsheetPanel.SetValue(col, row, value.ToString());
-            }
-            _openedFilePath = filepath;
+            // Load the new spreadsheet
+            _openedFilePath = fileDialogue.FileName;
+            _spreadsheet = new Spreadsheet(_openedFilePath, IsValid, Normalize, SpreadsheetVersion);
+
+            // Load the data from the new spreadsheet into the spreadsheet panel.
+            RefreshCellValues(_spreadsheet.GetNamesOfAllNonemptyCells());
+
+            // Show the currently selected cell in the editor (A1)
+            DisplayCurrentCellInEditor();
+        }
+
+        /// <summary>
+        /// Clears all parts of the spreadsheet GUI, selects A1, and sets the spreadsheet to null.
+        /// </summary>
+        private void ClearSpreadsheet()
+        {
+            ClearSpreadsheetPanel();
+            ClearCellEditor();
+
+            _spreadsheet = null;
+            _openedFilePath = null;
         }
     }
 }

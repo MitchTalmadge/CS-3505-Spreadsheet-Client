@@ -1,4 +1,5 @@
-﻿using SpreadsheetGUI.Properties;
+﻿using System.Collections.Generic;
+using SpreadsheetGUI.Properties;
 using SpreadsheetUtilities;
 using SS;
 
@@ -15,31 +16,25 @@ namespace SpreadsheetGUI
         /// Called when a cell in the spreadsheet has been selected.
         /// </summary>
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
-        private void SpreadsheetPanelOnSelectionChanged(SpreadsheetPanel sender)
+        private void SpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
-            // Move the text cursor to the content edit text box.
-            editorContentTextBox.Focus();
+            DisplayCurrentCellInEditor();
+        }
 
-            // Display the cell name in the editor.
-            var cellName = GetSelectedCellName();
-            editorNameTextBox.Text = cellName;
+        /// <summary>
+        /// From a cell name, determines the column and row of the cell in the spreadsheet panel.
+        /// </summary>
+        /// <param name="cellName">The name of the cell.</param>
+        /// <param name="col">The variable to store the column in.</param>
+        /// <param name="row">The variable to store the row in.</param>
+        private static void GetColumnAndRowFromCellName(string cellName, out int col, out int row)
+        {
+            // Column
+            col = cellName[0] - 'A';
 
-            // Display the cell value in the editor.
-            object value;
-            if ((value = _spreadsheet.GetCellValue(cellName)) is FormulaError)
-            {
-                value = Resources.SpreadsheetForm_Formula_Error_Value;
-            }
-            editorValueTextBox.Text = value.ToString();
-
-            // Display the cell contents in the editor (and add an equals sign to formulas).
-            var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
-            if (contents is Formula)
-            {
-                contents = "=" + contents;
-            }
-
-            editorContentTextBox.Text = contents.ToString();
+            // Row
+            int.TryParse(cellName.Substring(1), out row);
+            row = row - 1;
         }
 
         /// <summary>
@@ -52,6 +47,36 @@ namespace SpreadsheetGUI
             var cellName = (char) ('A' + col) + (++row).ToString();
 
             return cellName;
+        }
+
+        /// <summary>
+        /// Refreshes the values of the given cells on the spreadsheet panel.
+        /// </summary>
+        /// <param name="cellNames">The names of the cells to refresh.</param>
+        private void RefreshCellValues(IEnumerable<string> cellNames)
+        {
+            foreach (var cell in cellNames)
+            {
+                // Get the new value.
+                var value = _spreadsheet.GetCellValue(cell);
+                if (value is FormulaError)
+                {
+                    value = Resources.SpreadsheetForm_Formula_Error_Value;
+                }
+
+                // Update the value in the spreadsheet panel.
+                GetColumnAndRowFromCellName(cell, out var col, out var row);
+                spreadsheetPanel.SetValue(col, row, value.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Clears the spreadsheet panel and sets the selection to A1.
+        /// </summary>
+        private void ClearSpreadsheetPanel()
+        {
+            spreadsheetPanel.SetSelection(0, 0);
+            spreadsheetPanel.Clear();
         }
     }
 }
