@@ -18,22 +18,14 @@ namespace SpreadsheetGUI
             if (e.KeyChar != 13)
                 return;
 
-            var input = inputTextBox.Text;
-
             try
             {
-                _spreadsheet.SetContentsOfCell(GetSelectedCellName(), input);
-                spreadsheetPanel.GetSelection(out var col, out var row);
+                // Set the contents of the cell, and update the values of any dependents.
+                UpdateCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), inputTextBox.Text));
 
-                //display cell's value
-                var value = _spreadsheet.GetCellValue(GetSelectedCellName());
-                if (value is FormulaError)
-                {
-                    value = Resources.SpreadsheetForm_Formula_Error_Value;
-                }
-                
-                spreadsheetPanel.SetValue(col, row, value.ToString());
-                valueTextBox.Text = value.ToString();
+                // Reselect the current cell.
+                spreadsheetPanel.GetSelection(out var col, out var row);
+                spreadsheetPanel.SetSelection(col, row);
             }
             catch (CircularException)
             {
@@ -50,6 +42,43 @@ namespace SpreadsheetGUI
                 MessageBox.Show(Resources.SpreadsheetForm_inputTextBox_Invalid_Formula,
                     Resources.SpreadsheetForm_inputTextBox_Invalid_Cell_Input);
             }
+        }
+
+        /// <summary>
+        /// Updates the values of the given cells in the spreadsheet.
+        /// </summary>
+        /// <param name="cellNames">The names of the cells to update.</param>
+        private void UpdateCellValues(IEnumerable<string> cellNames)
+        {
+            foreach (var cell in cellNames)
+            {
+                // Get the new value.
+                var value = _spreadsheet.GetCellValue(cell);
+                if (value is FormulaError)
+                {
+                    value = Resources.SpreadsheetForm_Formula_Error_Value;
+                }
+
+                // Update the value in the spreadsheet panel.
+                GetColumnAndRowFromCellName(cell, out var col, out var row);
+                spreadsheetPanel.SetValue(col, row, value.ToString());
+            }
+        }
+
+        /// <summary>
+        /// From a cell name, determines the column and row of the cell in the spreadsheet panel.
+        /// </summary>
+        /// <param name="cellName">The name of the cell.</param>
+        /// <param name="col">The variable to store the column in.</param>
+        /// <param name="row">The variable to store the row in.</param>
+        private void GetColumnAndRowFromCellName(string cellName, out int col, out int row)
+        {
+            // Column
+            col = cellName[0] - 'A';
+
+            // Row
+            int.TryParse(cellName.Substring(1), out row);
+            row = row - 1;
         }
     }
 }
