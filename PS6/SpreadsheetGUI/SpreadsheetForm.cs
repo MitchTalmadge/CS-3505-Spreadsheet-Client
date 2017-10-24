@@ -69,6 +69,14 @@ namespace SpreadsheetGUI
             return cellName.ToUpper();
         }
 
+        private string GetSelectedCellName()
+        {
+            spreadsheetPanel.GetSelection(out var col, out var row);
+            string cellName = ((char)('A' + col)) + (++row).ToString();
+
+            return cellName;
+        }
+
         /// <summary>
         /// Called when a cell in the spreadsheet has been selected.
         /// </summary>
@@ -77,16 +85,17 @@ namespace SpreadsheetGUI
         {
             inputTextBox.Focus();
             //displays cell's name
-            sender.GetSelection(out var col, out var row);
-            string cellName = ((char)('A' + col)) + (++row).ToString();
-            cellNameLabel.Text = cellName;
+            var cellName = GetSelectedCellName();
+            cellNameTextBox.Text = cellName;
+            inputTextBox.Clear();
             //display cell's value
-            object value = null;
+            object value;
             if ( (value = _spreadsheet.GetCellValue(cellName)) is FormulaError error)
             {
                 value = "N O !";
             }
-            else cellValueLabel.Text = value.ToString();
+            valueTextBox.Text = value.ToString();
+            inputTextBox.Text = _spreadsheet.GetCellContents(GetSelectedCellName()).ToString();
         }
 
        
