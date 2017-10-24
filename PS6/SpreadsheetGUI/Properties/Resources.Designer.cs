@@ -61,11 +61,42 @@ namespace SpreadsheetGUI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TODO: Instructions.
+        ///   Looks up a localized string similar to Spreadsheet Application
+        ///Designed by Jiahui Chen (u0980890) and Mitch Talmadge (u1031378)
+        ///
+        ///Instructions for usage:
+        ///
+        ///Menu Bar
+        ///--------------------------------------------------
+        ///- Creating a new Spreadsheet:
+        ///    - Click on the File -&gt; New menu item, which will create a brand new (unsaved) spreadsheet in a new window.
+        ///
+        ///- Saving a Spreadsheet:
+        ///    - There are two ways to save a Spreadsheet: &quot;Save&quot; and &quot;Save As&quot;.
+        ///        - Save: If the spreadsheet has been opened from an existing file, or has been sav [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Instructions {
             get {
                 return ResourceManager.GetString("Instructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap splashscreen_image {
+            get {
+                object obj = ResourceManager.GetObject("splashscreen_image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream splashscreen_sound {
+            get {
+                return ResourceManager.GetStream("splashscreen_sound", resourceCulture);
             }
         }
         

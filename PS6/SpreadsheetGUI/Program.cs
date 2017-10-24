@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,6 +27,7 @@ namespace SpreadsheetGUI
         /// </summary>
         private int OpenSpreadsheets { get; set; }
 
+        /// <inheritdoc />
         /// <summary>
         /// Private constructor to prevent multiple instantiations of the singleton context.
         /// </summary>
@@ -68,6 +70,9 @@ namespace SpreadsheetGUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Start splashscreen
+            Application.Run(new SplashscreenForm());
 
             // Open one spreadsheet.
             SpreadsheetApplicationContext.Instance.OpenSpreadsheet();

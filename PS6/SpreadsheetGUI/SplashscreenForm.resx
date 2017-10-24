@@ -117,46 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Instructions" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Instructions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="SpreadsheetForm_About_Spreadsheet_Dialog_Caption" xml:space="preserve">
-    <value>About Spreadsheet</value>
-    <comment>The caption for the "About Spreadsheet" dialog box.</comment>
-  </data>
-  <data name="SpreadsheetForm_File_Extension_Filter" xml:space="preserve">
-    <value>Spreadsheet files (*.sprd)|*.sprd|All files (*.*)|*.*</value>
-    <comment>The pattern for file type selectors in file dialogs.</comment>
-  </data>
-  <data name="SpreadsheetForm_Unsaved_Changes_Text" xml:space="preserve">
-    <value>Would you like to save your changes to the spreadsheet?</value>
-    <comment>The text for the popup when changes may be overwritten.</comment>
-  </data>
-  <data name="SpreadsheetForm_Unsaved_Changes_Caption" xml:space="preserve">
-    <value>Unsaved Changes</value>
-    <comment>The caption for the popup when changes may be overwritten.</comment>
-  </data>
-  <data name="SpreadsheetForm_inputTextBox_Invalid_Cell_Input" xml:space="preserve">
-    <value>Invalid Cell Input</value>
-  </data>
-  <data name="SpreadsheetForm_inputTextBox_Circular_Dependency" xml:space="preserve">
-    <value>A circular dependency was found!</value>
-  </data>
-  <data name="SpreadsheetForm_inputTextBox_Invalid_Cell_Name" xml:space="preserve">
-    <value>The name of the cell is invalid!</value>
-  </data>
-  <data name="SpreadsheetForm_inputTextBox_Invalid_Formula" xml:space="preserve">
-    <value>The syntax of the formula entered is invalid!</value>
-  </data>
-  <data name="SpreadsheetForm_Formula_Error_Value" xml:space="preserve">
-    <value>N O !</value>
-    <comment>The value of a FormulaError in the spreadsheet.</comment>
-  </data>
-  <data name="splashscreen_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\splashscreen_image.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="splashscreen_sound" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\splashscreen_sound.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
 </root>
