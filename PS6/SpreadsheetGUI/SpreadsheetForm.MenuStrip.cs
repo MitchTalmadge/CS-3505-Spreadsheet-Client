@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SpreadsheetGUI.Properties;
 
 namespace SpreadsheetGUI
 {
@@ -75,7 +78,9 @@ namespace SpreadsheetGUI
         /// <param name="e">A click event.</param>
         private void AboutSpreadsheetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: Help
+            var instructions = Resources.ResourceManager.GetObject("Instructions");
+            // ReSharper disable once PossibleNullReferenceException
+            MessageBox.Show(instructions.ToString(), Resources.SpreadsheetForm_About_Spreadsheet_Dialog_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
