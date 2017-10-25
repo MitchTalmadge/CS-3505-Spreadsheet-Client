@@ -113,9 +113,6 @@
     <None Include="Resources\Instructions.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\splashscreen.mp3" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\splashscreen_image.png" />
   </ItemGroup>
   <ItemGroup>
