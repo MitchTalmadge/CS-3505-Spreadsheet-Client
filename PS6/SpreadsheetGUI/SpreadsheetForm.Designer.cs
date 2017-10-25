@@ -39,6 +39,8 @@
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutSpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.upgradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.professionalVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.cellNameLabel = new System.Windows.Forms.TextBox();
             this.editorNameTextBox = new System.Windows.Forms.TextBox();
@@ -68,7 +70,8 @@
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.upgradeToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(2157, 40);
@@ -136,6 +139,21 @@
             this.aboutSpreadsheetToolStripMenuItem.Size = new System.Drawing.Size(318, 38);
             this.aboutSpreadsheetToolStripMenuItem.Text = "About Spreadsheet";
             this.aboutSpreadsheetToolStripMenuItem.Click += new System.EventHandler(this.AboutSpreadsheetToolStripMenuItem_Click);
+            // 
+            // upgradeToolStripMenuItem
+            // 
+            this.upgradeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.professionalVersionToolStripMenuItem});
+            this.upgradeToolStripMenuItem.Name = "upgradeToolStripMenuItem";
+            this.upgradeToolStripMenuItem.Size = new System.Drawing.Size(118, 36);
+            this.upgradeToolStripMenuItem.Text = "Upgrade";
+            // 
+            // professionalVersionToolStripMenuItem
+            // 
+            this.professionalVersionToolStripMenuItem.Name = "professionalVersionToolStripMenuItem";
+            this.professionalVersionToolStripMenuItem.Size = new System.Drawing.Size(327, 38);
+            this.professionalVersionToolStripMenuItem.Text = "Professional Version";
+            this.professionalVersionToolStripMenuItem.Click += new System.EventHandler(this.professionalVersionToolStripMenuItem_Click);
             // 
             // topTableLayoutPanel
             // 
@@ -262,6 +280,8 @@
         private System.Windows.Forms.TextBox cellNameLabel;
         private System.Windows.Forms.TextBox inputLabel;
         private System.Windows.Forms.TextBox cellValueLabel;
+        private System.Windows.Forms.ToolStripMenuItem upgradeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem professionalVersionToolStripMenuItem;
     }
 }
 

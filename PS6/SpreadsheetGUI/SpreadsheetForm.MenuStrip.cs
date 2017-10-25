@@ -73,5 +73,15 @@ namespace SpreadsheetGUI
             MessageBox.Show(instructions.ToString(), Resources.SpreadsheetForm_About_Spreadsheet_Dialog_Caption,
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        /// <summary>
+        /// Called when Upgrade -> Professional Version is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void professionalVersionToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://products.office.com/en-us/excel");
+        }
     }
 }

@@ -183,6 +183,5 @@ namespace SpreadsheetGUI
             _spreadsheet = null;
             _openedFilePath = null;
         }
-
     }
 }
