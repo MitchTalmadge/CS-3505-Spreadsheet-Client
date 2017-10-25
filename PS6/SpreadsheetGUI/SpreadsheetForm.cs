@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using SpreadsheetGUI.Properties;
 using SS;
@@ -29,9 +30,29 @@ namespace SpreadsheetGUI
         private Spreadsheet _spreadsheet;
 
         /// <summary>
+        /// Do not set this variable directly. Instead, use OpenedFilePath.
+        /// </summary>
+        /// <see cref="OpenedFilePath"/>
+        private string _openedFilePath;
+
+        /// <summary>
         /// The path to the file that was opened for this spreadsheet, if any.
         /// </summary>
-        private string _openedFilePath;
+        private string OpenedFilePath
+        {
+            get => _openedFilePath;
+
+            set
+            {
+                _openedFilePath = value;
+
+                // Find the name of the file, without extension.
+                var fileName = value != null ? Path.GetFileNameWithoutExtension(value) : "Untitled";
+
+                // Update the title bar of the application.
+                Text = fileName + Resources.SpreadsheetForm_Title_Suffix;
+            }
+        }
 
         /// <inheritdoc />
         /// <summary>
@@ -130,9 +151,9 @@ namespace SpreadsheetGUI
         private void SaveSpreadsheet(bool chooseFile = false)
         {
             // Save to the currently open file (if we have saved/opened before)
-            if (!chooseFile && _openedFilePath != null)
+            if (!chooseFile && OpenedFilePath != null)
             {
-                _spreadsheet.Save(_openedFilePath);
+                _spreadsheet.Save(OpenedFilePath);
             }
             else
             {
@@ -148,7 +169,7 @@ namespace SpreadsheetGUI
                 // Save the spreadsheet and record its path.
                 var filePath = fileDialog.FileName;
                 _spreadsheet.Save(filePath);
-                _openedFilePath = filePath;
+                OpenedFilePath = filePath;
             }
         }
 
@@ -179,7 +200,7 @@ namespace SpreadsheetGUI
             }
 
             // Load the new spreadsheet
-            _openedFilePath = filePath;
+            OpenedFilePath = filePath;
             _spreadsheet = new Spreadsheet(filePath, IsValid, Normalize, SpreadsheetVersion);
 
             // Load the data from the new spreadsheet into the spreadsheet panel.
@@ -198,7 +219,7 @@ namespace SpreadsheetGUI
             ClearCellEditor();
 
             _spreadsheet = null;
-            _openedFilePath = null;
+            OpenedFilePath = null;
         }
     }
 }
