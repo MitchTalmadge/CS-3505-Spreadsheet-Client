@@ -14,17 +14,44 @@ namespace SpreadsheetGUI
     partial class SpreadsheetForm
     {
         /// <summary>
-        /// Called when a key is pressed while the editor content text box is focused.
-        /// Saves the contents when the enter key is pressed.
+        /// Called when a key is released while the editor content text box is focused.
+        /// Saves the contents when the enter key is pressed, and selects cells with the arrow keys.
         /// </summary>
-        /// <param name="sender">The focused text box.</param>
-        /// <param name="e">An event containing the key that was pressed.</param>
-        private void InputTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void editorContentTextBox_KeyUp(object sender, KeyEventArgs e)
         {
-            // Make sure the enter button was pressed in the input box.
-            if (e.KeyChar != 13)
-                return;
+            var refresh = true;
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    SubmitChanges();
+                    break;
+                case Keys.Up:
+                    spreadsheetPanel.MoveSelectionUp();
+                    break;
+                case Keys.Down:
+                    spreadsheetPanel.MoveSelectionDown();
+                    break;
+                case Keys.Left:
+                    spreadsheetPanel.MoveSelectionLeft();
+                    break;
+                case Keys.Right:
+                    spreadsheetPanel.MoveSelectionRight();
+                    break;
+                default:
+                    refresh = false;
+                    break;
+            }
 
+            // Refresh the selected cell if needed.
+            if (refresh)
+                DisplayCurrentCellInEditor();
+        }
+
+        /// <summary>
+        /// Updates the currently selected cell with the contents of the content input field.
+        /// </summary>
+        private void SubmitChanges()
+        {
             try
             {
                 // Set the contents of the cell, and update the values of any dependents.

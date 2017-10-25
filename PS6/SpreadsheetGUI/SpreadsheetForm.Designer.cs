@@ -192,7 +192,7 @@
             this.editorContentTextBox.Name = "editorContentTextBox";
             this.editorContentTextBox.Size = new System.Drawing.Size(1072, 31);
             this.editorContentTextBox.TabIndex = 3;
-            this.editorContentTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.InputTextBox_KeyPress);
+            this.editorContentTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.editorContentTextBox_KeyUp);
             // 
             // editorValueTextBox
             // 
