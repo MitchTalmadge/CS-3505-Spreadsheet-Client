@@ -44,8 +44,8 @@ namespace SpreadsheetGUI
             // Create a new, empty spreadsheet.
             _spreadsheet = new Spreadsheet(IsValid, Normalize, SpreadsheetVersion);
 
-            // Display the initially selected cell in the editor.
-            DisplayCurrentCellInEditor();
+            // Select the first cell.
+            spreadsheetPanel.SetSelection(0, 0);
         }
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace SpreadsheetGUI
             // Load the data from the new spreadsheet into the spreadsheet panel.
             RefreshCellValues(_spreadsheet.GetNamesOfAllNonemptyCells());
 
-            // Show the currently selected cell in the editor (A1)
-            DisplayCurrentCellInEditor();
+            // Select the first cell.
+            spreadsheetPanel.SetSelection(0, 0);
         }
 
         /// <summary>
