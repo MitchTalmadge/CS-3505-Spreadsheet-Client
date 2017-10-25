@@ -95,7 +95,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SpreadsheetForm.resx">
       <DependentUpon>SpreadsheetForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -112,6 +111,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Instructions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\splashscreen.mp3" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\splashscreen_image.png" />

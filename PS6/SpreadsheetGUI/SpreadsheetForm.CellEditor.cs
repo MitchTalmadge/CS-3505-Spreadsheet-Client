@@ -1,7 +1,6 @@
 ﻿using SpreadsheetUtilities;
 using SS;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Forms;
 using SpreadsheetGUI.Properties;
 
