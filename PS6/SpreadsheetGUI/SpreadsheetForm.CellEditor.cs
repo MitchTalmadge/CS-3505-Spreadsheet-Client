@@ -55,20 +55,9 @@ namespace SpreadsheetGUI
         /// </summary>
         private void DisplayCurrentCellInEditor()
         {
-            // Move the text cursor to the content edit text box.
-            editorContentTextBox.Focus();
-
             // Display the cell name in the editor.
             var cellName = GetSelectedCellName();
             editorNameTextBox.Text = cellName;
-
-            // Display the cell value in the editor.
-            var value = _spreadsheet.GetCellValue(cellName);
-            if (value is FormulaError)
-            {
-                value = Resources.SpreadsheetForm_Formula_Error_Value;
-            }
-            editorValueTextBox.Text = value.ToString();
 
             // Display the cell contents in the editor (and add an equals sign to formulas).
             var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
@@ -78,6 +67,18 @@ namespace SpreadsheetGUI
             }
 
             editorContentTextBox.Text = contents.ToString();
+
+            // Move the text cursor to the content edit text box.
+            editorContentTextBox.Focus();
+            editorContentTextBox.SelectAll();
+
+            // Display the cell value in the editor.
+            var value = _spreadsheet.GetCellValue(cellName);
+            if (value is FormulaError)
+            {
+                value = Resources.SpreadsheetForm_Formula_Error_Value;
+            }
+            editorValueTextBox.Text = value.ToString();
         }
 
         /// <summary>
