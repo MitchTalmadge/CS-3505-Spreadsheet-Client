@@ -23,6 +23,11 @@ Menu Bar
 
 Spreadsheet
 --------------------------------------------------
+- Selecting a Cell:
+    - You can click on any cell to select it.
+    - You can use the arrow keys to move your selection.
+    - Pushing Enter will move you to the cell below.
+
 - Editing a Cell:
     - To edit a cell, click on any cell in the spreadsheet and begin typing. You can put words, numbers, or formulas in any cell.
     - To enter a formula, start your cell contents with =. For example, =5 + 5 will result in 10.
