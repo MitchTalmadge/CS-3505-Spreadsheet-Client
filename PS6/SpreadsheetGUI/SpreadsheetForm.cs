@@ -48,6 +48,16 @@ namespace SpreadsheetGUI
             spreadsheetPanel.SetSelection(0, 0);
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Creates a SpreadsheetForm by loading the provided file.
+        /// </summary>
+        /// <param name="filePath">The path to the spreadsheet file to load.</param>
+        public SpreadsheetForm(string filePath) : this()
+        {
+            OpenSpreadsheet(filePath);
+        }
+
         /// <summary>
         /// Called when the form has been requested to be closed.
         /// Checks for changes before allowing the form to close.
@@ -145,25 +155,32 @@ namespace SpreadsheetGUI
         /// <summary>
         /// Opens a spreadsheet from a file, replacing the contents of the current spreadsheet (saving if needed).
         /// </summary>
-        private void OpenSpreadsheet()
+        /// <param name="filePath">An optional file path to open. If not specified, a dialog box will be opened for choosing the file.</param>
+        private void OpenSpreadsheet(string filePath = null)
         {
-            // Opens the menu for user to choose file to open
-            var fileDialogue = new OpenFileDialog {Filter = Resources.SpreadsheetForm_File_Extension_Filter};
+            // Show a file chooser if no file path was provided.
+            if (filePath == null)
+            {
+                // Opens the menu for user to choose file to open
+                var fileDialogue = new OpenFileDialog {Filter = Resources.SpreadsheetForm_File_Extension_Filter};
 
-            // If no file was opened, then return.
-            if (fileDialogue.ShowDialog(this) != DialogResult.OK)
-                return;
+                // If no file was opened, then return.
+                if (fileDialogue.ShowDialog(this) != DialogResult.OK)
+                    return;
 
-            // Allow the user to save their changes if needed.
-            if (!SaveIfNeeded())
-                return;
+                // Allow the user to save their changes if needed.
+                if (!SaveIfNeeded())
+                    return;
 
-            // Clear the current spreadsheet.
-            ClearSpreadsheet();
+                // Clear the current spreadsheet.
+                ClearSpreadsheet();
+
+                filePath = fileDialogue.FileName;
+            }
 
             // Load the new spreadsheet
-            _openedFilePath = fileDialogue.FileName;
-            _spreadsheet = new Spreadsheet(_openedFilePath, IsValid, Normalize, SpreadsheetVersion);
+            _openedFilePath = filePath;
+            _spreadsheet = new Spreadsheet(filePath, IsValid, Normalize, SpreadsheetVersion);
 
             // Load the data from the new spreadsheet into the spreadsheet panel.
             RefreshCellValues(_spreadsheet.GetNamesOfAllNonemptyCells());

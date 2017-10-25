@@ -38,10 +38,11 @@ namespace SpreadsheetGUI
         /// <summary>
         /// Creates and displays a new spreadsheet in the current application context.
         /// </summary>
-        internal void OpenSpreadsheet()
+        /// <param name="filePath">An optional file path for loading a spreadsheet.</param>
+        internal void OpenSpreadsheet(string filePath = null)
         {
             // Create a spreadsheet
-            var spreadsheet = new SpreadsheetForm();
+            var spreadsheet = filePath != null ? new SpreadsheetForm(filePath) : new SpreadsheetForm();
             OpenSpreadsheets++;
 
             // Add a listener for when the spreadsheet form is closed.
@@ -66,7 +67,7 @@ namespace SpreadsheetGUI
         /// Creates an application context and opens a single spreadsheet.
         /// </summary>
         [STAThread]
-        private static void Main()
+        private static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -75,7 +76,7 @@ namespace SpreadsheetGUI
             Application.Run(new SplashscreenForm());
 
             // Open one spreadsheet.
-            SpreadsheetApplicationContext.Instance.OpenSpreadsheet();
+            SpreadsheetApplicationContext.Instance.OpenSpreadsheet(args.Length > 0 ? args[0] : null);
 
             // Run the singleton Spreadsheet Application Context
             Application.Run(SpreadsheetApplicationContext.Instance);
