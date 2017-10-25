@@ -30,6 +30,9 @@ namespace SpreadsheetGUI
                 // Set the contents of the cell, and update the values of any dependents.
                 RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), editorContentTextBox.Text));
 
+                // Select cell below current cell.
+                spreadsheetPanel.MoveSelectionDown();
+
                 // Update the cell editor with the new data of the current cell.
                 DisplayCurrentCellInEditor();
             }
