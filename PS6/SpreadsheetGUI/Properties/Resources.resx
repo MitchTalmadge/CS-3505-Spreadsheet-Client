@@ -162,4 +162,10 @@
   <data name="SpreadsheetForm_Title_Suffix" xml:space="preserve">
     <value> - Spreadsheet 3500</value>
   </data>
+  <data name="SpreadsheetForm_OpenSpreadsheet_LoadFailMessage" xml:space="preserve">
+    <value>The file that you have selected is not a valid spreadsheet.</value>
+  </data>
+  <data name="SpreadsheetForm_OpenSpreadsheet_LoadFailTitle" xml:space="preserve">
+    <value>Cannot load Spreadsheet</value>
+  </data>
 </root>

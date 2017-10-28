@@ -193,15 +193,29 @@ namespace SpreadsheetGUI
                 if (!SaveIfNeeded())
                     return;
 
-                // Clear the current spreadsheet.
-                ClearSpreadsheet();
 
                 filePath = fileDialogue.FileName;
             }
 
+            // Attempt to create a new spreadsheet from the given file.
+            Spreadsheet spreadsheet;
+            try
+            {
+                spreadsheet = new Spreadsheet(filePath, IsValid, Normalize, SpreadsheetVersion);
+            }
+            catch (SpreadsheetReadWriteException)
+            {
+                MessageBox.Show(Resources.SpreadsheetForm_OpenSpreadsheet_LoadFailMessage,
+                    Resources.SpreadsheetForm_OpenSpreadsheet_LoadFailTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Clear the current spreadsheet.
+            ClearSpreadsheet();
+
             // Load the new spreadsheet
+            _spreadsheet = spreadsheet;
             OpenedFilePath = filePath;
-            _spreadsheet = new Spreadsheet(filePath, IsValid, Normalize, SpreadsheetVersion);
 
             // Load the data from the new spreadsheet into the spreadsheet panel.
             RefreshCellValues(_spreadsheet.GetNamesOfAllNonemptyCells());

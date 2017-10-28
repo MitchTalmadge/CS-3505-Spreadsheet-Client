@@ -165,6 +165,24 @@ namespace SpreadsheetGUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file that you have selected is not a valid spreadsheet..
+        /// </summary>
+        internal static string SpreadsheetForm_OpenSpreadsheet_LoadFailMessage {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_OpenSpreadsheet_LoadFailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot load Spreadsheet.
+        /// </summary>
+        internal static string SpreadsheetForm_OpenSpreadsheet_LoadFailTitle {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_OpenSpreadsheet_LoadFailTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  - Spreadsheet 3500.
         /// </summary>
         internal static string SpreadsheetForm_Title_Suffix {
