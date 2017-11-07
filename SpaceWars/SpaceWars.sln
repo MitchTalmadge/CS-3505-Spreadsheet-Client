@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{2B200A53-1C9C-4307-8022-0447DF20E5B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{DA562CCD-920E-4D4C-9CB7-D594CE96F302}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller", "Controller\Controller.csproj", "{0E4F88A2-EB10-4E7A-A268-5D888226C3F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networking", "Networking\Networking.csproj", "{45F0D777-CD1C-4F3C-A4C0-762EB1EB8DB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{0E4F88A2-EB10-4E7A-A268-5D888226C3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E4F88A2-EB10-4E7A-A268-5D888226C3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E4F88A2-EB10-4E7A-A268-5D888226C3F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45F0D777-CD1C-4F3C-A4C0-762EB1EB8DB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45F0D777-CD1C-4F3C-A4C0-762EB1EB8DB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45F0D777-CD1C-4F3C-A4C0-762EB1EB8DB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45F0D777-CD1C-4F3C-A4C0-762EB1EB8DB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
