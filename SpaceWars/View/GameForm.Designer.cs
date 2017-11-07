@@ -71,7 +71,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(1162, 983);
+            this.ClientSize = new System.Drawing.Size(1291, 1097);
             this.Controls.Add(this.tableLayoutPanel);
             this.Name = "GameForm";
             this.Text = "GameForm";
