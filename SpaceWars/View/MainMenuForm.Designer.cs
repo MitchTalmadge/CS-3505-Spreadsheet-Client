@@ -1,6 +1,6 @@
 ﻿namespace SpaceWars
 {
-    partial class SpaceWarsForm
+    partial class MainMenuForm
     {
         /// <summary>
         /// Required designer variable.
@@ -35,6 +35,7 @@
             this.ServerTextBox = new System.Windows.Forms.TextBox();
             this.ServerAddressLabel = new System.Windows.Forms.Label();
             this.ConnectButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -45,6 +46,7 @@
             this.tableLayoutPanel.ColumnCount = 1;
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel.Controls.Add(this.tableLayoutPanel1, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
@@ -137,8 +139,22 @@
             this.ConnectButton.TabIndex = 4;
             this.ConnectButton.Text = "Connect!";
             this.ConnectButton.UseVisualStyleBackColor = false;
+            this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
             // 
-            // SpaceWarsForm
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Comic Sans MS", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(1701, 640);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Space Wars";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // MainMenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -146,10 +162,11 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1707, 1280);
             this.Controls.Add(this.tableLayoutPanel);
-            this.Name = "SpaceWarsForm";
+            this.Name = "MainMenuForm";
             this.ShowIcon = false;
             this.Text = "Space Wars";
             this.tableLayoutPanel.ResumeLayout(false);
+            this.tableLayoutPanel.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
@@ -165,6 +182,7 @@
         private System.Windows.Forms.TextBox ServerTextBox;
         private System.Windows.Forms.Label ServerAddressLabel;
         private System.Windows.Forms.Button ConnectButton;
+        private System.Windows.Forms.Label label1;
     }
 }
 
