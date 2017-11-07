@@ -28,20 +28,143 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.NicknameLabel = new System.Windows.Forms.Label();
+            this.NameTextBox = new System.Windows.Forms.TextBox();
+            this.ServerTextBox = new System.Windows.Forms.TextBox();
+            this.ServerAddressLabel = new System.Windows.Forms.Label();
+            this.ConnectButton = new System.Windows.Forms.Button();
+            this.tableLayoutPanel.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // Form1
+            // tableLayoutPanel
+            // 
+            this.tableLayoutPanel.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel.ColumnCount = 1;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel.Controls.Add(this.tableLayoutPanel1, 0, 1);
+            this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel.Name = "tableLayoutPanel";
+            this.tableLayoutPanel.RowCount = 2;
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.Size = new System.Drawing.Size(1707, 1280);
+            this.tableLayoutPanel.TabIndex = 0;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.NicknameLabel, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.NameTextBox, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.ServerTextBox, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.ServerAddressLabel, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.ConnectButton, 0, 2);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 643);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1701, 634);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // NicknameLabel
+            // 
+            this.NicknameLabel.AutoSize = true;
+            this.NicknameLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.NicknameLabel.Font = new System.Drawing.Font("Comic Sans MS", 22.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NicknameLabel.ForeColor = System.Drawing.Color.White;
+            this.NicknameLabel.Location = new System.Drawing.Point(870, 56);
+            this.NicknameLabel.Margin = new System.Windows.Forms.Padding(20);
+            this.NicknameLabel.Name = "NicknameLabel";
+            this.NicknameLabel.Size = new System.Drawing.Size(811, 82);
+            this.NicknameLabel.TabIndex = 3;
+            this.NicknameLabel.Text = "Nickname";
+            // 
+            // NameTextBox
+            // 
+            this.NameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NameTextBox.Location = new System.Drawing.Point(870, 178);
+            this.NameTextBox.Margin = new System.Windows.Forms.Padding(20);
+            this.NameTextBox.Name = "NameTextBox";
+            this.NameTextBox.Size = new System.Drawing.Size(811, 67);
+            this.NameTextBox.TabIndex = 1;
+            // 
+            // ServerTextBox
+            // 
+            this.ServerTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ServerTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ServerTextBox.Location = new System.Drawing.Point(20, 178);
+            this.ServerTextBox.Margin = new System.Windows.Forms.Padding(20);
+            this.ServerTextBox.Name = "ServerTextBox";
+            this.ServerTextBox.Size = new System.Drawing.Size(810, 67);
+            this.ServerTextBox.TabIndex = 0;
+            // 
+            // ServerAddressLabel
+            // 
+            this.ServerAddressLabel.AutoSize = true;
+            this.ServerAddressLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ServerAddressLabel.Font = new System.Drawing.Font("Comic Sans MS", 22.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ServerAddressLabel.ForeColor = System.Drawing.Color.White;
+            this.ServerAddressLabel.Location = new System.Drawing.Point(20, 56);
+            this.ServerAddressLabel.Margin = new System.Windows.Forms.Padding(20);
+            this.ServerAddressLabel.Name = "ServerAddressLabel";
+            this.ServerAddressLabel.Size = new System.Drawing.Size(810, 82);
+            this.ServerAddressLabel.TabIndex = 2;
+            this.ServerAddressLabel.Text = "Server Address";
+            // 
+            // ConnectButton
+            // 
+            this.ConnectButton.AutoSize = true;
+            this.ConnectButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ConnectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.tableLayoutPanel1.SetColumnSpan(this.ConnectButton, 2);
+            this.ConnectButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConnectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ConnectButton.Font = new System.Drawing.Font("Comic Sans MS", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConnectButton.ForeColor = System.Drawing.Color.White;
+            this.ConnectButton.Location = new System.Drawing.Point(20, 336);
+            this.ConnectButton.Margin = new System.Windows.Forms.Padding(20);
+            this.ConnectButton.Name = "ConnectButton";
+            this.ConnectButton.Size = new System.Drawing.Size(1661, 278);
+            this.ConnectButton.TabIndex = 4;
+            this.ConnectButton.Text = "Connect!";
+            this.ConnectButton.UseVisualStyleBackColor = false;
+            // 
+            // SpaceWarsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(920, 790);
+            this.BackgroundImage = global::SpaceWars.Properties.Resources.space_background;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(1707, 1280);
+            this.Controls.Add(this.tableLayoutPanel);
             this.Name = "SpaceWarsForm";
-            this.Text = "Form1";
+            this.ShowIcon = false;
+            this.Text = "Space Wars";
+            this.tableLayoutPanel.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label NicknameLabel;
+        private System.Windows.Forms.TextBox NameTextBox;
+        private System.Windows.Forms.TextBox ServerTextBox;
+        private System.Windows.Forms.Label ServerAddressLabel;
+        private System.Windows.Forms.Button ConnectButton;
     }
 }
 
