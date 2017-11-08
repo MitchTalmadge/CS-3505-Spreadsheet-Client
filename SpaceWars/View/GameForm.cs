@@ -18,6 +18,11 @@ namespace SpaceWars
         private WorldPanel _worldPanel;
 
         /// <summary>
+        /// The panel that the players' scores appear on.
+        /// </summary>
+        private ScoreboardPanel _scoreboardPanel;
+
+        /// <summary>
         /// The mp3 player for the background music
         /// </summary>
         private Mp3Player _mp3Player;
@@ -27,6 +32,8 @@ namespace SpaceWars
             InitializeComponent();
 
             CreateWorldPanel();
+
+            CreateScoreboardPanel();
 
             StartMusic();
         }
@@ -45,6 +52,22 @@ namespace SpaceWars
             };
 
             _mainLayoutPanel.SetCellPosition(_worldPanel, new TableLayoutPanelCellPosition(0, 0));
+        }
+
+        /// <summary>
+        /// Creates the Scoreboard Panel that the players' scores appear on.
+        /// </summary>
+        private void CreateScoreboardPanel()
+        {
+            _scoreboardPanel = new ScoreboardPanel()
+            {
+                Margin = new Padding(10),
+                Location = new Point(10, 10),
+                Dock = DockStyle.Fill,
+                Parent = _mainLayoutPanel
+            };
+
+            _mainLayoutPanel.SetCellPosition(_scoreboardPanel, new TableLayoutPanelCellPosition(1, 0));
         }
 
         /// <summary>

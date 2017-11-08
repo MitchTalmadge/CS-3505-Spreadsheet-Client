@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3Player", "MP3Player\MP3P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldPanel", "WorldPanel\WorldPanel.csproj", "{D4979BD0-AF18-45B2-9819-5AC9F299292B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoreboardPanel", "ScoreboardPanel\ScoreboardPanel.csproj", "{3E434551-4E90-4CF4-A684-7657EE418CBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{D4979BD0-AF18-45B2-9819-5AC9F299292B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4979BD0-AF18-45B2-9819-5AC9F299292B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4979BD0-AF18-45B2-9819-5AC9F299292B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E434551-4E90-4CF4-A684-7657EE418CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E434551-4E90-4CF4-A684-7657EE418CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E434551-4E90-4CF4-A684-7657EE418CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E434551-4E90-4CF4-A684-7657EE418CBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

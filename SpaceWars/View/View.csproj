@@ -108,6 +108,10 @@
       <Project>{14fb94d4-0535-417d-ac81-56d5276f855b}</Project>
       <Name>MP3Player</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ScoreboardPanel\ScoreboardPanel.csproj">
+      <Project>{3e434551-4e90-4cf4-a684-7657ee418cbb}</Project>
+      <Name>ScoreboardPanel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WorldPanel\WorldPanel.csproj">
       <Project>{d4979bd0-af18-45b2-9819-5ac9f299292b}</Project>
       <Name>WorldPanel</Name>
