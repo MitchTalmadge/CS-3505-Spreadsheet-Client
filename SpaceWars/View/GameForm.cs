@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using SpaceWars.Properties;
 
 namespace SpaceWars
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// The game window for the space wars program, which is displayed once connection to a server has been established.
+    /// </summary>
+    /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     public partial class GameForm : Form
     {
         /// <summary>

@@ -1,11 +1,4 @@
-﻿using System.Drawing;
-using System.Drawing.Text;
-using System.IO;
-using System.Media;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows.Forms;
-using NAudio.Wave;
+﻿using System.Windows.Forms;
 using SpaceWars.Properties;
 
 namespace SpaceWars
