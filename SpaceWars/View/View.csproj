@@ -89,6 +89,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\game_font.ttf" />
     <None Include="Resources\space_background.jpg" />
   </ItemGroup>
   <ItemGroup>
