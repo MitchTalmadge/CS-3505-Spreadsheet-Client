@@ -15,11 +15,9 @@ namespace SpaceWars
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     internal sealed class WorldPanel : Panel
     {
-
         internal WorldPanel()
         {
             BackColor = Color.Black;
         }
-
     }
 }

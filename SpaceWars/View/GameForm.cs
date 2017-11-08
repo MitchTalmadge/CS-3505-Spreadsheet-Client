@@ -12,22 +12,26 @@ namespace SpaceWars
 {
     public partial class GameForm : Form
     {
-        private readonly WorldPanel _worldPanel;
+        private WorldPanel _worldPanel;
 
         public GameForm()
         {
             InitializeComponent();
 
+            CreateWorldPanel();
+        }
+
+        private void CreateWorldPanel()
+        {
             _worldPanel = new WorldPanel
             {
-                Location = new Point(0, 0),
                 Margin = new Padding(20),
-                Parent = tableLayoutPanel
+                Location = new Point(20, 20),
+                Parent = mainLayoutPanel
             };
-            tableLayoutPanel.SetColumn(_worldPanel, 0);
-            tableLayoutPanel.SetRow(_worldPanel, 0);
 
-            // World size is 750 by default.
+            mainLayoutPanel.SetCellPosition(_worldPanel, new TableLayoutPanelCellPosition(0, 0));
+
             SetWorldSize(750);
         }
 
@@ -43,6 +47,11 @@ namespace SpaceWars
         private void GameForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             new MainMenuForm().Show();
+        }
+
+        private void GameForm_Resize(object sender, EventArgs e)
+        {
+            CenterToScreen();
         }
     }
 }
