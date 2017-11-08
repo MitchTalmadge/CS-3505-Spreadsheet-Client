@@ -38,8 +38,11 @@ namespace SpaceWars
         private void SetWorldSize(int size)
         {
             _worldPanel.Size = new Size(size, size);
-            tableLayoutPanel.LayoutSettings.ColumnStyles[0].Width = size + _worldPanel.Margin.Horizontal;
-            tableLayoutPanel.LayoutSettings.RowStyles[0].Height = size + _worldPanel.Margin.Vertical;
+        }
+
+        private void GameForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            new MainMenuForm().Show();
         }
     }
 }
