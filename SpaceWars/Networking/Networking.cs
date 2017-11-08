@@ -45,6 +45,7 @@ namespace Networking
             SocketState socketState = (SocketState)stateAsArObject.AsyncState;
             socketState.socket.EndConnect(stateAsArObject);
             socketState.callbackFunction(new byte[0]);
+            socketState.cal
         }
 
         public static void GetData(SocketState state)
