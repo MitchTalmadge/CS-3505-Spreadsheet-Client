@@ -38,13 +38,13 @@ namespace SpaceWars
         {
             _worldPanel = new WorldPanel
             {
-                Margin = new Padding(20),
-                Location = new Point(20, 20),
+                Margin = new Padding(10),
+                Location = new Point(10, 10),
                 Size = new Size(750, 750),
-                Parent = mainLayoutPanel
+                Parent = _mainLayoutPanel
             };
 
-            mainLayoutPanel.SetCellPosition(_worldPanel, new TableLayoutPanelCellPosition(0, 0));
+            _mainLayoutPanel.SetCellPosition(_worldPanel, new TableLayoutPanelCellPosition(0, 0));
         }
 
         /// <summary>
@@ -65,20 +65,37 @@ namespace SpaceWars
         }
 
         /// <summary>
-        /// Loads the main menu when the game window is closed.
-        /// </summary>
-        private void GameForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            new MainMenuForm().Show();
-            StopMusic();
-        }
-
-        /// <summary>
         /// Centers the window onscreen whenever the size is updated (which can only happen automatically, since the user cannot resize the window).
         /// </summary>
         private void GameForm_Resize(object sender, EventArgs e)
         {
             CenterToScreen();
+        }
+
+        /// <summary>
+        /// Loads the main menu when the game window is closed.
+        /// </summary>
+        private void GameForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            OpenMainMenu();
+        }
+
+        /// <summary>
+        /// Disconnects from the server and opens the main menu.
+        /// </summary>
+        private void DisconnectButton_Click(object sender, EventArgs e)
+        {
+            OpenMainMenu();
+        }
+
+        /// <summary>
+        /// Opens the Main Menu window and disposes this window.
+        /// </summary>
+        private void OpenMainMenu()
+        {
+            new MainMenuForm().Show();
+            StopMusic();
+            Dispose();
         }
     }
 }

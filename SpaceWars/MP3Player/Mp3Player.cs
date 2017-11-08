@@ -4,10 +4,10 @@ using NAudio.Wave;
 namespace SpaceWars
 {
     /// <summary>
-    /// Plays mp3 music files from Resources.
+    /// Plays mp3 music files from an array of bytes.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
-    internal class Mp3Player
+    public class Mp3Player
     {
         private readonly byte[] _mp3Bytes;
         private MemoryStream _mp3Stream;

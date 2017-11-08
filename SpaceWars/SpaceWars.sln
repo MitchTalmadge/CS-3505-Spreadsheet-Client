@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameComponents", "GameCompo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{093C1891-4CA4-450C-81A4-1AAACA9507EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3Player", "MP3Player\MP3Player.csproj", "{14FB94D4-0535-417D-AC81-56D5276F855B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldPanel", "WorldPanel\WorldPanel.csproj", "{D4979BD0-AF18-45B2-9819-5AC9F299292B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +42,14 @@ Global
 		{093C1891-4CA4-450C-81A4-1AAACA9507EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{093C1891-4CA4-450C-81A4-1AAACA9507EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{093C1891-4CA4-450C-81A4-1AAACA9507EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14FB94D4-0535-417D-AC81-56D5276F855B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14FB94D4-0535-417D-AC81-56D5276F855B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14FB94D4-0535-417D-AC81-56D5276F855B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14FB94D4-0535-417D-AC81-56D5276F855B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4979BD0-AF18-45B2-9819-5AC9F299292B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4979BD0-AF18-45B2-9819-5AC9F299292B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4979BD0-AF18-45B2-9819-5AC9F299292B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4979BD0-AF18-45B2-9819-5AC9F299292B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

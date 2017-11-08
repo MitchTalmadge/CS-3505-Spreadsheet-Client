@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace SpaceWars
@@ -13,9 +8,9 @@ namespace SpaceWars
     /// The panel used for drawing the game world.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
-    internal sealed class WorldPanel : Panel
+    public sealed class WorldPanel : Panel
     {
-        internal WorldPanel()
+        public WorldPanel()
         {
             BackColor = Color.Black;
         }
