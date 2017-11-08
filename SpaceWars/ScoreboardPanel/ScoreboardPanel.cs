@@ -24,6 +24,25 @@ namespace SpaceWars
         public ScoreboardPanel()
         {
             BackColor = Color.FromArgb(80, 255, 255, 255);
+
+            CreateHeader();
+        }
+
+        /// <summary>
+        /// Creates the "Scoreboard" header at the top of the panel.
+        /// </summary>
+        private void CreateHeader()
+        {
+            var header = new Label
+            {
+                Text = "Scoreboard",
+                Font = new Font(new FontFamily("OCR A Extended"), 20, FontStyle.Underline),
+                BackColor = Color.Transparent,
+                ForeColor = Color.White,
+                Location = new Point(10, 10),
+                AutoSize = true,
+                Parent = this
+            };
         }
 
         protected override void OnPaint(PaintEventArgs e)
