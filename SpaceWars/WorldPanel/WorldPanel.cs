@@ -12,7 +12,20 @@ namespace SpaceWars
     {
         public WorldPanel()
         {
-            BackColor = Color.Black;
+            BackColor = Color.Transparent;
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            // Draw background
+            using (var brush = new SolidBrush(BackColor))
+                e.Graphics.FillRectangle(brush, ClientRectangle);
+
+            // Draw double border
+            e.Graphics.DrawRectangle(Pens.Yellow, 0, 0, ClientSize.Width - 1, ClientSize.Height - 1); // Outer
+            e.Graphics.DrawRectangle(Pens.Yellow, 2, 2, ClientSize.Width - 5, ClientSize.Height - 5); // Inner
+
+
         }
     }
 }
