@@ -63,16 +63,6 @@ namespace SpaceWars.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] game_font {
-            get {
-                object obj = ResourceManager.GetObject("game_font", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] game_music {
             get {
                 object obj = ResourceManager.GetObject("game_music", resourceCulture);

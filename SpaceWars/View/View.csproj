@@ -87,7 +87,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="Help\BassNet.chm" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -103,13 +102,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\game_font.ttf" />
     <None Include="Resources\space_background.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\game_music.mp3" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resources\main_menu_music.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
