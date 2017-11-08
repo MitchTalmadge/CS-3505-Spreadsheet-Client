@@ -50,12 +50,12 @@
             this.mainLayoutPanel.Controls.Add(this.logoLabel, 0, 0);
             this.mainLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.mainLayoutPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.mainLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.mainLayoutPanel.Name = "mainLayoutPanel";
             this.mainLayoutPanel.RowCount = 2;
             this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.mainLayoutPanel.Size = new System.Drawing.Size(834, 561);
+            this.mainLayoutPanel.Size = new System.Drawing.Size(1668, 1079);
             this.mainLayoutPanel.TabIndex = 0;
             // 
             // inputLayoutPanel
@@ -69,14 +69,14 @@
             this.inputLayoutPanel.Controls.Add(this.ServerAddressLabel, 0, 0);
             this.inputLayoutPanel.Controls.Add(this.ConnectButton, 0, 2);
             this.inputLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inputLayoutPanel.Location = new System.Drawing.Point(2, 338);
-            this.inputLayoutPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.inputLayoutPanel.Location = new System.Drawing.Point(4, 651);
+            this.inputLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.inputLayoutPanel.Name = "inputLayoutPanel";
             this.inputLayoutPanel.RowCount = 3;
             this.inputLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.inputLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.inputLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.inputLayoutPanel.Size = new System.Drawing.Size(830, 221);
+            this.inputLayoutPanel.Size = new System.Drawing.Size(1660, 424);
             this.inputLayoutPanel.TabIndex = 0;
             // 
             // NicknameLabel
@@ -85,10 +85,10 @@
             this.NicknameLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.NicknameLabel.Font = new System.Drawing.Font("OCR A Extended", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NicknameLabel.ForeColor = System.Drawing.Color.White;
-            this.NicknameLabel.Location = new System.Drawing.Point(425, 10);
-            this.NicknameLabel.Margin = new System.Windows.Forms.Padding(10);
+            this.NicknameLabel.Location = new System.Drawing.Point(850, 19);
+            this.NicknameLabel.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
             this.NicknameLabel.Name = "NicknameLabel";
-            this.NicknameLabel.Size = new System.Drawing.Size(395, 35);
+            this.NicknameLabel.Size = new System.Drawing.Size(790, 68);
             this.NicknameLabel.TabIndex = 3;
             this.NicknameLabel.Text = "Nickname";
             this.NicknameLabel.UseCompatibleTextRendering = true;
@@ -97,20 +97,20 @@
             // 
             this.NameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.NameTextBox.Font = new System.Drawing.Font("OCR A Extended", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NameTextBox.Location = new System.Drawing.Point(425, 65);
-            this.NameTextBox.Margin = new System.Windows.Forms.Padding(10);
+            this.NameTextBox.Location = new System.Drawing.Point(850, 125);
+            this.NameTextBox.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
             this.NameTextBox.Name = "NameTextBox";
-            this.NameTextBox.Size = new System.Drawing.Size(395, 35);
+            this.NameTextBox.Size = new System.Drawing.Size(790, 63);
             this.NameTextBox.TabIndex = 1;
             // 
             // ServerTextBox
             // 
             this.ServerTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ServerTextBox.Font = new System.Drawing.Font("OCR A Extended", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ServerTextBox.Location = new System.Drawing.Point(10, 65);
-            this.ServerTextBox.Margin = new System.Windows.Forms.Padding(10);
+            this.ServerTextBox.Location = new System.Drawing.Point(20, 125);
+            this.ServerTextBox.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
             this.ServerTextBox.Name = "ServerTextBox";
-            this.ServerTextBox.Size = new System.Drawing.Size(395, 35);
+            this.ServerTextBox.Size = new System.Drawing.Size(790, 63);
             this.ServerTextBox.TabIndex = 0;
             // 
             // ServerAddressLabel
@@ -119,10 +119,10 @@
             this.ServerAddressLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ServerAddressLabel.Font = new System.Drawing.Font("OCR A Extended", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ServerAddressLabel.ForeColor = System.Drawing.Color.White;
-            this.ServerAddressLabel.Location = new System.Drawing.Point(10, 10);
-            this.ServerAddressLabel.Margin = new System.Windows.Forms.Padding(10);
+            this.ServerAddressLabel.Location = new System.Drawing.Point(20, 19);
+            this.ServerAddressLabel.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
             this.ServerAddressLabel.Name = "ServerAddressLabel";
-            this.ServerAddressLabel.Size = new System.Drawing.Size(395, 35);
+            this.ServerAddressLabel.Size = new System.Drawing.Size(790, 68);
             this.ServerAddressLabel.TabIndex = 2;
             this.ServerAddressLabel.Text = "Server Address";
             this.ServerAddressLabel.UseCompatibleTextRendering = true;
@@ -140,10 +140,10 @@
             this.ConnectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ConnectButton.Font = new System.Drawing.Font("OCR A Extended", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ConnectButton.ForeColor = System.Drawing.Color.White;
-            this.ConnectButton.Location = new System.Drawing.Point(10, 120);
-            this.ConnectButton.Margin = new System.Windows.Forms.Padding(10);
+            this.ConnectButton.Location = new System.Drawing.Point(20, 231);
+            this.ConnectButton.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
             this.ConnectButton.Name = "ConnectButton";
-            this.ConnectButton.Size = new System.Drawing.Size(810, 91);
+            this.ConnectButton.Size = new System.Drawing.Size(1620, 174);
             this.ConnectButton.TabIndex = 4;
             this.ConnectButton.Text = "Connect";
             this.ConnectButton.UseCompatibleTextRendering = true;
@@ -156,10 +156,10 @@
             this.logoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logoLabel.Font = new System.Drawing.Font("OCR A Extended", 80.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.logoLabel.ForeColor = System.Drawing.Color.White;
-            this.logoLabel.Location = new System.Drawing.Point(2, 0);
-            this.logoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.logoLabel.Location = new System.Drawing.Point(4, 0);
+            this.logoLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.logoLabel.Name = "logoLabel";
-            this.logoLabel.Size = new System.Drawing.Size(830, 336);
+            this.logoLabel.Size = new System.Drawing.Size(1660, 647);
             this.logoLabel.TabIndex = 1;
             this.logoLabel.Text = "Space Wars";
             this.logoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -173,9 +173,9 @@
             this.copyrightLabel.Font = new System.Drawing.Font("OCR A Extended", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.copyrightLabel.ForeColor = System.Drawing.Color.White;
             this.copyrightLabel.Location = new System.Drawing.Point(0, 0);
-            this.copyrightLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.copyrightLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.copyrightLabel.Name = "copyrightLabel";
-            this.copyrightLabel.Size = new System.Drawing.Size(530, 31);
+            this.copyrightLabel.Size = new System.Drawing.Size(1060, 59);
             this.copyrightLabel.TabIndex = 2;
             this.copyrightLabel.Text = "(C) Jiahui Chen and Mitch Talmadge";
             this.copyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -183,15 +183,15 @@
             // 
             // MainMenuForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::SpaceWars.Properties.Resources.space_background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(834, 561);
+            this.ClientSize = new System.Drawing.Size(1668, 1079);
             this.Controls.Add(this.copyrightLabel);
             this.Controls.Add(this.mainLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "MainMenuForm";
             this.ShowIcon = false;
