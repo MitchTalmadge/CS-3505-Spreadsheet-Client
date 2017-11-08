@@ -36,15 +36,16 @@
             // tableLayoutPanel
             // 
             this.tableLayoutPanel.ColumnCount = 2;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 750F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 375F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel.Controls.Add(this.LeaveButton, 0, 1);
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 2;
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 750F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 390F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel.Size = new System.Drawing.Size(1074, 929);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(537, 483);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // LeaveButton
@@ -57,22 +58,22 @@
             this.LeaveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LeaveButton.Font = new System.Drawing.Font("Comic Sans MS", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LeaveButton.ForeColor = System.Drawing.Color.White;
-            this.LeaveButton.Location = new System.Drawing.Point(20, 770);
-            this.LeaveButton.Margin = new System.Windows.Forms.Padding(20);
+            this.LeaveButton.Location = new System.Drawing.Point(10, 400);
+            this.LeaveButton.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
             this.LeaveButton.Name = "LeaveButton";
-            this.LeaveButton.Size = new System.Drawing.Size(1034, 139);
+            this.LeaveButton.Size = new System.Drawing.Size(517, 73);
             this.LeaveButton.TabIndex = 5;
             this.LeaveButton.Text = "Leave Game";
             this.LeaveButton.UseVisualStyleBackColor = false;
             // 
             // GameForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(1291, 1097);
+            this.ClientSize = new System.Drawing.Size(646, 548);
             this.Controls.Add(this.tableLayoutPanel);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "GameForm";
             this.Text = "GameForm";
             this.tableLayoutPanel.ResumeLayout(false);

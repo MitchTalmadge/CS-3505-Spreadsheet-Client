@@ -1,8 +1,11 @@
 ﻿using System.Drawing;
 using System.Drawing.Text;
+using System.IO;
 using System.Media;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
+using NAudio.Wave;
 using SpaceWars.Properties;
 
 namespace SpaceWars
@@ -15,43 +18,15 @@ namespace SpaceWars
     public partial class MainMenuForm : Form
     {
         /// <summary>
-        /// The music player for the background music
+        /// The mp3 player for the background music
         /// </summary>
-        private SoundPlayer _musicPlayer;
+        private Mp3Player _mp3Player;
 
         public MainMenuForm()
         {
             InitializeComponent();
 
-            EnableCustomFonts();
-
             StartMusic();
-        }
-
-        /// <summary>
-        /// Loads custom fonts into memory for use within the application, then assigns them to the correct labels.
-        /// </summary>
-        private void EnableCustomFonts()
-        {
-            // Get font details
-            var fontLength = Resources.game_font.Length;
-            var fontdata = Resources.game_font;
-
-            // Store font in memory
-            var data = Marshal.AllocCoTaskMem(fontLength);
-            Marshal.Copy(fontdata, 0, data, fontLength);
-
-            using (var fontCollection = new PrivateFontCollection())
-            {
-                // Add font from memory to collection
-                fontCollection.AddMemoryFont(data, fontLength);
-
-                // Set fonts of labels
-                logoLabel.Font = new Font(fontCollection.Families[0], logoLabel.Font.Size);
-                ServerAddressLabel.Font = new Font(fontCollection.Families[0], ServerAddressLabel.Font.Size);
-                NicknameLabel.Font = new Font(fontCollection.Families[0], NicknameLabel.Font.Size);
-                ConnectButton.Font = new Font(fontCollection.Families[0], ConnectButton.Font.Size);
-            }
         }
 
         /// <summary>
@@ -59,8 +34,8 @@ namespace SpaceWars
         /// </summary>
         private void StartMusic()
         {
-            _musicPlayer = new SoundPlayer(Resources.main_music);
-            _musicPlayer.PlayLooping();
+            _mp3Player = new Mp3Player(Resources.main_menu_music);
+            _mp3Player.StartPlaying();
         }
 
         /// <summary>
@@ -68,7 +43,7 @@ namespace SpaceWars
         /// </summary>
         private void StopMusic()
         {
-            _musicPlayer.Stop();
+            _mp3Player.StopPlaying();
         }
 
         private void ConnectButton_Click(object sender, System.EventArgs e)

@@ -82,14 +82,14 @@
             // 
             this.NicknameLabel.AutoSize = true;
             this.NicknameLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.NicknameLabel.Font = new System.Drawing.Font("Comic Sans MS", 22.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NicknameLabel.Font = new System.Drawing.Font("OCR A Extended", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NicknameLabel.ForeColor = System.Drawing.Color.White;
-            this.NicknameLabel.Location = new System.Drawing.Point(425, 11);
+            this.NicknameLabel.Location = new System.Drawing.Point(425, 22);
             this.NicknameLabel.Margin = new System.Windows.Forms.Padding(10);
             this.NicknameLabel.Name = "NicknameLabel";
-            this.NicknameLabel.Size = new System.Drawing.Size(395, 48);
+            this.NicknameLabel.Size = new System.Drawing.Size(395, 37);
             this.NicknameLabel.TabIndex = 3;
-            this.NicknameLabel.Text = "nickname";
+            this.NicknameLabel.Text = "Nickname";
             this.NicknameLabel.UseCompatibleTextRendering = true;
             // 
             // NameTextBox
@@ -116,14 +116,14 @@
             // 
             this.ServerAddressLabel.AutoSize = true;
             this.ServerAddressLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.ServerAddressLabel.Font = new System.Drawing.Font("Comic Sans MS", 22.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ServerAddressLabel.Font = new System.Drawing.Font("OCR A Extended", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ServerAddressLabel.ForeColor = System.Drawing.Color.White;
-            this.ServerAddressLabel.Location = new System.Drawing.Point(10, 11);
+            this.ServerAddressLabel.Location = new System.Drawing.Point(10, 22);
             this.ServerAddressLabel.Margin = new System.Windows.Forms.Padding(10);
             this.ServerAddressLabel.Name = "ServerAddressLabel";
-            this.ServerAddressLabel.Size = new System.Drawing.Size(395, 48);
+            this.ServerAddressLabel.Size = new System.Drawing.Size(395, 37);
             this.ServerAddressLabel.TabIndex = 2;
-            this.ServerAddressLabel.Text = "server address";
+            this.ServerAddressLabel.Text = "Server Address";
             this.ServerAddressLabel.UseCompatibleTextRendering = true;
             // 
             // ConnectButton
@@ -134,14 +134,14 @@
             this.tableLayoutPanel1.SetColumnSpan(this.ConnectButton, 2);
             this.ConnectButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ConnectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ConnectButton.Font = new System.Drawing.Font("Comic Sans MS", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConnectButton.Font = new System.Drawing.Font("OCR A Extended", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ConnectButton.ForeColor = System.Drawing.Color.White;
             this.ConnectButton.Location = new System.Drawing.Point(10, 148);
             this.ConnectButton.Margin = new System.Windows.Forms.Padding(10);
             this.ConnectButton.Name = "ConnectButton";
             this.ConnectButton.Size = new System.Drawing.Size(810, 119);
             this.ConnectButton.TabIndex = 4;
-            this.ConnectButton.Text = "connect";
+            this.ConnectButton.Text = "Connect";
             this.ConnectButton.UseCompatibleTextRendering = true;
             this.ConnectButton.UseVisualStyleBackColor = false;
             this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
@@ -150,14 +150,14 @@
             // 
             this.logoLabel.AutoSize = true;
             this.logoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logoLabel.Font = new System.Drawing.Font("Comic Sans MS", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logoLabel.Font = new System.Drawing.Font("OCR A Extended", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.logoLabel.ForeColor = System.Drawing.Color.White;
             this.logoLabel.Location = new System.Drawing.Point(2, 0);
             this.logoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.logoLabel.Name = "logoLabel";
             this.logoLabel.Size = new System.Drawing.Size(830, 280);
             this.logoLabel.TabIndex = 1;
-            this.logoLabel.Text = "space wars";
+            this.logoLabel.Text = "Space Wars";
             this.logoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.logoLabel.UseCompatibleTextRendering = true;
             // 
