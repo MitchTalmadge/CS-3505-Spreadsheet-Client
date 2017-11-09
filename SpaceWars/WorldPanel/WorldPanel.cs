@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace SpaceWars
@@ -14,7 +15,7 @@ namespace SpaceWars
         /// <summary>
         /// The game components to be drawn when this component is painted.
         /// </summary>
-        private List<GameComponent> _gameComponents;
+        private IEnumerable<GameComponent> _gameComponents = new GameComponent[0];
 
         public WorldPanel()
         {
@@ -32,10 +33,10 @@ namespace SpaceWars
             e.Graphics.DrawRectangle(Pens.Aqua, 2, 2, ClientSize.Width - 5, ClientSize.Height - 5); // Inner
 
             // Draw game components
-            /*foreach (var gameComponent in _gameComponents)
+            foreach (var gameComponent in _gameComponents)
             {
                 //TODO: Draw game component
-            }*/
+            }
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace SpaceWars
         /// <param name="gameComponents">The components to draw, in the order to be drawn.</param>
         public void DrawGameComponents(IEnumerable<GameComponent> gameComponents)
         {
-            _gameComponents = new List<GameComponent>(gameComponents);
+            _gameComponents = gameComponents.ToArray();
         }
     }
 }

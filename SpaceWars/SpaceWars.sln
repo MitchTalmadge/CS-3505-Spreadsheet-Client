@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldPanel", "WorldPanel\Wo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoreboardPanel", "ScoreboardPanel\ScoreboardPanel.csproj", "{3E434551-4E90-4CF4-A684-7657EE418CBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vector2D", "Vector2D\Vector2D.csproj", "{66C73678-C0B2-477E-A1FD-CF48D38961AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{3E434551-4E90-4CF4-A684-7657EE418CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E434551-4E90-4CF4-A684-7657EE418CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E434551-4E90-4CF4-A684-7657EE418CBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66C73678-C0B2-477E-A1FD-CF48D38961AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66C73678-C0B2-477E-A1FD-CF48D38961AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66C73678-C0B2-477E-A1FD-CF48D38961AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66C73678-C0B2-477E-A1FD-CF48D38961AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
