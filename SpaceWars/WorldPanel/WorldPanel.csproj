@@ -53,6 +53,10 @@
       <Project>{8ecbf14a-8ed0-4ed5-ac25-dd4b41e8bac0}</Project>
       <Name>GameComponents</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vector2D\Vector2D.csproj">
+      <Project>{66C73678-C0B2-477E-A1FD-CF48D38961AF}</Project>
+      <Name>Vector2D</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
