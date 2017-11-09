@@ -32,10 +32,10 @@ namespace Networking
         // holds pervious data 
         internal StringBuilder sb = new StringBuilder();
 
-        //add ID
+        //ID, not used for PS7
+        int ID;
 
-        //
-        internal SocketState(Socket socket, String prevData, Networking.HandleData callbackFunction)
+        internal SocketState(Socket socket, Networking.HandleData callbackFunction)
         {
             this.socket = socket;
             this.handleData = callbackFunction;

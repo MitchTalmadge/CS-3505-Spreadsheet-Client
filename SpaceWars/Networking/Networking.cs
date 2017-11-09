@@ -28,7 +28,7 @@ namespace Networking
             //parsing host address and creating corresponding socket and SocketState
             IPAddress address = IPAddress.Parse(hostname);
             Socket socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            SocketState socketState = new SocketState(socket, null, callbackFunction);
+            SocketState socketState = new SocketState(socket, callbackFunction);
 
             //creating connection and passing SocketState object 
             socket.BeginConnect(address, 11000, ConnectedToServer, socketState);
@@ -62,10 +62,10 @@ namespace Networking
         }
 
         /// <summary>
-        ///  Called by the OS when new data arrives. This method should check to see how much data has arrived.
+        ///  Called by the OS when new data arrives. Checks to see how much data has arrived.
         ///  If 0, the connection has been closed (presumably by the server). On greater than zero data, 
-        ///  this method should get the SocketState object out of the IAsyncResult (just as above in 2), 
-        ///  and call the callMe provided in the SocketState.
+        ///  this method gets the SocketState object out of the IAsyncResult, 
+        ///  and calls the delegate provided in the SocketState.
         /// </summary>
         /// <param name="stateAsArObject"></param>
         public static void ReceiveCallback(IAsyncResult stateAsArObject)
