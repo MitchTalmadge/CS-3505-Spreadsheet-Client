@@ -32,10 +32,10 @@ namespace SpaceWars
             e.Graphics.DrawRectangle(Pens.Aqua, 2, 2, ClientSize.Width - 5, ClientSize.Height - 5); // Inner
 
             // Draw game components
-            foreach (var gameComponent in _gameComponents)
+            /*foreach (var gameComponent in _gameComponents)
             {
                 //TODO: Draw game component
-            }
+            }*/
         }
 
         /// <summary>
