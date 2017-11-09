@@ -1,5 +1,8 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 using Newtonsoft.Json;
+using SpaceWars.Properties;
 
 namespace SpaceWars
 {
@@ -34,5 +37,11 @@ namespace SpaceWars
         /// </summary>
         [JsonProperty("dir")]
         public Vector2D Direction { get; } = new Vector2D(0, 0);
+
+        /// <summary>
+        /// Gives details for which image should be drawn, and how it should be cropped.
+        /// </summary>
+        /// <returns>A tuple containing the image bitmap and a rectangle determining where the image should be cropped.</returns>
+        public abstract Tuple<Bitmap, Rectangle> GetDrawingDetails();
     }
 }

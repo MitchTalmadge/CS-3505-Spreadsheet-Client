@@ -35,7 +35,10 @@ namespace SpaceWars
             // Draw game components
             foreach (var gameComponent in _gameComponents)
             {
-                //TODO: Draw game component
+                var imageDetails = gameComponent.GetDrawingDetails();
+                e.Graphics.DrawImage(imageDetails.Item1,
+                    new Rectangle(0, 0, imageDetails.Item2.Width, imageDetails.Item2.Height), imageDetails.Item2,
+                    GraphicsUnit.Pixel);
             }
         }
 
