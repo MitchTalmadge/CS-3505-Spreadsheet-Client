@@ -11,7 +11,7 @@ namespace Networking
     /// Holds information about how data is handled when it reaches
     /// a Socket.
     /// </summary>
-    internal class SocketState
+    public class SocketState
     {
         internal Socket socket { get; }
 
