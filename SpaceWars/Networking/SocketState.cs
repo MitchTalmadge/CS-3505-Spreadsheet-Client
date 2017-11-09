@@ -13,14 +13,32 @@ namespace Networking
     /// </summary>
     public class SocketState
     {
+        /// <summary>
+        /// Socket that receives data
+        /// </summary>
         internal Socket socket { get; }
 
-        internal Networking.Callback callbackFunction { get; }
+        /// <summary>
+        /// This is the buffer where we will receive data from the socket
+        /// </summary>
+        internal byte[] dataBuffer = new byte[1000];
 
-        internal SocketState(Socket socket, String prevData, Networking.Callback callbackFunction)
+        /// <summary>
+        /// Function that processes data once it's received. 
+        /// </summary>
+        internal Networking.HandleData handleData { get; }
+
+        // This is a larger (growable) buffer, in case a single receive does not contain the full message.
+        // holds pervious data 
+        internal StringBuilder sb = new StringBuilder();
+
+        //add ID
+
+        //
+        internal SocketState(Socket socket, String prevData, Networking.HandleData callbackFunction)
         {
             this.socket = socket;
-            this.callbackFunction = callbackFunction;
+            this.handleData = callbackFunction;
         }
     }
 }

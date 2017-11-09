@@ -13,7 +13,8 @@ namespace Networking
     /// </summary>
     public static class Networking
     {
-        public delegate void Callback(byte[] data);
+        //void return takes in socket state 
+        public delegate void HandleData(SocketState state);
 
         /// <summary>
         /// Attempts to connect to the server via a provided hostname. 
@@ -22,9 +23,9 @@ namespace Networking
         /// <param name="callbackFunction"></param>
         /// <param name="hostname"></param>
         /// <returns></returns>
-        public static Socket ConnectToServer(Callback callbackFunction, string hostname)
+        public static Socket ConnectToServer(HandleData callbackFunction, string hostname)
         {
-            //parsing host address and creating corresponding socket
+            //parsing host address and creating corresponding socket and SocketState
             IPAddress address = IPAddress.Parse(hostname);
             Socket socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             SocketState socketState = new SocketState(socket, null, callbackFunction);
@@ -43,18 +44,54 @@ namespace Networking
         {
             //stateAsArObject contains a field AsyncState which contains a SocketState object
             SocketState socketState = (SocketState)stateAsArObject.AsyncState;
-            socketState.socket.EndConnect(stateAsArObject);
-            socketState.callbackFunction(new byte[0]);
+            Socket socket = socketState.socket;
+            socket.EndConnect(stateAsArObject);
+
+            //calls delegate which will usually call GetData
+            socketState.handleData(socketState);//change to taking in socket state as parameter 
         }
 
+        /// <summary>
+        /// is called in delegate (which is passed in/called within the Client), wrapper for begin receive. 
+        /// Cause the client decides if it wants data. 
+        /// </summary>
+        /// <param name="state"></param>
         public static void GetData(SocketState state)
         {
-
+            state.socket.BeginReceive(state.dataBuffer, 0, state.dataBuffer.Length, SocketFlags.None, ReceiveCallback, state);
         }
 
+        /// <summary>
+        ///  Called by the OS when new data arrives. This method should check to see how much data has arrived.
+        ///  If 0, the connection has been closed (presumably by the server). On greater than zero data, 
+        ///  this method should get the SocketState object out of the IAsyncResult (just as above in 2), 
+        ///  and call the callMe provided in the SocketState.
+        /// </summary>
+        /// <param name="stateAsArObject"></param>
         public static void ReceiveCallback(IAsyncResult stateAsArObject)
         {
-            return;
+            // Get the SocketState associated with the received data
+            SocketState state = (SocketState)stateAsArObject.AsyncState;
+
+            int numBytes = state.socket.EndReceive(stateAsArObject);
+
+            if (numBytes > 0)
+            {
+                // Convert the raw bytes to a string
+                string data = Encoding.UTF8.GetString(state.dataBuffer, 0, numBytes);
+
+                // Append the data to a growable buffer.
+                // We don't know how much data arrived, or if we have an incomplete message.
+                state.sb.Append(data);
+
+
+                // calling delegate on socket state containing data
+                state.handleData(state);
+
+                // Wait for more data from the server. This creates an "event loop".
+                // ReceiveCallback will be invoked every time new data is available on the socket.
+                state.socket.BeginReceive(state.dataBuffer, 0, state.dataBuffer.Length, SocketFlags.None, ReceiveCallback, state);
+            }
         }
 
         public static void Send(Socket socket, String data)
