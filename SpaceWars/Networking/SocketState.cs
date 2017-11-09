@@ -29,8 +29,12 @@ namespace Networking
         internal Networking.HandleData handleData { get; }
 
         // This is a larger (growable) buffer, in case a single receive does not contain the full message.
+        // holds pervious data 
         internal StringBuilder sb = new StringBuilder();
 
+        //add ID
+
+        //
         internal SocketState(Socket socket, String prevData, Networking.HandleData callbackFunction)
         {
             this.socket = socket;

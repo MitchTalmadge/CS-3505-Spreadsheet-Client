@@ -13,7 +13,8 @@ namespace Networking
     /// </summary>
     public static class Networking
     {
-        public delegate void HandleData(byte[] data);
+        //void return takes in socket state 
+        public delegate void HandleData(SocketState state);
 
         /// <summary>
         /// Attempts to connect to the server via a provided hostname. 
@@ -46,15 +47,18 @@ namespace Networking
             Socket socket = socketState.socket;
             socket.EndConnect(stateAsArObject);
 
-            // Wait for data to come from the server
-            // We pass the last argument (state) so that the callback knows which connection data was received on
-            socket.BeginReceive(socketState.dataBuffer, 0, socketState.dataBuffer.Length, SocketFlags.None, ReceiveCallback, socketState);
-            socketState.handleData(socketState.dataBuffer);///???
+            //calls delegate which will usually call GetData
+            socketState.handleData(socketState);//change to taking in socket state as parameter 
         }
 
+        /// <summary>
+        /// is called in delegate (which is passed in/called within the Client), wrapper for begin receive. 
+        /// Cause the client decides if it wants data. 
+        /// </summary>
+        /// <param name="state"></param>
         public static void GetData(SocketState state)
         {
-
+            state.socket.BeginReceive(state.dataBuffer, 0, state.dataBuffer.Length, SocketFlags.None, ReceiveCallback, state);
         }
 
         /// <summary>
@@ -81,8 +85,8 @@ namespace Networking
                 state.sb.Append(data);
 
 
-                // calling delegate on data???
-                state.handleData(state.dataBuffer);
+                // calling delegate on socket state containing data
+                state.handleData(state);
 
                 // Wait for more data from the server. This creates an "event loop".
                 // ReceiveCallback will be invoked every time new data is available on the socket.
