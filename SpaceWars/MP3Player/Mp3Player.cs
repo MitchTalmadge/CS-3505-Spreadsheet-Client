@@ -26,17 +26,26 @@ namespace SpaceWars
         /// <summary>
         /// Plays the loaded mp3 file.
         /// </summary>
-        public void StartPlaying()
+        /// <returns>True if the music was started, false if it could not start.</returns>
+        public bool StartPlaying()
         {
             StopPlaying();
 
-            _mp3Stream = new MemoryStream(_mp3Bytes);
-            _mp3Reader = new Mp3FileReader(_mp3Stream);
-            _player = new WaveOutEvent();
+            try
+            {
+                _mp3Stream = new MemoryStream(_mp3Bytes);
+                _mp3Reader = new Mp3FileReader(_mp3Stream);
+                _player = new WaveOutEvent();
 
 
-            _player.Init(_mp3Reader);
-            _player.Play();
+                _player.Init(_mp3Reader);
+                _player.Play();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -49,6 +58,7 @@ namespace SpaceWars
 
             _player.Stop();
             _player.Dispose();
+            _player = null;
             _mp3Reader.Dispose();
             _mp3Stream.Dispose();
         }

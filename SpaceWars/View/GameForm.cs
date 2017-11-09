@@ -59,7 +59,7 @@ namespace SpaceWars
         /// </summary>
         private void CreateScoreboardPanel()
         {
-            _scoreboardPanel = new ScoreboardPanel()
+            _scoreboardPanel = new ScoreboardPanel
             {
                 Margin = new Padding(10),
                 Location = new Point(10, 10),
