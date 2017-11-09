@@ -50,7 +50,7 @@
             this.mainLayoutPanel.Controls.Add(this.logoLabel, 0, 0);
             this.mainLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.mainLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mainLayoutPanel.Margin = new System.Windows.Forms.Padding(4);
             this.mainLayoutPanel.Name = "mainLayoutPanel";
             this.mainLayoutPanel.RowCount = 2;
             this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
@@ -70,7 +70,7 @@
             this.inputLayoutPanel.Controls.Add(this.ConnectButton, 0, 2);
             this.inputLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inputLayoutPanel.Location = new System.Drawing.Point(4, 651);
-            this.inputLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.inputLayoutPanel.Margin = new System.Windows.Forms.Padding(4);
             this.inputLayoutPanel.Name = "inputLayoutPanel";
             this.inputLayoutPanel.RowCount = 3;
             this.inputLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
@@ -191,7 +191,7 @@
             this.Controls.Add(this.copyrightLabel);
             this.Controls.Add(this.mainLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "MainMenuForm";
             this.ShowIcon = false;
