@@ -48,12 +48,12 @@ namespace Networking
             socket.EndConnect(stateAsArObject);
 
             //calls delegate which will usually call GetData
-            socketState.handleData(socketState);//change to taking in socket state as parameter 
+            socketState.handleData(socketState);
         }
 
         /// <summary>
-        /// is called in delegate (which is passed in/called within the Client), wrapper for begin receive. 
-        /// Cause the client decides if it wants data. 
+        /// Is called in delegate (which is passed in/called within the Client). 
+        /// Wrapper for BeginReceive, called by client since the client decides if it wants data. 
         /// </summary>
         /// <param name="state"></param>
         public static void GetData(SocketState state)
