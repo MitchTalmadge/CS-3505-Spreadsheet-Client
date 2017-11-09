@@ -48,5 +48,11 @@
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameComponents\GameComponents.csproj">
+      <Project>{8ecbf14a-8ed0-4ed5-ac25-dd4b41e8bac0}</Project>
+      <Name>GameComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

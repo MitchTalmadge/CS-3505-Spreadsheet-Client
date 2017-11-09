@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SpaceWars
 {
-    public class Ship
+    /// <inheritdoc />
+    /// <summary>
+    /// Represents a spaceship.
+    /// </summary>
+    /// <authors>Jiahui Chen, Mitch Talmadge</authors>
+    public class Ship : GameComponent
     {
 
-        private void Painter(PaintEventArgs e)
+        /// <inheritdoc />
+        /// <summary>
+        /// Draws a spaceship that is one of eight colors depending on the ship's ID.
+        /// </summary>
+        public override void DrawComponent(PaintEventArgs e)
         {
-            //int shipWidth = 35;
-            /*if (s.GetID() == ...)
-                color = ...;
-            else if (...)
-                color = ...;*/
-            //Rectangle r = new Rectangle(-(shipWidth / 2), -(shipWidth / 2), shipWidth, shipWidth);
-            //e.Graphics.FillRectangle(someBrush, r);
+            throw new NotImplementedException();
         }
-
     }
 }
