@@ -4,7 +4,7 @@ using NAudio.Wave;
 namespace SpaceWars
 {
     /// <summary>
-    /// Plays mp3 music files from an array of bytes.
+    /// Plays mp3 music files from an array of bytes in a loop.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     public class Mp3Player
@@ -12,6 +12,7 @@ namespace SpaceWars
         private readonly byte[] _mp3Bytes;
         private MemoryStream _mp3Stream;
         private Mp3FileReader _mp3Reader;
+        private LoopStream _loopStream;
         private WaveOutEvent _player;
 
         /// <summary>
@@ -24,21 +25,32 @@ namespace SpaceWars
         }
 
         /// <summary>
-        /// Plays the loaded mp3 file.
+        /// Plays the loaded mp3 audio.
         /// </summary>
+        /// <param name="loop">Determines if the audio should loop. Defaults to true.</param>
         /// <returns>True if the music was started, false if it could not start.</returns>
-        public bool StartPlaying()
+        public bool StartPlaying(bool loop = true)
         {
             StopPlaying();
 
             try
             {
-                _mp3Stream = new MemoryStream(_mp3Bytes);
-                _mp3Reader = new Mp3FileReader(_mp3Stream);
                 _player = new WaveOutEvent();
 
+                _mp3Stream = new MemoryStream(_mp3Bytes);
+                _mp3Reader = new Mp3FileReader(_mp3Stream);
 
-                _player.Init(_mp3Reader);
+                // Only use loop stream if looping is enabled.
+                if (loop)
+                {
+                    _loopStream = new LoopStream(_mp3Reader);
+                    _player.Init(_loopStream);
+                }
+                else
+                {
+                    _player.Init(_mp3Reader);
+                }
+
                 _player.Play();
                 return true;
             }
@@ -59,8 +71,10 @@ namespace SpaceWars
             _player.Stop();
             _player.Dispose();
             _player = null;
-            _mp3Reader.Dispose();
+
             _mp3Stream.Dispose();
+            _mp3Reader.Dispose();
+            _loopStream?.Dispose();
         }
     }
 }
