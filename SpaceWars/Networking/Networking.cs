@@ -93,14 +93,29 @@ namespace Networking
             }
         }
 
+        /// <summary>
+        /// Allows data to be sent over a Socket. Converts data into bytes and 
+        /// then sends using BeginSend. 
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <param name="data"></param>
         public static void Send(Socket socket, String data)
         {
+            Byte[] dataBytes = Encoding.UTF8.GetBytes(data);
 
+            socket.BeginSend(dataBytes, 0, 1000, SocketFlags.None, SendCallback, socket);
         }
 
+        /// <summary>
+        /// Assists the Send function. It should extract the Socket out of
+        /// the IAsyncResult, and then call socket.EndSend
+        /// </summary>
+        /// <param name="ar"></param>
         public static void SendCallback(IAsyncResult ar)
         {
+            SocketState state = (SocketState)ar.AsyncState;
 
+            state.socket.EndSend(ar);
         }
     }
 }
