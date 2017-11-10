@@ -21,11 +21,13 @@ namespace SpaceWars
         /// <summary>
         /// The Id of this ship.
         /// </summary>
-        [JsonProperty("ship")] private int _ship;
+        [JsonProperty("ship")]
+        private int _shipId;
 
+        /// <inheritdoc />
         protected override int GetId()
         {
-            return _ship;
+            return _shipId;
         }
 
         /// <summary>
