@@ -84,7 +84,6 @@ namespace Networking
                 // We don't know how much data arrived, or if we have an incomplete message.
                 state.sb.Append(data);
 
-
                 // calling delegate on socket state containing data
                 state.handleData(state);
 
