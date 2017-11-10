@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using SpaceWars.Properties;
 
 namespace SpaceWars
 {
@@ -11,6 +13,11 @@ namespace SpaceWars
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     public class Ship : GameComponent
     {
+        /// <summary>
+        /// The size of a single ship in the sprite sheet.
+        /// </summary>
+        private static readonly Size ShipSpriteSize = new Size(36, 44);
+
         /// <summary>
         /// The Id of this ship.
         /// </summary>
@@ -45,5 +52,24 @@ namespace SpaceWars
         /// </summary>
         [JsonProperty("score")]
         public int Score { get; }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// The ship to be drawn is based on the ID. A ship with ID 0 is red, ID 1 is orange, etc. until ID 8 which is red again.
+        /// Thrusting ships have a different image that includes exhaust.
+        /// </summary>
+        public override Tuple<Bitmap, Rectangle> GetDrawingDetails()
+        {
+            var colorIndex = Id % 8;
+
+            // Column is determined by the color index.
+            var spriteStartPoint = new Point(colorIndex * ShipSpriteSize.Width, 0);
+
+            // Move down one row for thrusting ships
+            if (_thrusting)
+                spriteStartPoint.Y = ShipSpriteSize.Height;
+
+            return new Tuple<Bitmap, Rectangle>(Resources.ships, new Rectangle(spriteStartPoint, ShipSpriteSize));
+        }
     }
 }

@@ -42,6 +42,11 @@ namespace SpaceWars
             _gameComponents = gameComponents.ToArray();
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Draws the background, border, and individual game components.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
         {
             // Draw background
