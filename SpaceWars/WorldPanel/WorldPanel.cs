@@ -13,14 +13,9 @@ namespace SpaceWars
     public sealed class WorldPanel : Panel
     {
         /// <summary>
-        /// The size of the game world, in either direction (width or height).
-        /// The game world is always square.
+        /// The size of this world, which has the same length on each side.
         /// </summary>
-        public int WorldSize
-        {
-            get => Size.Height;
-            set => Size = new Size(value, value);
-        }
+        private int WorldSize => Size.Height;
 
         /// <summary>
         /// The game components to be drawn when this component is painted.

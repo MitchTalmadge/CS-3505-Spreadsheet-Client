@@ -105,6 +105,10 @@
       <Project>{0e4f88a2-eb10-4e7a-a268-5d888226c3f6}</Project>
       <Name>Controller</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameComponents\GameComponents.csproj">
+      <Project>{8ECBF14A-8ED0-4ED5-AC25-DD4B41E8BAC0}</Project>
+      <Name>GameComponents</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MP3Player\MP3Player.csproj">
       <Project>{14fb94d4-0535-417d-ac81-56d5276f855b}</Project>
       <Name>MP3Player</Name>

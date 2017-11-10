@@ -81,6 +81,24 @@ namespace SpaceWars.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection Failed.
+        /// </summary>
+        internal static string MainMenuForm_ConnectionFailed_Caption {
+            get {
+                return ResourceManager.GetString("MainMenuForm_ConnectionFailed_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A connection could not be established: .
+        /// </summary>
+        internal static string MainMenuForm_ConnectionFailed_Prefix {
+            get {
+                return ResourceManager.GetString("MainMenuForm_ConnectionFailed_Prefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap space_background {

@@ -121,6 +121,13 @@
   <data name="game_music" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\game_music.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="MainMenuForm_ConnectionFailed_Caption" xml:space="preserve">
+    <value>Connection Failed</value>
+  </data>
+  <data name="MainMenuForm_ConnectionFailed_Prefix" xml:space="preserve">
+    <value>A connection could not be established: </value>
+    <comment>The message to display right before the actual error message of the failed connection.</comment>
+  </data>
   <data name="main_menu_music" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\main_menu_music.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

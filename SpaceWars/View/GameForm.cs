@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using SpaceWars.Properties;
@@ -12,6 +13,11 @@ namespace SpaceWars
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     public partial class GameForm : Form
     {
+        /// <summary>
+        /// The Space Wars instance being played.
+        /// </summary>
+        private readonly SpaceWars _spaceWars;
+
         /// <summary>
         /// The panel that the game ultimately takes place on. Ships, stars, etc. are drawn here.
         /// </summary>
@@ -27,8 +33,15 @@ namespace SpaceWars
         /// </summary>
         private Mp3Player _mp3Player;
 
-        public GameForm()
+        /// <inheritdoc />
+        /// <summary>
+        /// Creates a new Game Form that is based on the given Space Wars instance.
+        /// </summary>
+        /// <param name="spaceWars">The connected Space Wars instance.</param>
+        public GameForm(SpaceWars spaceWars)
         {
+            _spaceWars = spaceWars;
+
             InitializeComponent();
 
             CreateWorldPanel();
@@ -36,6 +49,21 @@ namespace SpaceWars
             CreateScoreboardPanel();
 
             StartMusic();
+
+            _spaceWars.OnGameComponentsUpdated += () =>
+            {
+                _worldPanel.DrawGameComponents(GetGameComponentsToDraw());
+            };
+        }
+
+        private IEnumerable<GameComponent> GetGameComponentsToDraw()
+        {
+            foreach (var ship in _spaceWars.Ships)
+            {
+                yield return ship;
+            }
+
+            //TODO: Yield return other things in the order they should be drawn.
         }
 
         /// <summary>
@@ -47,7 +75,7 @@ namespace SpaceWars
             {
                 Margin = new Padding(10),
                 Location = new Point(10, 10),
-                Size = new Size(750, 750),
+                Size = new Size(_spaceWars.WorldSize, _spaceWars.WorldSize),
                 Parent = _mainLayoutPanel
             };
 
@@ -116,8 +144,10 @@ namespace SpaceWars
         /// </summary>
         private void OpenMainMenu()
         {
-            new MainMenuForm().Show();
+            _spaceWars.Disconnect();
             StopMusic();
+
+            new MainMenuForm().Show();
             Dispose();
         }
     }

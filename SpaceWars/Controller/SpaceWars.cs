@@ -40,9 +40,14 @@ namespace SpaceWars
         public bool IsConnected => PlayerShip != null;
 
         /// <summary>
-        /// Contains all the currently loaded ships in the game.
+        /// A mapping of each known ship in the game to that ship's ID.
         /// </summary>
         private Dictionary<int, Ship> _ships;
+
+        /// <summary>
+        /// All known ships in the game.
+        /// </summary>
+        public IEnumerable<Ship> Ships => _ships.Values.ToList().AsReadOnly();
 
         //TODO: Projectiles, etc.
 
@@ -56,6 +61,15 @@ namespace SpaceWars
         public SpaceWars(string hostName, string nickname)
         {
             throw new SpaceWarsConnectionFailedException("We didn't even try to connect :(");
+        }
+
+        /// <summary>
+        /// Disconnects from the server. 
+        /// This game instance should no longer be used once this method is called.
+        /// </summary>
+        public void Disconnect()
+        {
+            //TODO: Disconnect gracefully.
         }
     }
 
@@ -77,7 +91,8 @@ namespace SpaceWars
         }
 
         /// <inheritdoc />
-        public SpaceWarsConnectionFailedException(string message, Exception innerException) : base(message, innerException)
+        public SpaceWarsConnectionFailedException(string message, Exception innerException) : base(message,
+            innerException)
         {
         }
     }

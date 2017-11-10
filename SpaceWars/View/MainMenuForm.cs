@@ -41,9 +41,20 @@ namespace SpaceWars
 
         private void ConnectButton_Click(object sender, System.EventArgs e)
         {
-            new GameForm().Show();
-            StopMusic();
-            Dispose();
+            // Attempt to connect to the server (in constructor of SpaceWars)
+            try
+            {
+                new GameForm(new SpaceWars(ServerTextBox.Text, NameTextBox.Text)).Show();
+                StopMusic();
+                Dispose();
+            }
+            catch (SpaceWarsConnectionFailedException ex)
+            {
+                // Connection Failed
+                MessageBox.Show(Resources.MainMenuForm_ConnectionFailed_Prefix + ex.Message,
+                    Resources.MainMenuForm_ConnectionFailed_Caption,
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
 
         /// <summary>
