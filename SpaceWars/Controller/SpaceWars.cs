@@ -18,8 +18,6 @@ namespace SpaceWars
         /// </summary>
         /// <param name="spaceWars">This instance.</param>
         public delegate void ConnectedCallback(SpaceWars spaceWars);
-
-        public delegate void Networking.Networking.HandleData(SocketState state);
         
         /// <summary>
         /// This delegate handles cases where any game component is updated (a ship, projectile, etc.)
@@ -30,6 +28,11 @@ namespace SpaceWars
         /// This event is fired whenever a game component (ship, projectile, etc.) is updated from the server.
         /// </summary>
         public event GameComponentsListener OnGameComponentsUpdated;
+
+        /// <summary>
+        /// The passed in ConnectedCallback delegate, used when connecting to the server. 
+        /// </summary>
+        public ConnectedCallback connectedCallback;
 
         /// <summary>
         /// The dimensions of the game world (both sides use same length).
@@ -71,8 +74,8 @@ namespace SpaceWars
         public SpaceWars(string hostName, string nickname, ConnectedCallback callback)
         {
             // Do some connection stuff
-            Networking.Networking.ConnectToServer(callback, hostName);
-            //callback(this);
+            //callback(this); is done within HandleData method 
+            Networking.Networking.ConnectToServer(HandleData, hostName);
             throw new SpaceWarsConnectionFailedException("We didn't even try to connect :(");
         }
 
@@ -84,6 +87,16 @@ namespace SpaceWars
         {
             //TODO: Disconnect gracefully.
 
+        }
+
+        /// <summary>
+        /// Method satisfying the HandleData delegate in Networking, is passed into
+        /// the ConnectToServer call and is a wrapper for the ConnectedCallBack delegate in this class.
+        /// </summary>
+        /// <param name="state"></param>
+        public void HandleData(SocketState state)
+        {
+            connectedCallback(this);
         }
     }
 
