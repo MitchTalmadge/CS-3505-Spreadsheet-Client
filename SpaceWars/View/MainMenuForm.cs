@@ -44,9 +44,12 @@ namespace SpaceWars
             // Attempt to connect to the server (in constructor of SpaceWars)
             try
             {
-                new GameForm(new SpaceWars(ServerTextBox.Text, NameTextBox.Text)).Show();
-                StopMusic();
-                Dispose();
+                new SpaceWars(ServerTextBox.Text, NameTextBox.Text, spaceWars =>
+                {
+                    new GameForm(spaceWars).Show();
+                    StopMusic();
+                    Dispose();
+                });
             }
             catch (SpaceWarsConnectionFailedException ex)
             {

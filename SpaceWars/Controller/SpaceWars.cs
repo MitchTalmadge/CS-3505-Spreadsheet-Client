@@ -13,6 +13,12 @@ namespace SpaceWars
     public class SpaceWars
     {
         /// <summary>
+        /// This delegate is called when a connection has been established.
+        /// </summary>
+        /// <param name="spaceWars">This instance.</param>
+        public delegate void ConnectedCallback(SpaceWars spaceWars);
+        
+        /// <summary>
         /// This delegate handles cases where any game component is updated (a ship, projectile, etc.)
         /// </summary>
         public delegate void GameComponentsListener();
@@ -52,14 +58,17 @@ namespace SpaceWars
         //TODO: Projectiles, etc.
 
         /// <summary>
+        /// Creates a new SpaceWars instance that has not been connected.
         /// Attempts to establish a connection to the given game server, using the given nickname.
         /// If a connection cannot be established, an exception is thrown. 
-        /// Otherwise, the connection has been established and the game is ready.
         /// </summary>
         /// <param name="hostName">The server address, excluding the port.</param>
         /// <param name="nickname">The nickname to use for the player connecting.</param>
-        public SpaceWars(string hostName, string nickname)
+        /// <param name="callback">This callback is called when a connection has been established.</param>
+        public SpaceWars(string hostName, string nickname, ConnectedCallback callback)
         {
+            // Do some connection stuff
+            //callback(this);
             throw new SpaceWarsConnectionFailedException("We didn't even try to connect :(");
         }
 
