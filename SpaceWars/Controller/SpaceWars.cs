@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Networking;
+using System.Net.Sockets;
 
 namespace SpaceWars
 {
@@ -74,9 +75,15 @@ namespace SpaceWars
         public SpaceWars(string hostName, string nickname, ConnectedCallback callback)
         {
             // Do some connection stuff
-            //callback(this); is done within HandleData method 
-            Networking.Networking.ConnectToServer(HandleData, hostName);
-            throw new SpaceWarsConnectionFailedException("We didn't even try to connect :(");
+            try
+            {
+                //callback(this); is done within HandleData method called when ConnectToServer is called
+                Socket socket = Networking.Networking.ConnectToServer(HandleData, hostName);
+            }
+            catch (Exception e)
+            {
+                throw new SpaceWarsConnectionFailedException(e.Message);
+            }
         }
 
         /// <summary>
@@ -86,6 +93,7 @@ namespace SpaceWars
         public void Disconnect()
         {
             //TODO: Disconnect gracefully.
+            //need the socket state
 
         }
 
