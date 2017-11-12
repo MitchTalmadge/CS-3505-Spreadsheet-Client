@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Networking;
 
 namespace SpaceWars
 {
@@ -17,6 +18,8 @@ namespace SpaceWars
         /// </summary>
         /// <param name="spaceWars">This instance.</param>
         public delegate void ConnectedCallback(SpaceWars spaceWars);
+
+        public delegate void Networking.Networking.HandleData(SocketState state);
         
         /// <summary>
         /// This delegate handles cases where any game component is updated (a ship, projectile, etc.)
@@ -68,6 +71,7 @@ namespace SpaceWars
         public SpaceWars(string hostName, string nickname, ConnectedCallback callback)
         {
             // Do some connection stuff
+            Networking.Networking.ConnectToServer(callback, hostName);
             //callback(this);
             throw new SpaceWarsConnectionFailedException("We didn't even try to connect :(");
         }
