@@ -39,15 +39,14 @@ namespace Networking
         public static void ConnectToServer(string hostName, ConnectionEstablished established, ConnectionFailed failed,
             DataReceived dataReceived)
         {
-            // Parse the address into an IPAddress and create a SocketState.
-            var address = Dns.GetHostAddresses(hostName)[0];
-            var socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            // Create a SocketState.
+            var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             var socketState = new SocketState(socket, established, failed, dataReceived);
 
             // Attempt connection to the address on the default port.
             try
             {
-                socket.BeginConnect(address, 11000, ConnectedToServer, socketState);
+                socket.BeginConnect(hostName, 11000, ConnectedToServer, socketState);
             }
             catch (Exception e)
             {
