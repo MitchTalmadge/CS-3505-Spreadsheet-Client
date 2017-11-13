@@ -16,14 +16,24 @@ namespace Networking
         internal Socket Socket { get; }
 
         /// <summary>
+        /// Callback for an established connection.
+        /// </summary>
+        internal readonly Networking.ConnectionEstablished Established;
+
+        /// <summary>
+        /// Callback for a failed connection.
+        /// </summary>
+        internal readonly Networking.ConnectionFailed Failed;
+
+        /// <summary>
+        /// Callback for received data.
+        /// </summary>
+        internal readonly Networking.DataReceived DataReceived;
+
+        /// <summary>
         /// This is the buffer where we will receive data from the socket
         /// </summary>
         internal byte[] DataBuffer = new byte[1000];
-
-        /// <summary>
-        /// Function that processes data once it's received. 
-        /// </summary>
-        internal Networking.HandleData HandleData { get; }
 
         // This is a larger (growable) buffer, in case a single receive does not contain the full message.
         // holds pervious data 
@@ -32,16 +42,20 @@ namespace Networking
         //ID, not used for PS7
         int ID;
 
-        internal SocketState(Socket socket, Networking.HandleData callbackFunction)
+        /// <summary>
+        /// Creates a new Socket State from a socket and callback.
+        /// </summary>
+        /// <param name="socket">The socket related to this state.</param>
+        /// <param name="established">Callback for an established connection.</param>
+        /// <param name="failed">Callback for a failed connection.</param>
+        /// <param name="dataReceived">Callback for received data.</param>
+        internal SocketState(Socket socket, Networking.ConnectionEstablished established,
+            Networking.ConnectionFailed failed, Networking.DataReceived dataReceived)
         {
             Socket = socket;
-            HandleData = callbackFunction;
-        }
-
-        /// <returns>The currently held data from the latest response from the server.</returns>
-        public string GetData()
-        {
-            return DataStringBuilder.ToString();
+            Established = established;
+            Failed = failed;
+            DataReceived = dataReceived;
         }
     }
 }

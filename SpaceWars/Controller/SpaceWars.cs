@@ -68,7 +68,7 @@ namespace SpaceWars
         /// <summary>
         /// The ID of the current player.
         /// </summary>
-        public int PlayerId { get; private set; }
+        public int PlayerId { get; private set; } = -1;
 
         /// <summary>
         /// A mapping of each known ship in the game to that ship's ID.
@@ -98,14 +98,13 @@ namespace SpaceWars
             _establishedCallback = established;
             _failedCallback = failed;
 
-            try
-            {
-                Networking.Networking.ConnectToServer(HandleData, hostName);
-            }
-            catch (Exception e)
-            {
-                _failedCallback(e.Message);
-            }
+            // Connect to the server.
+            Networking.Networking.ConnectToServer(
+                hostName,
+                state => _socketState = state,
+                reason => _failedCallback(reason),
+                DataReceived
+            );
         }
 
         /// <summary>
@@ -118,25 +117,21 @@ namespace SpaceWars
         }
 
         /// <summary>
-        /// Method satisfying the HandleData delegate in Networking, is passed into
-        /// the ConnectToServer call and is a wrapper for the ConnectedCallBack delegate in this class.
+        /// Called when data is received on the socket.
         /// </summary>
-        /// <param name="state"></param>
-        public void HandleData(SocketState state)
+        /// <param name="data">The data that was received.</param>
+        public void DataReceived(string data)
         {
-            // When the stored socket state is null, we have connected for the first time.
-            if (_socketState == null)
+            // When PlayerId is -1, the first packet containing the player id and world size has not been received.
+            if (PlayerId == -1)
             {
-                _socketState = state;
-
                 // Parse the first packet, containing our player id and the world size.
-                var splitData = _socketState.GetData().Split('\n');
+                var splitData = data.Split('\n');
                 PlayerId = int.Parse(splitData[0]);
                 WorldSize = int.Parse(splitData[1]);
 
-                // Notify the connection callback that the game has connected.
+                // Notify the listener that the connection was established and the world is ready.
                 _establishedCallback(this);
-                return;
             }
 
             //TODO: parse data as json
