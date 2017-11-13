@@ -61,9 +61,12 @@ namespace SpaceWars
         /// <param name="spaceWars">The connected SpaceWars client.</param>
         private void ConnectionEstablished(SpaceWars spaceWars)
         {
-            new GameForm(spaceWars).Show();
-            StopMusic();
-            Dispose();
+            Invoke(new MethodInvoker(() =>
+            {
+                new GameForm(spaceWars).Show();
+                StopMusic();
+                Dispose();
+            }));
         }
 
         /// <summary>

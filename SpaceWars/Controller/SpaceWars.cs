@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Networking;
 
 namespace SpaceWars
@@ -14,6 +15,7 @@ namespace SpaceWars
     {
         /// <summary>
         /// This delegate is called when a connection to SpaceWars was established.
+        /// May be called on another thread.
         /// </summary>
         /// <param name="spaceWars">The connected SpaceWars client.</param>
         public delegate void ConnectionEstablished(SpaceWars spaceWars);
@@ -28,11 +30,6 @@ namespace SpaceWars
         /// The provided ConnectionEstablished delegate implementation.
         /// </summary>
         private readonly ConnectionEstablished _establishedCallback;
-
-        /// <summary>
-        /// The provided ConnectionFailed delegate implementation.
-        /// </summary>
-        private readonly ConnectionFailed _failedCallback;
 
         /// <summary>
         /// This delegate handles cases where any game component is updated (a ship, projectile, etc.)
@@ -96,13 +93,24 @@ namespace SpaceWars
             PlayerNickname = nickname;
 
             _establishedCallback = established;
-            _failedCallback = failed;
 
             // Connect to the server.
             Networking.Networking.ConnectToServer(
                 hostName,
-                state => _socketState = state,
-                reason => _failedCallback(reason),
+                state =>
+                {
+                    _socketState = state;
+                    // Start the thread that continually receives data.
+                    new Thread(() =>
+                    {
+                        // Send the nickname of the user.
+                        Networking.Networking.Send(state, nickname + '\n');
+
+                        // Wait for data.
+                        Networking.Networking.GetData(state);
+                    }).Start();
+                },
+                reason => failed(reason),
                 DataReceived
             );
         }
@@ -135,6 +143,9 @@ namespace SpaceWars
             }
 
             //TODO: parse data as json
+
+            // Get new data.
+            Networking.Networking.GetData(_socketState);
         }
     }
 }

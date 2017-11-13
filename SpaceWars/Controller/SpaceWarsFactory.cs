@@ -17,7 +17,8 @@
         public static void ConnectToSpaceWars(string hostName, string nickname, SpaceWars.ConnectionEstablished established,
             SpaceWars.ConnectionFailed failed)
         {
-            var spaceWars = new SpaceWars(hostName, nickname, established, failed);
+            // ReSharper disable once ObjectCreationAsStatement
+            new SpaceWars(hostName, nickname, established, failed);
         }
 
     }

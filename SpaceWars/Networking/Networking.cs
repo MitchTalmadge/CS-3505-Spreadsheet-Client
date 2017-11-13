@@ -66,7 +66,7 @@ namespace Networking
             var socketState = (SocketState) stateAsArObject.AsyncState;
             var socket = socketState.Socket;
 
-            // Attempt to close the connection.
+            // Attempt to end the connection request.
             try
             {
                 socket.EndConnect(stateAsArObject);
@@ -144,7 +144,7 @@ namespace Networking
         {
             var dataBytes = Encoding.UTF8.GetBytes(data);
 
-            state.Socket.BeginSend(dataBytes, 0, 1000, SocketFlags.None, SendCallback, state);
+            state.Socket.BeginSend(dataBytes, 0, dataBytes.Length, SocketFlags.None, SendCallback, state);
         }
 
         /// <summary>
