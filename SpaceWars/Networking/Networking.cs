@@ -26,9 +26,9 @@ namespace Networking
         public static Socket ConnectToServer(HandleData callbackFunction, string hostname)
         {
             //parsing host address and creating corresponding socket and SocketState
-            IPAddress address = IPAddress.Parse(hostname);
-            Socket socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            SocketState socketState = new SocketState(socket, callbackFunction);
+            var address = IPAddress.Parse(hostname);
+            var socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            var socketState = new SocketState(socket, callbackFunction);
 
             //creating connection and passing SocketState object 
             socket.BeginConnect(address, 11000, ConnectedToServer, socketState);
@@ -43,12 +43,22 @@ namespace Networking
         public static void ConnectedToServer(IAsyncResult stateAsArObject)
         {
             //stateAsArObject contains a field AsyncState which contains a SocketState object
-            SocketState socketState = (SocketState)stateAsArObject.AsyncState;
-            Socket socket = socketState.socket;
+            var socketState = (SocketState)stateAsArObject.AsyncState;
+            var socket = socketState.Socket;
             socket.EndConnect(stateAsArObject);
 
             //calls delegate which will usually call GetData
-            socketState.handleData(socketState);
+            socketState.HandleData(socketState);
+        }
+
+        /// <summary>
+        /// Disconnects the given state from the server.
+        /// No messages should be sent after this method is called.
+        /// </summary>
+        /// <param name="state">The socket state to disconnect</param>
+        public static void DisconnectFromServer(SocketState state)
+        {
+            state.Socket.Disconnect(false);
         }
 
         /// <summary>
@@ -58,7 +68,7 @@ namespace Networking
         /// <param name="state"></param>
         public static void GetData(SocketState state)
         {
-            state.socket.BeginReceive(state.dataBuffer, 0, state.dataBuffer.Length, SocketFlags.None, ReceiveCallback, state);
+            state.Socket.BeginReceive(state.DataBuffer, 0, state.DataBuffer.Length, SocketFlags.None, ReceiveCallback, state);
         }
 
         /// <summary>
@@ -73,23 +83,23 @@ namespace Networking
             // Get the SocketState associated with the received data
             SocketState state = (SocketState)stateAsArObject.AsyncState;
 
-            int numBytes = state.socket.EndReceive(stateAsArObject);
+            int numBytes = state.Socket.EndReceive(stateAsArObject);
 
             if (numBytes > 0)
             {
                 // Convert the raw bytes to a string
-                string data = Encoding.UTF8.GetString(state.dataBuffer, 0, numBytes);
+                string data = Encoding.UTF8.GetString(state.DataBuffer, 0, numBytes);
 
                 // Append the data to a growable buffer.
                 // We don't know how much data arrived, or if we have an incomplete message.
-                state.sb.Append(data);
+                state.DataStringBuilder.Append(data);
 
                 // calling delegate on socket state containing data
-                state.handleData(state);
+                state.HandleData(state);
 
                 // Wait for more data from the server. This creates an "event loop".
                 // ReceiveCallback will be invoked every time new data is available on the socket.
-                state.socket.BeginReceive(state.dataBuffer, 0, state.dataBuffer.Length, SocketFlags.None, ReceiveCallback, state);
+                state.Socket.BeginReceive(state.DataBuffer, 0, state.DataBuffer.Length, SocketFlags.None, ReceiveCallback, state);
             }
         }
 
@@ -115,7 +125,7 @@ namespace Networking
         {
             SocketState state = (SocketState)ar.AsyncState;
 
-            state.socket.EndSend(ar);
+            state.Socket.EndSend(ar);
         }
     }
 }

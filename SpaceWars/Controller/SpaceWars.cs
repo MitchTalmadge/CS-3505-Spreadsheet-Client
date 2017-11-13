@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Networking;
-using System.Net.Sockets;
 
 namespace SpaceWars
 {
@@ -19,7 +16,12 @@ namespace SpaceWars
         /// </summary>
         /// <param name="spaceWars">This instance.</param>
         public delegate void ConnectedCallback(SpaceWars spaceWars);
-        
+
+        /// <summary>
+        /// The passed in ConnectedCallback delegate, used when connecting to the server. 
+        /// </summary>
+        private readonly ConnectedCallback _connectedCallback;
+
         /// <summary>
         /// This delegate handles cases where any game component is updated (a ship, projectile, etc.)
         /// </summary>
@@ -31,25 +33,30 @@ namespace SpaceWars
         public event GameComponentsListener OnGameComponentsUpdated;
 
         /// <summary>
-        /// The passed in ConnectedCallback delegate, used when connecting to the server. 
-        /// </summary>
-        public ConnectedCallback connectedCallback;
-
-        /// <summary>
         /// Socket that the connection is made through.
         /// </summary>
-        public Socket socket;
+        private SocketState _socketState;
 
         /// <summary>
         /// The dimensions of the game world (both sides use same length).
         /// </summary>
-        public int WorldSize { get; }
+        public int WorldSize { get; private set; }
 
         /// <summary>
         /// The current ship that the player controls. 
         /// May be null if there is no established connection.
         /// </summary>
-        public Ship PlayerShip { get; }
+        public Ship PlayerShip => _ships[PlayerId];
+
+        /// <summary>
+        /// The nickname of the current player.
+        /// </summary>
+        public string PlayerNickname { get; }
+
+        /// <summary>
+        /// The ID of the current player.
+        /// </summary>
+        public int PlayerId { get; private set; }
 
         /// <summary>
         /// Determines if there is an established connection.
@@ -79,11 +86,12 @@ namespace SpaceWars
         /// <param name="callback">This callback is called when a connection has been established.</param>
         public SpaceWars(string hostName, string nickname, ConnectedCallback callback)
         {
-            // Do some connection stuff
+            _connectedCallback = callback;
+            PlayerNickname = nickname;
+
             try
             {
-                //callback(this); is done within HandleData method called when ConnectToServer is called
-                this.socket = Networking.Networking.ConnectToServer(HandleData, hostName);
+                Networking.Networking.ConnectToServer(HandleData, hostName);
             }
             catch (Exception e)
             {
@@ -97,16 +105,7 @@ namespace SpaceWars
         /// </summary>
         public void Disconnect()
         {
-            try
-            {
-                //parameter boolean indicates if the socket is reusable
-                socket.Disconnect(true);
-            }
-            catch (Exception e)
-            {
-                throw new SpaceWarsConnectionFailedException(e.Message);
-            }
-
+            Networking.Networking.DisconnectFromServer(_socketState);
         }
 
         /// <summary>
@@ -116,7 +115,22 @@ namespace SpaceWars
         /// <param name="state"></param>
         public void HandleData(SocketState state)
         {
-            connectedCallback(this);
+            // When the stored socket state is null, we have connected for the first time.
+            if (_socketState == null)
+            {
+                _socketState = state;
+
+                // Parse the first packet, containing our player id and the world size.
+                var splitData = _socketState.GetData().Split('\n');
+                PlayerId = int.Parse(splitData[0]);
+                WorldSize = int.Parse(splitData[1]);
+
+                // Notify the connection callback that the game has connected.
+                _connectedCallback(this);
+                return;
+            }
+
+            //TODO: parse data as json
         }
     }
 
@@ -127,11 +141,6 @@ namespace SpaceWars
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     public class SpaceWarsConnectionFailedException : Exception
     {
-        /// <inheritdoc />
-        public SpaceWarsConnectionFailedException()
-        {
-        }
-
         /// <inheritdoc />
         public SpaceWarsConnectionFailedException(string message) : base(message)
         {
