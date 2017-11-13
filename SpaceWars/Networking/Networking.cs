@@ -26,7 +26,7 @@ namespace Networking
         public static Socket ConnectToServer(HandleData callbackFunction, string hostname)
         {
             //parsing host address and creating corresponding socket and SocketState
-            var address = IPAddress.Parse(hostname);
+            var address = Dns.GetHostAddresses(hostname)[0];
             var socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             var socketState = new SocketState(socket, callbackFunction);
 
