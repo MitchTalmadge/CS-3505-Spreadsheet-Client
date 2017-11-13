@@ -9,18 +9,30 @@ namespace SpaceWars
     /// The main controller for the SpaceWars game.
     /// Uses the networking library to maintain a connection with the game server and notify listeners of changes to game components.
     /// </summary>
+    /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     public class SpaceWars
     {
         /// <summary>
-        /// This delegate is called when a connection has been established.
+        /// This delegate is called when a connection to SpaceWars was established.
         /// </summary>
-        /// <param name="spaceWars">This instance.</param>
-        public delegate void ConnectedCallback(SpaceWars spaceWars);
+        /// <param name="spaceWars">The connected SpaceWars client.</param>
+        public delegate void ConnectionEstablished(SpaceWars spaceWars);
 
         /// <summary>
-        /// The passed in ConnectedCallback delegate, used when connecting to the server. 
+        /// This delegate is called when a connection to SpaceWars failed.
         /// </summary>
-        private readonly ConnectedCallback _connectedCallback;
+        /// <param name="reason">Why the connection failed.</param>
+        public delegate void ConnectionFailed(string reason);
+
+        /// <summary>
+        /// The provided ConnectionEstablished delegate implementation.
+        /// </summary>
+        private readonly ConnectionEstablished _establishedCallback;
+
+        /// <summary>
+        /// The provided ConnectionFailed delegate implementation.
+        /// </summary>
+        private readonly ConnectionFailed _failedCallback;
 
         /// <summary>
         /// This delegate handles cases where any game component is updated (a ship, projectile, etc.)
@@ -59,15 +71,9 @@ namespace SpaceWars
         public int PlayerId { get; private set; }
 
         /// <summary>
-        /// Determines if there is an established connection.
-        /// </summary>
-        /// <returns>True if a connection has been established.</returns>
-        public bool IsConnected => PlayerShip != null;
-
-        /// <summary>
         /// A mapping of each known ship in the game to that ship's ID.
         /// </summary>
-        private Dictionary<int, Ship> _ships;
+        private readonly Dictionary<int, Ship> _ships = new Dictionary<int, Ship>();
 
         /// <summary>
         /// All known ships in the game.
@@ -83,11 +89,14 @@ namespace SpaceWars
         /// </summary>
         /// <param name="hostName">The server address, excluding the port.</param>
         /// <param name="nickname">The nickname to use for the player connecting.</param>
-        /// <param name="callback">This callback is called when a connection has been established.</param>
-        public SpaceWars(string hostName, string nickname, ConnectedCallback callback)
+        /// <param name="established">The callback for when a connection is established.</param>
+        /// <param name="failed">The callback for when a connection has failed.</param>
+        internal SpaceWars(string hostName, string nickname, ConnectionEstablished established, ConnectionFailed failed)
         {
-            _connectedCallback = callback;
             PlayerNickname = nickname;
+
+            _establishedCallback = established;
+            _failedCallback = failed;
 
             try
             {
@@ -95,7 +104,7 @@ namespace SpaceWars
             }
             catch (Exception e)
             {
-                throw new SpaceWarsConnectionFailedException(e.Message);
+                _failedCallback(e.Message);
             }
         }
 
@@ -126,30 +135,11 @@ namespace SpaceWars
                 WorldSize = int.Parse(splitData[1]);
 
                 // Notify the connection callback that the game has connected.
-                _connectedCallback(this);
+                _establishedCallback(this);
                 return;
             }
 
             //TODO: parse data as json
-        }
-    }
-
-    /// <inheritdoc />
-    /// <summary>
-    /// A custom exception for when a connection to the Space Wars server could not be established.
-    /// </summary>
-    /// <authors>Jiahui Chen, Mitch Talmadge</authors>
-    public class SpaceWarsConnectionFailedException : Exception
-    {
-        /// <inheritdoc />
-        public SpaceWarsConnectionFailedException(string message) : base(message)
-        {
-        }
-
-        /// <inheritdoc />
-        public SpaceWarsConnectionFailedException(string message, Exception innerException) : base(message,
-            innerException)
-        {
         }
     }
 }

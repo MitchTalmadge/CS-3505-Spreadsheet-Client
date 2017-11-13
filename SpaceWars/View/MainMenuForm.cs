@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using SpaceWars.Properties;
 
 namespace SpaceWars
@@ -39,25 +40,42 @@ namespace SpaceWars
             _mp3Player.StopPlaying();
         }
 
-        private void ConnectButton_Click(object sender, System.EventArgs e)
+        /// <summary>
+        /// Attempts to connect to the SpaceWars server with the details entered.
+        /// </summary>
+        private void ConnectButton_Click(object sender, EventArgs e)
         {
-            // Attempt to connect to the server (in constructor of SpaceWars)
-            try
+            // Make sure there was entry.
+            if (ServerTextBox.TextLength > 0 && NameTextBox.TextLength > 0)
             {
-                new SpaceWars(ServerTextBox.Text, NameTextBox.Text, spaceWars =>
-                {
-                    new GameForm(spaceWars).Show();
-                    StopMusic();
-                    Dispose();
-                });
+                // Attempt connection
+                SpaceWarsFactory.ConnectToSpaceWars(ServerTextBox.Text, NameTextBox.Text, ConnectionEstablished,
+                    ConnectionFailed);
             }
-            catch (SpaceWarsConnectionFailedException ex)
-            {
-                // Connection Failed
-                MessageBox.Show(Resources.MainMenuForm_ConnectionFailed_Prefix + ex.Message,
-                    Resources.MainMenuForm_ConnectionFailed_Caption,
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
+        }
+
+        /// <summary>
+        /// Called when a connection to a SpaceWars server was established.
+        /// Creates the game form and closes the main menu.
+        /// </summary>
+        /// <param name="spaceWars">The connected SpaceWars client.</param>
+        private void ConnectionEstablished(SpaceWars spaceWars)
+        {
+            new GameForm(spaceWars).Show();
+            StopMusic();
+            Dispose();
+        }
+
+        /// <summary>
+        /// Called when a connection to the SpaceWars server has failed.
+        /// Displays a warning message dialog.
+        /// </summary>
+        /// <param name="reason">Why the connection failed.</param>
+        private static void ConnectionFailed(string reason)
+        {
+            MessageBox.Show(Resources.MainMenuForm_ConnectionFailed_Prefix + reason,
+                Resources.MainMenuForm_ConnectionFailed_Caption,
+                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         /// <summary>
