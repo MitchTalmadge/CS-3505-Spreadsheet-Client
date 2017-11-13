@@ -36,6 +36,11 @@ namespace SpaceWars
         public ConnectedCallback connectedCallback;
 
         /// <summary>
+        /// Socket that the connection is made through.
+        /// </summary>
+        public Socket socket;
+
+        /// <summary>
         /// The dimensions of the game world (both sides use same length).
         /// </summary>
         public int WorldSize { get; }
@@ -78,7 +83,7 @@ namespace SpaceWars
             try
             {
                 //callback(this); is done within HandleData method called when ConnectToServer is called
-                Socket socket = Networking.Networking.ConnectToServer(HandleData, hostName);
+                this.socket = Networking.Networking.ConnectToServer(HandleData, hostName);
             }
             catch (Exception e)
             {
@@ -92,8 +97,15 @@ namespace SpaceWars
         /// </summary>
         public void Disconnect()
         {
-            //TODO: Disconnect gracefully.
-            //need the socket state
+            try
+            {
+                //parameter boolean indicates if the socket is reusable
+                socket.Disconnect(true);
+            }
+            catch (Exception e)
+            {
+                throw new SpaceWarsConnectionFailedException(e.Message);
+            }
 
         }
 
