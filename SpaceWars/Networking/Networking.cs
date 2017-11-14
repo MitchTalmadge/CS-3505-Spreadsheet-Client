@@ -107,6 +107,9 @@ namespace Networking
         /// <param name="stateAsArObject"></param>
         private static void ReceiveCallback(IAsyncResult stateAsArObject)
         {
+            //if there's not a new line/terminating character it receives again
+            //and adds to stringbuilder, when terminating character is received then 
+            //call data received on string builder's string and clear stringbuilder
             // Get the SocketState associated with the received data
             var state = (SocketState) stateAsArObject.AsyncState;
 
