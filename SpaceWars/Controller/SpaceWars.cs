@@ -143,6 +143,7 @@ namespace SpaceWars
             }
 
             //TODO: parse data as json
+            //call custom event when json is parsed successfully
 
             // Get new data.
             Networking.Networking.GetData(_socketState);
