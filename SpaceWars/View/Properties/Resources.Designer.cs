@@ -81,6 +81,24 @@ namespace SpaceWars.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connecting....
+        /// </summary>
+        internal static string MainMenuForm_ConnectButton_Connecting {
+            get {
+                return ResourceManager.GetString("MainMenuForm_ConnectButton_Connecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect.
+        /// </summary>
+        internal static string MainMenuForm_ConnectButton_Default {
+            get {
+                return ResourceManager.GetString("MainMenuForm_ConnectButton_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection Failed.
         /// </summary>
         internal static string MainMenuForm_ConnectionFailed_Caption {
