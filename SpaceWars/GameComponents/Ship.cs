@@ -62,6 +62,10 @@ namespace SpaceWars
         /// </summary>
         public override Tuple<Bitmap, Rectangle> GetDrawingDetails()
         {
+            // Do not draw if the health is 0.
+            if (Health == 0)
+                return null;
+
             var colorIndex = Id % 8;
 
             // Column is determined by the color index.
