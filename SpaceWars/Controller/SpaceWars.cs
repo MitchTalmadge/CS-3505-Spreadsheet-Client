@@ -133,52 +133,68 @@ namespace SpaceWars
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
-            // Multiple objects may be sent, delimited by newlines.
-            var splitData = data.Split('\n');
-
-            // When PlayerId is -1, the first packet containing the player id and world size has not been received.
+            // We know the first packet has been handled once PlayerId is not -1.
             if (PlayerId == -1)
-            {
-                // Parse the first packet, containing our player id and the world size.
-                PlayerId = int.Parse(splitData[0]);
-                WorldSize = int.Parse(splitData[1]);
-
-                // Notify the listener that the connection was established and the world is ready.
-                _establishedCallback(this);
-            }
+                ParseFirstPacket(data);
             else
-            {
-                // For each json object
-                foreach (var dataItem in splitData)
-                {
-                    // Ignore empty items
-                    if (dataItem == "")
-                        continue; 
-                    
-                    try
-                    {
-                        // Parse the data as a json object.
-                        var parsedJson = JObject.Parse(dataItem);
-
-                        // Determine the json type.
-                        if (parsedJson["ship"] != null)
-                        {
-                            var ship = JsonConvert.DeserializeObject<Ship>(dataItem);
-                            _ships[ship.Id] = ship;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.Print("JSON Parsing Failed: " + e.Message);
-                    }
-                }
-
-                // Notify event listeners of updated game components.
-                OnGameComponentsUpdated?.Invoke();
-            }
+                ParseJsonPacket(data);
 
             // Get new data.
-            Networking.Networking.GetData(_socketState);
+            if (_socketState.Connected)
+                Networking.Networking.GetData(_socketState);
+        }
+
+        /// <summary>
+        /// Parses the first packet sent by the server, which contains the player's id and the world's size.
+        /// </summary>
+        /// <param name="data">The first packet's data.</param>
+        private void ParseFirstPacket(string data)
+        {
+            var splitData = data.Split('\n');
+
+            // Parse the first packet, containing our player id and the world size.
+            PlayerId = int.Parse(splitData[0]);
+            WorldSize = int.Parse(splitData[1]);
+
+            // Notify the listener that the connection was established and the world is ready.
+            _establishedCallback(this);
+        }
+
+        /// <summary>
+        /// Parses a json packet sent by the server, which contains information about the game components in the world.
+        /// </summary>
+        /// <param name="data">The json packet's data, where each JSON object is separated by a newline.</param>
+        private void ParseJsonPacket(string data)
+        {
+            var splitData = data.Split('\n');
+
+            // For each json object
+            foreach (var rawJson in splitData)
+            {
+                // Ignore empty items
+                if (rawJson == "")
+                    continue;
+
+                try
+                {
+                    // Parse the data as a json object.
+                    var parsedJson = JObject.Parse(rawJson);
+
+                    // Determine the json type.
+                    if (parsedJson["ship"] != null)
+                    {
+                        var ship = JsonConvert.DeserializeObject<Ship>(rawJson);
+                        _ships[ship.Id] = ship;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.Print("JSON Parsing Failed: " + e.Message);
+                }
+            }
+
+            // Notify event listeners of updated game components.
+            OnGameComponentsUpdated?.Invoke();
         }
     }
 }

@@ -51,11 +51,16 @@ namespace SpaceWars
             StartMusic();
 
             // Subscribe to game component changes
-            _spaceWars.OnGameComponentsUpdated += () =>
-            {
-                // Redraw the game components
-                _worldPanel.DrawGameComponents(GetGameComponentsToDraw());
-            };
+            _spaceWars.OnGameComponentsUpdated += OnGameComponentsUpdated;
+        }
+
+        /// <summary>
+        /// Called when any game component is updated in the SpaceWars client.
+        /// </summary>
+        private void OnGameComponentsUpdated()
+        {
+            // Redraw the game components
+            _worldPanel.DrawGameComponents(GetGameComponentsToDraw());
         }
 
         /// <summary>
@@ -150,7 +155,10 @@ namespace SpaceWars
         /// </summary>
         private void OpenMainMenu()
         {
+            // Disconnect and unsubscribe
+            _spaceWars.OnGameComponentsUpdated -= OnGameComponentsUpdated;
             _spaceWars.Disconnect();
+
             StopMusic();
 
             new MainMenuForm().Show();

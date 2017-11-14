@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -37,7 +38,14 @@ namespace SpaceWars
             _gameComponents = gameComponents.ToArray();
 
             // Invalidate this component for redrawing.
-            Invoke(new MethodInvoker(Refresh));
+            try
+            {
+                Invoke(new MethodInvoker(Refresh));
+            }
+            catch (ObjectDisposedException)
+            {
+                //ignored
+            }
         }
 
         /// <inheritdoc />
