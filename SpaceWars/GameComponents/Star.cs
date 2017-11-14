@@ -16,7 +16,7 @@ namespace SpaceWars
         /// The size of a star in the sprite sheet.
         /// Four times the size of a ship.
         /// </summary>
-        private static readonly Size StarSpriteSize = new Size(144, 176);
+        private static readonly Size StarSpriteSize = new Size(256, 256);
 
         /// <summary>
         /// The Id of this Star.
@@ -35,7 +35,7 @@ namespace SpaceWars
         public override Tuple<Bitmap, Rectangle> GetDrawingDetails()
         {
             return new Tuple<Bitmap, Rectangle>(Resources.star,
-                new Rectangle(new Point(StarSpriteSize.Width, 0), StarSpriteSize));
+                new Rectangle(new Point(0,0), StarSpriteSize));
         }
     }
 }

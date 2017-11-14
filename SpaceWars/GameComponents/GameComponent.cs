@@ -28,7 +28,7 @@ namespace SpaceWars
         /// The direction that this component is facing in world coordinates.
         /// </summary>
         [JsonProperty("dir")]
-        public Vector2D Direction { get; } = new Vector2D(0, 0);
+        public Vector2D Direction { get; } = new Vector2D(0, -1);
 
         /// <summary>
         /// Gives details for which image should be drawn, and how it should be cropped.
