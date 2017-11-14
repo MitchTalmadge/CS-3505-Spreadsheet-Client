@@ -35,13 +35,15 @@ namespace SpaceWars
         public void DrawGameComponents(IEnumerable<GameComponent> gameComponents)
         {
             _gameComponents = gameComponents.ToArray();
+
+            // Invalidate this component for redrawing.
+            Invoke(new MethodInvoker(Refresh));
         }
 
         /// <inheritdoc />
         /// <summary>
         /// Draws the background, border, and individual game components.
         /// </summary>
-        /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
         {
             // Draw background
@@ -55,13 +57,17 @@ namespace SpaceWars
             // Draw game components
             foreach (var gameComponent in _gameComponents)
             {
+                // Ensure there is something to draw.
+                var imageDetails = gameComponent.GetDrawingDetails();
+                if (imageDetails == null)
+                    continue;
+
                 // Translate the graphics object so that drawing at (0, 0) will put the component in the correct place.
                 var translation = WorldVectorToImagePoint(gameComponent.Location);
                 e.Graphics.TranslateTransform(translation.X, translation.Y);
                 e.Graphics.RotateTransform(gameComponent.Direction.ToAngle());
 
                 // Draw the component at (0, 0)
-                var imageDetails = gameComponent.GetDrawingDetails();
                 var image = imageDetails.Item1;
                 var cropRegion = imageDetails.Item2;
                 e.Graphics.DrawImage(image, new Rectangle(0, 0, cropRegion.Width, cropRegion.Height), cropRegion,
