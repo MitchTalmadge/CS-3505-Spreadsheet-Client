@@ -28,180 +28,180 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.inputLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.NicknameLabel = new System.Windows.Forms.Label();
-            this.NameTextBox = new System.Windows.Forms.TextBox();
-            this.ServerTextBox = new System.Windows.Forms.TextBox();
-            this.ServerAddressLabel = new System.Windows.Forms.Label();
-            this.ConnectButton = new System.Windows.Forms.Button();
-            this.logoLabel = new System.Windows.Forms.Label();
-            this.copyrightLabel = new System.Windows.Forms.Label();
-            this.mainLayoutPanel.SuspendLayout();
-            this.inputLayoutPanel.SuspendLayout();
+            this._mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this._inputLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this._nicknameLabel = new System.Windows.Forms.Label();
+            this._nicknameTextBox = new System.Windows.Forms.TextBox();
+            this._hostNameTextBox = new System.Windows.Forms.TextBox();
+            this._hostNameLabel = new System.Windows.Forms.Label();
+            this._connectButton = new System.Windows.Forms.Button();
+            this._logoLabel = new System.Windows.Forms.Label();
+            this._copyrightLabel = new System.Windows.Forms.Label();
+            this._mainLayoutPanel.SuspendLayout();
+            this._inputLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // mainLayoutPanel
+            // _mainLayoutPanel
             // 
-            this.mainLayoutPanel.BackColor = System.Drawing.Color.Transparent;
-            this.mainLayoutPanel.ColumnCount = 1;
-            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.mainLayoutPanel.Controls.Add(this.inputLayoutPanel, 0, 1);
-            this.mainLayoutPanel.Controls.Add(this.logoLabel, 0, 0);
-            this.mainLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.mainLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.mainLayoutPanel.Name = "mainLayoutPanel";
-            this.mainLayoutPanel.RowCount = 2;
-            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.mainLayoutPanel.Size = new System.Drawing.Size(834, 548);
-            this.mainLayoutPanel.TabIndex = 0;
+            this._mainLayoutPanel.BackColor = System.Drawing.Color.Transparent;
+            this._mainLayoutPanel.ColumnCount = 1;
+            this._mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this._mainLayoutPanel.Controls.Add(this._inputLayoutPanel, 0, 1);
+            this._mainLayoutPanel.Controls.Add(this._logoLabel, 0, 0);
+            this._mainLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._mainLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this._mainLayoutPanel.Margin = new System.Windows.Forms.Padding(4);
+            this._mainLayoutPanel.Name = "_mainLayoutPanel";
+            this._mainLayoutPanel.RowCount = 2;
+            this._mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this._mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this._mainLayoutPanel.Size = new System.Drawing.Size(1668, 1054);
+            this._mainLayoutPanel.TabIndex = 0;
             // 
-            // inputLayoutPanel
+            // _inputLayoutPanel
             // 
-            this.inputLayoutPanel.ColumnCount = 2;
-            this.inputLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.inputLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.inputLayoutPanel.Controls.Add(this.NicknameLabel, 1, 0);
-            this.inputLayoutPanel.Controls.Add(this.NameTextBox, 0, 1);
-            this.inputLayoutPanel.Controls.Add(this.ServerTextBox, 0, 1);
-            this.inputLayoutPanel.Controls.Add(this.ServerAddressLabel, 0, 0);
-            this.inputLayoutPanel.Controls.Add(this.ConnectButton, 0, 2);
-            this.inputLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inputLayoutPanel.Location = new System.Drawing.Point(2, 330);
-            this.inputLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.inputLayoutPanel.Name = "inputLayoutPanel";
-            this.inputLayoutPanel.RowCount = 3;
-            this.inputLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.inputLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.inputLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.inputLayoutPanel.Size = new System.Drawing.Size(830, 216);
-            this.inputLayoutPanel.TabIndex = 0;
+            this._inputLayoutPanel.ColumnCount = 2;
+            this._inputLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this._inputLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this._inputLayoutPanel.Controls.Add(this._nicknameLabel, 1, 0);
+            this._inputLayoutPanel.Controls.Add(this._nicknameTextBox, 0, 1);
+            this._inputLayoutPanel.Controls.Add(this._hostNameTextBox, 0, 1);
+            this._inputLayoutPanel.Controls.Add(this._hostNameLabel, 0, 0);
+            this._inputLayoutPanel.Controls.Add(this._connectButton, 0, 2);
+            this._inputLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._inputLayoutPanel.Location = new System.Drawing.Point(4, 636);
+            this._inputLayoutPanel.Margin = new System.Windows.Forms.Padding(4);
+            this._inputLayoutPanel.Name = "_inputLayoutPanel";
+            this._inputLayoutPanel.RowCount = 3;
+            this._inputLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this._inputLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this._inputLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this._inputLayoutPanel.Size = new System.Drawing.Size(1660, 414);
+            this._inputLayoutPanel.TabIndex = 0;
             // 
-            // NicknameLabel
+            // _nicknameLabel
             // 
-            this.NicknameLabel.AutoSize = true;
-            this.NicknameLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.NicknameLabel.Font = new System.Drawing.Font("OCR A Extended", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NicknameLabel.ForeColor = System.Drawing.Color.White;
-            this.NicknameLabel.Location = new System.Drawing.Point(425, 10);
-            this.NicknameLabel.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
-            this.NicknameLabel.Name = "NicknameLabel";
-            this.NicknameLabel.Size = new System.Drawing.Size(395, 34);
-            this.NicknameLabel.TabIndex = 3;
-            this.NicknameLabel.Text = "Nickname";
-            this.NicknameLabel.UseCompatibleTextRendering = true;
+            this._nicknameLabel.AutoSize = true;
+            this._nicknameLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this._nicknameLabel.Font = new System.Drawing.Font("OCR A Extended", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._nicknameLabel.ForeColor = System.Drawing.Color.White;
+            this._nicknameLabel.Location = new System.Drawing.Point(850, 19);
+            this._nicknameLabel.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
+            this._nicknameLabel.Name = "_nicknameLabel";
+            this._nicknameLabel.Size = new System.Drawing.Size(790, 65);
+            this._nicknameLabel.TabIndex = 3;
+            this._nicknameLabel.Text = "Nickname";
+            this._nicknameLabel.UseCompatibleTextRendering = true;
             // 
-            // NameTextBox
+            // _nicknameTextBox
             // 
-            this.NameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NameTextBox.Font = new System.Drawing.Font("OCR A Extended", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NameTextBox.Location = new System.Drawing.Point(425, 64);
-            this.NameTextBox.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
-            this.NameTextBox.Name = "NameTextBox";
-            this.NameTextBox.Size = new System.Drawing.Size(395, 35);
-            this.NameTextBox.TabIndex = 1;
+            this._nicknameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._nicknameTextBox.Font = new System.Drawing.Font("OCR A Extended", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._nicknameTextBox.Location = new System.Drawing.Point(850, 122);
+            this._nicknameTextBox.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
+            this._nicknameTextBox.Name = "_nicknameTextBox";
+            this._nicknameTextBox.Size = new System.Drawing.Size(790, 63);
+            this._nicknameTextBox.TabIndex = 1;
             // 
-            // ServerTextBox
+            // _hostNameTextBox
             // 
-            this.ServerTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ServerTextBox.Font = new System.Drawing.Font("OCR A Extended", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ServerTextBox.Location = new System.Drawing.Point(10, 64);
-            this.ServerTextBox.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
-            this.ServerTextBox.Name = "ServerTextBox";
-            this.ServerTextBox.Size = new System.Drawing.Size(395, 35);
-            this.ServerTextBox.TabIndex = 0;
+            this._hostNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._hostNameTextBox.Font = new System.Drawing.Font("OCR A Extended", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._hostNameTextBox.Location = new System.Drawing.Point(20, 122);
+            this._hostNameTextBox.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
+            this._hostNameTextBox.Name = "_hostNameTextBox";
+            this._hostNameTextBox.Size = new System.Drawing.Size(790, 63);
+            this._hostNameTextBox.TabIndex = 0;
             // 
-            // ServerAddressLabel
+            // _hostNameLabel
             // 
-            this.ServerAddressLabel.AutoSize = true;
-            this.ServerAddressLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.ServerAddressLabel.Font = new System.Drawing.Font("OCR A Extended", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ServerAddressLabel.ForeColor = System.Drawing.Color.White;
-            this.ServerAddressLabel.Location = new System.Drawing.Point(10, 10);
-            this.ServerAddressLabel.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
-            this.ServerAddressLabel.Name = "ServerAddressLabel";
-            this.ServerAddressLabel.Size = new System.Drawing.Size(395, 34);
-            this.ServerAddressLabel.TabIndex = 2;
-            this.ServerAddressLabel.Text = "Server Address";
-            this.ServerAddressLabel.UseCompatibleTextRendering = true;
+            this._hostNameLabel.AutoSize = true;
+            this._hostNameLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this._hostNameLabel.Font = new System.Drawing.Font("OCR A Extended", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._hostNameLabel.ForeColor = System.Drawing.Color.White;
+            this._hostNameLabel.Location = new System.Drawing.Point(20, 19);
+            this._hostNameLabel.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
+            this._hostNameLabel.Name = "_hostNameLabel";
+            this._hostNameLabel.Size = new System.Drawing.Size(790, 65);
+            this._hostNameLabel.TabIndex = 2;
+            this._hostNameLabel.Text = "Server Address";
+            this._hostNameLabel.UseCompatibleTextRendering = true;
             // 
-            // ConnectButton
+            // _connectButton
             // 
-            this.ConnectButton.AutoSize = true;
-            this.ConnectButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ConnectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.inputLayoutPanel.SetColumnSpan(this.ConnectButton, 2);
-            this.ConnectButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ConnectButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.ConnectButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.ConnectButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.ConnectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ConnectButton.Font = new System.Drawing.Font("OCR A Extended", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConnectButton.ForeColor = System.Drawing.Color.White;
-            this.ConnectButton.Location = new System.Drawing.Point(10, 118);
-            this.ConnectButton.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
-            this.ConnectButton.Name = "ConnectButton";
-            this.ConnectButton.Size = new System.Drawing.Size(810, 88);
-            this.ConnectButton.TabIndex = 4;
-            this.ConnectButton.Text = "Connect";
-            this.ConnectButton.UseCompatibleTextRendering = true;
-            this.ConnectButton.UseVisualStyleBackColor = false;
-            this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
+            this._connectButton.AutoSize = true;
+            this._connectButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this._connectButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._inputLayoutPanel.SetColumnSpan(this._connectButton, 2);
+            this._connectButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._connectButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._connectButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._connectButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this._connectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._connectButton.Font = new System.Drawing.Font("OCR A Extended", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._connectButton.ForeColor = System.Drawing.Color.White;
+            this._connectButton.Location = new System.Drawing.Point(20, 225);
+            this._connectButton.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
+            this._connectButton.Name = "_connectButton";
+            this._connectButton.Size = new System.Drawing.Size(1620, 170);
+            this._connectButton.TabIndex = 4;
+            this._connectButton.Text = "Connect";
+            this._connectButton.UseCompatibleTextRendering = true;
+            this._connectButton.UseVisualStyleBackColor = false;
+            this._connectButton.Click += new System.EventHandler(this.ConnectButton_Click);
             // 
-            // logoLabel
+            // _logoLabel
             // 
-            this.logoLabel.AutoSize = true;
-            this.logoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logoLabel.Font = new System.Drawing.Font("OCR A Extended", 80.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.logoLabel.ForeColor = System.Drawing.Color.White;
-            this.logoLabel.Location = new System.Drawing.Point(2, 0);
-            this.logoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.logoLabel.Name = "logoLabel";
-            this.logoLabel.Size = new System.Drawing.Size(830, 328);
-            this.logoLabel.TabIndex = 1;
-            this.logoLabel.Text = "Space Wars";
-            this.logoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.logoLabel.UseCompatibleTextRendering = true;
+            this._logoLabel.AutoSize = true;
+            this._logoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._logoLabel.Font = new System.Drawing.Font("OCR A Extended", 80.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._logoLabel.ForeColor = System.Drawing.Color.White;
+            this._logoLabel.Location = new System.Drawing.Point(4, 0);
+            this._logoLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this._logoLabel.Name = "_logoLabel";
+            this._logoLabel.Size = new System.Drawing.Size(1660, 632);
+            this._logoLabel.TabIndex = 1;
+            this._logoLabel.Text = "Space Wars";
+            this._logoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this._logoLabel.UseCompatibleTextRendering = true;
             // 
-            // copyrightLabel
+            // _copyrightLabel
             // 
-            this.copyrightLabel.AutoSize = true;
-            this.copyrightLabel.BackColor = System.Drawing.Color.Transparent;
-            this.copyrightLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.copyrightLabel.Font = new System.Drawing.Font("OCR A Extended", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.copyrightLabel.ForeColor = System.Drawing.Color.White;
-            this.copyrightLabel.Location = new System.Drawing.Point(0, 0);
-            this.copyrightLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.copyrightLabel.Name = "copyrightLabel";
-            this.copyrightLabel.Size = new System.Drawing.Size(530, 31);
-            this.copyrightLabel.TabIndex = 2;
-            this.copyrightLabel.Text = "(C) Jiahui Chen and Mitch Talmadge";
-            this.copyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.copyrightLabel.UseCompatibleTextRendering = true;
+            this._copyrightLabel.AutoSize = true;
+            this._copyrightLabel.BackColor = System.Drawing.Color.Transparent;
+            this._copyrightLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._copyrightLabel.Font = new System.Drawing.Font("OCR A Extended", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._copyrightLabel.ForeColor = System.Drawing.Color.White;
+            this._copyrightLabel.Location = new System.Drawing.Point(0, 0);
+            this._copyrightLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this._copyrightLabel.Name = "_copyrightLabel";
+            this._copyrightLabel.Size = new System.Drawing.Size(1060, 59);
+            this._copyrightLabel.TabIndex = 2;
+            this._copyrightLabel.Text = "(C) Jiahui Chen and Mitch Talmadge";
+            this._copyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this._copyrightLabel.UseCompatibleTextRendering = true;
             // 
             // MainMenuForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::SpaceWars.Properties.Resources.space_background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(834, 548);
-            this.Controls.Add(this.copyrightLabel);
-            this.Controls.Add(this.mainLayoutPanel);
+            this.ClientSize = new System.Drawing.Size(1668, 1054);
+            this.Controls.Add(this._copyrightLabel);
+            this.Controls.Add(this._mainLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "MainMenuForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Space Wars";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainMenuForm_FormClosed);
-            this.mainLayoutPanel.ResumeLayout(false);
-            this.mainLayoutPanel.PerformLayout();
-            this.inputLayoutPanel.ResumeLayout(false);
-            this.inputLayoutPanel.PerformLayout();
+            this._mainLayoutPanel.ResumeLayout(false);
+            this._mainLayoutPanel.PerformLayout();
+            this._inputLayoutPanel.ResumeLayout(false);
+            this._inputLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -209,15 +209,15 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel mainLayoutPanel;
-        private System.Windows.Forms.TableLayoutPanel inputLayoutPanel;
-        private System.Windows.Forms.Label NicknameLabel;
-        private System.Windows.Forms.TextBox NameTextBox;
-        private System.Windows.Forms.TextBox ServerTextBox;
-        private System.Windows.Forms.Label ServerAddressLabel;
-        private System.Windows.Forms.Button ConnectButton;
-        private System.Windows.Forms.Label logoLabel;
-        private System.Windows.Forms.Label copyrightLabel;
+        private System.Windows.Forms.TableLayoutPanel _mainLayoutPanel;
+        private System.Windows.Forms.TableLayoutPanel _inputLayoutPanel;
+        private System.Windows.Forms.Label _nicknameLabel;
+        private System.Windows.Forms.TextBox _nicknameTextBox;
+        private System.Windows.Forms.TextBox _hostNameTextBox;
+        private System.Windows.Forms.Label _hostNameLabel;
+        private System.Windows.Forms.Button _connectButton;
+        private System.Windows.Forms.Label _logoLabel;
+        private System.Windows.Forms.Label _copyrightLabel;
     }
 }
 

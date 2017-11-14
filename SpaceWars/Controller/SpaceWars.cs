@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Networking;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace SpaceWars
 {
@@ -140,10 +142,28 @@ namespace SpaceWars
 
                 // Notify the listener that the connection was established and the world is ready.
                 _establishedCallback(this);
+                return;
             }
 
-            //TODO: parse data as json
-            //call custom event when json is parsed successfully
+            // Parse the data as a json object.
+            try
+            {
+                var parsedJson = JObject.Parse(data);
+
+                // Determine the json type.
+                if (parsedJson["ship"] != null)
+                {
+                    var ship = JsonConvert.DeserializeObject<Ship>(data);
+                    _ships[ship.Id] = ship;
+                }
+
+                // Notify event listeners of updated game components.
+                OnGameComponentsUpdated?.Invoke();
+            }
+            catch
+            {
+                // ignored
+            }
 
             // Get new data.
             Networking.Networking.GetData(_socketState);

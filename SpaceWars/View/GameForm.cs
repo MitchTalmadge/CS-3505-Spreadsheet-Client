@@ -50,12 +50,18 @@ namespace SpaceWars
 
             StartMusic();
 
+            // Subscribe to game component changes
             _spaceWars.OnGameComponentsUpdated += () =>
             {
+                // Redraw the game components
                 _worldPanel.DrawGameComponents(GetGameComponentsToDraw());
             };
         }
 
+        /// <summary>
+        /// Retrieves and returns the game components in the order they should be drawn.
+        /// </summary>
+        /// <returns>An IEnumerable containing all the components to draw in the order they should be drawn.</returns>
         private IEnumerable<GameComponent> GetGameComponentsToDraw()
         {
             foreach (var ship in _spaceWars.Ships)

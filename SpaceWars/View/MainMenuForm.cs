@@ -16,6 +16,18 @@ namespace SpaceWars
         /// </summary>
         private Mp3Player _mp3Player;
 
+        /// <summary>
+        /// Determines if we are currently connecting to a server.
+        /// </summary>
+        private bool Connecting
+        {
+            get => _connectButton.Text == Resources.MainMenuForm_ConnectButton_Connecting;
+            set => _connectButton.Text =
+                value
+                    ? Resources.MainMenuForm_ConnectButton_Connecting
+                    : Resources.MainMenuForm_ConnectButton_Default;
+        }
+
         public MainMenuForm()
         {
             InitializeComponent();
@@ -45,13 +57,19 @@ namespace SpaceWars
         /// </summary>
         private void ConnectButton_Click(object sender, EventArgs e)
         {
+            // Make sure we are not connecting to a server.
+            if (Connecting)
+                return;
+
             // Make sure there was entry.
-            if (ServerTextBox.TextLength > 0 && NameTextBox.TextLength > 0)
-            {
-                // Attempt connection
-                SpaceWarsFactory.ConnectToSpaceWars(ServerTextBox.Text, NameTextBox.Text, ConnectionEstablished,
-                    ConnectionFailed);
-            }
+            if (_hostNameTextBox.TextLength == 0 || _nicknameTextBox.TextLength == 0)
+                return;
+
+            // Attempt connection
+            Connecting = true;
+            SpaceWarsFactory.ConnectToSpaceWars(_hostNameTextBox.Text, _nicknameTextBox.Text,
+                ConnectionEstablished,
+                ConnectionFailed);
         }
 
         /// <summary>
@@ -74,11 +92,15 @@ namespace SpaceWars
         /// Displays a warning message dialog.
         /// </summary>
         /// <param name="reason">Why the connection failed.</param>
-        private static void ConnectionFailed(string reason)
+        private void ConnectionFailed(string reason)
         {
-            MessageBox.Show(Resources.MainMenuForm_ConnectionFailed_Prefix + reason,
-                Resources.MainMenuForm_ConnectionFailed_Caption,
-                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            Invoke(new MethodInvoker(() =>
+            {
+                Connecting = false;
+                MessageBox.Show(Resources.MainMenuForm_ConnectionFailed_Prefix + reason,
+                    Resources.MainMenuForm_ConnectionFailed_Caption,
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }));
         }
 
         /// <summary>

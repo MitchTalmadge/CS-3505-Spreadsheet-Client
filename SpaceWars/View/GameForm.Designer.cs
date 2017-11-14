@@ -41,7 +41,7 @@
             this._mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this._mainLayoutPanel.Controls.Add(this._disconnectButton, 0, 1);
             this._mainLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this._mainLayoutPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this._mainLayoutPanel.Margin = new System.Windows.Forms.Padding(6);
             this._mainLayoutPanel.Name = "_mainLayoutPanel";
             this._mainLayoutPanel.RowCount = 2;
             this._mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -83,7 +83,7 @@
             this.ClientSize = new System.Drawing.Size(2142, 1729);
             this.Controls.Add(this._mainLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "GameForm";
             this.ShowIcon = false;
