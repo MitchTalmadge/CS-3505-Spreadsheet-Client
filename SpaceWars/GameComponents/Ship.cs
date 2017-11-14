@@ -34,7 +34,7 @@ namespace SpaceWars
         /// The name of this ship (aka the player's name).
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Determines if the ship is currently thrusting forward.
@@ -47,13 +47,13 @@ namespace SpaceWars
         /// Ranges from 0 to 5, where 5 is full health and 0 is temporarily dead (waiting for respawn).
         /// </summary>
         [JsonProperty("hp")]
-        public int Health { get; }
+        public int Health { get; private set; }
 
         /// <summary>
         /// The score of this ship.
         /// </summary>
         [JsonProperty("score")]
-        public int Score { get; }
+        public int Score { get; private set; }
 
         /// <inheritdoc />
         /// <summary>

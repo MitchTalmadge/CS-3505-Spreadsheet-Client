@@ -5,6 +5,7 @@ using System.Threading;
 using Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace SpaceWars
 {
@@ -132,37 +133,48 @@ namespace SpaceWars
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
+            // Multiple objects may be sent, delimited by newlines.
+            var splitData = data.Split('\n');
+
             // When PlayerId is -1, the first packet containing the player id and world size has not been received.
             if (PlayerId == -1)
             {
                 // Parse the first packet, containing our player id and the world size.
-                var splitData = data.Split('\n');
                 PlayerId = int.Parse(splitData[0]);
                 WorldSize = int.Parse(splitData[1]);
 
                 // Notify the listener that the connection was established and the world is ready.
                 _establishedCallback(this);
-                return;
             }
-
-            // Parse the data as a json object.
-            try
+            else
             {
-                var parsedJson = JObject.Parse(data);
-
-                // Determine the json type.
-                if (parsedJson["ship"] != null)
+                // For each json object
+                foreach (var dataItem in splitData)
                 {
-                    var ship = JsonConvert.DeserializeObject<Ship>(data);
-                    _ships[ship.Id] = ship;
+                    // Ignore empty items
+                    if (dataItem == "")
+                        continue; 
+                    
+                    try
+                    {
+                        // Parse the data as a json object.
+                        var parsedJson = JObject.Parse(dataItem);
+
+                        // Determine the json type.
+                        if (parsedJson["ship"] != null)
+                        {
+                            var ship = JsonConvert.DeserializeObject<Ship>(dataItem);
+                            _ships[ship.Id] = ship;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Print("JSON Parsing Failed: " + e.Message);
+                    }
                 }
 
                 // Notify event listeners of updated game components.
                 OnGameComponentsUpdated?.Invoke();
-            }
-            catch
-            {
-                // ignored
             }
 
             // Get new data.

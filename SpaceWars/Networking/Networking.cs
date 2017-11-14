@@ -118,25 +118,19 @@ namespace Networking
 
             // Convert the raw bytes to a string
             var data = Encoding.UTF8.GetString(state.DataBuffer, 0, numBytes);
+            state.DataStringBuilder.Append(data);
 
             //if there's not a new line/terminating character it receives again
             //and builds to stringbuilder 
             while (data[data.Length-1] != '\n')
             {
-                state.DataStringBuilder.Append(data);
                 GetData(state);
+                return;
             }
-            //when terminating character is received then
-            //call data received on string builder's string and clear stringbuilder
-            state.DataStringBuilder.Append(data);
+
             // calling delegate on socket state containing data
             state.DataReceived(state.DataStringBuilder.ToString());
             state.DataStringBuilder.Clear();
-
-            // Wait for more data from the server. This creates an "event loop".
-            // ReceiveCallback will be invoked every time new data is available on the socket.
-            state.Socket.BeginReceive(state.DataBuffer, 0, state.DataBuffer.Length, SocketFlags.None,
-                ReceiveCallback, state);
         }
 
         /// <summary>
