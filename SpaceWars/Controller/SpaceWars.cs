@@ -80,6 +80,26 @@ namespace SpaceWars
         /// </summary>
         public IEnumerable<Ship> Ships => _ships.Values.ToList().AsReadOnly();
 
+        /// <summary>
+        /// A mapping of each known projectile in the game to that projectile's ID.
+        /// </summary>
+        private readonly Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
+
+        /// <summary>
+        /// All known projectiles in the game.
+        /// </summary>
+        public IEnumerable<Projectile> Projectiles => _projectiles.Values.ToList().AsReadOnly();
+
+        /// <summary>
+        /// A mapping of each known star in the game to that star's ID.
+        /// </summary>
+        private readonly Dictionary<int, Star> _stars = new Dictionary<int, Star>();
+
+        /// <summary>
+        /// All known stars in the game.
+        /// </summary>
+        public IEnumerable<Star> Stars => _stars.Values.ToList().AsReadOnly();
+
         //TODO: Projectiles, etc.
 
         /// <summary>
@@ -185,6 +205,16 @@ namespace SpaceWars
                     {
                         var ship = JsonConvert.DeserializeObject<Ship>(rawJson);
                         _ships[ship.Id] = ship;
+                    }
+                    else if (parsedJson["proj"] != null)
+                    {
+                        var projectile = JsonConvert.DeserializeObject<Projectile>(rawJson);
+                        _projectiles[projectile.Id] = projectile;
+                    }
+                    else if (parsedJson["star"] != null)
+                    {
+                        var star = JsonConvert.DeserializeObject<Star>(rawJson);
+                        _stars[star.Id] = star;
                     }
                 }
                 catch (Exception e)

@@ -69,12 +69,20 @@ namespace SpaceWars
         /// <returns>An IEnumerable containing all the components to draw in the order they should be drawn.</returns>
         private IEnumerable<GameComponent> GetGameComponentsToDraw()
         {
+            foreach (var projectile in _spaceWars.Projectiles)
+            {
+                yield return projectile;
+            }
+
             foreach (var ship in _spaceWars.Ships)
             {
                 yield return ship;
             }
 
-            //TODO: Yield return other things in the order they should be drawn.
+            foreach (var star in _spaceWars.Stars)
+            {
+                yield return star;
+            }
         }
 
         /// <summary>
