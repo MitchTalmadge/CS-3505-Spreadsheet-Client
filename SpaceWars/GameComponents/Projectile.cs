@@ -1,22 +1,17 @@
 ﻿using Newtonsoft.Json;
 using SpaceWars.Properties;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace SpaceWars
 {
-
     /// <inheritdoc />
     /// <summary>
     /// Represents a Projectile.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
-    class Projectile : GameComponent
+    public class Projectile : GameComponent
     {
         /// <summary>
         /// The size of a single projectile in the sprite sheet.
@@ -27,8 +22,10 @@ namespace SpaceWars
         /// <summary>
         /// The Id of this Projectile.
         /// </summary>
-        [JsonProperty("proj")]
-        private int projectileID;
+        [JsonProperty("proj")] private int _projectileId;
+
+        /// <inheritdoc/>
+        public override int Id => _projectileId;
 
         /// <summary>
         /// Indicates whether or not this Projectile is deactivated or not.
@@ -41,7 +38,7 @@ namespace SpaceWars
         /// to draw the projectiles with a different color or image.
         /// </summary>
         [JsonProperty("owner")]
-        public int OwnerShip { get; private set; }
+        public int OwnerShipId { get; private set; }
 
         /// <inheritdoc />
         /// <summary>
@@ -50,14 +47,12 @@ namespace SpaceWars
         /// </summary>
         public override Tuple<Bitmap, Rectangle> GetDrawingDetails()
         {
-            return new Tuple<Bitmap, Rectangle>(Resources.projectile, 
-                new Rectangle(new Point(ProjectileSpriteSize.Width, 0), ProjectileSpriteSize));
-        }
+            // Don't draw if inactive.
+            if (!Active)
+                return null;
 
-        /// <inheritdoc />
-        protected override int GetId()
-        {
-            return projectileID;
+            return new Tuple<Bitmap, Rectangle>(Resources.projectile,
+                new Rectangle(new Point(ProjectileSpriteSize.Width, 0), ProjectileSpriteSize));
         }
     }
 }

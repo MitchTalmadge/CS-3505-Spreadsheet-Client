@@ -16,15 +16,7 @@ namespace SpaceWars
         /// The ID of this game component.
         /// </summary>
         [JsonIgnore]
-        public int Id => GetId();
-
-        /// <summary>
-        /// Determines the ID of this game component.
-        /// Since each component uses a different field for ID, like "ship" for ships, 
-        /// this is used to consolidate all data into an "Id" property.
-        /// </summary>
-        /// <returns>The ID of this game component.</returns>
-        protected abstract int GetId();
+        public abstract int Id { get; }
 
         /// <summary>
         /// The location of this component in world coordinates.

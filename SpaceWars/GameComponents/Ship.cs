@@ -24,11 +24,8 @@ namespace SpaceWars
         [JsonProperty("ship")]
         private int _shipId;
 
-        /// <inheritdoc />
-        protected override int GetId()
-        {
-            return _shipId;
-        }
+        /// <inheritdoc/>
+        public override int Id => _shipId;
 
         /// <summary>
         /// The name of this ship (aka the player's name).

@@ -1,11 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SpaceWars.Properties;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpaceWars
 {
@@ -14,7 +10,7 @@ namespace SpaceWars
     /// Represents a Star.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
-    class Star : GameComponent
+    public class Star : GameComponent
     {
         /// <summary>
         /// The size of a star in the sprite sheet.
@@ -25,25 +21,21 @@ namespace SpaceWars
         /// <summary>
         /// The Id of this Star.
         /// </summary>
-        [JsonProperty("star")]
-        private int starID;
+        [JsonProperty("star")] private int _starId;
+
+        /// <inheritdoc/>
+        public override int Id => _starId;
 
         /// <summary>
         /// Represents this Star's mass.
         /// </summary>
-        [JsonProperty("star")]
-        private int mass;
+        [JsonProperty("mass")] private int _mass;
 
+        /// <inheritdoc/>
         public override Tuple<Bitmap, Rectangle> GetDrawingDetails()
         {
             return new Tuple<Bitmap, Rectangle>(Resources.star,
                 new Rectangle(new Point(StarSpriteSize.Width, 0), StarSpriteSize));
-        }
-
-        /// <inheritdoc />
-        protected override int GetId()
-        {
-            return starID;
         }
     }
 }
