@@ -78,5 +78,11 @@
       <Name>Vector2D</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\star.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MarioStar.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
