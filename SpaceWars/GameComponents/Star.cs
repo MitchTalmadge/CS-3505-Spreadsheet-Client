@@ -29,7 +29,7 @@ namespace SpaceWars
         /// <summary>
         /// Represents this Star's mass.
         /// </summary>
-        [JsonProperty("mass")] private int _mass;
+        [JsonProperty("mass")] private double _mass;
 
         /// <inheritdoc/>
         public override Tuple<Bitmap, Rectangle> GetDrawingDetails()
