@@ -35,13 +35,15 @@ namespace SpaceWars
         public void DrawGameComponents(IEnumerable<GameComponent> gameComponents)
         {
             _gameComponents = gameComponents.ToArray();
+
+            // Invalidate this component for redrawing.
+            Invoke(new MethodInvoker(Refresh));
         }
 
         /// <inheritdoc />
         /// <summary>
         /// Draws the background, border, and individual game components.
         /// </summary>
-        /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
         {
             // Draw background
