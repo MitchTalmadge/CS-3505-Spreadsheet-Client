@@ -243,7 +243,18 @@ namespace SpaceWars
                     else if (parsedJson["proj"] != null)
                     {
                         var projectile = JsonConvert.DeserializeObject<Projectile>(rawJson);
-                        _projectiles[projectile.Id] = projectile;
+                        //removing dead projectiles, only adds projetile to dictionary if it's active
+                        if (!projectile.Active)
+                        {
+                            if (_projectiles.TryGetValue(projectile.Id, out var deadProj))
+                            {
+                                _projectiles.Remove(projectile.Id);
+                            }
+                        }
+                        else
+                        {
+                            _projectiles[projectile.Id] = projectile;
+                        }                     
                     }
                     else if (parsedJson["star"] != null)
                     {
