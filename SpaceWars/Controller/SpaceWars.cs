@@ -150,19 +150,19 @@ namespace SpaceWars
                 return;
 
             string commands = "(";
-            if (indicators[0] == true)
+            if (indicators[0])
             {
                 commands += "T";
             }
-            if (indicators[1] == true)
+            if (indicators[1])
             {
                 commands += "R";
             }
-            if (indicators[2] == true)
+            if (indicators[2])
             {
                 commands += "L";
             }
-            if (indicators[3] == true)
+            if (indicators[3])
             {
                 commands += "F";
             }
@@ -240,7 +240,18 @@ namespace SpaceWars
                     else if (parsedJson["proj"] != null)
                     {
                         var projectile = JsonConvert.DeserializeObject<Projectile>(rawJson);
-                        _projectiles[projectile.Id] = projectile;
+                        //removing dead projectiles, only adds projetile to dictionary if it's active
+                        if (!projectile.Active)
+                        {
+                            if (_projectiles.TryGetValue(projectile.Id, out var deadProj))
+                            {
+                                _projectiles.Remove(projectile.Id);
+                            }
+                        }
+                        else
+                        {
+                            _projectiles[projectile.Id] = projectile;
+                        }                     
                     }
                     else if (parsedJson["star"] != null)
                     {
