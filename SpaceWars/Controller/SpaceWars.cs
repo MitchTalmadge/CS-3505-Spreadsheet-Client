@@ -263,7 +263,7 @@ namespace SpaceWars
                         //removing dead projectiles, only adds projetile to dictionary if it's active
                         if (!projectile.Active)
                         {
-                            if (_projectiles.TryGetValue(projectile.Id, out var deadProj))
+                            if (_projectiles.TryGetValue(projectile.Id, out _))
                             {
                                 _projectiles.Remove(projectile.Id);
                             }

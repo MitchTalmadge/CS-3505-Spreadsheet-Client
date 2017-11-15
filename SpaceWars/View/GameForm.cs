@@ -37,7 +37,7 @@ namespace SpaceWars
         /// The server may sometimes disconnect unexpectedly. 
         /// This keeps track of whether the disconnect was intentional (by the user clicking disconnect or closing the window).
         /// </summary>
-        private bool _disconnectIntended = false;
+        private bool _disconnectIntended;
 
         /// <inheritdoc />
         /// <summary>

@@ -86,7 +86,7 @@ namespace SpaceWars
                 var cropRegion = imageDetails.Item2;
                 var drawSize = imageDetails.Item3;
 
-                //Centering image 
+                // Centering image 
                 var offset = 0 - .5 * drawSize.Width;
                 e.Graphics.DrawImage(image, new Rectangle((int) offset, (int) offset, drawSize.Width, drawSize.Height),
                     cropRegion,
