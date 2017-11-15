@@ -49,6 +49,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Controller\Controller.csproj">
+      <Project>{0E4F88A2-EB10-4E7A-A268-5D888226C3F6}</Project>
+      <Name>Controller</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameComponents\GameComponents.csproj">
       <Project>{8ecbf14a-8ed0-4ed5-ac25-dd4b41e8bac0}</Project>
       <Name>GameComponents</Name>

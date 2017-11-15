@@ -19,14 +19,122 @@ namespace SpaceWars
         private int WorldSize => Size.Height;
 
         /// <summary>
+        /// The space wars client this world is representing.
+        /// </summary>
+        private SpaceWars _spaceWars;
+
+        /// <summary>
         /// The game components to be drawn when this component is painted.
         /// </summary>
         private IEnumerable<GameComponent> _gameComponents = new GameComponent[0];
 
-        public WorldPanel()
+        /// <summary>
+        /// Keeps track of the currently fired controls.
+        /// Index 0: Shoot Projectile
+        /// Index 1: Right Turn
+        /// Index 2: Left Turn
+        /// Index 3: Forward Thrust
+        /// </summary>
+        private readonly bool[] _controls = new bool[4];
+
+        /// <summary>
+        /// The speed at which controls are sent.
+        /// </summary>
+        private const int ControlFps = 60;
+
+        /// <summary>
+        /// The timer that sends control commands to the space wars client.
+        /// </summary>
+        private Timer _controlTimer;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Creates a new WorldPanel.
+        /// </summary>
+        /// <param name="spaceWars">The space wars attached to this panel.</param>
+        public WorldPanel(SpaceWars spaceWars)
         {
+            _spaceWars = spaceWars;
+
             BackColor = Color.Transparent;
             DoubleBuffered = true;
+
+            // Controls
+            InitializeControls();
+        }
+
+        /// <summary>
+        /// Initializes the control handling mechanisms. (Thrust, fire, etc.)
+        /// </summary>
+        private void InitializeControls()
+        {
+            KeyDown += OnKeyDown;
+            KeyUp += OnKeyUp;
+            _controlTimer = new Timer
+            {
+                Interval = 1000 / ControlFps
+            };
+            _controlTimer.Tick += ControlTimerOnTick;
+        }
+
+        /// <summary>
+        /// Called when the control timer ticks, meaning that any enabled controls should be sent to the client.
+        /// </summary>
+        private void ControlTimerOnTick(object sender, EventArgs eventArgs)
+        {
+            
+        }
+
+        /// <summary>
+        /// Called when a key is pushed down.
+        /// Records when controls are enabled.
+        /// </summary>
+        private void OnKeyDown(object sender, KeyEventArgs keyEventArgs)
+        {
+            switch (keyEventArgs.KeyCode)
+            {
+                case Keys.Space:
+                    _controls[0] = true;
+                    break;
+                case Keys.D:
+                case Keys.Right:
+                    _controls[1] = true;
+                    break;
+                case Keys.A:
+                case Keys.Left:
+                    _controls[2] = true;
+                    break;
+                case Keys.W:
+                case Keys.Up:
+                    _controls[3] = true;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Called when a key is released.
+        /// Records when controls are disabled.
+        /// </summary>
+        private void OnKeyUp(object sender, KeyEventArgs keyEventArgs)
+        {
+            switch (keyEventArgs.KeyCode)
+            {
+                case Keys.Space:
+                    _controls[0] = false;
+                    break;
+                case Keys.D:
+                case Keys.Right:
+                    _controls[1] = false;
+                    break;
+                case Keys.A:
+                case Keys.Left:
+                    _controls[2] = false;
+                    break;
+                case Keys.W:
+                case Keys.Up:
+                    _controls[3] = false;
+                    break;
+            }
         }
 
         /// <summary>
@@ -82,7 +190,8 @@ namespace SpaceWars
 
                 //Centering image 
                 var offset = 0 - .5 * drawSize.Width;
-                e.Graphics.DrawImage(image, new Rectangle((int)offset, (int)offset, drawSize.Width, drawSize.Height), cropRegion,
+                e.Graphics.DrawImage(image, new Rectangle((int) offset, (int) offset, drawSize.Width, drawSize.Height),
+                    cropRegion,
                     GraphicsUnit.Pixel);
 
                 // Restore the original transformation of the graphics.

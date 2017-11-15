@@ -20,7 +20,7 @@ namespace SpaceWars
         /// <summary>
         /// The size of the star to be drawn.
         /// </summary>
-        private static readonly Size StarDrawSize = new Size(176, 176);
+        private static readonly Size StarDrawSize = new Size(100, 100);
 
         /// <summary>
         /// The Id of this Star.
