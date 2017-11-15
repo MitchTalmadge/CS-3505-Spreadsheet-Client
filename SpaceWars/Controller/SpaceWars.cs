@@ -25,15 +25,26 @@ namespace SpaceWars
         public delegate void ConnectionEstablished(SpaceWars spaceWars);
 
         /// <summary>
+        /// The provided ConnectionEstablished delegate implementation.
+        /// </summary>
+        private readonly ConnectionEstablished _establishedCallback;
+
+        /// <summary>
         /// This delegate is called when a connection to SpaceWars failed.
         /// </summary>
         /// <param name="reason">Why the connection failed.</param>
         public delegate void ConnectionFailed(string reason);
 
         /// <summary>
-        /// The provided ConnectionEstablished delegate implementation.
+        /// This delegate is called when the connection to the server has been lost.
         /// </summary>
-        private readonly ConnectionEstablished _establishedCallback;
+        public delegate void ConnectionLostListener();
+
+        /// <summary>
+        /// This event is fired when the connection to the server has been lost, 
+        /// whether unexpectedly or by calling the Disconnect method.
+        /// </summary>
+        public event ConnectionLostListener ConnectionLost;
 
         /// <summary>
         /// This delegate handles cases where any game component is updated (a ship, projectile, etc.)
@@ -43,7 +54,7 @@ namespace SpaceWars
         /// <summary>
         /// This event is fired whenever a game component (ship, projectile, etc.) is updated from the server.
         /// </summary>
-        public event GameComponentsListener OnGameComponentsUpdated;
+        public event GameComponentsListener GameComponentsUpdated;
 
         /// <summary>
         /// Socket that the connection is made through.
@@ -187,6 +198,13 @@ namespace SpaceWars
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
+            // Connection is closed.
+            if (data == null)
+            {
+                ConnectionLost?.Invoke();
+                return;
+            }
+
             // We know the first packet has been handled once PlayerId is not -1.
             if (PlayerId == -1)
                 ParseFirstPacket(data);
@@ -194,8 +212,7 @@ namespace SpaceWars
                 ParseJsonPacket(data);
 
             // Get new data.
-            if (_socketState.Connected)
-                Networking.Networking.GetData(_socketState);
+            Networking.Networking.GetData(_socketState);
         }
 
         /// <summary>
@@ -254,7 +271,7 @@ namespace SpaceWars
                         else
                         {
                             _projectiles[projectile.Id] = projectile;
-                        }                     
+                        }
                     }
                     else if (parsedJson["star"] != null)
                     {
@@ -269,7 +286,7 @@ namespace SpaceWars
             }
 
             // Notify event listeners of updated game components.
-            OnGameComponentsUpdated?.Invoke();
+            GameComponentsUpdated?.Invoke();
         }
     }
 }

@@ -33,6 +33,12 @@ namespace SpaceWars
         /// </summary>
         private Mp3Player _mp3Player;
 
+        /// <summary>
+        /// The server may sometimes disconnect unexpectedly. 
+        /// This keeps track of whether the disconnect was intentional (by the user clicking disconnect or closing the window).
+        /// </summary>
+        private bool _disconnectIntended = false;
+
         /// <inheritdoc />
         /// <summary>
         /// Creates a new Game Form that is based on the given Space Wars instance.
@@ -53,8 +59,11 @@ namespace SpaceWars
 
             StartMusic();
 
-            // Subscribe to game component changes
-            _spaceWars.OnGameComponentsUpdated += OnGameComponentsUpdated;
+            // Subscribe to game component changes.
+            _spaceWars.GameComponentsUpdated += OnGameComponentsUpdated;
+
+            // Subscribe to connection lost event.
+            _spaceWars.ConnectionLost += OnConnectionLost;
         }
 
         /// <summary>
@@ -152,7 +161,7 @@ namespace SpaceWars
         /// </summary>
         private void GameForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            OpenMainMenu();
+            Disconnect();
         }
 
         /// <summary>
@@ -160,7 +169,38 @@ namespace SpaceWars
         /// </summary>
         private void DisconnectButton_Click(object sender, EventArgs e)
         {
-            OpenMainMenu();
+            Disconnect();
+        }
+
+        /// <summary>
+        /// Disconnects from the server.
+        /// </summary>
+        /// <see cref="OnConnectionLost"/>
+        private void Disconnect()
+        {
+            _disconnectIntended = true;
+            _spaceWars.Disconnect();
+        }
+
+        /// <summary>
+        /// Opens the main menu when the connection to the server has been lost.
+        /// </summary>
+        /// <see cref="OpenMainMenu"/>
+        private void OnConnectionLost()
+        {
+            Invoke(new MethodInvoker(() =>
+            {
+                OpenMainMenu();
+
+                // Show a warning dialog that the connection was lost, with a different message depending on if disconnecting was intentional.
+                MessageBox.Show(
+                    _disconnectIntended
+                        ? Resources.GameForm_ConnectionLost_Intended
+                        : Resources.GameForm_ConnectionLost_Unexpected,
+                    Resources.GameForm_ConnectionLost_Caption,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+            }));
         }
 
         /// <summary>
@@ -168,10 +208,6 @@ namespace SpaceWars
         /// </summary>
         private void OpenMainMenu()
         {
-            // Disconnect and unsubscribe
-            _spaceWars.OnGameComponentsUpdated -= OnGameComponentsUpdated;
-            _spaceWars.Disconnect();
-
             StopMusic();
 
             new MainMenuForm().Show();

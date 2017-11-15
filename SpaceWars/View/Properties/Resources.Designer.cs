@@ -71,6 +71,33 @@ namespace SpaceWars.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disconnected.
+        /// </summary>
+        internal static string GameForm_ConnectionLost_Caption {
+            get {
+                return ResourceManager.GetString("GameForm_ConnectionLost_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have disconnected from the server..
+        /// </summary>
+        internal static string GameForm_ConnectionLost_Intended {
+            get {
+                return ResourceManager.GetString("GameForm_ConnectionLost_Intended", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The connection was unexpectedly lost!.
+        /// </summary>
+        internal static string GameForm_ConnectionLost_Unexpected {
+            get {
+                return ResourceManager.GetString("GameForm_ConnectionLost_Unexpected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] main_menu_music {

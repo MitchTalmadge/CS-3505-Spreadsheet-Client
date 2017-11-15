@@ -143,4 +143,16 @@
     <value>Connect</value>
     <comment>The default text of the connect button.</comment>
   </data>
+  <data name="GameForm_ConnectionLost_Caption" xml:space="preserve">
+    <value>Disconnected</value>
+    <comment>The caption of the connection lost dialog.</comment>
+  </data>
+  <data name="GameForm_ConnectionLost_Intended" xml:space="preserve">
+    <value>You have disconnected from the server.</value>
+    <comment>The message to display when disconnecting was intentional.</comment>
+  </data>
+  <data name="GameForm_ConnectionLost_Unexpected" xml:space="preserve">
+    <value>The connection was unexpectedly lost!</value>
+    <comment>The message to display when disconnecting was unexpected.</comment>
+  </data>
 </root>
