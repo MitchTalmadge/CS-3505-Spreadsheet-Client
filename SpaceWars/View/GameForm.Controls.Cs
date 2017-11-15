@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace SpaceWars
 {
@@ -22,7 +21,7 @@ namespace SpaceWars
         /// <summary>
         /// The speed at which controls are sent.
         /// </summary>
-        private const int ControlFps = 60;
+        private const int ControlFps = 120;
 
         /// <summary>
         /// The timer that sends control commands to the space wars client.
