@@ -146,7 +146,24 @@ namespace SpaceWars
         /// <param name="indicators"></param>
         public void SendCommand(bool[] indicators)
         {
-
+            string commands = "(";
+            if (indicators[0] == true)
+            {
+                commands += "T";
+            }
+            if (indicators[1] == true)
+            {
+                commands += "R";
+            }
+            if (indicators[2] == true)
+            {
+                commands += "L";
+            }
+            if (indicators[3] == true)
+            {
+                commands += "F";
+            }
+            Networking.Networking.Send(_socketState, commands + "\n");
         }
 
         /// <summary>
