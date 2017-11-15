@@ -162,6 +162,10 @@ namespace Networking
             // Put the remaining data into the string builder for next time.
             state.DataStringBuilder.Append(data.Substring(data.LastIndexOf('\n') + 1));
 
+            // Don't do anything if the socket is disconnected (race condition).
+            if (!state.Socket.Connected)
+                return;
+
             // Notify the callback.
             state.DataReceived(completeData);
         }
