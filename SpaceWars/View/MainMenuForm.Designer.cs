@@ -144,7 +144,7 @@
             this._connectButton.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
             this._connectButton.Name = "_connectButton";
             this._connectButton.Size = new System.Drawing.Size(1620, 170);
-            this._connectButton.TabIndex = 4;
+            this._connectButton.TabIndex = 2;
             this._connectButton.Text = "Connect";
             this._connectButton.UseCompatibleTextRendering = true;
             this._connectButton.UseVisualStyleBackColor = false;
@@ -191,6 +191,7 @@
             this.Controls.Add(this._copyrightLabel);
             this.Controls.Add(this._mainLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "MainMenuForm";
@@ -198,6 +199,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Space Wars";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainMenuForm_FormClosed);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainMenuForm_KeyDown);
             this._mainLayoutPanel.ResumeLayout(false);
             this._mainLayoutPanel.PerformLayout();
             this._inputLayoutPanel.ResumeLayout(false);

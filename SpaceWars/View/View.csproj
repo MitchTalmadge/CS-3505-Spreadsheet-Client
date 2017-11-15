@@ -50,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameForm.Controls.cs">
+    <Compile Include="GameForm.ControlManager.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GameForm.cs">

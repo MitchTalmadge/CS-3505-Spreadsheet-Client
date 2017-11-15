@@ -57,6 +57,11 @@ namespace SpaceWars
         /// </summary>
         private void ConnectButton_Click(object sender, EventArgs e)
         {
+            Connect();
+        }
+
+        private void Connect()
+        {
             // Make sure we are not connecting to a server.
             if (Connecting)
                 return;
@@ -109,6 +114,16 @@ namespace SpaceWars
         private void MainMenuForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             SpaceWarsApplicationContext.Instance.ExitThread();
+        }
+
+        /// <summary>
+        /// Called when a key is pressed down.
+        /// Tries to connect when the enter key is pressed.
+        /// </summary>
+        private void MainMenuForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                Connect();
         }
     }
 }

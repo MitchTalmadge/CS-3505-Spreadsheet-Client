@@ -21,7 +21,7 @@ namespace SpaceWars
         /// <summary>
         /// The speed at which controls are sent.
         /// </summary>
-        private const int ControlFps = 120;
+        private const int ControlFps = 200;
 
         /// <summary>
         /// The timer that sends control commands to the space wars client.

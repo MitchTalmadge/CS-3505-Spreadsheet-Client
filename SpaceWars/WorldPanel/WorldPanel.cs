@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -34,7 +33,6 @@ namespace SpaceWars
             Size = new Size(spaceWars.WorldSize, spaceWars.WorldSize);
             BackColor = Color.Transparent;
             DoubleBuffered = true;
-
         }
 
         /// <summary>
