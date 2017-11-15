@@ -1,0 +1,107 @@
+﻿using System.Diagnostics;
+using System.Windows.Forms;
+
+namespace SpaceWars
+{
+    /// <inheritdoc />
+    /// <summary>
+    /// Deals with the controls portion of the game form.
+    /// </summary>
+    /// <authors>Jiahui Chen, Mitch Talmadge</authors>
+    public partial class GameForm
+    {
+        /// <summary>
+        /// Keeps track of the currently fired controls.
+        /// Index 0: Shoot Projectile
+        /// Index 1: Right Turn
+        /// Index 2: Left Turn
+        /// Index 3: Forward Thrust
+        /// </summary>
+        private readonly bool[] _controls = new bool[4];
+
+        /// <summary>
+        /// The speed at which controls are sent.
+        /// </summary>
+        private const int ControlFps = 60;
+
+        /// <summary>
+        /// The timer that sends control commands to the space wars client.
+        /// </summary>
+        private Timer _controlTimer;
+
+        /// <summary>
+        /// Initializes the control handling mechanisms. (Thrust, fire, etc.)
+        /// </summary>
+        private void InitializeControls()
+        {
+            // Register key listeners
+            KeyDown += OnKeyDown;
+            KeyUp += OnKeyUp;
+
+            // Create a timer that sends controls on an interval.
+            _controlTimer = new Timer
+            {
+                Interval = 1000 / ControlFps
+            };
+            _controlTimer.Tick += (sender, args) => _spaceWars.SendCommand(_controls);
+
+            // Stop timer when this component disposes.
+            Disposed += (sender, args) => _controlTimer.Stop();
+
+            // Start the control timer.
+            _controlTimer.Start();
+        }
+
+        /// <summary>
+        /// Called when a key is pushed down.
+        /// Records when controls are enabled.
+        /// </summary>
+        private void OnKeyDown(object sender, KeyEventArgs keyEventArgs)
+        {
+            switch (keyEventArgs.KeyCode)
+            {
+                case Keys.Space:
+                    _controls[0] = true;
+                    break;
+                case Keys.D:
+                case Keys.Right:
+                    _controls[1] = true;
+                    break;
+                case Keys.A:
+                case Keys.Left:
+                    _controls[2] = true;
+                    break;
+                case Keys.W:
+                case Keys.Up:
+                    _controls[3] = true;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Called when a key is released.
+        /// Records when controls are disabled.
+        /// </summary>
+        private void OnKeyUp(object sender, KeyEventArgs keyEventArgs)
+        {
+            switch (keyEventArgs.KeyCode)
+            {
+                case Keys.Space:
+                    _controls[0] = false;
+                    break;
+                case Keys.D:
+                case Keys.Right:
+                    _controls[1] = false;
+                    break;
+                case Keys.A:
+                case Keys.Left:
+                    _controls[2] = false;
+                    break;
+                case Keys.W:
+                case Keys.Up:
+                    _controls[3] = false;
+                    break;
+            }
+        }
+    }
+}

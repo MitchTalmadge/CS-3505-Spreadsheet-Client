@@ -48,6 +48,9 @@ namespace SpaceWars
 
             CreateScoreboardPanel();
 
+            // Controls
+            InitializeControls();
+
             StartMusic();
 
             // Subscribe to game component changes
@@ -93,11 +96,10 @@ namespace SpaceWars
         /// </summary>
         private void CreateWorldPanel()
         {
-            _worldPanel = new WorldPanel
+            _worldPanel = new WorldPanel(_spaceWars)
             {
                 Margin = new Padding(10),
                 Location = new Point(10, 10),
-                Size = new Size(_spaceWars.WorldSize, _spaceWars.WorldSize),
                 Parent = _mainLayoutPanel
             };
 
