@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameForm));
             this._mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this._disconnectButton = new System.Windows.Forms.Button();
             this._mainLayoutPanel.SuspendLayout();
@@ -41,12 +42,11 @@
             this._mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this._mainLayoutPanel.Controls.Add(this._disconnectButton, 0, 1);
             this._mainLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this._mainLayoutPanel.Margin = new System.Windows.Forms.Padding(6);
             this._mainLayoutPanel.Name = "_mainLayoutPanel";
             this._mainLayoutPanel.RowCount = 2;
             this._mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this._mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this._mainLayoutPanel.Size = new System.Drawing.Size(2124, 1715);
+            this._mainLayoutPanel.Size = new System.Drawing.Size(1062, 892);
             this._mainLayoutPanel.TabIndex = 0;
             // 
             // _disconnectButton
@@ -60,12 +60,12 @@
             this._disconnectButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._disconnectButton.Font = new System.Drawing.Font("OCR A Extended", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._disconnectButton.ForeColor = System.Drawing.Color.White;
-            this._disconnectButton.Location = new System.Drawing.Point(20, 1496);
-            this._disconnectButton.Margin = new System.Windows.Forms.Padding(20, 19, 20, 19);
-            this._disconnectButton.MaximumSize = new System.Drawing.Size(0, 200);
-            this._disconnectButton.MinimumSize = new System.Drawing.Size(0, 200);
+            this._disconnectButton.Location = new System.Drawing.Point(10, 778);
+            this._disconnectButton.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this._disconnectButton.MaximumSize = new System.Drawing.Size(0, 104);
+            this._disconnectButton.MinimumSize = new System.Drawing.Size(0, 104);
             this._disconnectButton.Name = "_disconnectButton";
-            this._disconnectButton.Size = new System.Drawing.Size(2084, 200);
+            this._disconnectButton.Size = new System.Drawing.Size(1042, 104);
             this._disconnectButton.TabIndex = 0;
             this._disconnectButton.TabStop = false;
             this._disconnectButton.Text = "Disconnect";
@@ -75,20 +75,20 @@
             // 
             // GameForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackgroundImage = global::SpaceWars.Properties.Resources.space_background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.ClientSize = new System.Drawing.Size(2142, 1729);
+            this.ClientSize = new System.Drawing.Size(1071, 543);
             this.Controls.Add(this._mainLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.Name = "GameForm";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Space Wars";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GameForm_FormClosed);
