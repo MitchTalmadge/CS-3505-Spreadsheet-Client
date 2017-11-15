@@ -12,10 +12,10 @@ namespace SpaceWars
     {
         /// <summary>
         /// Keeps track of the currently fired controls.
-        /// Index 0: Shoot Projectile
+        /// Index 0: Forward Thrust
         /// Index 1: Right Turn
         /// Index 2: Left Turn
-        /// Index 3: Forward Thrust
+        /// Index 3: Fire Projectile
         /// </summary>
         private readonly bool[] _controls = new bool[4];
 
@@ -60,7 +60,8 @@ namespace SpaceWars
         {
             switch (keyEventArgs.KeyCode)
             {
-                case Keys.Space:
+                case Keys.W:
+                case Keys.Up:
                     _controls[0] = true;
                     break;
                 case Keys.D:
@@ -71,8 +72,7 @@ namespace SpaceWars
                 case Keys.Left:
                     _controls[2] = true;
                     break;
-                case Keys.W:
-                case Keys.Up:
+                case Keys.Space:
                     _controls[3] = true;
                     break;
             }
@@ -86,7 +86,8 @@ namespace SpaceWars
         {
             switch (keyEventArgs.KeyCode)
             {
-                case Keys.Space:
+                case Keys.W:
+                case Keys.Up:
                     _controls[0] = false;
                     break;
                 case Keys.D:
@@ -97,8 +98,7 @@ namespace SpaceWars
                 case Keys.Left:
                     _controls[2] = false;
                     break;
-                case Keys.W:
-                case Keys.Up:
+                case Keys.Space:
                     _controls[3] = false;
                     break;
             }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics;
 
 namespace SpaceWars
 {
@@ -149,24 +150,26 @@ namespace SpaceWars
             if (!indicators[0] && !indicators[1] && !indicators[2] && !indicators[3])
                 return;
 
-            string commands = "(";
-            if (indicators[0] == true)
+            var commandBuilder = new StringBuilder("(");
+            if (indicators[0])
             {
-                commands += "T";
+                commandBuilder.Append('T');
             }
-            if (indicators[1] == true)
+            if (indicators[1])
             {
-                commands += "R";
+                commandBuilder.Append('R');
             }
-            if (indicators[2] == true)
+            if (indicators[2])
             {
-                commands += "L";
+                commandBuilder.Append('L');
             }
-            if (indicators[3] == true)
+            if (indicators[3])
             {
-                commands += "F";
+                commandBuilder.Append('F');
             }
-            Networking.Networking.Send(_socketState, commands + ")\n");
+            commandBuilder.Append(')');
+
+            Networking.Networking.Send(_socketState, commandBuilder + "\n");
         }
 
         /// <summary>

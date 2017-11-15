@@ -66,7 +66,8 @@
             this._disconnectButton.MinimumSize = new System.Drawing.Size(0, 200);
             this._disconnectButton.Name = "_disconnectButton";
             this._disconnectButton.Size = new System.Drawing.Size(2084, 200);
-            this._disconnectButton.TabIndex = 5;
+            this._disconnectButton.TabIndex = 0;
+            this._disconnectButton.TabStop = false;
             this._disconnectButton.Text = "Disconnect";
             this._disconnectButton.UseCompatibleTextRendering = true;
             this._disconnectButton.UseVisualStyleBackColor = false;

@@ -57,7 +57,7 @@ namespace SpaceWars
 
             return new Tuple<Bitmap, Rectangle, Size>(
                 Resources.projectile,
-                new Rectangle(new Point(ProjectileSpriteSize.Width, 0), ProjectileSpriteSize),
+                new Rectangle(new Point(0, 0), ProjectileSpriteSize),
                 ProjectileDrawSize);
         }
     }
