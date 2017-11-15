@@ -19,6 +19,11 @@ namespace SpaceWars
         private static readonly Size ShipSpriteSize = new Size(36, 44);
 
         /// <summary>
+        /// The size to draw the ship.
+        /// </summary>
+        private static readonly Size ShipDrawSize = new Size(36, 44);
+
+        /// <summary>
         /// The Id of this ship.
         /// </summary>
         [JsonProperty("ship")]
@@ -57,7 +62,7 @@ namespace SpaceWars
         /// The ship to be drawn is based on the ID. A ship with ID 0 is red, ID 1 is orange, etc. until ID 8 which is red again.
         /// Thrusting ships have a different image that includes exhaust.
         /// </summary>
-        public override Tuple<Bitmap, Rectangle> GetDrawingDetails()
+        public override Tuple<Bitmap, Rectangle, Size> GetDrawingDetails()
         {
             // Do not draw if the health is 0.
             if (Health == 0)
@@ -72,7 +77,10 @@ namespace SpaceWars
             if (_thrusting)
                 spriteStartPoint.Y = ShipSpriteSize.Height;
 
-            return new Tuple<Bitmap, Rectangle>(Resources.ships, new Rectangle(spriteStartPoint, ShipSpriteSize));
+            return new Tuple<Bitmap, Rectangle, Size>(
+                Resources.ships, 
+                new Rectangle(spriteStartPoint, ShipSpriteSize), 
+                ShipDrawSize);
         }
     }
 }

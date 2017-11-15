@@ -33,7 +33,7 @@ namespace SpaceWars
         /// <summary>
         /// Gives details for which image should be drawn, and how it should be cropped.
         /// </summary>
-        /// <returns>A tuple containing the image bitmap and a rectangle determining where the image should be cropped.</returns>
-        public abstract Tuple<Bitmap, Rectangle> GetDrawingDetails();
+        /// <returns>A tuple containing the image bitmap and a rectangle determining where the image should be cropped, and a size for its scale.</returns>
+        public abstract Tuple<Bitmap, Rectangle, Size> GetDrawingDetails();
     }
 }

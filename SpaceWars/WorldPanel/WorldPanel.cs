@@ -78,9 +78,11 @@ namespace SpaceWars
                 // Draw the component at (0, 0)
                 var image = imageDetails.Item1;
                 var cropRegion = imageDetails.Item2;
+                var drawSize = imageDetails.Item3;
+
                 //Centering image 
-                var offset = 0 - .5 * cropRegion.Width;
-                e.Graphics.DrawImage(image, new Rectangle((int)offset, (int)offset, cropRegion.Width, cropRegion.Height), cropRegion,
+                var offset = 0 - .5 * drawSize.Width;
+                e.Graphics.DrawImage(image, new Rectangle((int)offset, (int)offset, drawSize.Width, drawSize.Height), cropRegion,
                     GraphicsUnit.Pixel);
 
                 // Restore the original transformation of the graphics.

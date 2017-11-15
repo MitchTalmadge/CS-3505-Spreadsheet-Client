@@ -15,9 +15,13 @@ namespace SpaceWars
     {
         /// <summary>
         /// The size of a single projectile in the sprite sheet.
-        /// A fourth of the size of a ship.
         /// </summary>
-        private static readonly Size ProjectileSpriteSize = new Size(9, 11);
+        private static readonly Size ProjectileSpriteSize = new Size(64,64);
+
+        /// <summary>
+        /// The size to draw a projectile.
+        /// </summary>
+        private static readonly Size ProjectileDrawSize = new Size(11, 11);
 
         /// <summary>
         /// The Id of this Projectile.
@@ -45,14 +49,16 @@ namespace SpaceWars
         /// There are 2 sprites for projectiles to be drawn, one frame is the projectile
         /// "exploding" and the other is just a regular projectile.
         /// </summary>
-        public override Tuple<Bitmap, Rectangle> GetDrawingDetails()
+        public override Tuple<Bitmap, Rectangle, Size> GetDrawingDetails()
         {
             // Don't draw if inactive.
             if (!Active)
                 return null;
 
-            return new Tuple<Bitmap, Rectangle>(Resources.projectile,
-                new Rectangle(new Point(ProjectileSpriteSize.Width, 0), ProjectileSpriteSize));
+            return new Tuple<Bitmap, Rectangle, Size>(
+                Resources.projectile,
+                new Rectangle(new Point(ProjectileSpriteSize.Width, 0), ProjectileSpriteSize),
+                ProjectileDrawSize);
         }
     }
 }

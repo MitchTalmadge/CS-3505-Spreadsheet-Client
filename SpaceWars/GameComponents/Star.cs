@@ -14,9 +14,13 @@ namespace SpaceWars
     {
         /// <summary>
         /// The size of a star in the sprite sheet.
-        /// Four times the size of a ship.
         /// </summary>
         private static readonly Size StarSpriteSize = new Size(256, 256);
+
+        /// <summary>
+        /// The size of the star to be drawn.
+        /// </summary>
+        private static readonly Size StarDrawSize = new Size(176, 176);
 
         /// <summary>
         /// The Id of this Star.
@@ -32,10 +36,12 @@ namespace SpaceWars
         [JsonProperty("mass")] private double _mass;
 
         /// <inheritdoc/>
-        public override Tuple<Bitmap, Rectangle> GetDrawingDetails()
+        public override Tuple<Bitmap, Rectangle, Size> GetDrawingDetails()
         {
-            return new Tuple<Bitmap, Rectangle>(Resources.star,
-                new Rectangle(new Point(0,0), StarSpriteSize));
+            return new Tuple<Bitmap, Rectangle, Size>(
+                Resources.star,
+                new Rectangle(new Point(0,0), StarSpriteSize), 
+                StarDrawSize);
         }
     }
 }
