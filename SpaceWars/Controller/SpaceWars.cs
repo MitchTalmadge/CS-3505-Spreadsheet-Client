@@ -100,8 +100,6 @@ namespace SpaceWars
         /// </summary>
         public IEnumerable<Star> Stars => _stars.Values.ToList().AsReadOnly();
 
-        //TODO: Projectiles, etc.
-
         /// <summary>
         /// Creates a new SpaceWars instance that has not been connected.
         /// Attempts to establish a connection to the given game server, using the given nickname.
@@ -136,6 +134,39 @@ namespace SpaceWars
                 reason => failed(reason),
                 DataReceived
             );
+        }
+
+        /// <summary>
+        /// Receives boolean array of indicators of user input-movement for ships. Index 0
+        /// is the forward indicator, index 1 is the right indicator, index 2 is the left 
+        /// indicator, and index 3 is the firing indicator. 
+        /// Ships can move forward, left, right, and fire projectiles. 
+        /// Action instructions are sent to the Server through this method.
+        /// </summary>
+        /// <param name="indicators"></param>
+        public void SendCommand(bool[] indicators)
+        {
+            if (!indicators[0] && !indicators[1] && !indicators[2] && !indicators[3])
+                return;
+
+            string commands = "(";
+            if (indicators[0] == true)
+            {
+                commands += "T";
+            }
+            if (indicators[1] == true)
+            {
+                commands += "R";
+            }
+            if (indicators[2] == true)
+            {
+                commands += "L";
+            }
+            if (indicators[3] == true)
+            {
+                commands += "F";
+            }
+            Networking.Networking.Send(_socketState, commands + ")\n");
         }
 
         /// <summary>
