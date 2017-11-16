@@ -42,6 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="ScoreboardPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -52,6 +57,16 @@
       <Project>{0E4F88A2-EB10-4E7A-A268-5D888226C3F6}</Project>
       <Name>Controller</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameComponents\GameComponents.csproj">
+      <Project>{8ECBF14A-8ED0-4ED5-AC25-DD4B41E8BAC0}</Project>
+      <Name>GameComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

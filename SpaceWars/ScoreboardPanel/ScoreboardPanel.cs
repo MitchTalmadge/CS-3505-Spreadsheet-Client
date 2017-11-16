@@ -1,11 +1,13 @@
-﻿using System.CodeDom;
+﻿using System;
+using System.CodeDom;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using SpaceWars.Properties;
 
 namespace SpaceWars
 {
-
     /// <inheritdoc />
     /// <summary>
     /// The panel used for drawing the scores of players.
@@ -17,6 +19,11 @@ namespace SpaceWars
         /// The SpaceWars client containing scores.
         /// </summary>
         private readonly SpaceWars _spaceWars;
+
+        /// <summary>
+        /// An array of ships, sorted by their scores.
+        /// </summary>
+        private IEnumerable<Ship> _shipsSortedByScore = new Ship[0];
 
         /// <summary>
         /// The pen used when drawing the border.
@@ -34,10 +41,20 @@ namespace SpaceWars
         public ScoreboardPanel(SpaceWars spaceWars)
         {
             _spaceWars = spaceWars;
+            _spaceWars.GameComponentsUpdated += OnGameComponentsUpdated;
 
             BackColor = Color.FromArgb(80, 255, 255, 255);
 
             CreateHeader();
+        }
+
+        /// <summary>
+        /// Updates scores every time game components are updated.
+        /// </summary>
+        private void OnGameComponentsUpdated()
+        {
+            //TODO: Sort all ships by their score, highest score at top
+            //TODO: Store the sorted ships in _shipsSortedByScore.
         }
 
         /// <summary>
@@ -48,7 +65,7 @@ namespace SpaceWars
             // ReSharper disable once ObjectCreationAsStatement
             new Label
             {
-                Text = "Scoreboard",
+                Text = Resources.Scoreboard_Header,
                 Font = new Font(new FontFamily("OCR A Extended"), 20, FontStyle.Underline),
                 BackColor = Color.Transparent,
                 ForeColor = Color.White,
@@ -58,6 +75,10 @@ namespace SpaceWars
             };
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Draws all ship stats.
+        /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
             // Draw background
@@ -66,7 +87,25 @@ namespace SpaceWars
 
             // Draw border
             e.Graphics.DrawRectangle(BorderPen, 0, 0, ClientSize.Width - 1, ClientSize.Height - 1);
+
+            // Draw stats.
+            var offset = 0;
+            foreach (var ship in _shipsSortedByScore)
+            {
+                DrawShipStats(ship, offset, e.Graphics);
+                offset++;
+            }
         }
 
+        /// <summary>
+        /// Draws a ship's statistics (score, health, name).
+        /// </summary>
+        /// <param name="ship">The ship whose stats should be drawn.</param>
+        /// <param name="offset">The number of ships that this ship is offset. For example, the second ship would be offset = 1.</param>
+        /// <param name="graphics">The graphics object to draw with.</param>
+        private void DrawShipStats(Ship ship, int offset, Graphics graphics)
+        {
+            //TODO: Draw name, score, and healthbar. Use offset to determine how far down to start drawing.
+        }
     }
 }

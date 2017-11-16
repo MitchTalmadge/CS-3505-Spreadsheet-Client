@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace SpaceWars
@@ -16,7 +15,7 @@ namespace SpaceWars
         /// <summary>
         /// The SpaceWars client for which this panel is drawing the world.
         /// </summary>
-        private SpaceWars _spaceWars;
+        private readonly SpaceWars _spaceWars;
 
         /// <summary>
         /// These multipliers account for differences in world size versus screen size.
