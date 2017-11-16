@@ -136,6 +136,7 @@ namespace SpaceWars
             _disconnectButton.MinimumSize = new Size(_worldPanel.Width + _scoreboardPanel.Width + 10, 80);
             _disconnectButton.Margin = new Padding(10);
             _disconnectButton.Location = new Point(10, _worldPanel.Height + 20);
+            _disconnectButton.GotFocus += (sender, args) => _worldPanel.Focus();
         }
 
         /// <summary>
