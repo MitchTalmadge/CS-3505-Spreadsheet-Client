@@ -18,6 +18,11 @@ namespace SpaceWars
         private static readonly Size StarSpriteSize = new Size(256, 256);
 
         /// <summary>
+        /// The size of a star's crop region.
+        /// </summary>
+        private static readonly Size StarCropSize = new Size(StarSpriteSize.Width - 1, StarSpriteSize.Height - 1);
+
+        /// <summary>
         /// The size of the star to be drawn.
         /// </summary>
         private static readonly Size StarDrawSize = new Size(100, 100);
@@ -40,7 +45,7 @@ namespace SpaceWars
         {
             return new Tuple<Bitmap, Rectangle, Size>(
                 Resources.star,
-                new Rectangle(new Point(0,0), StarSpriteSize), 
+                new Rectangle(new Point(0,0), StarCropSize), 
                 StarDrawSize);
         }
     }

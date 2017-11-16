@@ -19,6 +19,11 @@ namespace SpaceWars
         private static readonly Size ProjectileSpriteSize = new Size(64,64);
 
         /// <summary>
+        /// The size of a projectile's crop region.
+        /// </summary>
+        private static readonly Size ProjectileCropSize = new Size(ProjectileSpriteSize.Width - 1, ProjectileSpriteSize.Height - 1);
+
+        /// <summary>
         /// The size to draw a projectile.
         /// </summary>
         private static readonly Size ProjectileDrawSize = new Size(11, 11);
@@ -57,7 +62,7 @@ namespace SpaceWars
 
             return new Tuple<Bitmap, Rectangle, Size>(
                 Resources.projectile,
-                new Rectangle(new Point(0, 0), ProjectileSpriteSize),
+                new Rectangle(new Point(0, 0), ProjectileCropSize),
                 ProjectileDrawSize);
         }
     }

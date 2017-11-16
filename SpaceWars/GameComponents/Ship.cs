@@ -19,6 +19,11 @@ namespace SpaceWars
         private static readonly Size ShipSpriteSize = new Size(36, 44);
 
         /// <summary>
+        /// The size of a ship's crop region.
+        /// </summary>
+        private static readonly Size ShipCropSize = new Size(ShipSpriteSize.Width - 1, ShipSpriteSize.Height - 1);
+
+        /// <summary>
         /// The size to draw the ship.
         /// </summary>
         private static readonly Size ShipDrawSize = new Size(36, 44);
@@ -79,7 +84,7 @@ namespace SpaceWars
 
             return new Tuple<Bitmap, Rectangle, Size>(
                 Resources.ships, 
-                new Rectangle(spriteStartPoint, ShipSpriteSize), 
+                new Rectangle(spriteStartPoint, ShipCropSize), 
                 ShipDrawSize);
         }
     }
