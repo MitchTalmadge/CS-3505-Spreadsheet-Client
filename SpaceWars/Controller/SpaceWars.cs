@@ -90,7 +90,7 @@ namespace SpaceWars
         /// <summary>
         /// All known ships in the game.
         /// </summary>
-        public IEnumerable<Ship> Ships => _ships.Values.ToList().AsReadOnly();
+        public Ship[] Ships => _ships.Values.ToArray();
 
         /// <summary>
         /// A mapping of each known projectile in the game to that projectile's ID.
@@ -100,7 +100,7 @@ namespace SpaceWars
         /// <summary>
         /// All known projectiles in the game.
         /// </summary>
-        public IEnumerable<Projectile> Projectiles => _projectiles.Values.ToList().AsReadOnly();
+        public Projectile[] Projectiles => _projectiles.Values.ToArray();
 
         /// <summary>
         /// A mapping of each known star in the game to that star's ID.
@@ -110,7 +110,7 @@ namespace SpaceWars
         /// <summary>
         /// All known stars in the game.
         /// </summary>
-        public IEnumerable<Star> Stars => _stars.Values.ToList().AsReadOnly();
+        public Star[] Stars => _stars.Values.ToArray();
 
         /// <summary>
         /// Creates a new SpaceWars instance that has not been connected.

@@ -59,45 +59,8 @@ namespace SpaceWars
 
             StartMusic();
 
-            // Subscribe to game component changes.
-            _spaceWars.GameComponentsUpdated += OnGameComponentsUpdated;
-
             // Subscribe to connection lost event.
             _spaceWars.ConnectionLost += OnConnectionLost;
-        }
-
-        /// <summary>
-        /// Called when any game component is updated in the SpaceWars client.
-        /// </summary>
-        private void OnGameComponentsUpdated()
-        {
-            // Redraw the game components
-            _worldPanel.DrawGameComponents(GetGameComponentsToDraw());
-        }
-
-        /// <summary>
-        /// Retrieves and returns the game components in the order they should be drawn.
-        /// </summary>
-        /// <returns>An IEnumerable containing all the components to draw in the order they should be drawn.</returns>
-        private IEnumerable<GameComponent> GetGameComponentsToDraw()
-        {
-            // Draw first
-            foreach (var projectile in _spaceWars.Projectiles)
-            {
-                yield return projectile;
-            }
-
-            // Draw second
-            foreach (var star in _spaceWars.Stars)
-            {
-                yield return star;
-            }
-
-            // Draw third
-            foreach (var ship in _spaceWars.Ships)
-            {
-                yield return ship;
-            }
         }
 
         /// <summary>
@@ -119,7 +82,7 @@ namespace SpaceWars
         /// </summary>
         private void InitializeScoreboardPanel()
         {
-            _scoreboardPanel = new ScoreboardPanel
+            _scoreboardPanel = new ScoreboardPanel(_spaceWars)
             {
                 Margin = new Padding(10),
                 Location = new Point(_worldPanel.Width + 20, 10),

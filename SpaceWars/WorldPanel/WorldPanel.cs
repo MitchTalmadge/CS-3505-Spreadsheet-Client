@@ -36,6 +36,8 @@ namespace SpaceWars
         public WorldPanel(SpaceWars spaceWars)
         {
             _spaceWars = spaceWars;
+            _spaceWars.GameComponentsUpdated += OnGameComponentsUpdated;
+
             BackColor = Color.Transparent;
             DoubleBuffered = true;
 
@@ -48,12 +50,11 @@ namespace SpaceWars
         }
 
         /// <summary>
-        /// Schedules the given game components to be drawn on the next tick.
+        /// Called when any game component is updated in the SpaceWars client.
         /// </summary>
-        /// <param name="gameComponents">The components to draw, in the order to be drawn.</param>
-        public void DrawGameComponents(IEnumerable<GameComponent> gameComponents)
+        private void OnGameComponentsUpdated()
         {
-            _gameComponents = gameComponents.ToArray();
+            _gameComponents = GetGameComponentsToDraw();
 
             // Invalidate this component for redrawing.
             try
@@ -63,6 +64,31 @@ namespace SpaceWars
             catch (ObjectDisposedException)
             {
                 //ignored
+            }
+        }
+
+        /// <summary>
+        /// Retrieves and returns the game components in the order they should be drawn.
+        /// </summary>
+        /// <returns>An IEnumerable containing all the components to draw in the order they should be drawn.</returns>
+        private IEnumerable<GameComponent> GetGameComponentsToDraw()
+        {
+            // Draw first
+            foreach (var projectile in _spaceWars.Projectiles)
+            {
+                yield return projectile;
+            }
+
+            // Draw second
+            foreach (var star in _spaceWars.Stars)
+            {
+                yield return star;
+            }
+
+            // Draw third
+            foreach (var ship in _spaceWars.Ships)
+            {
+                yield return ship;
             }
         }
 

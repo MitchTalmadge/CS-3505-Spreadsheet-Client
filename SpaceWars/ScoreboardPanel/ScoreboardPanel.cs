@@ -14,6 +14,11 @@ namespace SpaceWars
     public sealed class ScoreboardPanel : Panel
     {
         /// <summary>
+        /// The SpaceWars client containing scores.
+        /// </summary>
+        private readonly SpaceWars _spaceWars;
+
+        /// <summary>
         /// The pen used when drawing the border.
         /// </summary>
         private static readonly Pen BorderPen = new Pen(Color.FromArgb(200, 255, 255, 255), 2)
@@ -21,8 +26,15 @@ namespace SpaceWars
             Alignment = PenAlignment.Inset
         };
 
-        public ScoreboardPanel()
+        /// <inheritdoc />
+        /// <summary>
+        /// Creates a Scoreboard Panel that represents the scores in a SpaceWars client.
+        /// </summary>
+        /// <param name="spaceWars">The SpaceWars client that holds player scores.</param>
+        public ScoreboardPanel(SpaceWars spaceWars)
         {
+            _spaceWars = spaceWars;
+
             BackColor = Color.FromArgb(80, 255, 255, 255);
 
             CreateHeader();
@@ -33,7 +45,8 @@ namespace SpaceWars
         /// </summary>
         private void CreateHeader()
         {
-            var header = new Label
+            // ReSharper disable once ObjectCreationAsStatement
+            new Label
             {
                 Text = "Scoreboard",
                 Font = new Font(new FontFamily("OCR A Extended"), 20, FontStyle.Underline),
