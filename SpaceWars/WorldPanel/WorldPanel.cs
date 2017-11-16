@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace SpaceWars
@@ -15,9 +14,14 @@ namespace SpaceWars
     public sealed class WorldPanel : Panel
     {
         /// <summary>
-        /// The size of this world, which has the same length on each side.
+        /// The SpaceWars client for which this panel is drawing the world.
         /// </summary>
-        private int WorldSize => Size.Height;
+        private readonly SpaceWars _spaceWars;
+
+        /// <summary>
+        /// These multipliers account for differences in world size versus screen size.
+        /// </summary>
+        private double[] _scaleMultipliers;
 
         /// <summary>
         /// The game components to be drawn when this component is painted.
@@ -31,19 +35,26 @@ namespace SpaceWars
         /// <param name="spaceWars">The SpaceWars client for which this panel is drawing the world.</param>
         public WorldPanel(SpaceWars spaceWars)
         {
-            Size = new Size(spaceWars.WorldSize, spaceWars.WorldSize);
+            _spaceWars = spaceWars;
+            _spaceWars.GameComponentsUpdated += OnGameComponentsUpdated;
+
             BackColor = Color.Transparent;
             DoubleBuffered = true;
 
+            // Compute scale of world when the size of this panel changes.
+            SizeChanged += (sender, args) =>
+            {
+                _scaleMultipliers = new[]
+                    {(double) Width / _spaceWars.WorldSize, (double) Height / _spaceWars.WorldSize};
+            };
         }
 
         /// <summary>
-        /// Schedules the given game components to be drawn on the next tick.
+        /// Called when any game component is updated in the SpaceWars client.
         /// </summary>
-        /// <param name="gameComponents">The components to draw, in the order to be drawn.</param>
-        public void DrawGameComponents(IEnumerable<GameComponent> gameComponents)
+        private void OnGameComponentsUpdated()
         {
-            _gameComponents = gameComponents.ToArray();
+            _gameComponents = GetGameComponentsToDraw();
 
             // Invalidate this component for redrawing.
             try
@@ -53,6 +64,31 @@ namespace SpaceWars
             catch (ObjectDisposedException)
             {
                 //ignored
+            }
+        }
+
+        /// <summary>
+        /// Retrieves and returns the game components in the order they should be drawn.
+        /// </summary>
+        /// <returns>An IEnumerable containing all the components to draw in the order they should be drawn.</returns>
+        private IEnumerable<GameComponent> GetGameComponentsToDraw()
+        {
+            // Draw first
+            foreach (var projectile in _spaceWars.Projectiles)
+            {
+                yield return projectile;
+            }
+
+            // Draw second
+            foreach (var star in _spaceWars.Stars)
+            {
+                yield return star;
+            }
+
+            // Draw third
+            foreach (var ship in _spaceWars.Ships)
+            {
+                yield return ship;
             }
         }
 
@@ -82,14 +118,20 @@ namespace SpaceWars
                 var translation = WorldVectorToImagePoint(gameComponent.Location);
                 e.Graphics.TranslateTransform(translation.X, translation.Y);
                 e.Graphics.RotateTransform(gameComponent.Direction.ToAngle());
+                e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
                 // Draw the component at (0, 0)
                 var image = imageDetails.Item1;
                 var cropRegion = imageDetails.Item2;
                 var drawSize = imageDetails.Item3;
 
-                //Centering image 
+                // Modify the draw size based on the scale of the world.
+                drawSize = new Size((int) (_scaleMultipliers[0] * drawSize.Width),
+                    (int) (_scaleMultipliers[1] * drawSize.Height));
+
+                // This offset is to center the image.
                 var offset = 0 - .5 * drawSize.Width;
+
                 e.Graphics.DrawImage(image, new Rectangle((int) offset, (int) offset, drawSize.Width, drawSize.Height),
                     cropRegion,
                     GraphicsUnit.Pixel);
@@ -106,7 +148,9 @@ namespace SpaceWars
         /// <returns>A new point containing the converted vector coordinates.</returns>
         private Point WorldVectorToImagePoint(Vector2D vector)
         {
-            return new Point((int) vector.GetX() + WorldSize / 2, (int) vector.GetY() + WorldSize / 2);
+            // Convert the world coordinates to screen coordinates by adding half the size of the screen.
+            return new Point((int) (vector.GetX() * _scaleMultipliers[0]) + Width / 2,
+                (int) (vector.GetY() * _scaleMultipliers[1]) + Height / 2);
         }
     }
 }

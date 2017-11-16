@@ -33,6 +33,12 @@ namespace SpaceWars
         /// </summary>
         private Mp3Player _mp3Player;
 
+        /// <summary>
+        /// The server may sometimes disconnect unexpectedly. 
+        /// This keeps track of whether the disconnect was intentional (by the user clicking disconnect or closing the window).
+        /// </summary>
+        private bool _disconnectIntended;
+
         /// <inheritdoc />
         /// <summary>
         /// Creates a new Game Form that is based on the given Space Wars instance.
@@ -43,83 +49,57 @@ namespace SpaceWars
             _spaceWars = spaceWars;
 
             InitializeComponent();
-
-            CreateWorldPanel();
-
-            CreateScoreboardPanel();
+            InitializeWorldPanel();
+            InitializeScoreboardPanel();
+            InitializeDisconnectButton();
+            _worldPanel.Focus();
 
             // Controls
             InitializeControls();
 
             StartMusic();
 
-            // Subscribe to game component changes
-            _spaceWars.OnGameComponentsUpdated += OnGameComponentsUpdated;
-        }
-
-        /// <summary>
-        /// Called when any game component is updated in the SpaceWars client.
-        /// </summary>
-        private void OnGameComponentsUpdated()
-        {
-            // Redraw the game components
-            _worldPanel.DrawGameComponents(GetGameComponentsToDraw());
-        }
-
-        /// <summary>
-        /// Retrieves and returns the game components in the order they should be drawn.
-        /// </summary>
-        /// <returns>An IEnumerable containing all the components to draw in the order they should be drawn.</returns>
-        private IEnumerable<GameComponent> GetGameComponentsToDraw()
-        {
-            // Draw first
-            foreach (var projectile in _spaceWars.Projectiles)
-            {
-                yield return projectile;
-            }
-
-            // Draw second
-            foreach (var star in _spaceWars.Stars)
-            {
-                yield return star;
-            }
-
-            // Draw third
-            foreach (var ship in _spaceWars.Ships)
-            {
-                yield return ship;
-            }
+            // Subscribe to connection lost event.
+            _spaceWars.ConnectionLost += OnConnectionLost;
         }
 
         /// <summary>
         /// Creates the World Panel that the game is played on.
         /// </summary>
-        private void CreateWorldPanel()
+        private void InitializeWorldPanel()
         {
             _worldPanel = new WorldPanel(_spaceWars)
             {
                 Margin = new Padding(10),
                 Location = new Point(10, 10),
-                Parent = _mainLayoutPanel
+                Size = new Size(750, 750),
+                Parent = this
             };
-
-            _mainLayoutPanel.SetCellPosition(_worldPanel, new TableLayoutPanelCellPosition(0, 0));
         }
 
         /// <summary>
         /// Creates the Scoreboard Panel that the players' scores appear on.
         /// </summary>
-        private void CreateScoreboardPanel()
+        private void InitializeScoreboardPanel()
         {
-            _scoreboardPanel = new ScoreboardPanel
+            _scoreboardPanel = new ScoreboardPanel(_spaceWars)
             {
                 Margin = new Padding(10),
-                Location = new Point(10, 10),
-                Dock = DockStyle.Fill,
-                Parent = _mainLayoutPanel
+                Location = new Point(_worldPanel.Width + 20, 10),
+                Size = new Size(300, _worldPanel.Height),
+                Parent = this
             };
+        }
 
-            _mainLayoutPanel.SetCellPosition(_scoreboardPanel, new TableLayoutPanelCellPosition(1, 0));
+        /// <summary>
+        /// Positions and sizes the disconnect button.
+        /// </summary>
+        private void InitializeDisconnectButton()
+        {
+            _disconnectButton.MinimumSize = new Size(_worldPanel.Width + _scoreboardPanel.Width + 10, 80);
+            _disconnectButton.Margin = new Padding(10);
+            _disconnectButton.Location = new Point(10, _worldPanel.Height + 20);
+            _disconnectButton.GotFocus += (sender, args) => _worldPanel.Focus();
         }
 
         /// <summary>
@@ -152,7 +132,7 @@ namespace SpaceWars
         /// </summary>
         private void GameForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            OpenMainMenu();
+            Disconnect();
         }
 
         /// <summary>
@@ -160,7 +140,38 @@ namespace SpaceWars
         /// </summary>
         private void DisconnectButton_Click(object sender, EventArgs e)
         {
-            OpenMainMenu();
+            Disconnect();
+        }
+
+        /// <summary>
+        /// Disconnects from the server.
+        /// </summary>
+        /// <see cref="OnConnectionLost"/>
+        private void Disconnect()
+        {
+            _disconnectIntended = true;
+            _spaceWars.Disconnect();
+        }
+
+        /// <summary>
+        /// Opens the main menu when the connection to the server has been lost.
+        /// </summary>
+        /// <see cref="OpenMainMenu"/>
+        private void OnConnectionLost()
+        {
+            Invoke(new MethodInvoker(() =>
+            {
+                OpenMainMenu();
+
+                // Show a warning dialog that the connection was lost, with a different message depending on if disconnecting was intentional.
+                MessageBox.Show(
+                    _disconnectIntended
+                        ? Resources.GameForm_ConnectionLost_Intended
+                        : Resources.GameForm_ConnectionLost_Unexpected,
+                    Resources.GameForm_ConnectionLost_Caption,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+            }));
         }
 
         /// <summary>
@@ -168,10 +179,6 @@ namespace SpaceWars
         /// </summary>
         private void OpenMainMenu()
         {
-            // Disconnect and unsubscribe
-            _spaceWars.OnGameComponentsUpdated -= OnGameComponentsUpdated;
-            _spaceWars.Disconnect();
-
             StopMusic();
 
             new MainMenuForm().Show();

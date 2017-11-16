@@ -25,15 +25,26 @@ namespace SpaceWars
         public delegate void ConnectionEstablished(SpaceWars spaceWars);
 
         /// <summary>
+        /// The provided ConnectionEstablished delegate implementation.
+        /// </summary>
+        private readonly ConnectionEstablished _establishedCallback;
+
+        /// <summary>
         /// This delegate is called when a connection to SpaceWars failed.
         /// </summary>
         /// <param name="reason">Why the connection failed.</param>
         public delegate void ConnectionFailed(string reason);
 
         /// <summary>
-        /// The provided ConnectionEstablished delegate implementation.
+        /// This delegate is called when the connection to the server has been lost.
         /// </summary>
-        private readonly ConnectionEstablished _establishedCallback;
+        public delegate void ConnectionLostListener();
+
+        /// <summary>
+        /// This event is fired when the connection to the server has been lost, 
+        /// whether unexpectedly or by calling the Disconnect method.
+        /// </summary>
+        public event ConnectionLostListener ConnectionLost;
 
         /// <summary>
         /// This delegate handles cases where any game component is updated (a ship, projectile, etc.)
@@ -43,7 +54,7 @@ namespace SpaceWars
         /// <summary>
         /// This event is fired whenever a game component (ship, projectile, etc.) is updated from the server.
         /// </summary>
-        public event GameComponentsListener OnGameComponentsUpdated;
+        public event GameComponentsListener GameComponentsUpdated;
 
         /// <summary>
         /// Socket that the connection is made through.
@@ -79,7 +90,7 @@ namespace SpaceWars
         /// <summary>
         /// All known ships in the game.
         /// </summary>
-        public IEnumerable<Ship> Ships => _ships.Values.ToList().AsReadOnly();
+        public Ship[] Ships => _ships.Values.ToArray();
 
         /// <summary>
         /// A mapping of each known projectile in the game to that projectile's ID.
@@ -89,7 +100,7 @@ namespace SpaceWars
         /// <summary>
         /// All known projectiles in the game.
         /// </summary>
-        public IEnumerable<Projectile> Projectiles => _projectiles.Values.ToList().AsReadOnly();
+        public Projectile[] Projectiles => _projectiles.Values.ToArray();
 
         /// <summary>
         /// A mapping of each known star in the game to that star's ID.
@@ -99,7 +110,7 @@ namespace SpaceWars
         /// <summary>
         /// All known stars in the game.
         /// </summary>
-        public IEnumerable<Star> Stars => _stars.Values.ToList().AsReadOnly();
+        public Star[] Stars => _stars.Values.ToArray();
 
         /// <summary>
         /// Creates a new SpaceWars instance that has not been connected.
@@ -187,6 +198,13 @@ namespace SpaceWars
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
+            // Connection is closed.
+            if (data == null)
+            {
+                ConnectionLost?.Invoke();
+                return;
+            }
+
             // We know the first packet has been handled once PlayerId is not -1.
             if (PlayerId == -1)
                 ParseFirstPacket(data);
@@ -194,8 +212,7 @@ namespace SpaceWars
                 ParseJsonPacket(data);
 
             // Get new data.
-            if (_socketState.Connected)
-                Networking.Networking.GetData(_socketState);
+            Networking.Networking.GetData(_socketState);
         }
 
         /// <summary>
@@ -246,7 +263,7 @@ namespace SpaceWars
                         //removing dead projectiles, only adds projetile to dictionary if it's active
                         if (!projectile.Active)
                         {
-                            if (_projectiles.TryGetValue(projectile.Id, out var deadProj))
+                            if (_projectiles.TryGetValue(projectile.Id, out _))
                             {
                                 _projectiles.Remove(projectile.Id);
                             }
@@ -254,7 +271,7 @@ namespace SpaceWars
                         else
                         {
                             _projectiles[projectile.Id] = projectile;
-                        }                     
+                        }
                     }
                     else if (parsedJson["star"] != null)
                     {
@@ -269,7 +286,7 @@ namespace SpaceWars
             }
 
             // Notify event listeners of updated game components.
-            OnGameComponentsUpdated?.Invoke();
+            GameComponentsUpdated?.Invoke();
         }
     }
 }

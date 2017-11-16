@@ -117,42 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="game_music" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\game_music.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="MainMenuForm_ConnectionFailed_Caption" xml:space="preserve">
-    <value>Connection Failed</value>
-    <comment>The caption of the connection failed dialog.</comment>
-  </data>
-  <data name="MainMenuForm_ConnectionFailed_Prefix" xml:space="preserve">
-    <value>A connection could not be established: </value>
-    <comment>The message to display right before the actual error message of the failed connection.</comment>
-  </data>
-  <data name="main_menu_music" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\main_menu_music.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="space_background" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\space_background.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MainMenuForm_ConnectButton_Connecting" xml:space="preserve">
-    <value>Connecting...</value>
-    <comment>The text of the connect button when connecting.</comment>
-  </data>
-  <data name="MainMenuForm_ConnectButton_Default" xml:space="preserve">
-    <value>Connect</value>
-    <comment>The default text of the connect button.</comment>
-  </data>
-  <data name="GameForm_ConnectionLost_Caption" xml:space="preserve">
-    <value>Disconnected</value>
-    <comment>The caption of the connection lost dialog.</comment>
-  </data>
-  <data name="GameForm_ConnectionLost_Intended" xml:space="preserve">
-    <value>You have disconnected from the server.</value>
-    <comment>The message to display when disconnecting was intentional.</comment>
-  </data>
-  <data name="GameForm_ConnectionLost_Unexpected" xml:space="preserve">
-    <value>The connection was unexpectedly lost!</value>
-    <comment>The message to display when disconnecting was unexpected.</comment>
+  <data name="Scoreboard_Header" xml:space="preserve">
+    <value>Scoreboard</value>
+    <comment>The header at the top of the Scoreboard.</comment>
   </data>
 </root>

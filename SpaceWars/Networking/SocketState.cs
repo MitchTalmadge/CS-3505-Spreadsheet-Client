@@ -16,11 +16,6 @@ namespace Networking
         internal Socket Socket { get; }
 
         /// <summary>
-        /// True if there is currently a connection.
-        /// </summary>
-        public bool Connected => Socket.Connected;
-
-        /// <summary>
         /// Callback for an established connection.
         /// </summary>
         internal readonly Networking.ConnectionEstablished Established;

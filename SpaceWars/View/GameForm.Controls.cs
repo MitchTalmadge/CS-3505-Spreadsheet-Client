@@ -21,7 +21,7 @@ namespace SpaceWars
         /// <summary>
         /// The speed at which controls are sent.
         /// </summary>
-        private const int ControlFps = 120;
+        private const int ControlFps = 200;
 
         /// <summary>
         /// The timer that sends control commands to the space wars client.
@@ -60,15 +60,12 @@ namespace SpaceWars
             switch (keyEventArgs.KeyCode)
             {
                 case Keys.W:
-                case Keys.Up:
                     _controls[0] = true;
                     break;
                 case Keys.D:
-                case Keys.Right:
                     _controls[1] = true;
                     break;
                 case Keys.A:
-                case Keys.Left:
                     _controls[2] = true;
                     break;
                 case Keys.Space:
@@ -86,15 +83,12 @@ namespace SpaceWars
             switch (keyEventArgs.KeyCode)
             {
                 case Keys.W:
-                case Keys.Up:
                     _controls[0] = false;
                     break;
                 case Keys.D:
-                case Keys.Right:
                     _controls[1] = false;
                     break;
                 case Keys.A:
-                case Keys.Left:
                     _controls[2] = false;
                     break;
                 case Keys.Space:
