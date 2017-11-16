@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace SpaceWars
@@ -117,6 +118,7 @@ namespace SpaceWars
                 var translation = WorldVectorToImagePoint(gameComponent.Location);
                 e.Graphics.TranslateTransform(translation.X, translation.Y);
                 e.Graphics.RotateTransform(gameComponent.Direction.ToAngle());
+                e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
                 // Draw the component at (0, 0)
                 var image = imageDetails.Item1;
