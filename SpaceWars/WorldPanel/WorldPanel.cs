@@ -14,9 +14,14 @@ namespace SpaceWars
     public sealed class WorldPanel : Panel
     {
         /// <summary>
-        /// The size of this world, which has the same length on each side.
+        /// The SpaceWars client for which this panel is drawing the world.
         /// </summary>
-        private int WorldSize => Size.Height;
+        private SpaceWars _spaceWars;
+
+        /// <summary>
+        /// These multipliers account for differences in world size versus screen size.
+        /// </summary>
+        private double[] _scaleMultipliers;
 
         /// <summary>
         /// The game components to be drawn when this component is painted.
@@ -30,9 +35,16 @@ namespace SpaceWars
         /// <param name="spaceWars">The SpaceWars client for which this panel is drawing the world.</param>
         public WorldPanel(SpaceWars spaceWars)
         {
-            Size = new Size(spaceWars.WorldSize, spaceWars.WorldSize);
+            _spaceWars = spaceWars;
             BackColor = Color.Transparent;
             DoubleBuffered = true;
+
+            // Compute scale of world when the size of this panel changes.
+            SizeChanged += (sender, args) =>
+            {
+                _scaleMultipliers = new[]
+                    {(double) Width / _spaceWars.WorldSize, (double) Height / _spaceWars.WorldSize};
+            };
         }
 
         /// <summary>
@@ -86,8 +98,13 @@ namespace SpaceWars
                 var cropRegion = imageDetails.Item2;
                 var drawSize = imageDetails.Item3;
 
-                // Centering image 
+                // Modify the draw size based on the scale of the world.
+                drawSize = new Size((int) (_scaleMultipliers[0] * drawSize.Width),
+                    (int) (_scaleMultipliers[1] * drawSize.Height));
+
+                // This offset is to center the image.
                 var offset = 0 - .5 * drawSize.Width;
+
                 e.Graphics.DrawImage(image, new Rectangle((int) offset, (int) offset, drawSize.Width, drawSize.Height),
                     cropRegion,
                     GraphicsUnit.Pixel);
@@ -104,7 +121,9 @@ namespace SpaceWars
         /// <returns>A new point containing the converted vector coordinates.</returns>
         private Point WorldVectorToImagePoint(Vector2D vector)
         {
-            return new Point((int) vector.GetX() + WorldSize / 2, (int) vector.GetY() + WorldSize / 2);
+            // Convert the world coordinates to screen coordinates by adding half the size of the screen.
+            return new Point((int) (vector.GetX() * _scaleMultipliers[0]) + Width / 2,
+                (int) (vector.GetY() * _scaleMultipliers[1]) + Height / 2);
         }
     }
 }

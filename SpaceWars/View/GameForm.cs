@@ -49,10 +49,10 @@ namespace SpaceWars
             _spaceWars = spaceWars;
 
             InitializeComponent();
-
-            CreateWorldPanel();
-
-            CreateScoreboardPanel();
+            InitializeWorldPanel();
+            InitializeScoreboardPanel();
+            InitializeDisconnectButton();
+            _worldPanel.Focus();
 
             // Controls
             InitializeControls();
@@ -103,32 +103,39 @@ namespace SpaceWars
         /// <summary>
         /// Creates the World Panel that the game is played on.
         /// </summary>
-        private void CreateWorldPanel()
+        private void InitializeWorldPanel()
         {
             _worldPanel = new WorldPanel(_spaceWars)
             {
                 Margin = new Padding(10),
                 Location = new Point(10, 10),
-                Parent = _mainLayoutPanel
+                Size = new Size(750, 750),
+                Parent = this
             };
-
-            _mainLayoutPanel.SetCellPosition(_worldPanel, new TableLayoutPanelCellPosition(0, 0));
         }
 
         /// <summary>
         /// Creates the Scoreboard Panel that the players' scores appear on.
         /// </summary>
-        private void CreateScoreboardPanel()
+        private void InitializeScoreboardPanel()
         {
             _scoreboardPanel = new ScoreboardPanel
             {
                 Margin = new Padding(10),
-                Location = new Point(10, 10),
-                Dock = DockStyle.Fill,
-                Parent = _mainLayoutPanel
+                Location = new Point(_worldPanel.Width + 20, 10),
+                Size = new Size(300, _worldPanel.Height),
+                Parent = this
             };
+        }
 
-            _mainLayoutPanel.SetCellPosition(_scoreboardPanel, new TableLayoutPanelCellPosition(1, 0));
+        /// <summary>
+        /// Positions and sizes the disconnect button.
+        /// </summary>
+        private void InitializeDisconnectButton()
+        {
+            _disconnectButton.MinimumSize = new Size(_worldPanel.Width + _scoreboardPanel.Width + 10, 80);
+            _disconnectButton.Margin = new Padding(10);
+            _disconnectButton.Location = new Point(10, _worldPanel.Height + 20);
         }
 
         /// <summary>
