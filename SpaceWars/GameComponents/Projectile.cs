@@ -65,10 +65,5 @@ namespace SpaceWars
                 new Rectangle(new Point(0, 0), ProjectileCropSize),
                 ProjectileDrawSize);
         }
-
-        public class ScoreLabel : Label
-        {
-
-        }
     }
 }
