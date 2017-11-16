@@ -2,7 +2,7 @@
 using SpaceWars.Properties;
 using System;
 using System.Drawing;
-
+using System.Windows.Forms;
 
 namespace SpaceWars
 {
@@ -59,6 +59,11 @@ namespace SpaceWars
                 Resources.projectile,
                 new Rectangle(new Point(0, 0), ProjectileSpriteSize),
                 ProjectileDrawSize);
+        }
+
+        public class ScoreLabel : Label
+        {
+
         }
     }
 }
