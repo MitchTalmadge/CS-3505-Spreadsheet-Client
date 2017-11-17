@@ -42,6 +42,7 @@ namespace SpaceWars
         {
             _spaceWars = spaceWars;
             _spaceWars.GameComponentsUpdated += OnGameComponentsUpdated;
+            DoubleBuffered = true;
 
             BackColor = Color.FromArgb(80, 255, 255, 255);
 
@@ -55,6 +56,16 @@ namespace SpaceWars
         {
             //TODO: Sort all ships by their score, highest score at top
             //TODO: Store the sorted ships in _shipsSortedByScore.
+
+            // Invalidate this component for redrawing.
+            try
+            {
+                Invoke(new MethodInvoker(Refresh));
+            }
+            catch (ObjectDisposedException)
+            {
+                //ignored
+            }
         }
 
         /// <summary>
@@ -106,6 +117,12 @@ namespace SpaceWars
         private void DrawShipStats(Ship ship, int offset, Graphics graphics)
         {
             //TODO: Draw name, score, and healthbar. Use offset to determine how far down to start drawing.
+            Font font = new Font(new FontFamily("OCR A Extended"), 10, FontStyle.Regular);
+            ForeColor = Color.White;
+            Brush brush = new SolidBrush(BackColor);
+
+            graphics.DrawString(ship.Name, font, brush, new Point(0, offset));
+            graphics.DrawString(ship.Score.ToString(), font, brush, new Point(50, offset));
         }
     }
 }
