@@ -103,11 +103,11 @@ namespace SpaceWars
             e.Graphics.DrawRectangle(BorderPen, 0, 0, ClientSize.Width - 1, ClientSize.Height - 1);
 
             // Draw stats.
-            var offset = 40;
+            var offset = 0;
             foreach (var ship in _shipsSortedByScore)
             {
                 DrawShipStats(ship, offset, e.Graphics);
-                offset += 50;
+                offset++;
             }
         }
 
@@ -122,15 +122,18 @@ namespace SpaceWars
             Font font = new Font(new FontFamily("OCR A Extended"), 15, FontStyle.Regular);
             Brush brush = new SolidBrush(Color.DarkSlateBlue);
 
-            graphics.DrawString(ship.Name, font, brush, new Point(0, offset));
-            graphics.DrawString(ship.Score.ToString(), font, brush, new Point(100, offset));
+            // Translate the graphics to where we will draw.
+            graphics.TranslateTransform(0, 40 + offset * 50);
 
-            graphics.DrawRectangle(new Pen(brush), 10, offset + 30, ClientSize.Width - 20, 15);
+            graphics.DrawString(ship.Name, font, brush, new Point(0, 0));
+            graphics.DrawString(ship.Score.ToString(), font, brush, new Point(100, 0));
+
+            graphics.DrawRectangle(new Pen(brush), 10, 30, ClientSize.Width - 20, 15);
 
             //fills health bar (rectangle) proportionately to health of ship
             double health = Convert.ToDouble(ship.Health);
-            graphics.FillRectangle(brush, 10, (offset + 30),
-                (float)(health / 5.0) * (ClientSize.Width - 20), 15);
+            graphics.FillRectangle(brush, 10, 30,
+                (float) (health / 5.0) * (ClientSize.Width - 20), 15);
         }
     }
 }
