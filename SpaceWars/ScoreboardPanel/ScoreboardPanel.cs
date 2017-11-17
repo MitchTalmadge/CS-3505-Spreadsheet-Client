@@ -54,9 +54,16 @@ namespace SpaceWars
         /// </summary>
         private void OnGameComponentsUpdated()
         {
-            //TODO: Sort all ships by their score, highest score at top
+            //All ships are sorted by their score, highest score at top so scoreboard draws in order
             _shipsSortedByScore = _spaceWars.Ships;
-            //TODO: Store the sorted ships in _shipsSortedByScore.
+
+            for (int i = 0; i < _spaceWars.Ships.Length; i++)
+            {
+                for (int j = i + 1; j < _spaceWars.Ships.Length; j++)
+                {
+
+                }
+            }
 
             // Invalidate this component for redrawing.
             try
@@ -124,7 +131,11 @@ namespace SpaceWars
             graphics.DrawString(ship.Score.ToString(), font, brush, new Point(100, offset));
 
             graphics.DrawRectangle(new Pen(brush), 10, offset + 30, ClientSize.Width - 20, 15);
-            graphics.FillRectangle(brush, 10, offset + 30, ClientSize.Width - 20, 15);
+
+            //fills health bar (rectangle) proportionately to health of ship
+            double health = Convert.ToDouble(ship.Health);
+            graphics.FillRectangle(brush, 10, (offset + 30),
+                (float)(health / 5.0) * (ClientSize.Width - 20), 15);
         }
     }
 }
