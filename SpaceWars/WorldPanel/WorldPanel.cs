@@ -59,7 +59,8 @@ namespace SpaceWars
             // Invalidate this component for redrawing.
             try
             {
-                Invoke(new MethodInvoker(Refresh));
+                if (IsHandleCreated)
+                    Invoke(new MethodInvoker(Refresh));
             }
             catch (ObjectDisposedException)
             {

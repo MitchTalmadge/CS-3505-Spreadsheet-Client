@@ -1,8 +1,10 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 using SpaceWars.Properties;
 
@@ -54,14 +56,14 @@ namespace SpaceWars
         /// </summary>
         private void OnGameComponentsUpdated()
         {
-            //TODO: Sort all ships by their score, highest score at top
-            _shipsSortedByScore = _spaceWars.Ships;
-            //TODO: Store the sorted ships in _shipsSortedByScore.
+            // Sort the ships by their scores descending
+            _shipsSortedByScore = _spaceWars.Ships.OrderByDescending(ship => ship.Score);
 
             // Invalidate this component for redrawing.
             try
             {
-                Invoke(new MethodInvoker(Refresh));
+                if (IsHandleCreated)
+                    Invoke(new MethodInvoker(Refresh));
             }
             catch (ObjectDisposedException)
             {
@@ -105,7 +107,7 @@ namespace SpaceWars
             foreach (var ship in _shipsSortedByScore)
             {
                 DrawShipStats(ship, offset, e.Graphics);
-                offset+= 50;
+                offset += 50;
             }
         }
 
