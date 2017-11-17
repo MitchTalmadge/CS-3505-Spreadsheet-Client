@@ -55,7 +55,9 @@ namespace SpaceWars
         private void OnGameComponentsUpdated()
         {
             //TODO: Sort all ships by their score, highest score at top
+            _shipsSortedByScore = _spaceWars.Ships;
             //TODO: Store the sorted ships in _shipsSortedByScore.
+            Console.WriteLine("scoreboard is being updated, called when game components are updated");
 
             // Invalidate this component for redrawing.
             try
@@ -92,6 +94,7 @@ namespace SpaceWars
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
+            Console.WriteLine("OnPaint is being called, ships are being drawn!");
             // Draw background
             using (var brush = new SolidBrush(BackColor))
                 e.Graphics.FillRectangle(brush, ClientRectangle);
@@ -103,8 +106,9 @@ namespace SpaceWars
             var offset = 0;
             foreach (var ship in _shipsSortedByScore)
             {
+                Console.WriteLine("each ship is being drawn!");
                 DrawShipStats(ship, offset, e.Graphics);
-                offset++;
+                offset+= 20;
             }
         }
 
@@ -118,11 +122,12 @@ namespace SpaceWars
         {
             //TODO: Draw name, score, and healthbar. Use offset to determine how far down to start drawing.
             Font font = new Font(new FontFamily("OCR A Extended"), 10, FontStyle.Regular);
-            ForeColor = Color.White;
-            Brush brush = new SolidBrush(BackColor);
+            Brush brush = new SolidBrush(Color.White);
 
-            graphics.DrawString(ship.Name, font, brush, new Point(0, offset));
-            graphics.DrawString(ship.Score.ToString(), font, brush, new Point(50, offset));
+            graphics.DrawString(ship.Name, font, brush, new Point(0, offset * 200));
+            graphics.DrawString(ship.Score.ToString(), font, brush, new Point(50, offset * 200));
+
+            //graphics.DrawRectangle(brush, )
         }
     }
 }
