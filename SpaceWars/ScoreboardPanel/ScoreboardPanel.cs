@@ -57,7 +57,6 @@ namespace SpaceWars
             //TODO: Sort all ships by their score, highest score at top
             _shipsSortedByScore = _spaceWars.Ships;
             //TODO: Store the sorted ships in _shipsSortedByScore.
-            Console.WriteLine("scoreboard is being updated, called when game components are updated");
 
             // Invalidate this component for redrawing.
             try
@@ -94,7 +93,6 @@ namespace SpaceWars
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            Console.WriteLine("OnPaint is being called, ships are being drawn!");
             // Draw background
             using (var brush = new SolidBrush(BackColor))
                 e.Graphics.FillRectangle(brush, ClientRectangle);
@@ -103,12 +101,11 @@ namespace SpaceWars
             e.Graphics.DrawRectangle(BorderPen, 0, 0, ClientSize.Width - 1, ClientSize.Height - 1);
 
             // Draw stats.
-            var offset = 0;
+            var offset = 40;
             foreach (var ship in _shipsSortedByScore)
             {
-                Console.WriteLine("each ship is being drawn!");
                 DrawShipStats(ship, offset, e.Graphics);
-                offset+= 20;
+                offset+= 50;
             }
         }
 
@@ -120,14 +117,14 @@ namespace SpaceWars
         /// <param name="graphics">The graphics object to draw with.</param>
         private void DrawShipStats(Ship ship, int offset, Graphics graphics)
         {
-            //TODO: Draw name, score, and healthbar. Use offset to determine how far down to start drawing.
-            Font font = new Font(new FontFamily("OCR A Extended"), 10, FontStyle.Regular);
-            Brush brush = new SolidBrush(Color.White);
+            Font font = new Font(new FontFamily("OCR A Extended"), 15, FontStyle.Regular);
+            Brush brush = new SolidBrush(Color.DarkSlateBlue);
 
-            graphics.DrawString(ship.Name, font, brush, new Point(0, offset * 200));
-            graphics.DrawString(ship.Score.ToString(), font, brush, new Point(50, offset * 200));
+            graphics.DrawString(ship.Name, font, brush, new Point(0, offset));
+            graphics.DrawString(ship.Score.ToString(), font, brush, new Point(100, offset));
 
-            //graphics.DrawRectangle(brush, )
+            graphics.DrawRectangle(new Pen(brush), 10, offset + 30, ClientSize.Width - 20, 15);
+            graphics.FillRectangle(brush, 10, offset + 30, ClientSize.Width - 20, 15);
         }
     }
 }
