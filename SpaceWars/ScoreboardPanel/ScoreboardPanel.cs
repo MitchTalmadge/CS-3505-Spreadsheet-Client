@@ -126,7 +126,11 @@ namespace SpaceWars
             graphics.DrawString(ship.Score.ToString(), font, brush, new Point(100, offset));
 
             graphics.DrawRectangle(new Pen(brush), 10, offset + 30, ClientSize.Width - 20, 15);
-            graphics.FillRectangle(brush, 10, offset + 30, ClientSize.Width - 20, 15);
+
+            //fills health bar (rectangle) proportionately to health of ship
+            double health = Convert.ToDouble(ship.Health);
+            graphics.FillRectangle(brush, 10, (offset + 30),
+                (float)(health / 5.0) * (ClientSize.Width - 20), 15);
         }
     }
 }
