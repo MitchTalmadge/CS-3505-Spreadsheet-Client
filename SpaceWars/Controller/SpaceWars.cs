@@ -12,7 +12,8 @@ namespace SpaceWars
 {
     /// <summary>
     /// The main controller for the SpaceWars game.
-    /// Uses the networking library to maintain a connection with the game server and notify listeners of changes to game components.
+    /// Uses the networking library to maintain a connection with the 
+    /// game server and notify listeners of changes to game components.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     public class SpaceWars
