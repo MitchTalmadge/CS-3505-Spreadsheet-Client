@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using SpaceWars.Properties;
@@ -16,7 +15,7 @@ namespace SpaceWars
         /// <summary>
         /// The Space Wars instance being played.
         /// </summary>
-        private readonly SpaceWars _spaceWars;
+        private readonly SpaceWarsClient _spaceWarsClient;
 
         /// <summary>
         /// The panel that the game ultimately takes place on. Ships, stars, etc. are drawn here.
@@ -43,10 +42,10 @@ namespace SpaceWars
         /// <summary>
         /// Creates a new Game Form that is based on the given Space Wars instance.
         /// </summary>
-        /// <param name="spaceWars">The connected Space Wars instance.</param>
-        public GameForm(SpaceWars spaceWars)
+        /// <param name="spaceWarsClient">The connected Space Wars instance.</param>
+        public GameForm(SpaceWarsClient spaceWarsClient)
         {
-            _spaceWars = spaceWars;
+            _spaceWarsClient = spaceWarsClient;
 
             InitializeComponent();
             InitializeWorldPanel();
@@ -60,7 +59,7 @@ namespace SpaceWars
             StartMusic();
 
             // Subscribe to connection lost event.
-            _spaceWars.ConnectionLost += OnConnectionLost;
+            _spaceWarsClient.ConnectionLost += OnConnectionLost;
         }
 
         /// <summary>
@@ -68,7 +67,7 @@ namespace SpaceWars
         /// </summary>
         private void InitializeWorldPanel()
         {
-            _worldPanel = new WorldPanel(_spaceWars)
+            _worldPanel = new WorldPanel(_spaceWarsClient)
             {
                 Margin = new Padding(10),
                 Location = new Point(10, 10),
@@ -82,7 +81,7 @@ namespace SpaceWars
         /// </summary>
         private void InitializeScoreboardPanel()
         {
-            _scoreboardPanel = new ScoreboardPanel(_spaceWars)
+            _scoreboardPanel = new ScoreboardPanel(_spaceWarsClient)
             {
                 Margin = new Padding(10),
                 Location = new Point(_worldPanel.Width + 20, 10),
@@ -150,7 +149,7 @@ namespace SpaceWars
         private void Disconnect()
         {
             _disconnectIntended = true;
-            _spaceWars.Disconnect();
+            _spaceWarsClient.Disconnect();
         }
 
         /// <summary>

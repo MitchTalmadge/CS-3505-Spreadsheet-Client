@@ -1,7 +1,5 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -20,7 +18,7 @@ namespace SpaceWars
         /// <summary>
         /// The SpaceWars client containing scores.
         /// </summary>
-        private readonly SpaceWars _spaceWars;
+        private readonly SpaceWarsClient _spaceWarsClient;
 
         /// <summary>
         /// An array of ships, sorted by their scores.
@@ -39,11 +37,11 @@ namespace SpaceWars
         /// <summary>
         /// Creates a Scoreboard Panel that represents the scores in a SpaceWars client.
         /// </summary>
-        /// <param name="spaceWars">The SpaceWars client that holds player scores.</param>
-        public ScoreboardPanel(SpaceWars spaceWars)
+        /// <param name="spaceWarsClient">The SpaceWars client that holds player scores.</param>
+        public ScoreboardPanel(SpaceWarsClient spaceWarsClient)
         {
-            _spaceWars = spaceWars;
-            _spaceWars.GameComponentsUpdated += OnGameComponentsUpdated;
+            _spaceWarsClient = spaceWarsClient;
+            _spaceWarsClient.WorldModified += OnWorldModified;
             DoubleBuffered = true;
 
             BackColor = Color.FromArgb(80, 255, 255, 255);
@@ -54,10 +52,10 @@ namespace SpaceWars
         /// <summary>
         /// Updates scores every time game components are updated.
         /// </summary>
-        private void OnGameComponentsUpdated()
+        private void OnWorldModified()
         {
             // Sort the ships by their scores descending
-            _shipsSortedByScore = _spaceWars.GameWorld.GetComponents<Ship>().OrderByDescending(ship => ship.Score);
+            _shipsSortedByScore = _spaceWarsClient.GameWorld.GetComponents<Ship>().OrderByDescending(ship => ship.Score);
 
             // Invalidate this component for redrawing.
             try

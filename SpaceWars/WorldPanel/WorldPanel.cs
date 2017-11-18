@@ -16,7 +16,7 @@ namespace SpaceWars
         /// <summary>
         /// The SpaceWars client for which this panel is drawing the world.
         /// </summary>
-        private readonly SpaceWars _spaceWars;
+        private readonly SpaceWarsClient _spaceWarsClient;
 
         /// <summary>
         /// These multipliers account for differences in world size versus screen size.
@@ -32,11 +32,11 @@ namespace SpaceWars
         /// <summary>
         /// Creates a new WorldPanel.
         /// </summary>
-        /// <param name="spaceWars">The SpaceWars client for which this panel is drawing the world.</param>
-        public WorldPanel(SpaceWars spaceWars)
+        /// <param name="spaceWarsClient">The SpaceWars client for which this panel is drawing the world.</param>
+        public WorldPanel(SpaceWarsClient spaceWarsClient)
         {
-            _spaceWars = spaceWars;
-            _spaceWars.GameComponentsUpdated += OnGameComponentsUpdated;
+            _spaceWarsClient = spaceWarsClient;
+            _spaceWarsClient.WorldModified += OnWorldModified;
 
             BackColor = Color.Transparent;
             DoubleBuffered = true;
@@ -45,14 +45,14 @@ namespace SpaceWars
             SizeChanged += (sender, args) =>
             {
                 _scaleMultipliers = new[]
-                    {(double) Width / _spaceWars.GameWorld.Size, (double) Height / _spaceWars.GameWorld.Size};
+                    {(double) Width / _spaceWarsClient.GameWorld.Size, (double) Height / _spaceWarsClient.GameWorld.Size};
             };
         }
 
         /// <summary>
-        /// Called when any game component is updated in the SpaceWars client.
+        /// Called when the world is modified in the SpaceWars client.
         /// </summary>
-        private void OnGameComponentsUpdated()
+        private void OnWorldModified()
         {
             _gameComponents = GetGameComponentsToDraw();
 
@@ -75,19 +75,19 @@ namespace SpaceWars
         private IEnumerable<GameComponent> GetGameComponentsToDraw()
         {
             // Draw first
-            foreach (var projectile in _spaceWars.GameWorld.GetComponents<Projectile>())
+            foreach (var projectile in _spaceWarsClient.GameWorld.GetComponents<Projectile>())
             {
                 yield return projectile;
             }
 
             // Draw second
-            foreach (var star in _spaceWars.GameWorld.GetComponents<Star>())
+            foreach (var star in _spaceWarsClient.GameWorld.GetComponents<Star>())
             {
                 yield return star;
             }
 
             // Draw third
-            foreach (var ship in _spaceWars.GameWorld.GetComponents<Ship>())
+            foreach (var ship in _spaceWarsClient.GameWorld.GetComponents<Ship>())
             {
                 yield return ship;
             }

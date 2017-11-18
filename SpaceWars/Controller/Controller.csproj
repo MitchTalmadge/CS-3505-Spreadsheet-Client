@@ -43,9 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SpaceWars.cs" />
+    <Compile Include="SpaceWarsClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpaceWarsFactory.cs" />
+    <Compile Include="SpaceWarsClient.Networking.cs" />
+    <Compile Include="SpaceWarsClientFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

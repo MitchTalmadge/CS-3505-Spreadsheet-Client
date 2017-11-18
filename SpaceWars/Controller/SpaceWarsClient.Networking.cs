@@ -9,30 +9,33 @@ using Newtonsoft.Json.Linq;
 namespace SpaceWars
 {
     /// <summary>
-    /// The main controller for the SpaceWars game.
-    /// Uses the networking library to maintain a connection with the 
-    /// game server and notify listeners of changes to game components.
+    /// This section of the SpaceWars class handles networking.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
-    public class SpaceWars
+    public partial class SpaceWarsClient
     {
         /// <summary>
         /// This delegate is called when a connection to SpaceWars was established.
         /// May be called on another thread.
         /// </summary>
-        /// <param name="spaceWars">The connected SpaceWars client.</param>
-        public delegate void ConnectionEstablished(SpaceWars spaceWars);
+        /// <param name="spaceWarsClient">The connected SpaceWars client.</param>
+        public delegate void ConnectionEstablished(SpaceWarsClient spaceWarsClient);
 
         /// <summary>
         /// The provided ConnectionEstablished delegate implementation.
         /// </summary>
-        private readonly ConnectionEstablished _establishedCallback;
+        private readonly ConnectionEstablished _connectionEstablishedCallback;
 
         /// <summary>
         /// This delegate is called when a connection to SpaceWars failed.
         /// </summary>
         /// <param name="reason">Why the connection failed.</param>
         public delegate void ConnectionFailed(string reason);
+
+        /// <summary>
+        /// The provided ConnectionFailed delegate implementation.
+        /// </summary>
+        private readonly ConnectionFailed _connectionFailedCallback;
 
         /// <summary>
         /// This delegate is called when the connection to the server has been lost.
@@ -46,65 +49,9 @@ namespace SpaceWars
         public event ConnectionLostListener ConnectionLost;
 
         /// <summary>
-        /// This delegate handles cases where any game component is updated (a ship, projectile, etc.)
-        /// </summary>
-        public delegate void GameComponentsListener();
-
-        /// <summary>
-        /// This event is fired whenever a game component (ship, projectile, etc.) is updated from the server.
-        /// </summary>
-        public event GameComponentsListener GameComponentsUpdated;
-
-        /// <summary>
         /// Socket that the connection is made through.
         /// </summary>
         private SocketState _socketState;
-
-        /// <summary>
-        /// The nickname of the current player.
-        /// </summary>
-        public string PlayerNickname { get; }
-
-        /// <summary>
-        /// The game world.
-        /// </summary>
-        public World GameWorld { get; private set; }
-
-        /// <summary>
-        /// Creates a new SpaceWars instance that has not been connected.
-        /// Attempts to establish a connection to the given game server, using the given nickname.
-        /// If a connection cannot be established, an exception is thrown. 
-        /// </summary>
-        /// <param name="hostName">The server address, excluding the port.</param>
-        /// <param name="nickname">The nickname to use for the player connecting.</param>
-        /// <param name="established">The callback for when a connection is established.</param>
-        /// <param name="failed">The callback for when a connection has failed.</param>
-        internal SpaceWars(string hostName, string nickname, ConnectionEstablished established, ConnectionFailed failed)
-        {
-            PlayerNickname = nickname;
-
-            _establishedCallback = established;
-
-            // Connect to the server.
-            Networking.Networking.ConnectToServer(
-                hostName,
-                state =>
-                {
-                    _socketState = state;
-                    // Start the thread that continually receives data.
-                    new Thread(() =>
-                    {
-                        // Send the nickname of the user.
-                        Networking.Networking.Send(state, nickname + '\n');
-
-                        // Wait for data.
-                        Networking.Networking.GetData(state);
-                    }).Start();
-                },
-                reason => failed(reason),
-                DataReceived
-            );
-        }
 
         /// <summary>
         /// Receives boolean array of indicators of user input-movement for ships. Index 0
@@ -139,6 +86,34 @@ namespace SpaceWars
             commandBuilder.Append(')');
 
             Networking.Networking.Send(_socketState, commandBuilder + "\n");
+        }
+
+        /// <summary>
+        /// Attempts to connect to the given hostname using the given nickname.
+        /// </summary>
+        /// <param name="hostname">The server address, excluding the port.</param>
+        /// <param name="nickname">The nickname to use for the player connecting.</param>
+        private void Connect(string hostname, string nickname)
+        {
+            // Connect to the server.
+            Networking.Networking.ConnectToServer(
+                hostname,
+                state =>
+                {
+                    _socketState = state;
+                    // Start the thread that continually receives data.
+                    new Thread(() =>
+                    {
+                        // Send the nickname of the user.
+                        Networking.Networking.Send(state, nickname + '\n');
+
+                        // Wait for data.
+                        Networking.Networking.GetData(state);
+                    }).Start();
+                },
+                reason => _connectionFailedCallback(reason),
+                DataReceived
+            );
         }
 
         /// <summary>
@@ -189,7 +164,7 @@ namespace SpaceWars
             GameWorld = new World(worldSize, playerId);
 
             // Notify the listener that the connection was established and the world is ready.
-            _establishedCallback(this);
+            _connectionEstablishedCallback(this);
         }
 
         /// <summary>
@@ -221,7 +196,7 @@ namespace SpaceWars
                     else if (parsedJson["proj"] != null)
                     {
                         var projectile = JsonConvert.DeserializeObject<Projectile>(rawJson);
-                        //removing dead projectiles, only adds projetile to dictionary if it's active
+                        // Remove dead projectiles.
                         if (!projectile.Active)
                         {
                             GameWorld.RemoveComponent(projectile);
@@ -243,8 +218,8 @@ namespace SpaceWars
                 }
             }
 
-            // Notify event listeners of updated game components.
-            GameComponentsUpdated?.Invoke();
+            // Notify event listeners of an updated world.
+            WorldModified?.Invoke();
         }
     }
 }

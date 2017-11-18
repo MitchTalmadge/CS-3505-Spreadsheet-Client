@@ -42,7 +42,7 @@ namespace SpaceWars
             {
                 Interval = 1000 / ControlFps
             };
-            _controlTimer.Tick += (sender, args) => _spaceWars.SendCommand(_controls);
+            _controlTimer.Tick += (sender, args) => _spaceWarsClient.SendCommand(_controls);
 
             // Stop timer when this component disposes.
             Disposed += (sender, args) => _controlTimer.Stop();

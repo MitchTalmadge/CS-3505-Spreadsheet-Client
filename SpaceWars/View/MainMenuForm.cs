@@ -72,7 +72,7 @@ namespace SpaceWars
 
             // Attempt connection
             Connecting = true;
-            SpaceWarsFactory.ConnectToSpaceWars(_hostNameTextBox.Text, _nicknameTextBox.Text,
+            SpaceWarsClientFactory.ConnectToSpaceWars(_hostNameTextBox.Text, _nicknameTextBox.Text,
                 ConnectionEstablished,
                 ConnectionFailed);
         }
@@ -81,12 +81,12 @@ namespace SpaceWars
         /// Called when a connection to a SpaceWars server was established.
         /// Creates the game form and closes the main menu.
         /// </summary>
-        /// <param name="spaceWars">The connected SpaceWars client.</param>
-        private void ConnectionEstablished(SpaceWars spaceWars)
+        /// <param name="spaceWarsClient">The connected SpaceWars client.</param>
+        private void ConnectionEstablished(SpaceWarsClient spaceWarsClient)
         {
             Invoke(new MethodInvoker(() =>
             {
-                new GameForm(spaceWars).Show();
+                new GameForm(spaceWarsClient).Show();
                 StopMusic();
                 Dispose();
             }));
