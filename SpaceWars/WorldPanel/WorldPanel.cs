@@ -45,7 +45,7 @@ namespace SpaceWars
             SizeChanged += (sender, args) =>
             {
                 _scaleMultipliers = new[]
-                    {(double) Width / _spaceWars.WorldSize, (double) Height / _spaceWars.WorldSize};
+                    {(double) Width / _spaceWars.GameWorld.Size, (double) Height / _spaceWars.GameWorld.Size};
             };
         }
 
@@ -75,19 +75,19 @@ namespace SpaceWars
         private IEnumerable<GameComponent> GetGameComponentsToDraw()
         {
             // Draw first
-            foreach (var projectile in _spaceWars.Projectiles)
+            foreach (var projectile in _spaceWars.GameWorld.GetComponents<Projectile>())
             {
                 yield return projectile;
             }
 
             // Draw second
-            foreach (var star in _spaceWars.Stars)
+            foreach (var star in _spaceWars.GameWorld.GetComponents<Star>())
             {
                 yield return star;
             }
 
             // Draw third
-            foreach (var ship in _spaceWars.Ships)
+            foreach (var ship in _spaceWars.GameWorld.GetComponents<Ship>())
             {
                 yield return ship;
             }

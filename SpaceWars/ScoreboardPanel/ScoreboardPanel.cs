@@ -57,7 +57,7 @@ namespace SpaceWars
         private void OnGameComponentsUpdated()
         {
             // Sort the ships by their scores descending
-            _shipsSortedByScore = _spaceWars.Ships.OrderByDescending(ship => ship.Score);
+            _shipsSortedByScore = _spaceWars.GameWorld.GetComponents<Ship>().OrderByDescending(ship => ship.Score);
 
             // Invalidate this component for redrawing.
             try

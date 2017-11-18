@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using Networking;
@@ -62,55 +60,14 @@ namespace SpaceWars
         private SocketState _socketState;
 
         /// <summary>
-        /// The dimensions of the game world (both sides use same length).
-        /// </summary>
-        public int WorldSize { get; private set; }
-
-        /// <summary>
-        /// The current ship that the player controls. 
-        /// May be null if there is no established connection.
-        /// </summary>
-        public Ship PlayerShip => _ships[PlayerId];
-
-        /// <summary>
         /// The nickname of the current player.
         /// </summary>
         public string PlayerNickname { get; }
 
         /// <summary>
-        /// The ID of the current player.
+        /// The game world.
         /// </summary>
-        public int PlayerId { get; private set; } = -1;
-
-        /// <summary>
-        /// A mapping of each known ship in the game to that ship's ID.
-        /// </summary>
-        private readonly Dictionary<int, Ship> _ships = new Dictionary<int, Ship>();
-
-        /// <summary>
-        /// All known ships in the game.
-        /// </summary>
-        public Ship[] Ships => _ships.Values.ToArray();
-
-        /// <summary>
-        /// A mapping of each known projectile in the game to that projectile's ID.
-        /// </summary>
-        private readonly Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
-
-        /// <summary>
-        /// All known projectiles in the game.
-        /// </summary>
-        public Projectile[] Projectiles => _projectiles.Values.ToArray();
-
-        /// <summary>
-        /// A mapping of each known star in the game to that star's ID.
-        /// </summary>
-        private readonly Dictionary<int, Star> _stars = new Dictionary<int, Star>();
-
-        /// <summary>
-        /// All known stars in the game.
-        /// </summary>
-        public Star[] Stars => _stars.Values.ToArray();
+        public World GameWorld { get; private set; }
 
         /// <summary>
         /// Creates a new SpaceWars instance that has not been connected.
@@ -205,8 +162,8 @@ namespace SpaceWars
                 return;
             }
 
-            // We know the first packet has been handled once PlayerId is not -1.
-            if (PlayerId == -1)
+            // We know the first packet has been handled once the world is not null.
+            if (GameWorld == null)
                 ParseFirstPacket(data);
             else
                 ParseJsonPacket(data);
@@ -224,8 +181,11 @@ namespace SpaceWars
             var splitData = data.Split('\n');
 
             // Parse the first packet, containing our player id and the world size.
-            PlayerId = int.Parse(splitData[0]);
-            WorldSize = int.Parse(splitData[1]);
+            var playerId = int.Parse(splitData[0]);
+            var worldSize = int.Parse(splitData[1]);
+
+            // Create a world from the parsed data.
+            GameWorld = new World(worldSize, playerId);
 
             // Notify the listener that the connection was established and the world is ready.
             _establishedCallback(this);
@@ -255,7 +215,7 @@ namespace SpaceWars
                     if (parsedJson["ship"] != null)
                     {
                         var ship = JsonConvert.DeserializeObject<Ship>(rawJson);
-                        _ships[ship.Id] = ship;
+                        GameWorld.UpdateComponent(ship);
                     }
                     else if (parsedJson["proj"] != null)
                     {
@@ -263,20 +223,17 @@ namespace SpaceWars
                         //removing dead projectiles, only adds projetile to dictionary if it's active
                         if (!projectile.Active)
                         {
-                            if (_projectiles.TryGetValue(projectile.Id, out _))
-                            {
-                                _projectiles.Remove(projectile.Id);
-                            }
+                            GameWorld.RemoveComponent(projectile);
                         }
                         else
                         {
-                            _projectiles[projectile.Id] = projectile;
+                            GameWorld.UpdateComponent(projectile);
                         }
                     }
                     else if (parsedJson["star"] != null)
                     {
                         var star = JsonConvert.DeserializeObject<Star>(rawJson);
-                        _stars[star.Id] = star;
+                        GameWorld.UpdateComponent(star);
                     }
                 }
                 catch (Exception e)

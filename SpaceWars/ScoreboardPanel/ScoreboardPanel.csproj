@@ -61,6 +61,10 @@
       <Project>{8ECBF14A-8ED0-4ED5-AC25-DD4B41E8BAC0}</Project>
       <Name>GameComponents</Name>
     </ProjectReference>
+    <ProjectReference Include="..\World\World.csproj">
+      <Project>{5A77CEDF-4A58-4138-8CCC-083CB198D2C8}</Project>
+      <Name>World</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
