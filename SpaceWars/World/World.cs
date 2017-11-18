@@ -82,7 +82,7 @@ namespace SpaceWars
         /// <returns>An IEnumerable containing only components of the given type.</returns>
         public IEnumerable<T> GetComponents<T>() where T : GameComponent
         {
-            return _gameComponents[typeof(T)].Values.Cast<T>();
+            return _gameComponents[typeof(T)].Values.OfType<T>();
         }
     }
 }

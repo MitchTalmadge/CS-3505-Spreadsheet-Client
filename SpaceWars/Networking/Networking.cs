@@ -142,27 +142,21 @@ namespace Networking
 
             // Convert the raw bytes to a string
             var data = Encoding.UTF8.GetString(state.DataBuffer, 0, numBytes);
+            state.DataStringBuilder.Append(data);
 
-            // Find a newline in the response.
-            if (data.LastIndexOf('\n') == -1)
+            // Check for newline terminator.
+            if (!data.EndsWith("\n"))
             {
                 // No newline, so there must be more data.
-                state.DataStringBuilder.Append(data);
                 GetData(state);
                 return;
             }
 
-            // Newline found; split on it and save the remaining data.
-            state.DataStringBuilder.Append(data.Substring(0, data.LastIndexOf('\n') + 1));
-
-            // Save the total data and clear out the string builder.
+            // Save the complete data and clear out the string builder.
             var completeData = state.DataStringBuilder.ToString();
             state.DataStringBuilder.Clear();
 
-            // Put the remaining data into the string builder for next time.
-            state.DataStringBuilder.Append(data.Substring(data.LastIndexOf('\n') + 1));
-
-            // Don't do anything if the socket is disconnected (race condition).
+            // Don't do anything if the socket is disconnected (prevents race condition).
             if (!state.Socket.Connected)
                 return;
 
