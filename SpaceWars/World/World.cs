@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
-using System.Reflection;
 
 namespace SpaceWars
 {
@@ -25,7 +23,7 @@ namespace SpaceWars
         /// <summary>
         /// Contains dictionaries that map game components to their ids. 
         /// </summary>
-        private readonly IServiceContainer _gameComponents = new ServiceContainer();
+        private readonly IDictionary<Type, Dictionary<int, GameComponent>> _gameComponents = new Dictionary<Type, Dictionary<int, GameComponent>>();
 
         /// <summary>
         /// Creates a World instance with the given size and player id.
@@ -51,16 +49,10 @@ namespace SpaceWars
                 .Where(type => type.IsSubclassOf(typeof(GameComponent)));
 
             // Create a dictionary mapping component ids to instances for each subclass.
-            var method = GetType().GetMethod("AddGameComponentsTypeMapping", BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (var subclass in subclasses)
             {
-                method?.MakeGenericMethod(subclass).Invoke(this, null);
+                _gameComponents[subclass] = new Dictionary<int, GameComponent>();
             }
-        }
-
-        private void AddGameComponentsTypeMapping<T>() where T : GameComponent
-        {
-            _gameComponents.AddService(typeof(Dictionary<int, T>), new Dictionary<int, T>());
         }
 
         /// <summary>
@@ -69,10 +61,8 @@ namespace SpaceWars
         /// <param name="component">The game component to update.</param>
         public void UpdateComponent(GameComponent component)
         {
-            var method = GetType().GetMethod("GetComponentDictionary", BindingFlags.NonPublic | BindingFlags.Instance);
-            dynamic dict = method?.MakeGenericMethod(component.GetType()).Invoke(this, null);
-            if (dict != null)
-                dict[component.Id] = component;
+            var dict = _gameComponents[component.GetType()];
+            dict[component.Id] = component;
         }
 
         /// <summary>
@@ -81,20 +71,18 @@ namespace SpaceWars
         /// <param name="component">The game component to remove.</param>
         public void RemoveComponent(GameComponent component)
         {
-            var method = GetType().GetMethod("GetComponentDictionary", BindingFlags.NonPublic | BindingFlags.Instance);
-            dynamic dict = method?.MakeGenericMethod(component.GetType()).Invoke(this, null);
-            if (dict != null)
-                dict.Remove(component.Id);
+            var dict = _gameComponents[component.GetType()];
+            dict.Remove(component.Id);
         }
 
-        private Dictionary<int, T> GetComponentDictionary<T>() where T : GameComponent
-        {
-            return (Dictionary<int, T>) _gameComponents.GetService(typeof(Dictionary<int, T>));
-        }
-
+        /// <summary>
+        /// Retrieves an IEnumerable of game components of a given type from this world.
+        /// </summary>
+        /// <typeparam name="T">The type of game component to enumerate over.</typeparam>
+        /// <returns>An IEnumerable containing only components of the given type.</returns>
         public IEnumerable<T> GetComponents<T>() where T : GameComponent
         {
-            return ((Dictionary<int, T>) _gameComponents.GetService(typeof(Dictionary<int, T>))).Values.ToArray();
+            return _gameComponents[typeof(T)].Values.Cast<T>();
         }
     }
 }
