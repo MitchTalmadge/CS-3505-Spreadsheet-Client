@@ -54,7 +54,7 @@ namespace SpaceWars
         /// Ranges from 0 to 5, where 5 is full health and 0 is temporarily dead (waiting for respawn).
         /// </summary>
         [JsonProperty("hp")]
-        public int Health { get; private set; }
+        public double Health { get; private set; }
 
         /// <summary>
         /// The score of this ship.
@@ -70,7 +70,7 @@ namespace SpaceWars
         public override Tuple<Bitmap, Rectangle, Size> GetDrawingDetails()
         {
             // Do not draw if the health is 0.
-            if (Health == 0)
+            if (Health.Equals(0))
                 return null;
 
             var colorIndex = Id % 8;

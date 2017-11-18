@@ -117,21 +117,20 @@ namespace SpaceWars
         /// <param name="graphics">The graphics object to draw with.</param>
         private void DrawShipStats(Ship ship, int offset, Graphics graphics)
         {
-            Font font = new Font(new FontFamily("OCR A Extended"), 15, FontStyle.Regular);
-            Brush brush = new SolidBrush(Color.DarkSlateBlue);
+            var font = new Font(new FontFamily("OCR A Extended"), 15, FontStyle.Regular);
+            var brush = new SolidBrush(Color.DarkSlateBlue);
 
             // Translate the graphics to where we will draw.
             graphics.TranslateTransform(0, 40 + offset * 50);
 
-            graphics.DrawString(ship.Name, font, brush, new Point(0, 0));
-            graphics.DrawString(ship.Score.ToString(), font, brush, new Point(100, 0));
+            graphics.DrawString(ship.Name, font, brush, new Point(10, 0));
+            graphics.DrawString(ship.Score.ToString(), font, brush, new Point(ClientSize.Width - 50, 0));
 
             graphics.DrawRectangle(new Pen(brush), 10, 30, ClientSize.Width - 20, 15);
 
             //fills health bar (rectangle) proportionately to health of ship
-            double health = Convert.ToDouble(ship.Health);
             graphics.FillRectangle(brush, 10, 30,
-                (float) (health / 5.0) * (ClientSize.Width - 20), 15);
+                (float) (ship.Health / 5.0) * (ClientSize.Width - 20), 15);
         }
     }
 }
