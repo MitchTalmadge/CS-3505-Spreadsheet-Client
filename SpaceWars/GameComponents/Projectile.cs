@@ -50,10 +50,6 @@ namespace SpaceWars
         public int OwnerShipId { get; private set; }
 
         /// <inheritdoc />
-        /// <summary>
-        /// There are 2 sprites for projectiles to be drawn, one frame is the projectile
-        /// "exploding" and the other is just a regular projectile.
-        /// </summary>
         public override Tuple<Bitmap, Rectangle, Size> GetDrawingDetails()
         {
             // Don't draw if inactive.

@@ -4,13 +4,19 @@ Mitch Talmadge
 u1031378
 
 Our Spacewars game has a very different visual aesthetic than the one demoed in class. It does
-have music, so we encourage you to turn up your volume!
+have music, so we encourage you to turn up your volume! We had many more plans for this game
+(such as exploding animations, different colored projectils, etc) but due to time constraints 
+we had to prioritize.
+
+Controls: WASD to move, Space to fire. 
 
 For the GUI we made separate WorldPanel and ScoreboadPanel classes, both which extend Panel. 
 This separation made it clearer in the initial design to focus on redrawing and handling threads
 for the game's components display and the scoreboard's functionality. Our scoreboard includes
 a health bar that fills to scale according to the player's health and also sorts/draws the 
 scores in order from highest scorer to lowest. 
+
+We have created an MP3Player which uses NAudio from NuGet, so please make sure to download that package.
 
 Our Networking class of static methods is structured differently from what was recommended in the 
 instructions, we did this so we could catch all the possible exceptions thrown by networking code. 
