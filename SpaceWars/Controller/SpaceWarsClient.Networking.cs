@@ -85,7 +85,7 @@ namespace SpaceWars
             }
             commandBuilder.Append(')');
 
-            Networking.Networking.Send(_socketState, commandBuilder + "\n");
+            AbstractNetworking.Send(_socketState, commandBuilder + "\n");
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace SpaceWars
         private void Connect(string hostname, string nickname)
         {
             // Connect to the server.
-            Networking.Networking.ConnectToServer(
+            ClientNetworking.ConnectToServer(
                 hostname,
                 state =>
                 {
@@ -105,10 +105,10 @@ namespace SpaceWars
                     new Thread(() =>
                     {
                         // Send the nickname of the user.
-                        Networking.Networking.Send(state, nickname + '\n');
+                        AbstractNetworking.Send(state, nickname + '\n');
 
                         // Wait for data.
-                        Networking.Networking.GetData(state);
+                        AbstractNetworking.GetData(state);
                     }).Start();
                 },
                 reason => _connectionFailedCallback(reason),
@@ -122,7 +122,7 @@ namespace SpaceWars
         /// </summary>
         public void Disconnect()
         {
-            Networking.Networking.DisconnectFromServer(_socketState);
+            AbstractNetworking.Disconnect(_socketState);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace SpaceWars
                 ParseJsonPacket(data);
 
             // Get new data.
-            Networking.Networking.GetData(_socketState);
+            AbstractNetworking.GetData(_socketState);
         }
 
         /// <summary>

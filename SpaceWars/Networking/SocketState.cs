@@ -18,17 +18,17 @@ namespace Networking
         /// <summary>
         /// Callback for an established connection.
         /// </summary>
-        internal readonly Networking.ConnectionEstablished Established;
+        internal readonly AbstractNetworking.ConnectionEstablished ConnectionEstablished;
 
         /// <summary>
         /// Callback for a failed connection.
         /// </summary>
-        internal readonly Networking.ConnectionFailed Failed;
+        internal readonly AbstractNetworking.ConnectionFailed ConnectionFailed;
 
         /// <summary>
         /// Callback for received data.
         /// </summary>
-        internal readonly Networking.DataReceived DataReceived;
+        internal readonly AbstractNetworking.DataReceived DataReceived;
 
         /// <summary>
         /// This is the buffer where we will receive data from the socket
@@ -49,12 +49,15 @@ namespace Networking
         /// <param name="established">Callback for an established connection.</param>
         /// <param name="failed">Callback for a failed connection.</param>
         /// <param name="dataReceived">Callback for received data.</param>
-        internal SocketState(Socket socket, Networking.ConnectionEstablished established,
-            Networking.ConnectionFailed failed, Networking.DataReceived dataReceived)
+        internal SocketState(
+            Socket socket,
+            AbstractNetworking.ConnectionEstablished established,
+            AbstractNetworking.ConnectionFailed failed,
+            AbstractNetworking.DataReceived dataReceived)
         {
             Socket = socket;
-            Established = established;
-            Failed = failed;
+            ConnectionEstablished = established;
+            ConnectionFailed = failed;
             DataReceived = dataReceived;
         }
     }

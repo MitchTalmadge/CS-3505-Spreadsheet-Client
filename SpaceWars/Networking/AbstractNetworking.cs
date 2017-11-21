@@ -5,18 +5,13 @@ using System.Text;
 namespace Networking
 {
     /// <summary>
-    /// Static class holding static networking methods.
+    /// Networking code that is used by both clients and servers.
     /// </summary>
-    public static class Networking
+    /// <authors>Jiahui Chen, Mitch Talmadge</authors>
+    public abstract class AbstractNetworking
     {
         /// <summary>
-        /// This delegate is called when data is received.
-        /// </summary>
-        /// <param name="data">The data that was received, or null if the connection was closed.</param>
-        public delegate void DataReceived(string data);
-
-        /// <summary>
-        /// This delegate is called when a connection has been established.
+        /// This delegate is called when a connection has been established, whether to a client or a server.
         /// </summary>
         /// <param name="state">The socket state, which contains information about the connection and should be stored for use when sending data.</param>
         public delegate void ConnectionEstablished(SocketState state);
@@ -28,65 +23,10 @@ namespace Networking
         public delegate void ConnectionFailed(string reason);
 
         /// <summary>
-        /// Attempts to connect to the server via a provided hostname. 
-        /// Saves the callback function in a socket state object for use when data arrives.
+        /// This delegate is called when data is received.
         /// </summary>
-        /// <param name="hostName">The address to connect to, excluding port.</param>
-        /// <param name="established">The callback for when a connection has been established.</param>
-        /// <param name="failed">The callback for when a connection has failed.</param>
-        /// <param name="dataReceived">The callback for when data is received.</param>
-        public static void ConnectToServer(string hostName, ConnectionEstablished established, ConnectionFailed failed,
-            DataReceived dataReceived)
-        {
-            // Create a SocketState.
-            var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            var socketState = new SocketState(socket, established, failed, dataReceived);
-
-            // Attempt connection to the address on the default port.
-            try
-            {
-                socket.BeginConnect(hostName, 11000, ConnectedToServer, socketState);
-            }
-            catch (Exception e)
-            {
-                socketState.Failed(e.Message);
-            }
-        }
-
-        /// <summary>
-        ///  Referenced by the BeginConnect method and is called by the OS
-        ///  when the socket connects to the server.
-        /// </summary>
-        /// <param name="stateAsArObject"></param>
-        private static void ConnectedToServer(IAsyncResult stateAsArObject)
-        {
-            // Retreive the SocketState from the async result.
-            var socketState = (SocketState) stateAsArObject.AsyncState;
-            var socket = socketState.Socket;
-
-            // Attempt to end the connection request.
-            try
-            {
-                socket.EndConnect(stateAsArObject);
-                socketState.Established(socketState);
-            }
-            catch (Exception e)
-            {
-                socketState.Failed(e.Message);
-            }
-        }
-
-        /// <summary>
-        /// Disconnects the given state from the server.
-        /// No messages should be sent after this method is called.
-        /// After calling this method, null data will be sent to the DataReceived method to signify the closing of the connection.
-        /// </summary>
-        /// <param name="state">The socket state to disconnect</param>
-        public static void DisconnectFromServer(SocketState state)
-        {
-            state.Socket.Disconnect(false);
-            state.DataReceived(null);
-        }
+        /// <param name="data">The data that was received, or null if the connection was closed.</param>
+        public delegate void DataReceived(string data);
 
         /// <summary>
         /// Is called in delegate (which is passed in/called within the Client). 
@@ -103,7 +43,7 @@ namespace Networking
             }
             catch (SocketException)
             {
-                DisconnectFromServer(state);
+                Disconnect(state);
             }
         }
 
@@ -117,7 +57,7 @@ namespace Networking
         private static void ReceiveCallback(IAsyncResult stateAsArObject)
         {
             // Get the SocketState associated with the received data
-            var state = (SocketState) stateAsArObject.AsyncState;
+            var state = (SocketState)stateAsArObject.AsyncState;
 
             int numBytes;
 
@@ -129,14 +69,14 @@ namespace Networking
             catch (SocketException)
             {
                 // The socket was closed.
-                DisconnectFromServer(state);
+                Disconnect(state);
                 return;
             }
 
             // Account for no data being received (connection closed).
             if (numBytes <= 0)
             {
-                DisconnectFromServer(state);
+                Disconnect(state);
                 return;
             }
 
@@ -183,9 +123,21 @@ namespace Networking
         /// </summary>
         private static void SendCallback(IAsyncResult ar)
         {
-            var state = (SocketState) ar.AsyncState;
+            var state = (SocketState)ar.AsyncState;
 
             state.Socket.EndSend(ar);
+        }
+
+        /// <summary>
+        /// Disconnects the given socket state.
+        /// The given socket state should not be used after calling this method.
+        /// After calling this method, null data will be sent to the DataReceived callback to signify the closing of the connection.
+        /// </summary>
+        /// <param name="state">The socket state to disconnect</param>
+        public static void Disconnect(SocketState state)
+        {
+            state.Socket.Disconnect(false);
+            state.DataReceived(null);
         }
     }
 }
