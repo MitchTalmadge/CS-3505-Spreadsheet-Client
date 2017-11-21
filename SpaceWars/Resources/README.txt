@@ -5,6 +5,8 @@ u1031378
 
 PS8: Server README
 
+Testing:
+We unit tested our World class exclusively. 
 
 PS7: Client README
 Our Spacewars game has a very different visual aesthetic than the one demoed in class. It does
