@@ -17,7 +17,7 @@ namespace Networking
         /// <param name="hostName">The address to connect to, excluding port.</param>
         /// <param name="established">The callback for when a connection has been established.</param>
         /// <param name="failed">The callback for when a connection has failed.</param>
-        /// <param name="dataReceived">The callback for when data is received.</param>
+        /// <param name="dataReceived">The callback for when data is received from the server.</param>
         public static void ConnectToServer(
             string hostName,
             ConnectionEstablished established,
@@ -40,8 +40,8 @@ namespace Networking
         }
 
         /// <summary>
-        ///  Referenced by the BeginConnect method and is called by the OS
-        ///  when the socket connects to the server.
+        /// Referenced by the BeginConnect method and is called by the OS
+        /// when the socket connects to the server.
         /// </summary>
         /// <param name="asyncResult">Contains the state.</param>
         private static void ConnectedToServer(IAsyncResult asyncResult)
