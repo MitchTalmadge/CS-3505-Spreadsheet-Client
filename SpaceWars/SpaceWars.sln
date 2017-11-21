@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{DA562CCD-920E-4D4C-9CB7-D594CE96F302}"
 EndProject
@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networking", "Networking\Ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameComponents", "GameComponents\GameComponents.csproj", "{8ECBF14A-8ED0-4ED5-AC25-DD4B41E8BAC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{093C1891-4CA4-450C-81A4-1AAACA9507EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "View\Client.csproj", "{093C1891-4CA4-450C-81A4-1AAACA9507EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3Player", "MP3Player\MP3Player.csproj", "{14FB94D4-0535-417D-AC81-56D5276F855B}"
 EndProject
@@ -94,6 +94,7 @@ Global
 		{3E434551-4E90-4CF4-A684-7657EE418CBB} = {E1AD77C2-8281-4C26-8627-D407C431D36C}
 		{66C73678-C0B2-477E-A1FD-CF48D38961AF} = {F7DED078-03C8-4E25-8D30-67275C44DAAF}
 		{5A77CEDF-4A58-4138-8CCC-083CB198D2C8} = {F7DED078-03C8-4E25-8D30-67275C44DAAF}
+		{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF} = {E1AD77C2-8281-4C26-8627-D407C431D36C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FA88E468-FA51-4B6C-84C1-321CBFB2D6EC}

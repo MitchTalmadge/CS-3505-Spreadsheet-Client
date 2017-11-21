@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Server
+﻿namespace SpaceWars
 {
-    class Program
+    /// <summary>
+    /// The SpaceWars Server Program.
+    /// This class is only the "view" of the server; the console.
+    /// The controller logic is in a separate project.
+    /// </summary>
+    /// <authors>Jiahui Chen, Mitch Talmadge</authors>
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
         }
     }
