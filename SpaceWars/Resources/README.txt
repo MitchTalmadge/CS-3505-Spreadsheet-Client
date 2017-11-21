@@ -3,6 +3,10 @@ u0980890
 Mitch Talmadge
 u1031378
 
+PS8: Server README
+
+
+PS7: Client README
 Our Spacewars game has a very different visual aesthetic than the one demoed in class. It does
 have music, so we encourage you to turn up your volume! We had many more plans for this game
 (such as exploding animations, different colored projectils, etc) but due to time constraints 

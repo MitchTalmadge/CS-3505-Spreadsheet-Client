@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{DA562CCD-920E-4D4C-9CB7-D594CE96F302}"
 EndProject
@@ -28,6 +28,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "View Projects", "View Projects", "{E1AD77C2-8281-4C26-8627-D407C431D36C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controller Projects", "Controller Projects", "{F33033F4-6BC8-4D2C-BDD5-01906ABBBC81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +76,10 @@ Global
 		{5A77CEDF-4A58-4138-8CCC-083CB198D2C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A77CEDF-4A58-4138-8CCC-083CB198D2C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A77CEDF-4A58-4138-8CCC-083CB198D2C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
