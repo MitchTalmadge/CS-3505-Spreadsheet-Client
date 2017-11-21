@@ -14,7 +14,7 @@ namespace SpaceWars
         /// <summary>
         /// The logger for this program.
         /// </summary>
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger("Space Wars");
 
         /// <summary>
         /// The server controller instance attached to this view.
