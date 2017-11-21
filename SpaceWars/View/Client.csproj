@@ -104,9 +104,9 @@
     <None Include="Resources\main_menu_music.mp3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Controller\Controller.csproj">
+    <ProjectReference Include="..\Controller\ClientController.csproj">
       <Project>{0e4f88a2-eb10-4e7a-a268-5d888226c3f6}</Project>
-      <Name>Controller</Name>
+      <Name>ClientController</Name>
     </ProjectReference>
     <ProjectReference Include="..\GameComponents\GameComponents.csproj">
       <Project>{8ECBF14A-8ED0-4ED5-AC25-DD4B41E8BAC0}</Project>

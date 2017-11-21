@@ -53,9 +53,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Controller\Controller.csproj">
+    <ProjectReference Include="..\Controller\ClientController.csproj">
       <Project>{0E4F88A2-EB10-4E7A-A268-5D888226C3F6}</Project>
-      <Name>Controller</Name>
+      <Name>ClientController</Name>
     </ProjectReference>
     <ProjectReference Include="..\GameComponents\GameComponents.csproj">
       <Project>{8ECBF14A-8ED0-4ED5-AC25-DD4B41E8BAC0}</Project>

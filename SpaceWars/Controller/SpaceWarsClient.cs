@@ -1,7 +1,7 @@
 ﻿namespace SpaceWars
 {
     /// <summary>
-    /// The main controller for the SpaceWars game.
+    /// The main controller for the SpaceWars game client.
     /// Uses the networking library to maintain a connection with the 
     /// game server and notify listeners of changes to game components.
     /// </summary>

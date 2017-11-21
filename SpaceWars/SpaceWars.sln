@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{DA562CCD-920E-4D4C-9CB7-D594CE96F302}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller", "Controller\Controller.csproj", "{0E4F88A2-EB10-4E7A-A268-5D888226C3F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientController", "Controller\ClientController.csproj", "{0E4F88A2-EB10-4E7A-A268-5D888226C3F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networking", "Networking\Networking.csproj", "{45F0D777-CD1C-4F3C-A4C0-762EB1EB8DB9}"
 EndProject
@@ -30,6 +30,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controller Projects", "Controller Projects", "{F33033F4-6BC8-4D2C-BDD5-01906ABBBC81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerController", "ServerController\ServerController.csproj", "{7AB2E330-DBE6-489D-AE36-B4DF8AA5F0FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,6 +82,10 @@ Global
 		{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AB2E330-DBE6-489D-AE36-B4DF8AA5F0FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB2E330-DBE6-489D-AE36-B4DF8AA5F0FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB2E330-DBE6-489D-AE36-B4DF8AA5F0FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB2E330-DBE6-489D-AE36-B4DF8AA5F0FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{66C73678-C0B2-477E-A1FD-CF48D38961AF} = {F7DED078-03C8-4E25-8D30-67275C44DAAF}
 		{5A77CEDF-4A58-4138-8CCC-083CB198D2C8} = {F7DED078-03C8-4E25-8D30-67275C44DAAF}
 		{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF} = {E1AD77C2-8281-4C26-8627-D407C431D36C}
+		{7AB2E330-DBE6-489D-AE36-B4DF8AA5F0FA} = {F33033F4-6BC8-4D2C-BDD5-01906ABBBC81}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FA88E468-FA51-4B6C-84C1-321CBFB2D6EC}
