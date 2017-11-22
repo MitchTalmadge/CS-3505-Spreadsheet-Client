@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Networking;
 
 namespace SpaceWars
@@ -56,9 +57,28 @@ namespace SpaceWars
 
         private void ClientConnectionEstablished(SocketState state)
         {
+            // Add the client to the list of connected clients.
             _clients.Add(state);
 
+            // Spawn a thread to communicate with the client.
+            new Thread(() =>
+            {
+                SendFirstPacket(state);
+                AbstractNetworking.GetData(state);
+            }).Start();
+
+            // Notify listeners of a newly connected client.
             ClientConnected?.Invoke();
+        }
+
+        /// <summary>
+        /// Sends the first packet that a client should receive.
+        /// </summary>
+        /// <param name="state">The client's socket state.</param>
+        private void SendFirstPacket(SocketState state)
+        {
+            //TODO: Get World Size from xml, compute an id.
+            AbstractNetworking.Send(state, "0\n750\n");
         }
 
         private void ClientConnectionFailed(string reason)

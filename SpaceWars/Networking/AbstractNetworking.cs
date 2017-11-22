@@ -68,8 +68,13 @@ namespace Networking
             }
             catch (SocketException)
             {
-                // The socket was closed.
+                // The other side has disconnected.
                 Disconnect(state);
+                return;
+            }
+            catch (ObjectDisposedException)
+            {
+                // The socket was disposed previously.
                 return;
             }
 
@@ -136,7 +141,8 @@ namespace Networking
         /// <param name="state">The socket state to disconnect</param>
         public static void Disconnect(SocketState state)
         {
-            state.Socket.Disconnect(false);
+            state.Socket.Shutdown(SocketShutdown.Both);
+            state.Socket.Close();
             state.DataReceived(null);
         }
     }
