@@ -20,7 +20,25 @@ namespace SpaceWars
         /// <summary>
         /// A list of socket states for connected clients.
         /// </summary>
-        private HashSet<SocketState> _clients = new HashSet<SocketState>();
+        private readonly HashSet<SocketState> _clients = new HashSet<SocketState>();
+
+        /// <summary>
+        /// Called when a client connects to the server.
+        /// Useful for logging purposes.
+        /// </summary>
+        public event Action ClientConnected;
+
+        /// <summary>
+        /// Called when a client disconnects from the server.
+        /// Useful for logging purposes.
+        /// </summary>
+        public event Action ClientDisconnected;
+
+        /// <summary>
+        /// Called when this server stops listening for clients.
+        /// Useful for logging purposes.
+        /// </summary>
+        public event Action ServerDisconnected;
 
         public SpaceWarsServer()
         {
@@ -38,7 +56,9 @@ namespace SpaceWars
 
         private void ClientConnectionEstablished(SocketState state)
         {
-            Console.Out.WriteLine("Connection from client.");
+            _clients.Add(state);
+
+            ClientConnected?.Invoke();
         }
 
         private void ClientConnectionFailed(string reason)
@@ -48,6 +68,13 @@ namespace SpaceWars
 
         private void DataReceived(string data)
         {
+            // When data is null, the connection has been lost.
+            if (data == null)
+            {
+                ClientDisconnected?.Invoke();
+                return;
+            }
+
             Console.Out.WriteLine("Data from client: " + data);
         }
 
@@ -55,9 +82,10 @@ namespace SpaceWars
         /// Disconnects from the TcpState that accepts client connections.
         /// This server instance may not be used after calling this method.
         /// </summary>
-        private void Disconnect()
+        public void Disconnect()
         {
             _tcpState?.StopAcceptingClientConnections();
+            ServerDisconnected?.Invoke();
         }
     }
 }
