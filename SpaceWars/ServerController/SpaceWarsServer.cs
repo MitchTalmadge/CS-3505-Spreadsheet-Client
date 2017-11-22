@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Networking;
 
 namespace SpaceWars
@@ -15,6 +16,11 @@ namespace SpaceWars
         /// The TcpState that the server is using to accept client connections.
         /// </summary>
         private TcpState _tcpState;
+
+        /// <summary>
+        /// A list of socket states for connected clients.
+        /// </summary>
+        private HashSet<SocketState> _clients = new HashSet<SocketState>();
 
         public SpaceWarsServer()
         {

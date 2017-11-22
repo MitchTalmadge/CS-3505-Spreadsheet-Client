@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 using System.Text;
 
 namespace Networking
@@ -10,6 +11,11 @@ namespace Networking
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     public class SocketState
     {
+        /// <summary>
+        /// A unique ID for determining equality between socket states.
+        /// </summary>
+        private readonly Guid _id = new Guid();
+
         /// <summary>
         /// Socket that receives data
         /// </summary>
@@ -39,9 +45,6 @@ namespace Networking
         // holds pervious data 
         internal StringBuilder DataStringBuilder = new StringBuilder();
 
-        //ID, not used for PS7
-        int ID;
-
         /// <summary>
         /// Creates a new Socket State from a socket and callback.
         /// </summary>
@@ -59,6 +62,24 @@ namespace Networking
             ConnectionEstablished = established;
             ConnectionFailed = failed;
             DataReceived = dataReceived;
+        }
+
+        protected bool Equals(SocketState other)
+        {
+            return _id.Equals(other._id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((SocketState) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return _id.GetHashCode();
         }
     }
 }
