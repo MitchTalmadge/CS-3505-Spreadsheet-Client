@@ -18,7 +18,7 @@ namespace Networking
         /// <param name="failed">The callback for when a connection to a client has failed.</param>
         /// <param name="dataReceived">The callback for when data is received from the new client.</param>
         /// <returns>A TcpState, which can be used to stop accepting connections from clients.</returns>
-        public TcpState AwaitClientConnections(
+        public static TcpState AwaitClientConnections(
             ConnectionEstablished established,
             ConnectionFailed failed,
             DataReceived dataReceived)
@@ -56,8 +56,6 @@ namespace Networking
                 tcpState.ConnectionEstablished,
                 tcpState.ConnectionFailed,
                 tcpState.DataReceived);
-
-            tcpState.TcpListener.Stop();
 
             // Notify callback of connection established.
             socketState.ConnectionEstablished(socketState);
