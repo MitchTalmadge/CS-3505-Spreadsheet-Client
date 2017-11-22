@@ -23,7 +23,7 @@ namespace Networking
             ConnectionFailed failed,
             DataReceived dataReceived)
         {
-            var listener = new TcpListener(IPAddress.Loopback, 11000);
+            var listener = new TcpListener(IPAddress.Any, 11000);
             var tcpState = new TcpState(listener, established, failed, dataReceived);
 
             // Start accepting the socket from the client.
