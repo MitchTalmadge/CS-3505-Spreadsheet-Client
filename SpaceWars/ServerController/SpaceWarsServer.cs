@@ -40,6 +40,9 @@ namespace SpaceWars
         /// </summary>
         public event Action ServerDisconnected;
 
+        /// <summary>
+        /// Creates a new Space Wars Server that will listen for clients.
+        /// </summary>
         public SpaceWarsServer()
         {
             BeginAcceptingConnections();

@@ -62,7 +62,7 @@ namespace Properties
             {
                 using (var reader = XmlReader.Create(FilePath, ReaderSettings))
                 {
-                    reader.ReadStartElement();
+                    reader.MoveToContent();
                     reader.ReadStartElement(RootElementName);
                     reader.ReadEndElement();
                 }
@@ -82,7 +82,7 @@ namespace Properties
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement(RootElementName);
-                writer.WriteEndElement();
+                writer.WriteFullEndElement();
                 writer.WriteEndDocument();
             }
         }

@@ -125,6 +125,10 @@
     <value>Client Disconnected</value>
     <comment>Displays in the logs when a client disconnects.</comment>
   </data>
+  <data name="Server_Log_PropertiesLoadFailed" xml:space="preserve">
+    <value>Properties file could not be loaded; possibly corrupt.</value>
+    <comment>Displays in the logs when the properties file cannot be loaded.</comment>
+  </data>
   <data name="Server_Log_ServerConnected" xml:space="preserve">
     <value>Server Started and Listening for Clients</value>
     <comment>Displays in the logs when the server begins listening successfully.</comment>

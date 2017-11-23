@@ -79,6 +79,15 @@ namespace SpaceWars.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Properties file could not be loaded; possibly corrupt..
+        /// </summary>
+        internal static string Server_Log_PropertiesLoadFailed {
+            get {
+                return ResourceManager.GetString("Server_Log_PropertiesLoadFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server Started and Listening for Clients.
         /// </summary>
         internal static string Server_Log_ServerConnected {

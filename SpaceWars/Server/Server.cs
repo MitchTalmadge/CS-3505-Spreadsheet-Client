@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using NLog;
+using Properties;
 using SpaceWars.Properties;
 
 namespace SpaceWars
@@ -18,6 +20,11 @@ namespace SpaceWars
         private static readonly ILogger Logger = LogManager.GetLogger("Space Wars");
 
         /// <summary>
+        /// The path to the server's properties file.
+        /// </summary>
+        private const string PropertiesFilePath = "server_properties.xml";
+
+        /// <summary>
         /// The server controller instance attached to this view.
         /// </summary>
         private static SpaceWarsServer _spaceWarsServer;
@@ -29,12 +36,33 @@ namespace SpaceWars
         /// </summary>
         private static void Main(string[] args)
         {
+            InitializeProperties();
+            
             _spaceWarsServer = new SpaceWarsServer();
             Logger.Log(LogLevel.Info, Resources.Server_Log_ServerConnected);
 
             InitializeLoggingListeners();
 
             KeepConsoleOpen();
+        }
+
+        /// <summary>
+        /// Initializes the properties file and checks for errors.
+        /// Also checks for missing properties and writes their default values.
+        /// </summary>
+        private static void InitializeProperties()
+        {
+            try
+            {
+                var properties = new PropertiesFile(PropertiesFilePath);
+            }
+            catch (IOException)
+            {
+                // Log error and quit.
+                Logger.Log(LogLevel.Fatal, Resources.Server_Log_PropertiesLoadFailed);
+                Console.Read();
+                Environment.Exit(-1);
+            }
         }
 
         /// <summary>
