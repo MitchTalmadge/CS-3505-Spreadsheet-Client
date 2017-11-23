@@ -32,9 +32,14 @@ namespace Networking
         internal readonly AbstractNetworking.ConnectionFailed ConnectionFailed;
 
         /// <summary>
-        /// Callback for received data.
+        /// This event is invoked when data is received for the socket related to this state.
         /// </summary>
-        internal readonly AbstractNetworking.DataReceived DataReceived;
+        public event Action<string> DataReceived;
+
+        /// <summary>
+        /// This event is invoked when this socket state becomes disconnected and can no longer be used.
+        /// </summary>
+        public event Action Disconnected;
 
         /// <summary>
         /// This is the buffer where we will receive data from the socket
@@ -51,17 +56,45 @@ namespace Networking
         /// <param name="socket">The socket related to this state.</param>
         /// <param name="established">Callback for an established connection.</param>
         /// <param name="failed">Callback for a failed connection.</param>
-        /// <param name="dataReceived">Callback for received data.</param>
         internal SocketState(
             Socket socket,
             AbstractNetworking.ConnectionEstablished established,
-            AbstractNetworking.ConnectionFailed failed,
-            AbstractNetworking.DataReceived dataReceived)
+            AbstractNetworking.ConnectionFailed failed)
         {
             Socket = socket;
             ConnectionEstablished = established;
             ConnectionFailed = failed;
-            DataReceived = dataReceived;
+        }
+
+        /// <summary>
+        /// Finishes the process of receiving a data packet on this socket.
+        /// 
+        /// This is achieved by clearing the Data StringBuilder and notifying 
+        /// event listeners that data was received.
+        /// </summary>
+        internal void FinishReceiveData()
+        {
+            // Save the complete data and clear out the string builder.
+            var completeData = DataStringBuilder.ToString();
+            DataStringBuilder.Clear();
+
+            // Notify listeners.
+            DataReceived?.Invoke(completeData);
+        }
+
+        /// <summary>
+        /// Shuts down and closes this socket state.
+        /// The state may not be used after invoking this method.
+        /// The Disconnected event will be invoked upon completion.
+        /// </summary>
+        /// <seealso cref="Disconnected"/>
+        public void Disconnect()
+        {
+            Socket.Shutdown(SocketShutdown.Both);
+            Socket.Close();
+
+            // Notify listeners.
+            Disconnected?.Invoke();
         }
 
         protected bool Equals(SocketState other)

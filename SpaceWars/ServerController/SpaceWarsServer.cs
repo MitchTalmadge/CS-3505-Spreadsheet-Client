@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using Networking;
 
 namespace SpaceWars
@@ -19,9 +18,9 @@ namespace SpaceWars
         private TcpState _tcpState;
 
         /// <summary>
-        /// A list of socket states for connected clients.
+        /// A list of connected client communicators.
         /// </summary>
-        private readonly HashSet<SocketState> _clients = new HashSet<SocketState>();
+        private readonly HashSet<ClientCommunicator> _clients = new HashSet<ClientCommunicator>();
 
         /// <summary>
         /// Called when a client connects to the server.
@@ -51,51 +50,35 @@ namespace SpaceWars
         /// </summary>
         private void BeginAcceptingConnections()
         {
-            _tcpState = ServerNetworking.AwaitClientConnections(ClientConnectionEstablished, ClientConnectionFailed,
-                DataReceived);
+            _tcpState = ServerNetworking.AwaitClientConnections(ClientConnectionEstablished, ClientConnectionFailed);
         }
 
         private void ClientConnectionEstablished(SocketState state)
         {
             // Add the client to the list of connected clients.
-            _clients.Add(state);
+            var communicator = new ClientCommunicator(this, state);
+            _clients.Add(communicator);
 
-            // Spawn a thread to communicate with the client.
-            new Thread(() =>
+            // Handle the case where the client disconnects.
+            communicator.Disconnected += () =>
             {
-                SendFirstPacket(state);
-                AbstractNetworking.GetData(state);
-            }).Start();
+                // Remove the client from the list of connected clients.
+                _clients.Remove(communicator);
+
+                // Notify listeners.
+                ClientDisconnected?.Invoke();
+            };
+
+            // Start the listening process.
+            communicator.BeginListeningAsync();
 
             // Notify listeners of a newly connected client.
             ClientConnected?.Invoke();
         }
 
-        /// <summary>
-        /// Sends the first packet that a client should receive.
-        /// </summary>
-        /// <param name="state">The client's socket state.</param>
-        private void SendFirstPacket(SocketState state)
-        {
-            //TODO: Get World Size from xml, compute an id.
-            AbstractNetworking.Send(state, "0\n750\n");
-        }
-
         private void ClientConnectionFailed(string reason)
         {
             Console.Out.WriteLine("Connection Failed: " + reason);
-        }
-
-        private void DataReceived(string data)
-        {
-            // When data is null, the connection has been lost.
-            if (data == null)
-            {
-                ClientDisconnected?.Invoke();
-                return;
-            }
-
-            Console.Out.WriteLine("Data from client: " + data);
         }
 
         /// <summary>

@@ -38,15 +38,10 @@ namespace SpaceWars
         private readonly ConnectionFailed _connectionFailedCallback;
 
         /// <summary>
-        /// This delegate is called when the connection to the server has been lost.
-        /// </summary>
-        public delegate void ConnectionLostListener();
-
-        /// <summary>
         /// This event is fired when the connection to the server has been lost, 
         /// whether unexpectedly or by calling the Disconnect method.
         /// </summary>
-        public event ConnectionLostListener ConnectionLost;
+        public event Action Disconnected;
 
         /// <summary>
         /// Socket that the connection is made through.
@@ -101,6 +96,16 @@ namespace SpaceWars
                 state =>
                 {
                     _socketState = state;
+
+                    // Listen for when data is received on the socket.
+                    _socketState.DataReceived += DataReceived;
+
+                    // Listen for when the socket disconnects.
+                    _socketState.Disconnected += () =>
+                    {
+                        Disconnected?.Invoke();
+                    };
+
                     // Start the thread that continually receives data.
                     new Thread(() =>
                     {
@@ -111,8 +116,7 @@ namespace SpaceWars
                         AbstractNetworking.GetData(state);
                     }).Start();
                 },
-                reason => _connectionFailedCallback(reason),
-                DataReceived
+                reason => _connectionFailedCallback(reason)
             );
         }
 
@@ -122,7 +126,7 @@ namespace SpaceWars
         /// </summary>
         public void Disconnect()
         {
-            AbstractNetworking.Disconnect(_socketState);
+            _socketState.Disconnect();
         }
 
         /// <summary>
@@ -131,13 +135,6 @@ namespace SpaceWars
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
-            // Connection is closed.
-            if (data == null)
-            {
-                ConnectionLost?.Invoke();
-                return;
-            }
-
             // We know the first packet has been handled once the world is not null.
             if (GameWorld == null)
                 ParseFirstPacket(data);

@@ -17,16 +17,11 @@ namespace Networking
         /// <param name="hostName">The address to connect to, excluding port.</param>
         /// <param name="established">The callback for when a connection has been established.</param>
         /// <param name="failed">The callback for when a connection has failed.</param>
-        /// <param name="dataReceived">The callback for when data is received from the server.</param>
-        public static void ConnectToServer(
-            string hostName,
-            ConnectionEstablished established,
-            ConnectionFailed failed,
-            DataReceived dataReceived)
+        public static void ConnectToServer(string hostName, ConnectionEstablished established, ConnectionFailed failed)
         {
             // Create a SocketState.
             var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            var socketState = new SocketState(socket, established, failed, dataReceived);
+            var socketState = new SocketState(socket, established, failed);
 
             // Attempt connection to the address on the default port.
             try

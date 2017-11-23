@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Sockets;
 
 namespace Networking
 {
@@ -37,27 +32,19 @@ namespace Networking
         internal AbstractNetworking.ConnectionFailed ConnectionFailed { get; }
 
         /// <summary>
-        /// The data received callback.
-        /// </summary>
-        internal AbstractNetworking.DataReceived DataReceived { get; }
-
-        /// <summary>
         /// Creates a client connection state with the given TCP Listener and callbacks.
         /// </summary>
         /// <param name="tcpListener">The TCP Listener that is being used to connect to the client.</param>
         /// <param name="established">The connection established callback.</param>
         /// <param name="failed">The connection failed callback.</param>
-        /// <param name="dataReceived">The data received callback.</param>
         internal TcpState(
             TcpListener tcpListener,
             AbstractNetworking.ConnectionEstablished established,
-            AbstractNetworking.ConnectionFailed failed,
-            AbstractNetworking.DataReceived dataReceived)
+            AbstractNetworking.ConnectionFailed failed)
         {
             TcpListener = tcpListener;
             ConnectionEstablished = established;
             ConnectionFailed = failed;
-            DataReceived = dataReceived;
         }
 
         /// <summary>

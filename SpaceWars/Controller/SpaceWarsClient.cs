@@ -1,4 +1,6 @@
-﻿namespace SpaceWars
+﻿using System;
+
+namespace SpaceWars
 {
     /// <summary>
     /// The main controller for the SpaceWars game client.
@@ -9,15 +11,9 @@
     public partial class SpaceWarsClient
     {
         /// <summary>
-        /// This delegate acts as a listener for the WorldModified event.
-        /// </summary>
-        /// <see cref="WorldModified"/>
-        public delegate void WorldModificationListener();
-
-        /// <summary>
         /// This event is fired whenever the world is modified.
         /// </summary>
-        public event WorldModificationListener WorldModified;
+        public event Action WorldModified;
 
         /// <summary>
         /// The nickname of the current player.

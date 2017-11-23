@@ -16,15 +16,11 @@ namespace Networking
         /// </summary>
         /// <param name="established">The callback for when a connection to a client has been established.</param>
         /// <param name="failed">The callback for when a connection to a client has failed.</param>
-        /// <param name="dataReceived">The callback for when data is received from the new client.</param>
         /// <returns>A TcpState, which can be used to stop accepting connections from clients.</returns>
-        public static TcpState AwaitClientConnections(
-            ConnectionEstablished established,
-            ConnectionFailed failed,
-            DataReceived dataReceived)
+        public static TcpState AwaitClientConnections(ConnectionEstablished established, ConnectionFailed failed)
         {
             var listener = new TcpListener(IPAddress.Any, 11000);
-            var tcpState = new TcpState(listener, established, failed, dataReceived);
+            var tcpState = new TcpState(listener, established, failed);
 
             // Start accepting the socket from the client.
             try
@@ -51,11 +47,7 @@ namespace Networking
             var socket = tcpState.TcpListener.EndAcceptSocket(asyncResult);
 
             // Create a socket state from the connection.
-            var socketState = new SocketState(
-                socket,
-                tcpState.ConnectionEstablished,
-                tcpState.ConnectionFailed,
-                tcpState.DataReceived);
+            var socketState = new SocketState(socket, tcpState.ConnectionEstablished, tcpState.ConnectionFailed);
 
             // Notify callback of connection established.
             socketState.ConnectionEstablished(socketState);

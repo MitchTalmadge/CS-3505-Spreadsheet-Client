@@ -59,7 +59,7 @@ namespace SpaceWars
             StartMusic();
 
             // Subscribe to connection lost event.
-            _spaceWarsClient.ConnectionLost += OnConnectionLost;
+            _spaceWarsClient.Disconnected += OnDisconnected;
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace SpaceWars
         /// <summary>
         /// Disconnects from the server.
         /// </summary>
-        /// <see cref="OnConnectionLost"/>
+        /// <see cref="OnDisconnected"/>
         private void Disconnect()
         {
             _disconnectIntended = true;
@@ -156,7 +156,7 @@ namespace SpaceWars
         /// Opens the main menu when the connection to the server has been lost.
         /// </summary>
         /// <see cref="OpenMainMenu"/>
-        private void OnConnectionLost()
+        private void OnDisconnected()
         {
             Invoke(new MethodInvoker(() =>
             {

@@ -23,12 +23,6 @@ namespace Networking
         public delegate void ConnectionFailed(string reason);
 
         /// <summary>
-        /// This delegate is called when data is received.
-        /// </summary>
-        /// <param name="data">The data that was received, or null if the connection was closed.</param>
-        public delegate void DataReceived(string data);
-
-        /// <summary>
         /// Is called in delegate (which is passed in/called within the Client). 
         /// Wrapper for BeginReceive, called by client since the client decides if it wants data. 
         /// </summary>
@@ -43,7 +37,7 @@ namespace Networking
             }
             catch (SocketException)
             {
-                Disconnect(state);
+                state.Disconnect();
             }
         }
 
@@ -57,7 +51,7 @@ namespace Networking
         private static void ReceiveCallback(IAsyncResult stateAsArObject)
         {
             // Get the SocketState associated with the received data
-            var state = (SocketState)stateAsArObject.AsyncState;
+            var state = (SocketState) stateAsArObject.AsyncState;
 
             int numBytes;
 
@@ -69,7 +63,7 @@ namespace Networking
             catch (SocketException)
             {
                 // The other side has disconnected.
-                Disconnect(state);
+                state.Disconnect();
                 return;
             }
             catch (ObjectDisposedException)
@@ -81,7 +75,7 @@ namespace Networking
             // Account for no data being received (connection closed).
             if (numBytes <= 0)
             {
-                Disconnect(state);
+                state.Disconnect();
                 return;
             }
 
@@ -97,16 +91,12 @@ namespace Networking
                 return;
             }
 
-            // Save the complete data and clear out the string builder.
-            var completeData = state.DataStringBuilder.ToString();
-            state.DataStringBuilder.Clear();
-
             // Don't do anything if the socket is disconnected (prevents race condition).
             if (!state.Socket.Connected)
                 return;
 
             // Notify the callback.
-            state.DataReceived(completeData);
+            state.FinishReceiveData();
         }
 
         /// <summary>
@@ -128,22 +118,9 @@ namespace Networking
         /// </summary>
         private static void SendCallback(IAsyncResult ar)
         {
-            var state = (SocketState)ar.AsyncState;
+            var state = (SocketState) ar.AsyncState;
 
             state.Socket.EndSend(ar);
-        }
-
-        /// <summary>
-        /// Disconnects the given socket state.
-        /// The given socket state should not be used after calling this method.
-        /// After calling this method, null data will be sent to the DataReceived callback to signify the closing of the connection.
-        /// </summary>
-        /// <param name="state">The socket state to disconnect</param>
-        public static void Disconnect(SocketState state)
-        {
-            state.Socket.Shutdown(SocketShutdown.Both);
-            state.Socket.Close();
-            state.DataReceived(null);
         }
     }
 }
