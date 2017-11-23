@@ -16,11 +16,6 @@ namespace SpaceWars
         public int Size { get; }
 
         /// <summary>
-        /// The ID of the current player.
-        /// </summary>
-        public int PlayerId { get; }
-
-        /// <summary>
         /// Contains dictionaries that map game components to their ids. 
         /// </summary>
         private readonly IDictionary<Type, Dictionary<int, GameComponent>> _gameComponents = new Dictionary<Type, Dictionary<int, GameComponent>>();
@@ -29,11 +24,9 @@ namespace SpaceWars
         /// Creates a World instance with the given size and player id.
         /// </summary>
         /// <param name="size">The dimensions of the game world (both sides use same length).</param>
-        /// <param name="playerId">The ID of the current player.</param>
-        public World(int size, int playerId)
+        public World(int size)
         {
             Size = size;
-            PlayerId = playerId;
 
             InitializeGameComponentsDictionary();
         }

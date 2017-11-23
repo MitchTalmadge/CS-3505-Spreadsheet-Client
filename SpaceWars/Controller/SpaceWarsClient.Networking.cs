@@ -154,11 +154,10 @@ namespace SpaceWars
             var splitData = data.Split('\n');
 
             // Parse the first packet, containing our player id and the world size.
-            var playerId = int.Parse(splitData[0]);
             var worldSize = int.Parse(splitData[1]);
 
             // Create a world from the parsed data.
-            GameWorld = new World(worldSize, playerId);
+            GameWorld = new World(worldSize);
 
             // Notify the listener that the connection was established and the world is ready.
             _connectionEstablishedCallback(this);
