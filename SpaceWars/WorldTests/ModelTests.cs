@@ -11,11 +11,11 @@ namespace SpaceWars
         [TestMethod]
         public void TestAddShips()
         {
-            World w = new World(420, 69);
-            w.UpdateComponent(new Ship());
-            Assert.AreEqual(1, w.GetComponents<Ship>().ToList().Count);
-            Assert.AreEqual(0, w.GetComponents<Projectile>().ToList().Count);
-            Assert.AreEqual(0, w.GetComponents<Star>().ToList().Count);
+            var world = new World(420);
+            world.UpdateComponent(new Ship());
+            Assert.AreEqual(1, world.GetComponents<Ship>().ToList().Count);
+            Assert.AreEqual(0, world.GetComponents<Projectile>().ToList().Count);
+            Assert.AreEqual(0, world.GetComponents<Star>().ToList().Count);
 
 
         }
