@@ -79,6 +79,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GameComponents\GameComponents.csproj">
+      <Project>{8ECBF14A-8ED0-4ED5-AC25-DD4B41E8BAC0}</Project>
+      <Name>GameComponents</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Properties\Properties.csproj">
       <Project>{d3ec5fa3-37ad-4eb8-a05a-735044634ea5}</Project>
       <Name>Properties</Name>

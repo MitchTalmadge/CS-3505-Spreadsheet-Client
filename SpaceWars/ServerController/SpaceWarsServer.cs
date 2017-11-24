@@ -13,6 +13,11 @@ namespace SpaceWars
     public class SpaceWarsServer
     {
         /// <summary>
+        /// The configuration for this server.
+        /// </summary>
+        public SpaceWarsServerConfiguration Configuration { get; }
+
+        /// <summary>
         /// The TcpState that the server is using to accept client connections.
         /// </summary>
         private TcpState _tcpState;
@@ -43,8 +48,9 @@ namespace SpaceWars
         /// <summary>
         /// Creates a new Space Wars Server that will listen for clients.
         /// </summary>
-        public SpaceWarsServer()
+        public SpaceWarsServer(SpaceWarsServerConfiguration configuration)
         {
+            Configuration = configuration;
             BeginAcceptingConnections();
         }
 
@@ -56,6 +62,10 @@ namespace SpaceWars
             _tcpState = ServerNetworking.AwaitClientConnections(ClientConnectionEstablished, ClientConnectionFailed);
         }
 
+        /// <summary>
+        /// Called when a client establishes a connection with the server.
+        /// </summary>
+        /// <param name="state">The client's socket state.</param>
         private void ClientConnectionEstablished(SocketState state)
         {
             // Add the client to the list of connected clients.
@@ -79,6 +89,10 @@ namespace SpaceWars
             ClientConnected?.Invoke();
         }
 
+        /// <summary>
+        /// Called when the server cannot connect to a client.
+        /// </summary>
+        /// <param name="reason">The reason that the connection failed.</param>
         private void ClientConnectionFailed(string reason)
         {
             Console.Out.WriteLine("Connection Failed: " + reason);

@@ -40,6 +40,19 @@ namespace SpaceWars
         /// </summary>
         [JsonProperty("mass")] private double _mass;
 
+        /// <summary>
+        /// Creates a star.
+        /// </summary>
+        /// <param name="id">The ID of the star.</param>
+        /// <param name="location">The location of the star.</param>
+        /// <param name="mass">The mass of the star.</param>
+        public Star(int id, Vector2D location, double mass)
+        {
+            _starId = id;
+            Location = location;
+            _mass = mass;
+        }
+
         /// <inheritdoc/>
         public override Tuple<Bitmap, Rectangle, Size> GetDrawingDetails()
         {

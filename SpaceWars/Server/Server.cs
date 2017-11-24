@@ -36,9 +36,11 @@ namespace SpaceWars
         /// </summary>
         private static void Main(string[] args)
         {
-            InitializeProperties();
-            
-            _spaceWarsServer = new SpaceWarsServer();
+            var configuration = InitializeProperties();
+
+            // Configure and create server instance.
+            _spaceWarsServer = new SpaceWarsServer(configuration);
+
             Logger.Log(LogLevel.Info, Resources.Server_Log_ServerConnected);
 
             InitializeLoggingListeners();
@@ -50,11 +52,12 @@ namespace SpaceWars
         /// Initializes the properties file and checks for errors.
         /// Also checks for missing properties and writes their default values.
         /// </summary>
-        private static void InitializeProperties()
+        private static SpaceWarsServerConfiguration InitializeProperties()
         {
             try
             {
                 var properties = new PropertiesFile(PropertiesFilePath);
+                return new SpaceWarsServerConfiguration(properties);
             }
             catch (IOException)
             {
@@ -63,6 +66,8 @@ namespace SpaceWars
                 Console.Read();
                 Environment.Exit(-1);
             }
+
+            return null;
         }
 
         /// <summary>
@@ -71,7 +76,8 @@ namespace SpaceWars
         private static void InitializeLoggingListeners()
         {
             // Log when the server disconnects.
-            _spaceWarsServer.ServerDisconnected += () => Logger.Log(LogLevel.Info, Resources.Server_Log_ServerDisconnected);
+            _spaceWarsServer.ServerDisconnected +=
+                () => Logger.Log(LogLevel.Info, Resources.Server_Log_ServerDisconnected);
 
             // Log when a client connects.
             _spaceWarsServer.ClientConnected += () => Logger.Log(LogLevel.Info, Resources.Server_Log_ClientConnected);

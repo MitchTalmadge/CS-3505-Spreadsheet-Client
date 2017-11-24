@@ -61,9 +61,18 @@ namespace SpaceWars
         /// </summary>
         private void SendFirstPacket()
         {
-            //TODO: Client id should be passed into constructor, world size should be loaded in Server from xml.
-            // Format: ID<newline>WorldSize<newline>
-            AbstractNetworking.Send(_state, "0\n750\n");
+            //TODO: Client id should be passed into constructor
+
+            var packet = new StringBuilder();
+
+            // Player ID
+            packet.Append(0).Append('\n');
+
+            // World Size
+            packet.Append(_server.Configuration.WorldSize).Append('\n');
+
+            // Send packet.
+            AbstractNetworking.Send(_state, packet.ToString());
         }
 
         /// <summary>
