@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Properties
 {
@@ -35,5 +36,29 @@ namespace Properties
             Attributes = attributes ?? new Dictionary<string, string>();
         }
 
+        protected bool Equals(Property other)
+        {
+            return string.Equals(Key, other.Key) && string.Equals(Value, other.Value) &&
+                   Attributes.Count == other.Attributes.Count && !Attributes.Except(other.Attributes).Any();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Property) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (Key != null ? Key.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Value != null ? Value.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Attributes != null ? Attributes.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
     }
 }

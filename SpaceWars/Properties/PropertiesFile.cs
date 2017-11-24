@@ -89,7 +89,11 @@ namespace Properties
         /// <param name="property">The property to write.</param>
         public void WriteProperty(Property property)
         {
-            //TODO: Get all properties, then use WriteProperties to write all properties + new property.
+            // Append the new property to the existing properties.
+            var properties = new List<Property>(GetAllProperties()) {property};
+
+            // Write the new list of properties.
+            WriteProperties(properties);
         }
 
         /// <summary>
@@ -132,7 +136,7 @@ namespace Properties
         /// </summary>
         /// <param name="key">The key of the properties to find.</param>
         /// <returns>All properties matching the key.</returns>
-        public IEnumerable<Property> GetProperties(string key)
+        public IEnumerable<Property> GetPropertiesByKey(string key)
         {
             var properties = new List<Property>();
             using (var reader = XmlReader.Create(FilePath, ReaderSettings))
@@ -140,33 +144,76 @@ namespace Properties
                 reader.MoveToContent();
                 reader.ReadStartElement(RootElementName);
 
-                while (reader.NodeType == XmlNodeType.Element)
+                do
                 {
-                    while (reader.ReadToNextSibling(key))
-                    {
-                        // Get attributes of property.
-                        Dictionary<string, string> attributes = null;
-                        if (reader.HasAttributes)
-                        {
-                            attributes = new Dictionary<string, string>();
-                            while (reader.MoveToNextAttribute())
-                            {
-                                attributes.Add(reader.Name, reader.Value);
-                            }
-                        }
+                    // Check name.
+                    if (reader.Name != key)
+                        continue;
 
-                        // Get value of property.
-                        var value = reader.ReadElementContentAsString();
-
-                        // Create property object.
-                        properties.Add(new Property(key, value, attributes));
-                    }
-                }
-
-                reader.ReadEndElement();
+                    // Parse property.
+                    properties.Add(ParseElementAsProperty(reader));
+                } while (reader.ReadToNextSibling(key));
             }
 
             return properties;
+        }
+
+        /// <summary>
+        /// Gets all the properties currently saved in the file.
+        /// </summary>
+        /// <returns>All saved properties.</returns>
+        private IEnumerable<Property> GetAllProperties()
+        {
+            var properties = new List<Property>();
+            using (var reader = XmlReader.Create(FilePath, ReaderSettings))
+            {
+                reader.MoveToContent();
+                reader.ReadStartElement(RootElementName);
+
+                while (reader.NodeType != XmlNodeType.EndElement)
+                {
+                    // Parse property.
+                    properties.Add(ParseElementAsProperty(reader));
+                }
+            }
+
+            return properties;
+        }
+
+        /// <summary>
+        /// Parses the current element that the reader is positioned at to a Property object.
+        /// </summary>
+        /// <param name="reader">The reader to read from.</param>
+        /// <returns>A Property representing the current element.</returns>
+        private static Property ParseElementAsProperty(XmlReader reader)
+        {
+            var key = reader.Name;
+            string value = null;
+
+            // Get attributes of property.
+            Dictionary<string, string> attributes = null;
+            if (reader.HasAttributes)
+            {
+                // Read attributes
+                attributes = new Dictionary<string, string>();
+                while (reader.MoveToNextAttribute())
+                {
+                    attributes.Add(reader.Name, reader.Value);
+                }
+            }
+
+            reader.Read();
+
+            // Read value.
+            if (reader.HasValue)
+            {
+                value = reader.Value;
+                reader.Read();
+            }
+
+            reader.ReadEndElement();
+
+            return new Property(key, value, attributes);
         }
     }
 }
