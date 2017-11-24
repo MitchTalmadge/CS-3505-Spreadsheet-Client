@@ -33,6 +33,33 @@ namespace PropertiesTests
         }
 
         /// <summary>
+        /// Ensures that loading invalid properties files throws an exception.
+        /// </summary>
+        [TestMethod]
+        public void TestLoadInvalidPropertiesFiles()
+        {
+            Assert.ThrowsException<IOException>(() => new PropertiesFile("invalid_properties.xml"));
+            Assert.ThrowsException<IOException>(() => new PropertiesFile("not_properties.txt"));
+        }
+
+        /// <summary>
+        /// Ensures that loading valid properties files is successful.
+        /// </summary>
+        [TestMethod]
+        public void TestLoadValidPropertiesFiles()
+        {
+            var properties = new PropertiesFile("valid_properties.xml");
+
+            // Read properties
+            var test1Properties = properties.GetPropertiesByKey("test1").ToArray();
+            var test2Properties = properties.GetPropertiesByKey("test2").ToArray();
+
+            // Check lengths
+            Assert.AreEqual(1, test1Properties.Length);
+            Assert.AreEqual(1, test2Properties.Length);
+        }
+
+        /// <summary>
         /// Makes sure that properties can be saved and loaded properly when they have a value and attributes.
         /// </summary>
         [TestMethod]

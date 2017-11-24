@@ -66,7 +66,6 @@ namespace Properties
                 {
                     reader.MoveToContent();
                     reader.ReadStartElement(RootElementName);
-                    reader.ReadEndElement();
                 }
             }
             catch (XmlException e)
