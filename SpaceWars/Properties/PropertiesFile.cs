@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 
 namespace Properties
@@ -138,23 +139,7 @@ namespace Properties
         /// <returns>All properties matching the key.</returns>
         public IEnumerable<Property> GetPropertiesByKey(string key)
         {
-            var properties = new List<Property>();
-            using (var reader = XmlReader.Create(FilePath, ReaderSettings))
-            {
-                reader.MoveToContent();
-                reader.ReadStartElement(RootElementName);
-
-                do
-                {
-                    // Check name.
-                    if (reader.Name != key)
-                        continue;
-
-                    // Parse property.
-                    properties.Add(ParseElementAsProperty(reader));
-                } while (reader.ReadToNextSibling(key));
-            }
-
+            var properties = GetAllProperties().Where(property => property.Key == key);
             return properties;
         }
 
