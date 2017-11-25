@@ -80,27 +80,27 @@ namespace Properties
         private void CreatePropertiesFile()
         {
             // Write no properties.
-            WriteProperties(new Property[0]);
+            SetProperties(new Property[0]);
         }
 
         /// <summary>
-        /// Writes the given property to the file.
+        /// Adds the given property to the file.
         /// </summary>
-        /// <param name="property">The property to write.</param>
-        public void WriteProperty(Property property)
+        /// <param name="property">The property to add.</param>
+        public void AddProperty(Property property)
         {
             // Append the new property to the existing properties.
             var properties = new List<Property>(GetAllProperties()) {property};
 
             // Write the new list of properties.
-            WriteProperties(properties);
+            SetProperties(properties);
         }
 
         /// <summary>
         /// Overwrites the properties file contents with the given properties.
         /// </summary>
         /// <param name="properties">The properties to write.</param>
-        private void WriteProperties(IEnumerable<Property> properties)
+        public void SetProperties(IEnumerable<Property> properties)
         {
             using (var writer = XmlWriter.Create(FilePath, WriterSettings))
             {
@@ -146,7 +146,7 @@ namespace Properties
         /// Gets all the properties currently saved in the file.
         /// </summary>
         /// <returns>All saved properties.</returns>
-        private IEnumerable<Property> GetAllProperties()
+        public IEnumerable<Property> GetAllProperties()
         {
             var properties = new List<Property>();
             using (var reader = XmlReader.Create(FilePath, ReaderSettings))

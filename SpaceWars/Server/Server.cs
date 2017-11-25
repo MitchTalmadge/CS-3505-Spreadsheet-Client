@@ -54,13 +54,41 @@ namespace SpaceWars
         /// </summary>
         private static SpaceWarsServerConfiguration InitializeProperties()
         {
+            // If there is no properties file, generate one.
+            if (!File.Exists(PropertiesFilePath))
+            {
+                // Create a new properties file.
+                var properties = new PropertiesFile(PropertiesFilePath);
+                   
+                // Create a config with defaults.
+                var config = new SpaceWarsServerConfiguration();
+
+                // Write defaults to properties file.
+                properties.SetProperties(config.ToProperties());
+
+                return config;
+            }
+
+            // A properties file exists, so try to read it.
             try
             {
+                // Read the properties file.
                 var properties = new PropertiesFile(PropertiesFilePath);
-                return new SpaceWarsServerConfiguration(properties);
+
+                // Create a config with defaults.
+                var config = new SpaceWarsServerConfiguration();
+
+                // Populate the config with the properties file.
+                config.FromProperties(properties.GetAllProperties());
+
+                // Write the config back to the properties file, in case any defaults were inferred.
+                properties.SetProperties(config.ToProperties());
+
+                return config;
             }
             catch (IOException)
             {
+                // Could not load properties file.
                 // Log error and quit.
                 Logger.Log(LogLevel.Fatal, Resources.Server_Log_PropertiesLoadFailed);
                 Console.Read();

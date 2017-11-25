@@ -81,8 +81,8 @@ namespace PropertiesTests
             var test2Property = new Property("test2", "test2Value", attributes2);
 
             // Write properties
-            properties.WriteProperty(test1Property);
-            properties.WriteProperty(test2Property);
+            properties.AddProperty(test1Property);
+            properties.AddProperty(test2Property);
 
             // Read properties
             var test1Properties = properties.GetPropertiesByKey(test1Property.Key).ToArray();
@@ -119,8 +119,8 @@ namespace PropertiesTests
             var test2Property = new Property("test2", attributes: attributes2);
 
             // Write properties
-            properties.WriteProperty(test1Property);
-            properties.WriteProperty(test2Property);
+            properties.AddProperty(test1Property);
+            properties.AddProperty(test2Property);
 
             // Read properties
             var test1Properties = properties.GetPropertiesByKey(test1Property.Key).ToArray();
@@ -154,8 +154,8 @@ namespace PropertiesTests
             var test2Property = new Property("test2", "test2Value");
 
             // Write properties
-            properties.WriteProperty(test1Property);
-            properties.WriteProperty(test2Property);
+            properties.AddProperty(test1Property);
+            properties.AddProperty(test2Property);
 
             // Read properties
             var test1Properties = properties.GetPropertiesByKey(test1Property.Key).ToArray();
@@ -193,9 +193,9 @@ namespace PropertiesTests
             var test3Property = new Property("test1", "test1Value2");
 
             // Write properties
-            properties.WriteProperty(test1Property);
-            properties.WriteProperty(test2Property);
-            properties.WriteProperty(test3Property);
+            properties.AddProperty(test1Property);
+            properties.AddProperty(test2Property);
+            properties.AddProperty(test3Property);
 
             // Read properties
             var test1Properties = properties.GetPropertiesByKey(test1Property.Key).ToArray();

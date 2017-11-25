@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using Properties;
 
@@ -58,9 +57,9 @@ namespace SpaceWars
                     nameof(Star),
                     attributes: new Dictionary<string, string>
                     {
-                        ["x"] = star.Location.GetX().ToString(),
-                        ["y"] = star.Location.GetY().ToString(),
-                        ["mass"] = star.Mass.ToString()
+                        ["x"] = star.Location.GetX().ToString(CultureInfo.InvariantCulture),
+                        ["y"] = star.Location.GetY().ToString(CultureInfo.InvariantCulture),
+                        ["mass"] = star.Mass.ToString(CultureInfo.InvariantCulture)
                     }
                 ));
             }
