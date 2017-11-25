@@ -24,6 +24,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "World", "World\World.csproj", "{5A77CEDF-4A58-4138-8CCC-083CB198D2C8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model Projects", "Model Projects", "{F7DED078-03C8-4E25-8D30-67275C44DAAF}"
+	ProjectSection(SolutionItems) = preProject
+		ServerController\SpaceWarsServerConfiguration.cs = ServerController\SpaceWarsServerConfiguration.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "View Projects", "View Projects", "{E1AD77C2-8281-4C26-8627-D407C431D36C}"
 EndProject

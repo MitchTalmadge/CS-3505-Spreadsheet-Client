@@ -1,4 +1,5 @@
-﻿using Properties;
+﻿using System.Collections.Generic;
+using Properties;
 
 namespace SpaceWars
 {
@@ -7,7 +8,7 @@ namespace SpaceWars
     /// This allows the creator of the server instance to configure the server.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
-    public class SpaceWarsServerConfiguration
+    public class SpaceWarsServerConfiguration : IPropertySerializable
     {
         /// <summary>
         /// The width and height of the world.
@@ -59,24 +60,6 @@ namespace SpaceWars
         }
 
         /// <summary>
-        /// Creates a new SpaceWars server configuration from the values in a properties file.
-        /// </summary>
-        /// <param name="properties">The properties file containing the values to load.</param>
-        public SpaceWarsServerConfiguration(PropertiesFile properties)
-        {
-            
-        }
-       
-        /// <summary>
-        /// Serializes this configuration to the given properties file.
-        /// </summary>
-        /// <param name="properties">The properties file to write to.</param>
-        public void SerializeToPropertiesFile(PropertiesFile properties)
-        {
-            //TODO: Write to properties
-        }
-
-        /// <summary>
         /// Loads a default configuration.
         /// </summary>
         /// <returns>The default configuration.</returns>
@@ -89,6 +72,16 @@ namespace SpaceWars
                 50,
                 new[] {new Star(0, new Vector2D(0, 0), 0.01)}
             );
+        }
+
+        public IEnumerable<Property> ToProperties()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void FromProperties(IEnumerable<Property> properties)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
