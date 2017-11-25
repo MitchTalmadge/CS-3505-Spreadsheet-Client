@@ -24,16 +24,23 @@ namespace Properties
         public Dictionary<string, string> Attributes { get; }
 
         /// <summary>
+        /// A comment to display above the property in the properties file.
+        /// </summary>
+        public string Comment { get; }
+
+        /// <summary>
         /// Creates a property with the given attributes and value.
         /// </summary>
         /// <param name="key">The key of the property.</param>
         /// <param name="value">The value of the property.</param>
         /// <param name="attributes">The attributes to store in the property.</param>
-        public Property(string key, string value = null, Dictionary<string, string> attributes = null)
+        /// <param name="comment">A comment to display about the property in the properties file.</param>
+        public Property(string key, string value = null, Dictionary<string, string> attributes = null, string comment = null)
         {
             Key = key;
             Value = value ?? "";
             Attributes = attributes ?? new Dictionary<string, string>();
+            Comment = comment;
         }
 
         protected bool Equals(Property other)

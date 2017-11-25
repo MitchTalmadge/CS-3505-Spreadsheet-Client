@@ -112,6 +112,10 @@ namespace Properties
                 // Write each property.
                 foreach (var property in properties)
                 {
+                    // Write comment if applicable.
+                    if(property.Comment != null)
+                        writer.WriteComment(property.Comment);
+
                     // Write opening tag
                     writer.WriteStartElement(property.Key);
 
