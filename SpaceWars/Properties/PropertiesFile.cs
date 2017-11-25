@@ -17,7 +17,9 @@ namespace Properties
         private static readonly XmlWriterSettings WriterSettings = new XmlWriterSettings
         {
             NewLineChars = "\n",
-            NewLineHandling = NewLineHandling.Replace
+            NewLineHandling = NewLineHandling.Replace,
+            Indent = true,
+            IndentChars = "  "
         };
 
         /// <summary>
