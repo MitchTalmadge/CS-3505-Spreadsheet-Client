@@ -38,7 +38,8 @@ namespace SpaceWars
         /// <summary>
         /// Represents this Star's mass.
         /// </summary>
-        [JsonProperty("mass")] private double _mass;
+        [JsonProperty("mass")]
+        public double Mass { get; private set; }
 
         /// <summary>
         /// Creates a star.
@@ -50,7 +51,7 @@ namespace SpaceWars
         {
             _starId = id;
             Location = location;
-            _mass = mass;
+            Mass = mass;
         }
 
         /// <inheritdoc/>
