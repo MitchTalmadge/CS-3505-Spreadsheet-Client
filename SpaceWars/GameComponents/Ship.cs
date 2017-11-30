@@ -62,6 +62,19 @@ namespace SpaceWars
         [JsonProperty("score")]
         public int Score { get; private set; }
 
+        /// <summary>
+        /// Ship's constructor, initializes Ship data.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        public Ship(int id, string name)
+        {
+            Health = 5;
+            Score = 0;
+            _shipId = id;
+            Name = name;
+        }
+
         /// <inheritdoc />
         /// <summary>
         /// The ship to be drawn is based on the ID. A ship with ID 0 is red, ID 1 is orange, etc. until ID 8 which is red again.
