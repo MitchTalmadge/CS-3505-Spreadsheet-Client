@@ -49,6 +49,17 @@ namespace SpaceWars
         [JsonProperty("owner")]
         public int OwnerShipId { get; private set; }
 
+        /// <summary>
+        /// Projectile's constructor, initializes Projectile data.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="shipID"></param>
+        public Projectile(int id, int shipID)
+        {
+            OwnerShipId = shipID;
+            _projectileId = id;
+        }
+
         /// <inheritdoc />
         public override Tuple<Bitmap, Rectangle, Size> GetDrawingDetails()
         {
