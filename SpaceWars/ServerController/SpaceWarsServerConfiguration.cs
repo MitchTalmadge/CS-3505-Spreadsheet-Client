@@ -67,7 +67,7 @@ namespace SpaceWars
         /// <summary>
         /// The stars to place in the world.
         /// </summary>
-        public Star[] Stars { get; set; } = {new Star(0, new Vector2D(0, 0), 0.01)};
+        public Star[] Stars { get; set; } = {new Star(new Vector2D(0, 0), 0.01)};
 
         public IEnumerable<Property> ToProperties()
         {
@@ -167,7 +167,7 @@ namespace SpaceWars
                             && double.TryParse(property.Attributes["y"], out var y)
                             && double.TryParse(property.Attributes["mass"], out var mass))
                         {
-                            stars.Add(new Star(stars.Count, new Vector2D(x, y), mass));
+                            stars.Add(new Star(new Vector2D(x, y), mass));
                         }
                         break;
                 }

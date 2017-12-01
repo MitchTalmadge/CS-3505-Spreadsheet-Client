@@ -63,7 +63,7 @@ namespace SpaceWars
         public Projectile(int shipID)
         {
             OwnerShipId = shipID;
-            _projectileId = ++ProjectileCount;
+            _projectileId = ProjectileCount++;
         }
 
         /// <inheritdoc />
