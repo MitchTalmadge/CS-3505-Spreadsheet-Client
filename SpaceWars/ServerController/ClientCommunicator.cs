@@ -149,6 +149,11 @@ namespace SpaceWars
         /// </summary>
         private void OnDisconnected()
         {
+            // Unsubscribe from event listeners
+            _server.WorldUpdated -= OnWorldUpdated;
+            _state.DataReceived -= OnDataReceived;
+            _state.Disconnected -= OnDisconnected;
+
             Disconnected?.Invoke();
         }
     }

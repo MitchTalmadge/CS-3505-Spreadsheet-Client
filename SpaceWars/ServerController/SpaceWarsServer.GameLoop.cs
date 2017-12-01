@@ -27,8 +27,8 @@ namespace SpaceWars
         /// </summary>
         private void StartGameLoopAsync()
         {
-            _gameLoop = new GameLoop(Configuration.MsPerFrame, OnTick);
             _world = new World(Configuration.WorldSize);
+            _gameLoop = new GameLoop(Configuration.MsPerFrame, OnTick);
         }
 
         /// <summary>
