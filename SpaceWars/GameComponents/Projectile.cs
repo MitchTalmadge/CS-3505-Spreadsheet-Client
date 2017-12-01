@@ -29,6 +29,12 @@ namespace SpaceWars
         private static readonly Size ProjectileDrawSize = new Size(11, 11);
 
         /// <summary>
+        /// Counts the number of Projectiles currently istantiated. 
+        /// Increments on each ship's creation and becomes a new Projectile's ID.
+        /// </summary>
+        private static int ProjectileCount;
+
+        /// <summary>
         /// The Id of this Projectile.
         /// </summary>
         [JsonProperty("proj")] private int _projectileId;
@@ -54,10 +60,10 @@ namespace SpaceWars
         /// </summary>
         /// <param name="id"></param>
         /// <param name="shipID"></param>
-        public Projectile(int id, int shipID)
+        public Projectile(int shipID)
         {
             OwnerShipId = shipID;
-            _projectileId = id;
+            _projectileId = ++ProjectileCount;
         }
 
         /// <inheritdoc />
