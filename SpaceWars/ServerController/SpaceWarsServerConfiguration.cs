@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using Properties;
 
 namespace SpaceWars
@@ -22,7 +20,7 @@ namespace SpaceWars
         /// The number of milliseconds that each frame should take up.
         /// Determines the framerate. (FPS = 1000 / MsPerFrame)
         /// </summary>
-        public int MsPerFrame { get; set; } = 10;
+        public int MsPerFrame { get; set; } = 16;
 
         /// <summary>
         /// The number of frames to wait before subsequent shots are fired.
@@ -33,7 +31,7 @@ namespace SpaceWars
         /// <summary>
         /// How many frames until a ship is respawned when they die.
         /// </summary>
-        public int RespawnRate { get; set; } = 50;
+        public int RespawnRate { get; set; } = 300;
 
         /// <summary>
         /// The stars to place in the world.

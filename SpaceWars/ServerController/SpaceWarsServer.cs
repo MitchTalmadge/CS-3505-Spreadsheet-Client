@@ -10,12 +10,12 @@ namespace SpaceWars
     /// and update the world state, notifying clients of changes in state.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
-    public class SpaceWarsServer
+    public partial class SpaceWarsServer
     {
         /// <summary>
         /// The configuration for this server.
         /// </summary>
-        public SpaceWarsServerConfiguration Configuration { get; }
+        internal SpaceWarsServerConfiguration Configuration { get; }
 
         /// <summary>
         /// The TcpState that the server is using to accept client connections.
@@ -51,13 +51,14 @@ namespace SpaceWars
         public SpaceWarsServer(SpaceWarsServerConfiguration configuration)
         {
             Configuration = configuration;
-            BeginAcceptingConnections();
+            AcceptConnectionsAsync();
+            StartGameLoopAsync();
         }
 
         /// <summary>
-        /// Starts the process of accepting client connections.
+        /// Starts the process of accepting client connections in a separate thread.
         /// </summary>
-        private void BeginAcceptingConnections()
+        private void AcceptConnectionsAsync()
         {
             _tcpState = ServerNetworking.AwaitClientConnections(ClientConnectionEstablished, ClientConnectionFailed);
         }
@@ -105,6 +106,7 @@ namespace SpaceWars
         public void Disconnect()
         {
             _tcpState?.StopAcceptingClientConnections();
+            StopGameLoop();
             ServerDisconnected?.Invoke();
         }
     }
