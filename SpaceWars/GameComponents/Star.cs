@@ -53,9 +53,9 @@ namespace SpaceWars
         /// <param name="id">The ID of the star.</param>
         /// <param name="location">The location of the star.</param>
         /// <param name="mass">The mass of the star.</param>
-        public Star(int id, Vector2D location, double mass)
+        public Star(Vector2D location, double mass)
         {
-            _starId = ++StarCount;
+            _starId = StarCount++;
             Location = location;
             Mass = mass;
         }

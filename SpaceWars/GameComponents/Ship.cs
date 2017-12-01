@@ -77,7 +77,7 @@ namespace SpaceWars
         {
             Health = 5;
             Score = 0;
-            _shipId = ++ShipCount;
+            _shipId = ShipCount++;
             Name = name;
         }
 
