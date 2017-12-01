@@ -125,7 +125,8 @@ namespace SpaceWars
         /// </summary>
         private void SpawnProjectiles()
         {
-            
+            //Projectiles are created with a velocity in the direction of the ship's orientation, 
+            //with length equal to server's definition of projectile speed (normalize it, then * Configuration.ProjectileSpeed)
         }
 
         /// <summary>
@@ -148,11 +149,16 @@ namespace SpaceWars
         /// </summary>
         private void ComputeProjectileMotion()
         {
-            //If a projectile is out of the world's bounds it's marked as not Active
             double bounds = _world.Size / 2d;
+            //Computing motion and bound checking for each Projectile
             foreach (var proj in _world.GetComponents<Projectile>())
             {
-                //Projectile's location
+                //new location based on projectile speed in settings
+                double newX = proj.Location.GetX() + Configuration.ProjectileSpeed;
+                double newY = proj.Location.GetY() + Configuration.ProjectileSpeed;
+                proj.Location = new Vector2D(newX, newY);
+
+                //If a projectile is out of the world's bounds it's marked as not Active
                 double x = proj.Location.GetX();
                 double y = proj.Location.GetY();
                 if (x > bounds || x < -bounds || y > bounds || y < -bounds)
