@@ -9,6 +9,15 @@ namespace SpaceWars
     public class ModelTests
     {
         [TestMethod]
+        public void TestCreateShips()
+        {
+            Ship ship1 = new Ship("noob1");
+            Ship ship2 = new Ship("noob2");
+            Assert.AreEqual(1, ship1.Id);
+            Assert.AreEqual(2, ship2.Id);
+        }
+
+        [TestMethod]
         public void TestAddShips()
         {
             var world = new World(420);
