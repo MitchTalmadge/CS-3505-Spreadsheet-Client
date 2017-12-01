@@ -18,7 +18,8 @@ namespace SpaceWars
         /// <summary>
         /// Contains dictionaries that map game components to their ids. 
         /// </summary>
-        private readonly IDictionary<Type, Dictionary<int, GameComponent>> _gameComponents = new Dictionary<Type, Dictionary<int, GameComponent>>();
+        private readonly IDictionary<Type, Dictionary<int, GameComponent>> _gameComponents =
+            new Dictionary<Type, Dictionary<int, GameComponent>>();
 
         /// <summary>
         /// Creates a World instance with the given size and player id.
@@ -75,6 +76,42 @@ namespace SpaceWars
         public IEnumerable<T> GetComponents<T>() where T : GameComponent
         {
             return _gameComponents[typeof(T)].Values.OfType<T>();
+        }
+
+        /// <summary>
+        /// Finds a location in the world not occupied by a ship or another star.
+        /// </summary>
+        /// <returns>A Vector2D representing a location where a ship may safely spawn.</returns>
+        public Vector2D FindShipSpawnLocation(double starCollisionRadius, double shipCollisionRadius)
+        {
+            var random = new Random();
+            // This is how far ships and stars must be apart. The star collision radius is multipled by 2 to give a "buffer".
+            var minShipDistanceToStar = starCollisionRadius * 2 + shipCollisionRadius;
+
+            // Attempt to find a location 100 times.
+            for (var i = 0; i < 100; i++)
+            {
+                // Pick a random location
+                var randX = random.NextDouble() * Size - Size / 2d;
+                var randY = random.NextDouble() * Size - Size / 2d;
+                var spawnVector = new Vector2D(randX, randY);
+
+                // Check if the location is occupied by stars
+                foreach (var star in GetComponents<Star>())
+                {
+                    // Compute the distance between the vectors.
+                    var distanceVector = star.Location - spawnVector;
+
+                    // Make sure the star and ship collision radius "bubbles" do not collide.
+                    if (distanceVector.Length() < minShipDistanceToStar)
+                        continue;
+
+                    return spawnVector;
+                }
+            }
+
+            // If we failed to find an empty space, we return the upper left corner as a fallback.
+            return new Vector2D(-Size / 2d, -Size / 2d);
         }
     }
 }

@@ -57,6 +57,10 @@
       <Project>{8ECBF14A-8ED0-4ED5-AC25-DD4B41E8BAC0}</Project>
       <Name>GameComponents</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vector2D\Vector2D.csproj">
+      <Project>{66C73678-C0B2-477E-A1FD-CF48D38961AF}</Project>
+      <Name>Vector2D</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

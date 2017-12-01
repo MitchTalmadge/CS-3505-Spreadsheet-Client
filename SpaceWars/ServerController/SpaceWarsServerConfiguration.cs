@@ -60,7 +60,7 @@ namespace SpaceWars
         public double ShipCollisionRadius { get; set; } = 20;
 
         /// <summary>
-        /// How close a projectile must get to collide with a star.
+        /// How close a projectile or ship must get to collide with a star.
         /// </summary>
         public double StarCollisionRadius { get; set; } = 35;
 
@@ -93,7 +93,7 @@ namespace SpaceWars
                 new Property(nameof(ShipCollisionRadius), ShipCollisionRadius.ToString(CultureInfo.InvariantCulture),
                     comment: "How close a projectile must get to collide with a ship."),
                 new Property(nameof(StarCollisionRadius), StarCollisionRadius.ToString(CultureInfo.InvariantCulture),
-                    comment: "How close a projectile must get to collide with a star."),
+                    comment: "How close a projectile or ship must get to collide with a star."),
             };
 
             // Add all stars.
