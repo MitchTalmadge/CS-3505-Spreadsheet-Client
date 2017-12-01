@@ -163,7 +163,21 @@ namespace SpaceWars
         /// </summary>
         private void ComputeWrapping()
         {
-            
+            // Check each ship
+            foreach (var ship in _world.GetComponents<Ship>())
+            {
+                // If a ship is out of bounds on the X-axis, set its X to the edge of the other side.
+                if(ship.Location.GetX() > _world.Size / 2d)
+                    ship.Location = new Vector2D(-(_world.Size / 2d), ship.Location.GetY());
+                else if(ship.Location.GetX() < -(_world.Size / 2d))
+                    ship.Location = new Vector2D(_world.Size / 2d, ship.Location.GetY());
+
+                // If a ship is out of bounds on the Y-axis, set its Y to the edge of the other side.
+                if (ship.Location.GetY() < -(_world.Size / 2d))
+                    ship.Location = new Vector2D(ship.Location.GetX(), _world.Size / 2d);
+                else if (ship.Location.GetY() < -(_world.Size / 2d))
+                    ship.Location = new Vector2D(ship.Location.GetX(), _world.Size / 2d);
+            }
         }
 
         /// <summary>
