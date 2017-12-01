@@ -32,6 +32,12 @@ namespace SpaceWars
         /// </summary>
         [JsonProperty("star")] private int _starId;
 
+        /// <summary>
+        /// Counts the number of Stars currently istantiated. 
+        /// Increments on each Star's creation and becomes a new Star's ID.
+        /// </summary>
+        private static int StarCount;
+
         /// <inheritdoc/>
         public override int Id => _starId;
 
@@ -49,7 +55,7 @@ namespace SpaceWars
         /// <param name="mass">The mass of the star.</param>
         public Star(int id, Vector2D location, double mass)
         {
-            _starId = id;
+            _starId = ++StarCount;
             Location = location;
             Mass = mass;
         }

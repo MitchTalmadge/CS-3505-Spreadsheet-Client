@@ -29,6 +29,12 @@ namespace SpaceWars
         private static readonly Size ProjectileDrawSize = new Size(11, 11);
 
         /// <summary>
+        /// Counts the number of Projectiles currently istantiated. 
+        /// Increments on each ship's creation and becomes a new Projectile's ID.
+        /// </summary>
+        private static int ProjectileCount;
+
+        /// <summary>
         /// The Id of this Projectile.
         /// </summary>
         [JsonProperty("proj")] private int _projectileId;
@@ -48,6 +54,17 @@ namespace SpaceWars
         /// </summary>
         [JsonProperty("owner")]
         public int OwnerShipId { get; private set; }
+
+        /// <summary>
+        /// Projectile's constructor, initializes Projectile data.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="shipID"></param>
+        public Projectile(int shipID)
+        {
+            OwnerShipId = shipID;
+            _projectileId = ++ProjectileCount;
+        }
 
         /// <inheritdoc />
         public override Tuple<Bitmap, Rectangle, Size> GetDrawingDetails()

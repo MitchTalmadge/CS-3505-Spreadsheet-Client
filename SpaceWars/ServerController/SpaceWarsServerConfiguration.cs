@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using Properties;
 
 namespace SpaceWars
@@ -43,10 +44,10 @@ namespace SpaceWars
             // Add simple fields.
             var properties = new List<Property>
             {
-                new Property(nameof(WorldSize), WorldSize.ToString()),
-                new Property(nameof(MsPerFrame), MsPerFrame.ToString()),
-                new Property(nameof(FramesPerShot), FramesPerShot.ToString()),
-                new Property(nameof(RespawnRate), RespawnRate.ToString())
+                new Property(nameof(WorldSize), WorldSize.ToString(), comment: "The width and height of the game world."),
+                new Property(nameof(MsPerFrame), MsPerFrame.ToString(), comment: "The number of milliseconds to spend per frame. FPS = 1000 / MsPerFrame."),
+                new Property(nameof(FramesPerShot), FramesPerShot.ToString(), comment: "The number of frames to pause between each firing of a projectile."),
+                new Property(nameof(RespawnRate), RespawnRate.ToString(), comment: "How many frames before a dead ship respawns.")
             };
 
             // Add all stars.
@@ -56,10 +57,11 @@ namespace SpaceWars
                     nameof(Star),
                     attributes: new Dictionary<string, string>
                     {
-                        ["x"] = star.Location.GetX().ToString(),
-                        ["y"] = star.Location.GetY().ToString(),
-                        ["mass"] = star.Mass.ToString()
-                    }
+                        ["x"] = star.Location.GetX().ToString(CultureInfo.InvariantCulture),
+                        ["y"] = star.Location.GetY().ToString(CultureInfo.InvariantCulture),
+                        ["mass"] = star.Mass.ToString(CultureInfo.InvariantCulture)
+                    },
+                    comment: "The location and mass of a star."
                 ));
             }
 

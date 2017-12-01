@@ -27,7 +27,6 @@ namespace SpaceWars
         public World(int size)
         {
             Size = size;
-
             InitializeGameComponentsDictionary();
         }
 
