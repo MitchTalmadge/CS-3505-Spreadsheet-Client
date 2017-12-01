@@ -208,7 +208,10 @@ namespace SpaceWars
                         //Dead ships are set to respawn in a certain amount of frames and a point is given to the ship that killed it
                         if (ship.Health == 0)
                         {
-                            Ship winner = _world.GetComponents<Ship>().
+                            ship.RespawnFrames = Configuration.RespawnRate;
+
+                            Ship winner = (Ship)_world.GetComponent<Ship>(proj.OwnerShipId);
+                            winner.Score++;
                         }
                     }
                 }

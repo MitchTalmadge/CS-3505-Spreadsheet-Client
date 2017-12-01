@@ -73,7 +73,7 @@ namespace SpaceWars
         /// The score of this ship.
         /// </summary>
         [JsonProperty("score")]
-        public int Score { get; private set; }
+        public int Score { get; set; }
 
         /// <summary>
         /// Ship's constructor, initializes Ship data.
