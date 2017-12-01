@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Networking;
+using Newtonsoft.Json;
 
 namespace SpaceWars
 {
@@ -91,7 +92,20 @@ namespace SpaceWars
         /// <param name="world">The world that was updated.</param>
         private void OnWorldUpdated(World world)
         {
-            //TODO: Send a packet to the client.
+            StringBuilder worldData = new StringBuilder();
+            foreach (var ship in world.GetComponents<Ship>())
+            {
+                worldData.Append(JsonConvert.SerializeObject(ship)).Append("\n");
+            }
+            foreach (var proj in world.GetComponents<Projectile>())
+            {
+                worldData.Append(JsonConvert.SerializeObject(proj)).Append("\n");
+            }
+            foreach (var star in world.GetComponents<Star>())
+            {
+                worldData.Append(JsonConvert.SerializeObject(star)).Append("\n");
+            }
+            AbstractNetworking.Send(_state, worldData.ToString());
         }
 
         /// <summary>

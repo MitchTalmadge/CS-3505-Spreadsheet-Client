@@ -127,6 +127,9 @@ namespace SpaceWars
 
                 // Restore the ship's health.
                 client.PlayerShip.Health = Configuration.ShipHitpoints;
+
+                // Update the component
+                _world.UpdateComponent(client.PlayerShip);
             }
         }
 
