@@ -22,11 +22,16 @@ namespace SpaceWars
         private World _world;
 
         /// <summary>
+        /// Invoked when the world has been updated, after every tick.
+        /// </summary>
+        internal event Action<World> WorldUpdated;
+
+        /// <summary>
         /// Keeps track of how long a ship has until it can respawn.
         /// Maps ships to number of frames left until respawn.
         /// If a ship is not in the dictionary, it should be spawned.
         /// </summary>
-        private Dictionary<Ship, int> _respawnCounts = new Dictionary<Ship, int>();
+        private readonly Dictionary<Ship, int> _respawnCounts = new Dictionary<Ship, int>();
 
         /// <summary>
         /// Starts the game loop for the server in another thread.
@@ -66,7 +71,7 @@ namespace SpaceWars
             ComputeCollision();
 
             // Notify listeners of world updated
-            // TODO
+            WorldUpdated?.Invoke(_world);
         }
 
         /// <summary>

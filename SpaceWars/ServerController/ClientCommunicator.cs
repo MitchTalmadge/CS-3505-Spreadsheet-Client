@@ -43,6 +43,10 @@ namespace SpaceWars
         public ClientCommunicator(SpaceWarsServer server, SocketState state)
         {
             _server = server;
+            
+            // Listen for server events.
+            _server.WorldUpdated += OnWorldUpdated;
+
             _state = state;
 
             // Listen for socket state events.
@@ -79,6 +83,15 @@ namespace SpaceWars
 
             // Send packet.
             AbstractNetworking.Send(_state, packet.ToString());
+        }
+
+        /// <summary>
+        /// Called when the world is updated by the server.
+        /// </summary>
+        /// <param name="world">The world that was updated.</param>
+        private void OnWorldUpdated(World world)
+        {
+            //TODO: Send a packet to the client.
         }
 
         /// <summary>
