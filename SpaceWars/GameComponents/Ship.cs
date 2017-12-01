@@ -52,8 +52,15 @@ namespace SpaceWars
         /// <summary>
         /// Determines if the ship is currently thrusting forward.
         /// This is used to change appearance of the ship by adding exhaust.
+        /// Client use only.
         /// </summary>
         [JsonProperty("thrust")] private bool _thrusting;
+
+        /// <summary>
+        /// The current velocity of the ship.
+        /// Server use only.
+        /// </summary>
+        public Vector2D Velocity { get; set; }
 
         /// <summary>
         /// The hitpoints remaining for this ship.
@@ -61,6 +68,12 @@ namespace SpaceWars
         /// </summary>
         [JsonProperty("hp")]
         public double Health { get; set; }
+
+        /// <summary>
+        /// The number of frames remaining until the ship respawns.
+        /// Server use only.
+        /// </summary>
+        public int RespawnFrames { get; set; }
 
         /// <summary>
         /// The score of this ship.

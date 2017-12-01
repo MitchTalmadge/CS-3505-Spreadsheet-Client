@@ -27,13 +27,6 @@ namespace SpaceWars
         internal event Action<World> WorldUpdated;
 
         /// <summary>
-        /// Keeps track of how long a ship has until it can respawn.
-        /// Maps ships to number of frames left until respawn.
-        /// If a ship is not in the dictionary, it should be spawned.
-        /// </summary>
-        private readonly Dictionary<Ship, int> _respawnCounts = new Dictionary<Ship, int>();
-
-        /// <summary>
         /// Starts the game loop for the server in another thread.
         /// </summary>
         private void StartGameLoopAsync()
@@ -98,22 +91,16 @@ namespace SpaceWars
                 if (client.PlayerShip.Health > 0)
                     continue;
 
-                // If the ship is in the respawn dictionary, decrease its frame count.
-                if (_respawnCounts.TryGetValue(client.PlayerShip, out var framesUntilRespawn))
+                // Check if the ship is waiting to respawn.
+                if (client.PlayerShip.RespawnFrames > 0)
                 {
                     // Decrease the frames counter by 1.
-                    framesUntilRespawn--;
-
-                    // Remove if it reached 0.
-                    if (framesUntilRespawn == 0)
-                        _respawnCounts.Remove(client.PlayerShip);
-                    else // Otherwise, update the value in the dictionary.
-                        _respawnCounts[client.PlayerShip] = framesUntilRespawn;
+                    client.PlayerShip.RespawnFrames--;
 
                     continue;
                 }
 
-                // At this point, the ship is not in the respawn dictionary, but it is dead, so it must be spawned.
+                // Respawn the ship, since it is dead but its frame counter is 0.
 
                 // Compute a spawn location for the ship.
                 var spawnLocation = _world.FindShipSpawnLocation(Configuration.StarCollisionRadius, Configuration.ShipCollisionRadius);
@@ -146,7 +133,13 @@ namespace SpaceWars
         /// </summary>
         private void ComputeShipMotion()
         {
-            
+            // Compute for each ship
+            foreach (var ship in _world.GetComponents<Ship>())
+            {
+                //TODO: Compute acceleration 
+                //TODO: Add acceleration to ship velocity
+                //TODO: Add velocity to location
+            }
         }
 
         /// <summary>
