@@ -29,12 +29,6 @@ namespace SpaceWars
         private static readonly Size ShipDrawSize = new Size(36, 44);
 
         /// <summary>
-        /// Counts the number of ships currently istantiated. 
-        /// Increments on each ship's creation and becomes a new ship's ID.
-        /// </summary>
-        private static int ShipCount;
-
-        /// <summary>
         /// The Id of this ship.
         /// </summary>
         [JsonProperty("ship")]
@@ -84,11 +78,12 @@ namespace SpaceWars
         /// <summary>
         /// Ship's constructor, initializes Ship data.
         /// </summary>
+        /// <param name="id">The ID of the ship. Should be unique.</param>
         /// <param name="name">The nickname of the ship.</param>
-        public Ship(string name)
+        public Ship(int id, string name)
         {
+            _shipId = id;
             Name = name;
-            _shipId = ShipCount++;
         }
 
         /// <inheritdoc />

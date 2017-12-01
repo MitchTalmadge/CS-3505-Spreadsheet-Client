@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Networking;
 using Newtonsoft.Json;
 
@@ -16,6 +13,17 @@ namespace SpaceWars
     internal class ClientCommunicator
     {
         /// <summary>
+        /// This static counter ensures that all new instances have a unique id.
+        /// </summary>
+        private static int _idCounter;
+
+        /// <summary>
+        /// The Id of this client communicator.
+        /// Used to match up communicators with ships.
+        /// </summary>
+        public int Id { get; } = _idCounter++;
+
+        /// <summary>
         /// The SpaceWars server instance.
         /// </summary>
         private readonly SpaceWarsServer _server;
@@ -26,15 +34,19 @@ namespace SpaceWars
         private readonly SocketState _state;
 
         /// <summary>
-        /// The current client's ship.
-        /// Will be null until the nickname packet is recieved. 
-        /// </summary>
-        public Ship PlayerShip { get; private set; }
-
-        /// <summary>
         /// This event is invoked when the client disconnects.
         /// </summary>
         public event Action Disconnected;
+
+        /// <summary>
+        /// Determines if the first nickname packet has been received.
+        /// </summary>
+        private bool _nicknameReceived;
+
+        /// <summary>
+        /// Invoked when the client sends their nickname.
+        /// </summary>
+        public event Action<string> NicknameReceived;
 
         /// <summary>
         /// Creates an instance from a connected client SocketState.
@@ -44,7 +56,7 @@ namespace SpaceWars
         public ClientCommunicator(SpaceWarsServer server, SocketState state)
         {
             _server = server;
-            
+
             // Listen for server events.
             _server.WorldUpdated += OnWorldUpdated;
 
@@ -72,12 +84,10 @@ namespace SpaceWars
         /// </summary>
         private void SendFirstPacket()
         {
-            //TODO: Client id should be passed into constructor
-
             var packet = new StringBuilder();
 
             // Player ID
-            packet.Append(0).Append('\n');
+            packet.Append(Id).Append('\n');
 
             // World Size
             packet.Append(_server.Configuration.WorldSize).Append('\n');
@@ -106,6 +116,8 @@ namespace SpaceWars
                 worldData.Append(JsonConvert.SerializeObject(star)).Append("\n");
             }
             AbstractNetworking.Send(_state, worldData.ToString());
+
+            //TODO: Clear commands
         }
 
         /// <summary>
@@ -114,14 +126,19 @@ namespace SpaceWars
         /// <param name="data">The data from the client.</param>
         private void OnDataReceived(string data)
         {
-            // Check if the player has a ship yet.
-            if (PlayerShip == null)
+            // Check for nickname packet.
+            if (!_nicknameReceived)
             {
-                // Nickname packet is expected.
-                var nickname = data.Replace("\n", "");
+                _nicknameReceived = true;
 
-                // Create a ship for the player.
-                PlayerShip = new Ship(nickname);
+                // Trim newline from nickname and invoke event.
+                var nickname = data.Replace("\n", "");
+                NicknameReceived?.Invoke(nickname);
+            }
+            else
+            {
+                // Command packet.
+                //TODO: handle commands
             }
 
             AbstractNetworking.GetData(_state);

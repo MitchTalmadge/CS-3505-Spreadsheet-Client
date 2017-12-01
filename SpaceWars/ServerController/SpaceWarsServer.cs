@@ -73,6 +73,13 @@ namespace SpaceWars
             var communicator = new ClientCommunicator(this, state);
             _clients.Add(communicator);
 
+            // Create a ship when the client sends their nickname.
+            communicator.NicknameReceived += nickname =>
+            {
+                var ship = new Ship(communicator.Id, nickname);
+                _world.UpdateComponent(ship);
+            };
+
             // Handle the case where the client disconnects.
             communicator.Disconnected += () =>
             {

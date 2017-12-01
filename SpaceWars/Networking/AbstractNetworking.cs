@@ -114,7 +114,18 @@ namespace Networking
         {
             var dataBytes = Encoding.UTF8.GetBytes(data);
 
-            state.Socket.BeginSend(dataBytes, 0, dataBytes.Length, SocketFlags.None, SendCallback, state);
+            try
+            {
+                state.Socket.BeginSend(dataBytes, 0, dataBytes.Length, SocketFlags.None, SendCallback, state);
+            }
+            catch (SocketException)
+            {
+                state.Disconnect();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Ignored
+            }
         }
 
         /// <summary>
@@ -125,7 +136,18 @@ namespace Networking
         {
             var state = (SocketState) ar.AsyncState;
 
-            state.Socket.EndSend(ar);
+            try
+            {
+                state.Socket.EndSend(ar);
+            }
+            catch (SocketException)
+            {
+                state.Disconnect();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Ignored
+            }
         }
     }
 }
