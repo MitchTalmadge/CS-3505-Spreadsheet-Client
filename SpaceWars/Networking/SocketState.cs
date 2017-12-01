@@ -90,11 +90,18 @@ namespace Networking
         /// <seealso cref="Disconnected"/>
         public void Disconnect()
         {
-            Socket.Shutdown(SocketShutdown.Both);
-            Socket.Close();
+            try
+            {
+                Socket.Shutdown(SocketShutdown.Both);
+                Socket.Close();
 
-            // Notify listeners.
-            Disconnected?.Invoke();
+                // Notify listeners.
+                Disconnected?.Invoke();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Ignored
+            }
         }
 
         protected bool Equals(SocketState other)

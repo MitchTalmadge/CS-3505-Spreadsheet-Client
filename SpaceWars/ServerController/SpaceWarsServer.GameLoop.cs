@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpaceWars
 {
@@ -31,8 +27,8 @@ namespace SpaceWars
         /// </summary>
         private void StartGameLoopAsync()
         {
-            _gameLoop = new GameLoop(Configuration.MsPerFrame, OnTick);
             _world = new World(Configuration.WorldSize);
+            _gameLoop = new GameLoop(Configuration.MsPerFrame, OnTick);
         }
 
         /// <summary>
@@ -80,22 +76,18 @@ namespace SpaceWars
         /// </summary>
         private void SpawnShips()
         {
-            // Check every client's ship.
-            foreach (var client in _clients)
+            // Check every ship.
+            foreach (var ship in _world.GetComponents<Ship>())
             {
-                // The client may not have a ship yet if they are new.
-                if (client.PlayerShip == null)
-                    continue;
-
                 // Ignore alive ships
-                if (client.PlayerShip.Health > 0)
+                if (ship.Health > 0)
                     continue;
 
                 // Check if the ship is waiting to respawn.
-                if (client.PlayerShip.RespawnFrames > 0)
+                if (ship.RespawnFrames > 0)
                 {
                     // Decrease the frames counter by 1.
-                    client.PlayerShip.RespawnFrames--;
+                    ship.RespawnFrames--;
 
                     continue;
                 }
@@ -104,19 +96,16 @@ namespace SpaceWars
 
                 // Compute a spawn location for the ship.
                 var spawnLocation = _world.FindShipSpawnLocation(Configuration.StarCollisionRadius, Configuration.ShipCollisionRadius);
-                client.PlayerShip.Location = spawnLocation;
+                ship.Location = spawnLocation;
 
                 // Compute a random direction for the ship.
                 var random = new Random();
                 var spawnDirection = new Vector2D((random.NextDouble() * 1 - 0.5) * 2, (random.NextDouble() * 1 - 0.5) * 2);
                 spawnDirection.Normalize();
-                client.PlayerShip.Direction = spawnDirection;
+                ship.Direction = spawnDirection;
 
                 // Restore the ship's health.
-                client.PlayerShip.Health = Configuration.ShipHitpoints;
-
-                // Update the component
-                _world.UpdateComponent(client.PlayerShip);
+                ship.Health = Configuration.ShipHitpoints;
             }
         }
 
