@@ -39,6 +39,11 @@ namespace Networking
             {
                 state.Disconnect();
             }
+            catch (ObjectDisposedException)
+            {
+                // The socket was disposed previously.
+                // Ignore.
+            }
         }
 
         /// <summary>
