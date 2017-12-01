@@ -35,6 +35,36 @@ namespace SpaceWars
         public int RespawnRate { get; set; } = 300;
 
         /// <summary>
+        /// How many hitpoints ships should start with.
+        /// </summary>
+        public int ShipHitpoints { get; set; } = 5;
+
+        /// <summary>
+        /// How many units per frame that projectiles travel.
+        /// </summary>
+        public double ProjectileSpeed { get; set; } = 15;
+
+        /// <summary>
+        /// How many units per frame that ships accellerate when thrusting.
+        /// </summary>
+        public double ShipEngineStrength { get; set; } = 0.08;
+
+        /// <summary>
+        /// The degrees that a ship can rotate per frame.
+        /// </summary>
+        public double ShipTurningRate { get; set; } = 2;
+
+        /// <summary>
+        /// How close a projectile must get to collide with a ship.
+        /// </summary>
+        public double ShipCollisionRadius { get; set; } = 20;
+
+        /// <summary>
+        /// How close a projectile must get to collide with a star.
+        /// </summary>
+        public double StarCollisionRadius { get; set; } = 35;
+
+        /// <summary>
         /// The stars to place in the world.
         /// </summary>
         public Star[] Stars { get; set; } = {new Star(0, new Vector2D(0, 0), 0.01)};
@@ -44,10 +74,26 @@ namespace SpaceWars
             // Add simple fields.
             var properties = new List<Property>
             {
-                new Property(nameof(WorldSize), WorldSize.ToString(), comment: "The width and height of the game world."),
-                new Property(nameof(MsPerFrame), MsPerFrame.ToString(), comment: "The number of milliseconds to spend per frame. FPS = 1000 / MsPerFrame."),
-                new Property(nameof(FramesPerShot), FramesPerShot.ToString(), comment: "The number of frames to pause between each firing of a projectile."),
-                new Property(nameof(RespawnRate), RespawnRate.ToString(), comment: "How many frames before a dead ship respawns.")
+                new Property(nameof(WorldSize), WorldSize.ToString(),
+                    comment: "The width and height of the game world."),
+                new Property(nameof(MsPerFrame), MsPerFrame.ToString(),
+                    comment: "The number of milliseconds to spend per frame. FPS = 1000 / MsPerFrame."),
+                new Property(nameof(FramesPerShot), FramesPerShot.ToString(),
+                    comment: "The number of frames to pause between each firing of a projectile."),
+                new Property(nameof(RespawnRate), RespawnRate.ToString(),
+                    comment: "How many frames before a dead ship respawns."),
+                new Property(nameof(ShipHitpoints), ShipHitpoints.ToString(),
+                    comment: "How many hitpoints ships should start with."),
+                new Property(nameof(ProjectileSpeed), ProjectileSpeed.ToString(CultureInfo.InvariantCulture),
+                    comment: "How many units per frame that projectiles travel."),
+                new Property(nameof(ShipEngineStrength), ShipEngineStrength.ToString(CultureInfo.InvariantCulture),
+                    comment: "How many units per frame that ships accellerate when thrusting."),
+                new Property(nameof(ShipTurningRate), ShipTurningRate.ToString(CultureInfo.InvariantCulture),
+                    comment: "The degrees that a ship can rotate per frame."),
+                new Property(nameof(ShipCollisionRadius), ShipCollisionRadius.ToString(CultureInfo.InvariantCulture),
+                    comment: "How close a projectile must get to collide with a ship."),
+                new Property(nameof(StarCollisionRadius), StarCollisionRadius.ToString(CultureInfo.InvariantCulture),
+                    comment: "How close a projectile must get to collide with a star."),
             };
 
             // Add all stars.
@@ -77,20 +123,44 @@ namespace SpaceWars
                 switch (property.Key)
                 {
                     case nameof(WorldSize):
-                        if (int.TryParse(property.Value, out var worldSize))
-                            WorldSize = worldSize;
+                        if (int.TryParse(property.Value, out var parsedInt))
+                            WorldSize = parsedInt;
                         break;
                     case nameof(MsPerFrame):
-                        if (int.TryParse(property.Value, out var msPerFrame))
-                            MsPerFrame = msPerFrame;
+                        if (int.TryParse(property.Value, out parsedInt))
+                            MsPerFrame = parsedInt;
                         break;
                     case nameof(FramesPerShot):
-                        if (int.TryParse(property.Value, out var framesPerShot))
-                            FramesPerShot = framesPerShot;
+                        if (int.TryParse(property.Value, out parsedInt))
+                            FramesPerShot = parsedInt;
                         break;
                     case nameof(RespawnRate):
-                        if (int.TryParse(property.Value, out var respawnRate))
-                            RespawnRate = respawnRate;
+                        if (int.TryParse(property.Value, out parsedInt))
+                            RespawnRate = parsedInt;
+                        break;
+                    case nameof(ShipHitpoints):
+                        if (int.TryParse(property.Value, out parsedInt))
+                            ShipHitpoints = parsedInt;
+                        break;
+                    case nameof(ProjectileSpeed):
+                        if (double.TryParse(property.Value, out var parsedDouble))
+                            ProjectileSpeed = parsedDouble;
+                        break;
+                    case nameof(ShipEngineStrength):
+                        if (double.TryParse(property.Value, out parsedDouble))
+                            ShipEngineStrength = parsedDouble;
+                        break;
+                    case nameof(ShipTurningRate):
+                        if (double.TryParse(property.Value, out parsedDouble))
+                            ShipTurningRate = parsedDouble;
+                        break;
+                    case nameof(ShipCollisionRadius):
+                        if (double.TryParse(property.Value, out parsedDouble))
+                            ShipCollisionRadius = parsedDouble;
+                        break;
+                    case nameof(StarCollisionRadius):
+                        if (double.TryParse(property.Value, out parsedDouble))
+                            StarCollisionRadius = parsedDouble;
                         break;
                     case nameof(Star):
                         if (double.TryParse(property.Attributes["x"], out var x)
