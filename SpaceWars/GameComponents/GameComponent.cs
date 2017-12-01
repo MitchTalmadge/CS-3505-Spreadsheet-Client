@@ -22,13 +22,13 @@ namespace SpaceWars
         /// The location of this component in world coordinates.
         /// </summary>
         [JsonProperty("loc")]
-        public Vector2D Location { get; protected set; } = new Vector2D(0, 0);
+        public Vector2D Location { get; set; } = new Vector2D(0, 0);
 
         /// <summary>
         /// The direction that this component is facing in world coordinates.
         /// </summary>
         [JsonProperty("dir")]
-        public Vector2D Direction { get; protected set; } = new Vector2D(0, -1);
+        public Vector2D Direction { get; set; } = new Vector2D(0, -1);
 
         /// <summary>
         /// Gives details for which image should be drawn, and how it should be cropped.

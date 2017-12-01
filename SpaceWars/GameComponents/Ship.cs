@@ -60,7 +60,7 @@ namespace SpaceWars
         /// Ranges from 0 to 5, where 5 is full health and 0 is temporarily dead (waiting for respawn).
         /// </summary>
         [JsonProperty("hp")]
-        public double Health { get; private set; }
+        public double Health { get; set; }
 
         /// <summary>
         /// The score of this ship.
@@ -71,14 +71,11 @@ namespace SpaceWars
         /// <summary>
         /// Ship's constructor, initializes Ship data.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
+        /// <param name="name">The nickname of the ship.</param>
         public Ship(string name)
         {
-            Health = 5;
-            Score = 0;
-            _shipId = ShipCount++;
             Name = name;
+            _shipId = ShipCount++;
         }
 
         /// <inheritdoc />

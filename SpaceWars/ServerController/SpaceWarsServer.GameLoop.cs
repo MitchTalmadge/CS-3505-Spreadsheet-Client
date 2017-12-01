@@ -17,11 +17,24 @@ namespace SpaceWars
         private GameLoop _gameLoop;
 
         /// <summary>
+        /// The world for this server.
+        /// </summary>
+        private World _world;
+
+        /// <summary>
+        /// Keeps track of how long a ship has until it can respawn.
+        /// Maps ships to number of frames left until respawn.
+        /// If a ship is not in the dictionary, it should be spawned.
+        /// </summary>
+        private Dictionary<Ship, int> _respawnCounts = new Dictionary<Ship, int>();
+
+        /// <summary>
         /// Starts the game loop for the server in another thread.
         /// </summary>
         private void StartGameLoopAsync()
         {
             _gameLoop = new GameLoop(Configuration.MsPerFrame, OnTick);
+            _world = new World(Configuration.WorldSize);
         }
 
         /// <summary>
@@ -69,7 +82,47 @@ namespace SpaceWars
         /// </summary>
         private void SpawnShips()
         {
+            // Check every client's ship.
+            foreach (var client in _clients)
+            {
+                // The client may not have a ship yet if they are new.
+                if (client.PlayerShip == null)
+                    continue;
 
+                // Ignore alive ships
+                if (client.PlayerShip.Health > 0)
+                    continue;
+
+                // If the ship is in the respawn dictionary, decrease its frame count.
+                if (_respawnCounts.TryGetValue(client.PlayerShip, out var framesUntilRespawn))
+                {
+                    // Decrease the frames counter by 1.
+                    framesUntilRespawn--;
+
+                    // Remove if it reached 0.
+                    if (framesUntilRespawn == 0)
+                        _respawnCounts.Remove(client.PlayerShip);
+                    else // Otherwise, update the value in the dictionary.
+                        _respawnCounts[client.PlayerShip] = framesUntilRespawn;
+
+                    continue;
+                }
+
+                // At this point, the ship is not in the respawn dictionary, but it is dead, so it must be spawned.
+
+                // Compute a spawn location for the ship.
+                var spawnLocation = _world.FindShipSpawnLocation(Configuration.StarCollisionRadius, Configuration.ShipCollisionRadius);
+                client.PlayerShip.Location = spawnLocation;
+
+                // Compute a random direction for the ship.
+                var random = new Random();
+                var spawnDirection = new Vector2D((random.NextDouble() * 1 - 0.5) * 2, (random.NextDouble() * 1 - 0.5) * 2);
+                spawnDirection.Normalize();
+                client.PlayerShip.Direction = spawnDirection;
+
+                // Restore the ship's health.
+                client.PlayerShip.Health = Configuration.ShipHitpoints;
+            }
         }
 
         /// <summary>

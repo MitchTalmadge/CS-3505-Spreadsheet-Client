@@ -97,6 +97,13 @@ namespace SpaceWars
                 var spawnVector = new Vector2D(randX, randY);
 
                 // Check if the location is occupied by stars
+                var stars = GetComponents<Star>().ToArray();
+
+                // If there are no stars, we can spawn anywhere.
+                if (stars.Length == 0)
+                    return spawnVector;
+
+                // Otherwise, check for collisions.
                 foreach (var star in GetComponents<Star>())
                 {
                     // Compute the distance between the vectors.

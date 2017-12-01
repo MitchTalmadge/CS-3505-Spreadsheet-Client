@@ -25,6 +25,12 @@ namespace SpaceWars
         private readonly SocketState _state;
 
         /// <summary>
+        /// The current client's ship.
+        /// Will be null until the nickname packet is recieved. 
+        /// </summary>
+        public Ship PlayerShip { get; private set; }
+
+        /// <summary>
         /// This event is invoked when the client disconnects.
         /// </summary>
         public event Action Disconnected;
@@ -81,7 +87,15 @@ namespace SpaceWars
         /// <param name="data">The data from the client.</param>
         private void OnDataReceived(string data)
         {
-            Console.Out.WriteLine("Data from client: " + data);
+            // Check if the player has a ship yet.
+            if (PlayerShip == null)
+            {
+                // Nickname packet is expected.
+                var nickname = data.Replace("\n", "");
+
+                // Create a ship for the player.
+                PlayerShip = new Ship(nickname);
+            }
 
             AbstractNetworking.GetData(_state);
         }
