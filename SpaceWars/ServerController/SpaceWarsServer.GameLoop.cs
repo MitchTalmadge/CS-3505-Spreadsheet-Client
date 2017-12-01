@@ -148,7 +148,18 @@ namespace SpaceWars
         /// </summary>
         private void ComputeProjectileMotion()
         {
-
+            //If a projectile is out of the world's bounds it's marked as not Active
+            double bounds = _world.Size / 2d;
+            foreach (var proj in _world.GetComponents<Projectile>())
+            {
+                //Projectile's location
+                double x = proj.Location.GetX();
+                double y = proj.Location.GetY();
+                if (x > bounds || x < -bounds || y > bounds || y < -bounds)
+                {
+                    proj.Active = false;
+                }
+            }
         }
 
         /// <summary>

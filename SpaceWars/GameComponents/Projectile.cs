@@ -46,7 +46,7 @@ namespace SpaceWars
         /// Indicates whether or not this Projectile is deactivated or not.
         /// </summary>
         [JsonProperty("alive")]
-        public bool Active { get; private set; }
+        public bool Active { get; set; }
 
         /// <summary>
         /// ID of the ship that created the projectile. Can be used 
