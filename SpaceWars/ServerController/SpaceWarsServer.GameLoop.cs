@@ -175,6 +175,13 @@ namespace SpaceWars
                 if (ship.Health == 0)
                     continue;
 
+                // Turn if needed.
+                var clientCommunicator = _clients[ship.Id];
+                if (clientCommunicator.ClientCommands[Ship.Command.Left])
+                    ship.Direction.Rotate(-Configuration.ShipTurningRate);
+                else if (clientCommunicator.ClientCommands[Ship.Command.Right])
+                    ship.Direction.Rotate(Configuration.ShipTurningRate);
+
                 //TODO: Compute acceleration 
                 //TODO: Add acceleration to ship velocity
                 //TODO: Add velocity to location
