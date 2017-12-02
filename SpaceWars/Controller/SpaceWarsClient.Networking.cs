@@ -101,20 +101,13 @@ namespace SpaceWars
                     _socketState.DataReceived += DataReceived;
 
                     // Listen for when the socket disconnects.
-                    _socketState.Disconnected += () =>
-                    {
-                        Disconnected?.Invoke();
-                    };
+                    _socketState.Disconnected += () => { Disconnected?.Invoke(); };
 
-                    // Start the thread that continually receives data.
-                    new Thread(() =>
-                    {
-                        // Send the nickname of the user.
-                        AbstractNetworking.Send(state, nickname + '\n');
+                    // Send the nickname of the user.
+                    AbstractNetworking.Send(state, nickname + '\n');
 
-                        // Wait for data.
-                        AbstractNetworking.GetData(state);
-                    }).Start();
+                    // Wait for data.
+                    AbstractNetworking.GetData(state);
                 },
                 reason => _connectionFailedCallback(reason)
             );

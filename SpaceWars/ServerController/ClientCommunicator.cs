@@ -84,11 +84,8 @@ namespace SpaceWars
         /// </summary>
         public void BeginListeningAsync()
         {
-            new Thread(() =>
-            {
-                SendFirstPacket();
-                AbstractNetworking.GetData(_state);
-            }).Start();
+            SendFirstPacket();
+            AbstractNetworking.GetData(_state);
         }
 
         /// <summary>
