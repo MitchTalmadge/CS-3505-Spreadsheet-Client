@@ -28,6 +28,13 @@ namespace SpaceWars
         private void StartGameLoopAsync()
         {
             _world = new World(Configuration.WorldSize);
+
+            // Add all stars from configuration to the world.
+            foreach (var star in Configuration.Stars)
+            {
+                _world.PutComponent(star);
+            }
+
             _gameLoop = new GameLoop(Configuration.MsPerFrame, OnTick);
         }
 
