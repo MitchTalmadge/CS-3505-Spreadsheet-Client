@@ -68,7 +68,14 @@ namespace SpaceWars
         /// </summary>
         private void CleanupProjectiles()
         {
-
+            //Checks all projectiles if they're active/alive and all dead ones are removed
+            foreach (var proj in _world.GetComponents<Projectile>())
+            {
+                if (!proj.Active)
+                {
+                    _world.RemoveComponent(proj);
+                }
+            }
         }
 
         /// <summary>
