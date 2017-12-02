@@ -28,6 +28,13 @@ namespace SpaceWars
         private void StartGameLoopAsync()
         {
             _world = new World(Configuration.WorldSize);
+
+            // Add all stars from configuration to the world.
+            foreach (var star in Configuration.Stars)
+            {
+                _world.PutComponent(star);
+            }
+
             _gameLoop = new GameLoop(Configuration.MsPerFrame, OnTick);
         }
 
@@ -167,6 +174,13 @@ namespace SpaceWars
                 // Don't compute dead ships.
                 if (ship.Health == 0)
                     continue;
+
+                // Turn if needed.
+                var clientCommunicator = _clients[ship.Id];
+                if (clientCommunicator.ClientCommands[Ship.Command.Left])
+                    ship.Direction.Rotate(-Configuration.ShipTurningRate);
+                else if (clientCommunicator.ClientCommands[Ship.Command.Right])
+                    ship.Direction.Rotate(Configuration.ShipTurningRate);
 
                 //TODO: Compute acceleration 
                 //TODO: Add acceleration to ship velocity
