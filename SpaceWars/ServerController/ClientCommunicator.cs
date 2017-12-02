@@ -72,9 +72,6 @@ namespace SpaceWars
         {
             _server = server;
 
-            // Listen for server events.
-            _server.WorldUpdated += OnWorldUpdated;
-
             _state = state;
 
             // Listen for socket state events.
@@ -153,6 +150,9 @@ namespace SpaceWars
                 // Trim newline from nickname and invoke event.
                 var nickname = data.Replace("\n", "");
                 NicknameReceived?.Invoke(nickname);
+
+                // Listen for server events.
+                _server.WorldUpdated += OnWorldUpdated;
             }
             else
             {
