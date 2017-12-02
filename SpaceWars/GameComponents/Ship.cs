@@ -111,5 +111,17 @@ namespace SpaceWars
                 new Rectangle(spriteStartPoint, ShipCropSize), 
                 ShipDrawSize);
         }
+
+        /// <summary>
+        /// Represents the valid commands that can be sent to the server.
+        /// </summary>
+        /// <authors>Jiahui Chen, Mitch Talmadge</authors>
+        public enum Command
+        {
+            Thrust,
+            Left,
+            Right,
+            Fire
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Networking;
@@ -47,6 +49,19 @@ namespace SpaceWars
         /// Invoked when the client sends their nickname.
         /// </summary>
         public event Action<string> NicknameReceived;
+
+        /// <summary>
+        /// Maps ship commands to the current value as received by the client.
+        /// For example, if a value of a command is true, then the client sent the command during the current tick.
+        /// Commands are set to false at the end of every tick.
+        /// </summary>
+        public IDictionary<Ship.Command, bool> ClientCommands { get; } = new ConcurrentDictionary<Ship.Command, bool>
+        {
+            [Ship.Command.Thrust] = false,
+            [Ship.Command.Left] = false,
+            [Ship.Command.Right] = false,
+            [Ship.Command.Fire] = false
+        };
 
         /// <summary>
         /// Creates an instance from a connected client SocketState.
@@ -102,7 +117,8 @@ namespace SpaceWars
         /// <param name="world">The world that was updated.</param>
         private void OnWorldUpdated(World world)
         {
-            StringBuilder worldData = new StringBuilder();
+            // Serialize the World to JSON.
+            var worldData = new StringBuilder();
             foreach (var ship in world.GetComponents<Ship>())
             {
                 worldData.Append(JsonConvert.SerializeObject(ship)).Append("\n");
@@ -115,9 +131,12 @@ namespace SpaceWars
             {
                 worldData.Append(JsonConvert.SerializeObject(star)).Append("\n");
             }
-            AbstractNetworking.Send(_state, worldData.ToString());
 
-            //TODO: Clear commands
+            // Clear the client's commands.
+            foreach (var command in ClientCommands.Keys)
+                ClientCommands[command] = false;
+
+            AbstractNetworking.Send(_state, worldData.ToString());
         }
 
         /// <summary>
@@ -137,8 +156,19 @@ namespace SpaceWars
             }
             else
             {
-                // Command packet.
-                //TODO: handle commands
+                // Thrust
+                if (data.Contains("T"))
+                    ClientCommands[Ship.Command.Thrust] = true;
+
+                // Left or Right
+                if (data.Contains("L"))
+                    ClientCommands[Ship.Command.Left] = true;
+                else if (data.Contains("R"))
+                    ClientCommands[Ship.Command.Right] = true;
+
+                // Fire
+                if (data.Contains("F"))
+                    ClientCommands[Ship.Command.Fire] = true;
             }
 
             AbstractNetworking.GetData(_state);
