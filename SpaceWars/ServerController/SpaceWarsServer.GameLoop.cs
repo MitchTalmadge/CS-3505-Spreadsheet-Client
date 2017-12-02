@@ -64,7 +64,8 @@ namespace SpaceWars
             ComputeWrapping();
 
             // Collision
-            ComputeCollision();
+            ComputeProjectileCollisions();
+            ComputeShipCollisions();
 
             // Notify listeners of world updated
             WorldUpdated?.Invoke(_world);
@@ -113,12 +114,14 @@ namespace SpaceWars
                 // Respawn the ship, since it is dead but its frame counter is 0.
 
                 // Compute a spawn location for the ship.
-                var spawnLocation = _world.FindShipSpawnLocation(Configuration.StarCollisionRadius, Configuration.ShipCollisionRadius);
+                var spawnLocation = _world.FindShipSpawnLocation(Configuration.StarCollisionRadius,
+                    Configuration.ShipCollisionRadius);
                 ship.Location = spawnLocation;
 
                 // Compute a random direction for the ship.
                 var random = new Random();
-                var spawnDirection = new Vector2D((random.NextDouble() * 1 - 0.5) * 2, (random.NextDouble() * 1 - 0.5) * 2);
+                var spawnDirection =
+                    new Vector2D((random.NextDouble() * 1 - 0.5) * 2, (random.NextDouble() * 1 - 0.5) * 2);
                 spawnDirection.Normalize();
                 ship.Direction = spawnDirection;
 
@@ -148,7 +151,7 @@ namespace SpaceWars
 
                 // Check if firing
                 var clientCommunicator = _clients[ship.Id];
-                if(clientCommunicator.ClientCommands[Ship.Command.Fire])
+                if (clientCommunicator.ClientCommands[Ship.Command.Fire])
                 {
                     ship.ProjectileCooldown = Configuration.FramesPerShot;
                     var projectile = new Projectile(ship.Id)
@@ -188,7 +191,7 @@ namespace SpaceWars
 
                 //TODO: Compute acceleration 
                 //TODO: Add acceleration to ship velocity
-                
+
                 // Apply ship's velocity to location
                 ship.Location += ship.Velocity;
             }
@@ -237,9 +240,9 @@ namespace SpaceWars
                 var y = ship.Location.GetY();
 
                 // If a ship is out of bounds on the X-axis, set its X to the edge of the other side.
-                if(x > bounds)
+                if (x > bounds)
                     ship.Location = new Vector2D(-bounds, y);
-                else if(x < -bounds)
+                else if (x < -bounds)
                     ship.Location = new Vector2D(bounds, y);
 
                 // If a ship is out of bounds on the Y-axis, set its Y to the edge of the other side.
@@ -255,16 +258,16 @@ namespace SpaceWars
         /// Decreases the health of ships when a collision occurs, marks collided projectiles as "dead."
         /// If a ship dies as result of the collision, a point is added to the ship who owned the projectile.
         /// </summary>
-        private void ComputeCollision()
+        private void ComputeProjectileCollisions()
         {
-            //Ship and projectile collisions
+            // Ship and projectile collisions
             foreach (var ship in _world.GetComponents<Ship>())
             {
                 // Don't compute dead ships.
                 if (ship.Health == 0)
                     continue;
 
-                foreach (var proj in _world.GetComponents<Projectile>()) 
+                foreach (var proj in _world.GetComponents<Projectile>())
                 {
                     if (ship == _world.GetComponent<Ship>(proj.OwnerShipId))
                     {
@@ -300,6 +303,31 @@ namespace SpaceWars
                     if (distanceVector.Length() < Configuration.StarCollisionRadius)
                     {
                         proj.Active = false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines when and where ships collide with stars.
+        /// Ships that collide with stars die immediately.
+        /// </summary>
+        private void ComputeShipCollisions()
+        {
+            // Star and ship collisions, the star is unaffected, the ship dies
+            foreach (var ship in _world.GetComponents<Ship>())
+            {
+                // Don't compute dead ships.
+                if (ship.Health == 0)
+                    continue;
+
+                foreach (var star in _world.GetComponents<Star>())
+                {
+                    // If the distance between a star and ship is less than the star's radius, a collision occurs
+                    var distanceVector = ship.Location - star.Location;
+                    if (distanceVector.Length() < Configuration.StarCollisionRadius)
+                    {
+                        ship.Health = 0;
                     }
                 }
             }
