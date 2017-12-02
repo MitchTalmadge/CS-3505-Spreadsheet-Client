@@ -46,7 +46,7 @@ namespace SpaceWars
         /// Indicates whether or not this Projectile is deactivated or not.
         /// </summary>
         [JsonProperty("alive")]
-        public bool Active { get; set; }
+        public bool Active { get; set; } = true;
 
         /// <summary>
         /// ID of the ship that created the projectile. Can be used 
@@ -54,6 +54,12 @@ namespace SpaceWars
         /// </summary>
         [JsonProperty("owner")]
         public int OwnerShipId { get; private set; }
+
+        /// <summary>
+        /// The velocity of this projectile.
+        /// </summary>
+        [JsonIgnore]
+        public Vector2D Velocity { get; set; }
 
         /// <summary>
         /// Projectile's constructor, initializes Projectile data.

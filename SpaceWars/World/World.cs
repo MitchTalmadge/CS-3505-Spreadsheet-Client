@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,8 +19,8 @@ namespace SpaceWars
         /// <summary>
         /// Contains dictionaries that map game components to their ids. 
         /// </summary>
-        private readonly IDictionary<Type, Dictionary<int, GameComponent>> _gameComponents =
-            new Dictionary<Type, Dictionary<int, GameComponent>>();
+        private readonly IDictionary<Type, IDictionary<int, GameComponent>> _gameComponents =
+            new ConcurrentDictionary<Type, IDictionary<int, GameComponent>>();
 
         /// <summary>
         /// Creates a World instance with the given size and player id.
@@ -44,7 +45,7 @@ namespace SpaceWars
             // Create a dictionary mapping component ids to instances for each subclass.
             foreach (var subclass in subclasses)
             {
-                _gameComponents[subclass] = new Dictionary<int, GameComponent>();
+                _gameComponents[subclass] = new ConcurrentDictionary<int, GameComponent>();
             }
         }
 
@@ -52,7 +53,7 @@ namespace SpaceWars
         /// Adds or replaces an existing game component with the provided game component, where the component's id determines equality.
         /// </summary>
         /// <param name="component">The game component to update.</param>
-        public void UpdateComponent(GameComponent component)
+        public void PutComponent(GameComponent component)
         {
             var dict = _gameComponents[component.GetType()];
             dict[component.Id] = component;
@@ -84,11 +85,11 @@ namespace SpaceWars
         /// <typeparam name="T">The type of game component to get.</typeparam>
         /// <param name="ID">The ID of the game component to remove.</param>
         /// <returns>The specified GameComponent.</returns>
-        public GameComponent GetComponent<T>(int ID) where T : GameComponent
+        public T GetComponent<T>(int ID) where T : GameComponent
         {
             if (_gameComponents[typeof(T)].TryGetValue(ID, out var component))
             {
-                return component;
+                return (T) component;
             }
             return null;
         }

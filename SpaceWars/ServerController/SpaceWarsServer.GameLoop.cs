@@ -99,6 +99,10 @@ namespace SpaceWars
                     continue;
                 }
 
+                // Check if the ship has a connected client
+                if (!_clients.TryGetValue(ship.Id, out var _))
+                    continue;
+
                 // Respawn the ship, since it is dead but its frame counter is 0.
 
                 // Compute a spawn location for the ship.
@@ -117,12 +121,39 @@ namespace SpaceWars
         }
 
         /// <summary>
-        /// Spawns any new projectils due to firing commands.
+        /// Spawns any new projectiles due to firing commands.
         /// </summary>
         private void SpawnProjectiles()
         {
-            //Projectiles are created with a velocity in the direction of the ship's orientation, 
-            //with length equal to server's definition of projectile speed (normalize it, then * Configuration.ProjectileSpeed)
+            // Check every ship.
+            foreach (var ship in _world.GetComponents<Ship>())
+            {
+                // Don't spawn projectiles for dead ships.
+                if (ship.Health == 0)
+                    continue;
+
+                // Decrease cooldown counter if needed.
+                if (ship.ProjectileCooldown > 0)
+                {
+                    ship.ProjectileCooldown--;
+                    continue;
+                }
+
+                // Check if firing
+                var clientCommunicator = _clients[ship.Id];
+                if(clientCommunicator.ClientCommands[Ship.Command.Fire])
+                {
+                    ship.ProjectileCooldown = Configuration.FramesPerShot;
+                    var projectile = new Projectile(ship.Id)
+                    {
+                        Direction = ship.Direction,
+                        Location = ship.Location,
+                        Velocity = ship.Direction * Configuration.ProjectileSpeed
+                    };
+
+                    _world.PutComponent(projectile);
+                }
+            }
         }
 
         /// <summary>
@@ -133,6 +164,10 @@ namespace SpaceWars
             // Compute for each ship
             foreach (var ship in _world.GetComponents<Ship>())
             {
+                // Don't compute dead ships.
+                if (ship.Health == 0)
+                    continue;
+
                 //TODO: Compute acceleration 
                 //TODO: Add acceleration to ship velocity
                 //TODO: Add velocity to location
@@ -149,10 +184,8 @@ namespace SpaceWars
             //Computing motion and bound checking for each Projectile
             foreach (var proj in _world.GetComponents<Projectile>())
             {
-                //new location based on projectile speed in settings
-                double newX = proj.Location.GetX() + Configuration.ProjectileSpeed;
-                double newY = proj.Location.GetY() + Configuration.ProjectileSpeed;
-                proj.Location = new Vector2D(newX, newY);
+                //new location based on projectile's velocity
+                proj.Location = proj.Location + proj.Velocity;
 
                 //If a projectile is out of the world's bounds it's marked as not Active
                 double x = proj.Location.GetX();
@@ -172,6 +205,10 @@ namespace SpaceWars
             // Check each ship
             foreach (var ship in _world.GetComponents<Ship>())
             {
+                // Don't compute dead ships.
+                if (ship.Health == 0)
+                    continue;
+
                 // How far on either axis (in either direction) that the ship may travel.
                 var bounds = _world.Size / 2d;
 
@@ -203,8 +240,17 @@ namespace SpaceWars
             //Ship and projectile collisions
             foreach (var ship in _world.GetComponents<Ship>())
             {
+                // Don't compute dead ships.
+                if (ship.Health == 0)
+                    continue;
+
                 foreach (var proj in _world.GetComponents<Projectile>()) 
                 {
+                    if (ship == _world.GetComponent<Ship>(proj.OwnerShipId))
+                    {
+                        continue;
+                    }
+
                     //If the distance between a ship and projectile is less than the ship's radius a collision occurs
                     Vector2D distanceVector = ship.Location - proj.Location;
                     if (distanceVector.Length() < Configuration.ShipCollisionRadius)
@@ -217,7 +263,7 @@ namespace SpaceWars
                         {
                             ship.RespawnFrames = Configuration.RespawnRate;
 
-                            Ship winner = (Ship)_world.GetComponent<Ship>(proj.OwnerShipId);
+                            Ship winner = _world.GetComponent<Ship>(proj.OwnerShipId);
                             winner.Score++;
                         }
                     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Networking;
+using System.Collections.Concurrent;
 
 namespace SpaceWars
 {
@@ -25,7 +26,7 @@ namespace SpaceWars
         /// <summary>
         /// A list of connected client communicators.
         /// </summary>
-        private readonly HashSet<ClientCommunicator> _clients = new HashSet<ClientCommunicator>();
+        private readonly IDictionary<int, ClientCommunicator> _clients = new ConcurrentDictionary<int, ClientCommunicator>();
 
         /// <summary>
         /// Called when a client connects to the server.
@@ -69,22 +70,25 @@ namespace SpaceWars
         /// <param name="state">The client's socket state.</param>
         private void ClientConnectionEstablished(SocketState state)
         {
-            // Add the client to the list of connected clients.
+            // Add a new client communicator.
             var communicator = new ClientCommunicator(this, state);
-            _clients.Add(communicator);
+            _clients.Add(communicator.Id, communicator);
 
             // Create a ship when the client sends their nickname.
             communicator.NicknameReceived += nickname =>
             {
                 var ship = new Ship(communicator.Id, nickname);
-                _world.UpdateComponent(ship);
+                _world.PutComponent(ship);
             };
 
             // Handle the case where the client disconnects.
             communicator.Disconnected += () =>
             {
-                // Remove the client from the list of connected clients.
-                _clients.Remove(communicator);
+                // Remove the client's ship.
+                _world.GetComponent<Ship>(communicator.Id).Health = 0;
+
+                // Remove the client communicator.
+                _clients.Remove(communicator.Id);
 
                 // Notify listeners.
                 ClientDisconnected?.Invoke();

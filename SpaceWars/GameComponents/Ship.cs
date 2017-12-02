@@ -54,6 +54,7 @@ namespace SpaceWars
         /// The current velocity of the ship.
         /// Server use only.
         /// </summary>
+        [JsonIgnore]
         public Vector2D Velocity { get; set; }
 
         /// <summary>
@@ -67,7 +68,15 @@ namespace SpaceWars
         /// The number of frames remaining until the ship respawns.
         /// Server use only.
         /// </summary>
+        [JsonIgnore]
         public int RespawnFrames { get; set; }
+
+        /// <summary>
+        /// The number of frames remaining until a projectile can be fired again.
+        /// Server use only.
+        /// </summary>
+        [JsonIgnore]
+        public int ProjectileCooldown { get; set; }
 
         /// <summary>
         /// The score of this ship.

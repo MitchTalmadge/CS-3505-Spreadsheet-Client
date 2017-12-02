@@ -41,11 +41,11 @@ namespace SpaceWars
             Ship ship1 = new Ship("noob1");
             Ship ship2 = new Ship("noob2");
 
-            world.UpdateComponent(new Ship("noob3"));
+            world.PutComponent(new Ship("noob3"));
             Assert.AreEqual(1, world.GetComponents<Ship>().ToList().Count);
             Assert.AreEqual(0, world.GetComponents<Projectile>().ToList().Count);
             Assert.AreEqual(0, world.GetComponents<Star>().ToList().Count);
-            world.UpdateComponent(ship1);
+            world.PutComponent(ship1);
             Assert.AreEqual(2, world.GetComponents<Ship>().ToList().Count);
         }
 

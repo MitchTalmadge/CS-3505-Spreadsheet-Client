@@ -187,7 +187,7 @@ namespace SpaceWars
                     if (parsedJson["ship"] != null)
                     {
                         var ship = JsonConvert.DeserializeObject<Ship>(rawJson);
-                        GameWorld.UpdateComponent(ship);
+                        GameWorld.PutComponent(ship);
                     }
                     else if (parsedJson["proj"] != null)
                     {
@@ -199,13 +199,13 @@ namespace SpaceWars
                         }
                         else
                         {
-                            GameWorld.UpdateComponent(projectile);
+                            GameWorld.PutComponent(projectile);
                         }
                     }
                     else if (parsedJson["star"] != null)
                     {
                         var star = JsonConvert.DeserializeObject<Star>(rawJson);
-                        GameWorld.UpdateComponent(star);
+                        GameWorld.PutComponent(star);
                     }
                 }
                 catch (Exception e)
