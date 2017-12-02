@@ -121,6 +121,10 @@
     <value>Client Connected</value>
     <comment>Displays in the logs when a client connects.</comment>
   </data>
+  <data name="Server_Log_ClientConnectFailed" xml:space="preserve">
+    <value>Client Failed to Connect</value>
+    <comment>Displays in the logs when a client connection failed.</comment>
+  </data>
   <data name="Server_Log_ClientDisconnected" xml:space="preserve">
     <value>Client Disconnected</value>
     <comment>Displays in the logs when a client disconnects.</comment>

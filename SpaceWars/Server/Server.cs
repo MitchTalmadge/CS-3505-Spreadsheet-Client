@@ -110,6 +110,10 @@ namespace SpaceWars
             // Log when a client connects.
             _spaceWarsServer.ClientConnected += () => Logger.Log(LogLevel.Info, Resources.Server_Log_ClientConnected);
 
+            // Log when a client fails to connect.
+            _spaceWarsServer.ClientConnectFailed +=
+                () => Logger.Log(LogLevel.Warn, Resources.Server_Log_ClientConnectFailed);
+
             // Log when a client disconnects.
             _spaceWarsServer.ClientDisconnected +=
                 () => Logger.Log(LogLevel.Info, Resources.Server_Log_ClientDisconnected);

@@ -70,6 +70,15 @@ namespace SpaceWars.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client Failed to Connect.
+        /// </summary>
+        internal static string Server_Log_ClientConnectFailed {
+            get {
+                return ResourceManager.GetString("Server_Log_ClientConnectFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Client Disconnected.
         /// </summary>
         internal static string Server_Log_ClientDisconnected {

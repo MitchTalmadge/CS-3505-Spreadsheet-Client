@@ -35,6 +35,12 @@ namespace SpaceWars
         public event Action ClientConnected;
 
         /// <summary>
+        /// Called when a client fails to connect to the server.
+        /// Useful for logging purposes.
+        /// </summary>
+        public event Action ClientConnectFailed;
+
+        /// <summary>
         /// Called when a client disconnects from the server.
         /// Useful for logging purposes.
         /// </summary>
@@ -107,7 +113,7 @@ namespace SpaceWars
         /// <param name="reason">The reason that the connection failed.</param>
         private void ClientConnectionFailed(string reason)
         {
-            Console.Out.WriteLine("Connection Failed: " + reason);
+            ClientConnectFailed?.Invoke();
         }
 
         /// <summary>
