@@ -131,6 +131,8 @@ namespace SpaceWars
             //fills health bar (rectangle) proportionately to health of ship
             graphics.FillRectangle(brush, 10, 30,
                 (float) (ship.Health / 5.0) * (ClientSize.Width - 20), 15);
+
+            graphics.ResetTransform();
         }
     }
 }
