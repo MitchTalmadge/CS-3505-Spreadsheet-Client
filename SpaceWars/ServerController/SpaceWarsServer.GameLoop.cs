@@ -68,7 +68,14 @@ namespace SpaceWars
         /// </summary>
         private void CleanupProjectiles()
         {
-
+            //Checks all projectiles if they're active/alive and all dead ones are removed
+            foreach (var proj in _world.GetComponents<Projectile>())
+            {
+                if (!proj.Active)
+                {
+                    _world.RemoveComponent(proj);
+                }
+            }
         }
 
         /// <summary>
@@ -188,14 +195,48 @@ namespace SpaceWars
 
         /// <summary>
         /// Determines where and when projectiles collide with ships and stars.
-        /// Decreases the health of ships where needed.
-        /// Marks collided projectiles as "dead."
+        /// Decreases the health of ships when a collision occurs, marks collided projectiles as "dead."
         /// If a ship dies as result of the collision, a point is added to the ship who owned the projectile.
         /// </summary>
         private void ComputeCollision()
         {
-            
-        }
+            //Ship and projectile collisions
+            foreach (var ship in _world.GetComponents<Ship>())
+            {
+                foreach (var proj in _world.GetComponents<Projectile>()) 
+                {
+                    //If the distance between a ship and projectile is less than the ship's radius a collision occurs
+                    Vector2D distanceVector = ship.Location - proj.Location;
+                    if (distanceVector.Length() < Configuration.ShipCollisionRadius)
+                    {
+                        proj.Active = false;
+                        ship.Health--;
 
+                        //Dead ships are set to respawn in a certain amount of frames and a point is given to the ship that killed it
+                        if (ship.Health == 0)
+                        {
+                            ship.RespawnFrames = Configuration.RespawnRate;
+
+                            Ship winner = (Ship)_world.GetComponent<Ship>(proj.OwnerShipId);
+                            winner.Score++;
+                        }
+                    }
+                }
+            }
+
+            //Star and projectile collisions, the star is unaffected, the projectile dies
+            foreach (var star in _world.GetComponents<Star>())
+            {
+                foreach (var proj in _world.GetComponents<Projectile>())
+                {
+                    //If the distance between a star and projectile is less than the star's radius a collision occurs
+                    Vector2D distanceVector = star.Location - proj.Location;
+                    if (distanceVector.Length() < Configuration.StarCollisionRadius)
+                    {
+                        proj.Active = false;
+                    }
+                }
+            }
+        }
     }
 }

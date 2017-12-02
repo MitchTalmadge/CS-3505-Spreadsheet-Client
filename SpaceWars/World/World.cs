@@ -79,6 +79,21 @@ namespace SpaceWars
         }
 
         /// <summary>
+        /// Retrieves a GameComponent given the type and ID. 
+        /// </summary>
+        /// <typeparam name="T">The type of game component to get.</typeparam>
+        /// <param name="ID">The ID of the game component to remove.</param>
+        /// <returns>The specified GameComponent.</returns>
+        public GameComponent GetComponent<T>(int ID) where T : GameComponent
+        {
+            if (_gameComponents[typeof(T)].TryGetValue(ID, out var component))
+            {
+                return component;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Finds a location in the world not occupied by a ship or another star.
         /// </summary>
         /// <returns>A Vector2D representing a location where a ship may safely spawn.</returns>
