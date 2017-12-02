@@ -184,7 +184,9 @@ namespace SpaceWars
 
                 //TODO: Compute acceleration 
                 //TODO: Add acceleration to ship velocity
-                //TODO: Add velocity to location
+                
+                // Apply ship's velocity to location
+                ship.Location += ship.Velocity;
             }
         }
 
@@ -199,7 +201,7 @@ namespace SpaceWars
             foreach (var proj in _world.GetComponents<Projectile>())
             {
                 //new location based on projectile's velocity
-                proj.Location = proj.Location + proj.Velocity;
+                proj.Location += proj.Velocity;
 
                 //If a projectile is out of the world's bounds it's marked as not Active
                 double x = proj.Location.GetX();

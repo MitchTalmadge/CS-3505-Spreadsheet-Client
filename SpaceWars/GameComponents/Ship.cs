@@ -55,7 +55,7 @@ namespace SpaceWars
         /// Server use only.
         /// </summary>
         [JsonIgnore]
-        public Vector2D Velocity { get; set; }
+        public Vector2D Velocity { get; set; } = new Vector2D(0, 0);
 
         /// <summary>
         /// The hitpoints remaining for this ship.
