@@ -182,6 +182,10 @@ namespace SpaceWars
                 else if (clientCommunicator.ClientCommands[Ship.Command.Right])
                     ship.Direction.Rotate(Configuration.ShipTurningRate);
 
+                // Apply engine thrust.
+                if (clientCommunicator.ClientCommands[Ship.Command.Thrust])
+                    ship.Velocity += ship.Direction * Configuration.ShipEngineStrength;
+
                 //TODO: Compute acceleration 
                 //TODO: Add acceleration to ship velocity
                 
