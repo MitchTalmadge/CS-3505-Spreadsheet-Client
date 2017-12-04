@@ -31,6 +31,15 @@ namespace SpaceWars
         public Vector2D Direction { get; set; } = new Vector2D(0, -1);
 
         /// <summary>
+        /// Ensures that direction is not serialized for Stars.
+        /// </summary>
+        /// <returns>True if direction should be serialized.</returns>
+        public bool ShouldSerializeDirection()
+        {
+            return !(this is Star);
+        }
+
+        /// <summary>
         /// Gives details for which image should be drawn, and how it should be cropped.
         /// </summary>
         /// <returns>A tuple containing the image bitmap and a rectangle determining where the image should be cropped, and a size for its scale.</returns>

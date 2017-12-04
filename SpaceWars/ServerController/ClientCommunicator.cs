@@ -80,11 +80,10 @@ namespace SpaceWars
         }
 
         /// <summary>
-        /// Asynchronously begins listening for client data after sending the first packet.
+        /// Asynchronously begins listening for client data.
         /// </summary>
         public void BeginListeningAsync()
         {
-            SendFirstPacket();
             AbstractNetworking.GetData(_state);
         }
 
@@ -147,6 +146,9 @@ namespace SpaceWars
                 // Trim newline from nickname and invoke event.
                 var nickname = data.Replace("\n", "");
                 NicknameReceived?.Invoke(nickname);
+
+                // Send the first packet to the client.
+                SendFirstPacket();
 
                 // Listen for server events.
                 _server.WorldUpdated += OnWorldUpdated;

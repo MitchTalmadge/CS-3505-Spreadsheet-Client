@@ -62,7 +62,7 @@ namespace SpaceWars
         /// Ranges from 0 to 5, where 5 is full health and 0 is temporarily dead (waiting for respawn).
         /// </summary>
         [JsonProperty("hp")]
-        public double Health { get; set; }
+        public int Health { get; set; }
 
         /// <summary>
         /// The number of frames remaining until the ship respawns.
