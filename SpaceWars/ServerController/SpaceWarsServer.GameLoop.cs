@@ -203,7 +203,7 @@ namespace SpaceWars
         /// </summary>
         private void ComputeProjectileMotion()
         {
-            double bounds = _world.Size / 2d;
+            var bounds = _world.Size / 2d;
             //Computing motion and bound checking for each Projectile
             foreach (var proj in _world.GetComponents<Projectile>())
             {
@@ -211,8 +211,8 @@ namespace SpaceWars
                 proj.Location += proj.Velocity;
 
                 //If a projectile is out of the world's bounds it's marked as not Active
-                double x = proj.Location.GetX();
-                double y = proj.Location.GetY();
+                var x = proj.Location.GetX();
+                var y = proj.Location.GetY();
                 if (x > bounds || x < -bounds || y > bounds || y < -bounds)
                 {
                     proj.Active = false;
@@ -284,9 +284,10 @@ namespace SpaceWars
                         //Dead ships are set to respawn in a certain amount of frames and a point is given to the ship that killed it
                         if (ship.Health == 0)
                         {
-                            ship.RespawnFrames = Configuration.RespawnRate;
+                            KillShip(ship);
 
-                            Ship winner = _world.GetComponent<Ship>(proj.OwnerShipId);
+                            // Award points to the ship that killed this ship.
+                            var winner = _world.GetComponent<Ship>(proj.OwnerShipId);
                             winner.Score++;
                         }
                     }
@@ -327,10 +328,20 @@ namespace SpaceWars
                     var distanceVector = ship.Location - star.Location;
                     if (distanceVector.Length() < Configuration.StarCollisionRadius + Configuration.ShipCollisionRadius)
                     {
-                        ship.Health = 0;
+                        KillShip(ship);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Kills a ship by setting its health to zero, resetting its respawn counter, and resetting its velocity.
+        /// </summary>
+        private void KillShip(Ship ship)
+        {
+            ship.Health = 0;
+            ship.RespawnFrames = Configuration.RespawnRate;
+            ship.Velocity = new Vector2D(0, 0);
         }
     }
 }
