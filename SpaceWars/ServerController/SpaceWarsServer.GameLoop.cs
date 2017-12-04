@@ -325,7 +325,7 @@ namespace SpaceWars
                 {
                     // If the distance between a star and ship is less than the star's radius, a collision occurs
                     var distanceVector = ship.Location - star.Location;
-                    if (distanceVector.Length() < Configuration.StarCollisionRadius)
+                    if (distanceVector.Length() < Configuration.StarCollisionRadius + Configuration.ShipCollisionRadius)
                     {
                         ship.Health = 0;
                     }
