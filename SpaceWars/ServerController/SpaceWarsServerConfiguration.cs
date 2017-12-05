@@ -67,7 +67,7 @@ namespace SpaceWars
         /// <summary>
         /// Determines if the explosive game mode is enabled.
         /// </summary>
-        public bool ExplosiveGameMode { get; set; } = false;
+        public bool ExplosiveGameMode { get; set; }
 
         /// <summary>
         /// The stars to place in the world.

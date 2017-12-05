@@ -288,7 +288,7 @@ namespace SpaceWars
                     }
 
                     //If the distance between a ship and projectile is less than the ship's radius a collision occurs
-                    Vector2D distanceVector = ship.Location - proj.Location;
+                    var distanceVector = ship.Location - proj.Location;
                     if (distanceVector.Length() < Configuration.ShipCollisionRadius)
                     {
                         proj.Active = false;
@@ -313,7 +313,7 @@ namespace SpaceWars
                 foreach (var proj in _world.GetComponents<Projectile>())
                 {
                     //If the distance between a star and projectile is less than the star's radius a collision occurs
-                    Vector2D distanceVector = star.Location - proj.Location;
+                    var distanceVector = star.Location - proj.Location;
                     if (distanceVector.Length() < Configuration.StarCollisionRadius)
                     {
                         proj.Active = false;
@@ -355,6 +355,42 @@ namespace SpaceWars
             ship.Health = 0;
             ship.RespawnFrames = Configuration.RespawnRate;
             ship.Velocity = new Vector2D(0, 0);
+
+            // Explosive Game Mode
+            if (Configuration.ExplosiveGameMode)
+                Explode(ship);
+        }
+
+        /// <summary>
+        /// Spawns an explosion of projectiles at the component's location.
+        /// Used for the explosive game mode.
+        /// </summary>
+        /// <param name="component">The component at which to "explode."</param>
+        private void Explode(GameComponent component)
+        {
+            // Store the last rotation vector
+            var rotationVector = new Vector2D(0, 1);
+
+            // Spawn projectiles in a circle.
+            for (var i = 0; i < 20; i++)
+            {
+                // Create a copy of the rotation vector
+                var direction = new Vector2D(rotationVector);
+
+                // Create a new projectile
+                var projectile = new Projectile(component.Id)
+                {
+                    Direction = direction,
+                    Location = component.Location,
+                    Velocity = direction * Configuration.ProjectileSpeed
+                };
+
+                // Add the projectile to the world.
+                _world.PutComponent(projectile);
+
+                // Rotate the rotation vector
+                rotationVector.Rotate(18);
+            }
         }
     }
 }
