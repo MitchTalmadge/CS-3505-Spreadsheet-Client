@@ -65,6 +65,11 @@ namespace SpaceWars
         public double StarCollisionRadius { get; set; } = 35;
 
         /// <summary>
+        /// Determines if the explosive game mode is enabled.
+        /// </summary>
+        public bool ExplosiveGameMode { get; set; } = false;
+
+        /// <summary>
         /// The stars to place in the world.
         /// </summary>
         public Star[] Stars { get; set; } = {new Star(new Vector2D(0, 0), 0.01)};
@@ -94,6 +99,9 @@ namespace SpaceWars
                     comment: "How close a projectile must get to collide with a ship."),
                 new Property(nameof(StarCollisionRadius), StarCollisionRadius.ToString(CultureInfo.InvariantCulture),
                     comment: "How close a projectile or ship must get to collide with a star."),
+                new Property(nameof(ExplosiveGameMode), ExplosiveGameMode.ToString(),
+                    comment:
+                    "Set to true to enable the explosive game mode, where a large number of projectiles are spawned each time a sihp dies.")
             };
 
             // Add all stars.
@@ -161,6 +169,10 @@ namespace SpaceWars
                     case nameof(StarCollisionRadius):
                         if (double.TryParse(property.Value, out parsedDouble))
                             StarCollisionRadius = parsedDouble;
+                        break;
+                    case nameof(ExplosiveGameMode):
+                        if (bool.TryParse(property.Value, out var parsedBool))
+                            ExplosiveGameMode = parsedBool;
                         break;
                     case nameof(Star):
                         if (double.TryParse(property.Attributes["x"], out var x)
