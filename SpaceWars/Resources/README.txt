@@ -6,7 +6,11 @@ u1031378
 PS8: Server README
 
 Testing:
-We unit tested our World class exclusively. 
+We unit tested our World Project and Properties Project with unit tests. For the World Project, 
+the code coverage for the World class is low, but it's because we didn't unit test the FindShipSpawnLocation
+method (a method that finds open/empty space in the GUI to draw ships) since it's so dependent on
+game state. We ensured the method works by generating a lot of ships (with the AI client) and ensuring 
+non spawned in a star. 
 
 PS7: Client README
 Our Spacewars game has a very different visual aesthetic than the one demoed in class. It does

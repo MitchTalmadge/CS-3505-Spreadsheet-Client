@@ -30,7 +30,7 @@ namespace SpaceWars
 
         /// <summary>
         /// Counts the number of Projectiles currently istantiated. 
-        /// Increments on each ship's creation and becomes a new Projectile's ID.
+        /// Increments on each projectile's creation and becomes a new Projectile's ID.
         /// </summary>
         private static int ProjectileCount;
 
