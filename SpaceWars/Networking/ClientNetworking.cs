@@ -14,10 +14,11 @@ namespace Networking
         /// Attempts to connect to the server via a provided hostname. 
         /// Saves the callback function in a socket state object for use when data arrives.
         /// </summary>
-        /// <param name="hostName">The address to connect to, excluding port.</param>
+        /// <param name="hostName">The address to connect to.</param>
+        /// <param name="port">The port to connect to.</param>
         /// <param name="established">The callback for when a connection has been established.</param>
         /// <param name="failed">The callback for when a connection has failed.</param>
-        public static void ConnectToServer(string hostName, ConnectionEstablished established, ConnectionFailed failed)
+        public static void ConnectToServer(string hostName, int port, ConnectionEstablished established, ConnectionFailed failed)
         {
             // Create a SocketState.
             var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
@@ -26,7 +27,7 @@ namespace Networking
             // Attempt connection to the address on the default port.
             try
             {
-                socket.BeginConnect(hostName, 11000, ConnectedToServer, socketState);
+                socket.BeginConnect(hostName, port, ConnectedToServer, socketState);
             }
             catch (Exception e)
             {

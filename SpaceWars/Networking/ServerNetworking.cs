@@ -14,12 +14,13 @@ namespace Networking
         /// <summary>
         /// Starts an internal loop that will continually accept connections from clients until stopped via the returned TcpState.
         /// </summary>
+        /// <param name="port">The port to listen on.</param>
         /// <param name="established">The callback for when a connection to a client has been established.</param>
         /// <param name="failed">The callback for when a connection to a client has failed.</param>
         /// <returns>A TcpState, which can be used to stop accepting connections from clients.</returns>
-        public static TcpState AwaitClientConnections(ConnectionEstablished established, ConnectionFailed failed)
+        public static TcpState AwaitClientConnections(int port, ConnectionEstablished established, ConnectionFailed failed)
         {
-            var listener = new TcpListener(IPAddress.Any, 11000);
+            var listener = new TcpListener(IPAddress.Any, port);
             var tcpState = new TcpState(listener, established, failed);
 
             // Start accepting the socket from the client.

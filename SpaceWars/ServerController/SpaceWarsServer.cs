@@ -67,7 +67,7 @@ namespace SpaceWars
         /// </summary>
         private void AcceptConnectionsAsync()
         {
-            _tcpState = ServerNetworking.AwaitClientConnections(ClientConnectionEstablished, ClientConnectionFailed);
+            _tcpState = ServerNetworking.AwaitClientConnections(11000, ClientConnectionEstablished, ClientConnectionFailed);
         }
 
         /// <summary>

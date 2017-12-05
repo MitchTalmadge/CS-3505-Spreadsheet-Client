@@ -93,6 +93,7 @@ namespace SpaceWars
             // Connect to the server.
             ClientNetworking.ConnectToServer(
                 hostname,
+                11000,
                 state =>
                 {
                     _socketState = state;
