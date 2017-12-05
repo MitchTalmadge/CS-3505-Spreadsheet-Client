@@ -196,7 +196,14 @@ namespace SpaceWars
 
                 // Apply engine thrust.
                 if (clientCommunicator.ClientCommands[Ship.Command.Thrust])
+                {
                     ship.Velocity += ship.Direction * Configuration.ShipEngineStrength;
+                    ship.Thrusting = true;
+                }
+                else
+                {
+                    ship.Thrusting = false;
+                }
 
                 // Apply ship's velocity to location
                 ship.Location += ship.Velocity;
