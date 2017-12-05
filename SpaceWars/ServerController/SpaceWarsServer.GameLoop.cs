@@ -185,12 +185,25 @@ namespace SpaceWars
                 else if (clientCommunicator.ClientCommands[Ship.Command.Right])
                     ship.Direction.Rotate(Configuration.ShipTurningRate);
 
+                // Create a vector to store the total acceleration.
+                foreach (var star in _world.GetComponents<Star>())
+                {
+                    var gravityAcceleration = star.Location - ship.Location;
+                    gravityAcceleration.Normalize();
+                    gravityAcceleration = gravityAcceleration * star.Mass;
+                    ship.Velocity += gravityAcceleration;
+                }
+
                 // Apply engine thrust.
                 if (clientCommunicator.ClientCommands[Ship.Command.Thrust])
+                {
                     ship.Velocity += ship.Direction * Configuration.ShipEngineStrength;
-
-                //TODO: Compute acceleration 
-                //TODO: Add acceleration to ship velocity
+                    ship.Thrusting = true;
+                }
+                else
+                {
+                    ship.Thrusting = false;
+                }
 
                 // Apply ship's velocity to location
                 ship.Location += ship.Velocity;

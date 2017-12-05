@@ -31,8 +31,7 @@ namespace SpaceWars
         /// <summary>
         /// The Id of this ship.
         /// </summary>
-        [JsonProperty("ship")]
-        private int _shipId;
+        [JsonProperty("ship")] private int _shipId;
 
         /// <inheritdoc/>
         public override int Id => _shipId;
@@ -48,7 +47,8 @@ namespace SpaceWars
         /// This is used to change appearance of the ship by adding exhaust.
         /// Client use only.
         /// </summary>
-        [JsonProperty("thrust")] private bool _thrusting;
+        [JsonProperty("thrust")]
+        public bool Thrusting { get; set; }
 
         /// <summary>
         /// The current velocity of the ship.
@@ -112,12 +112,12 @@ namespace SpaceWars
             var spriteStartPoint = new Point(colorIndex * ShipSpriteSize.Width, 0);
 
             // Move down one row for thrusting ships
-            if (_thrusting)
+            if (Thrusting)
                 spriteStartPoint.Y = ShipSpriteSize.Height;
 
             return new Tuple<Bitmap, Rectangle, Size>(
-                Resources.ships, 
-                new Rectangle(spriteStartPoint, ShipCropSize), 
+                Resources.ships,
+                new Rectangle(spriteStartPoint, ShipCropSize),
                 ShipDrawSize);
         }
 
