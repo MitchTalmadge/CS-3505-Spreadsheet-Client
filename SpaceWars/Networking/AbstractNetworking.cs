@@ -74,6 +74,7 @@ namespace Networking
             catch (ObjectDisposedException)
             {
                 // The socket was disposed previously.
+                state.Disconnect();
                 return;
             }
 
@@ -120,11 +121,13 @@ namespace Networking
             }
             catch (SocketException)
             {
+                // The other side has disconnected.
                 state.Disconnect();
             }
             catch (ObjectDisposedException)
             {
-                // Ignored
+                // The socket was disposed previously.
+                state.Disconnect();
             }
         }
 
@@ -142,11 +145,13 @@ namespace Networking
             }
             catch (SocketException)
             {
+                // The other side has disconnected.
                 state.Disconnect();
             }
             catch (ObjectDisposedException)
             {
-                // Ignored
+                // The socket was disposed previously.
+                state.Disconnect();
             }
         }
     }

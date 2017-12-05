@@ -94,14 +94,14 @@ namespace Networking
             {
                 Socket.Shutdown(SocketShutdown.Both);
                 Socket.Close();
-
-                // Notify listeners.
-                Disconnected?.Invoke();
             }
             catch (ObjectDisposedException)
             {
                 // Ignored
             }
+
+            // Notify listeners.
+            Disconnected?.Invoke();
         }
 
         protected bool Equals(SocketState other)
