@@ -35,6 +35,11 @@ View Projects/Server Projects/Server
 We consider our console as a "view", since it displays text and, although we did not implement it, 
 may also accept user input in the future.
 
+Extra Game Mode:
+Our additional game mode is that when a ship dies 20 projectiles are sent out in a circle from where
+the ship died. The ship that died can score points if these projectiles kill another ship. It makes for 
+a considerably riskier game and as well looks pretty cool. 
+
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
@@ -70,8 +75,3 @@ the "Properties" collapsible group in the solution explorer for the respective p
 
 We created a "Factory" for our SpaceWarsClient (controller) that prevents the user from accidentally interacting
 with a SpaceWarsClient instance that did not connect successfully. 
-
-Extra Game Mode:
-Our additional game mode is that when a ship dies 20 projectiles are sent out in a circle from where
-the ship died. The ship that died can score points if these projectiles kill another ship. It makes for 
-a considerably riskier game and as well looks pretty cool. 
