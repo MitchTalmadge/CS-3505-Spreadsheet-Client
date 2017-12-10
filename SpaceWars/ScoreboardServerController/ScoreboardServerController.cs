@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Networking;
 
 namespace SpaceWars
 {
-
     /// <summary>
     /// The main controller for the SpaceWars scoreboard server.
     /// Uses the networking library to maintain a connection with multiple clients
@@ -42,6 +43,11 @@ namespace SpaceWars
         public event Action ServerDisconnected;
 
         /// <summary>
+        /// A list of connected client communicators.
+        /// </summary>
+        private readonly IDictionary<int, ClientCommunicator> _clients = new ConcurrentDictionary<int, ClientCommunicator>();
+
+        /// <summary>
         /// Creates a new scoreboard server controller that will listen for clients.
         /// </summary>
         public ScoreboardServerController()
@@ -63,6 +69,22 @@ namespace SpaceWars
         /// <param name="state">The client's socket state.</param>
         private void ClientConnectionEstablished(SocketState state)
         {
+            // Add a new client communicator.
+            var communicator = new ClientCommunicator(this, state);
+            _clients.Add(communicator.Id, communicator);
+
+            // Handle the case where the client disconnects.
+            communicator.Disconnected += () =>
+            {
+                // Remove the client communicator.
+                _clients.Remove(communicator.Id);
+
+                // Notify listeners.
+                ClientDisconnected?.Invoke();
+            };
+
+            // Start the listening process.
+            communicator.BeginListeningAsync();
 
             // Notify listeners of a newly connected client.
             ClientConnected?.Invoke();
