@@ -117,28 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Server_Log_ClientConnected" xml:space="preserve">
+  <data name="GameServer_Log_ClientConnected" xml:space="preserve">
     <value>Client Connected</value>
     <comment>Displays in the logs when a client connects.</comment>
   </data>
-  <data name="Server_Log_ClientConnectFailed" xml:space="preserve">
+  <data name="GameServer_Log_ClientConnectFailed" xml:space="preserve">
     <value>Client Failed to Connect</value>
     <comment>Displays in the logs when a client connection failed.</comment>
   </data>
-  <data name="Server_Log_ClientDisconnected" xml:space="preserve">
+  <data name="GameServer_Log_ClientDisconnected" xml:space="preserve">
     <value>Client Disconnected</value>
     <comment>Displays in the logs when a client disconnects.</comment>
   </data>
-  <data name="Server_Log_PropertiesLoadFailed" xml:space="preserve">
+  <data name="GameServer_Log_PropertiesLoadFailed" xml:space="preserve">
     <value>Properties file could not be loaded; possibly corrupt.</value>
     <comment>Displays in the logs when the properties file cannot be loaded.</comment>
   </data>
-  <data name="Server_Log_ServerConnected" xml:space="preserve">
-    <value>Server Started and Listening for Clients</value>
+  <data name="GameServer_Log_ServerConnected" xml:space="preserve">
+    <value>Listening for Game Clients on Port 11000</value>
     <comment>Displays in the logs when the server begins listening successfully.</comment>
   </data>
-  <data name="Server_Log_ServerDisconnected" xml:space="preserve">
+  <data name="GameServer_Log_ServerDisconnected" xml:space="preserve">
     <value>Server Disconnected</value>
     <comment>Displays in the logs when the server disconnects.</comment>
+  </data>
+  <data name="ScoreServer_Log_ServerConnected" xml:space="preserve">
+    <value>Listening for Web Clients on Port 80</value>
+    <comment>Displays in the logs when the server beings listening successfully.</comment>
   </data>
 </root>
