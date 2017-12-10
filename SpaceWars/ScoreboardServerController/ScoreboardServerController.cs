@@ -1,32 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using Networking;
-using System.Collections.Concurrent;
 
 namespace SpaceWars
 {
+
     /// <summary>
-    /// The main controller for the SpaceWars game server.
+    /// The main controller for the SpaceWars scoreboard server.
     /// Uses the networking library to maintain a connection with multiple clients
-    /// and update the world state, notifying clients of changes in state.
+    /// and output an html webpage that shows scores based on the accessed endpoint.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
-    public partial class SpaceWarsServer
+    public class ScoreboardServerController
     {
-        /// <summary>
-        /// The configuration for this server.
-        /// </summary>
-        internal SpaceWarsServerConfiguration Configuration { get; }
-
         /// <summary>
         /// The TcpState that the server is using to accept client connections.
         /// </summary>
         private TcpState _tcpState;
-
-        /// <summary>
-        /// A list of connected client communicators.
-        /// </summary>
-        private readonly IDictionary<int, ClientCommunicator> _clients = new ConcurrentDictionary<int, ClientCommunicator>();
 
         /// <summary>
         /// Called when a client connects to the server.
@@ -53,13 +42,11 @@ namespace SpaceWars
         public event Action ServerDisconnected;
 
         /// <summary>
-        /// Creates a new Space Wars Server that will listen for clients.
+        /// Creates a new scoreboard server controller that will listen for clients.
         /// </summary>
-        public SpaceWarsServer(SpaceWarsServerConfiguration configuration)
+        public ScoreboardServerController()
         {
-            Configuration = configuration;
             AcceptConnectionsAsync();
-            StartGameLoopAsync();
         }
 
         /// <summary>
@@ -67,7 +54,7 @@ namespace SpaceWars
         /// </summary>
         private void AcceptConnectionsAsync()
         {
-            _tcpState = ServerNetworking.AwaitClientConnections(11000, ClientConnectionEstablished, ClientConnectionFailed);
+            _tcpState = ServerNetworking.AwaitClientConnections(80, ClientConnectionEstablished, ClientConnectionFailed);
         }
 
         /// <summary>
@@ -76,32 +63,6 @@ namespace SpaceWars
         /// <param name="state">The client's socket state.</param>
         private void ClientConnectionEstablished(SocketState state)
         {
-            // Add a new client communicator.
-            var communicator = new ClientCommunicator(this, state);
-            _clients.Add(communicator.Id, communicator);
-
-            // Create a ship when the client sends their nickname.
-            communicator.NicknameReceived += nickname =>
-            {
-                var ship = new Ship(communicator.Id, nickname);
-                _world.PutComponent(ship);
-            };
-
-            // Handle the case where the client disconnects.
-            communicator.Disconnected += () =>
-            {
-                // Remove the client's ship.
-                _world.GetComponent<Ship>(communicator.Id).Health = 0;
-
-                // Remove the client communicator.
-                _clients.Remove(communicator.Id);
-
-                // Notify listeners.
-                ClientDisconnected?.Invoke();
-            };
-
-            // Start the listening process.
-            communicator.BeginListeningAsync();
 
             // Notify listeners of a newly connected client.
             ClientConnected?.Invoke();
@@ -123,8 +84,8 @@ namespace SpaceWars
         public void Disconnect()
         {
             _tcpState?.StopAcceptingClientConnections();
-            StopGameLoop();
             ServerDisconnected?.Invoke();
         }
+
     }
 }

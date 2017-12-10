@@ -141,8 +141,24 @@
     <value>Server Disconnected</value>
     <comment>Displays in the logs when the server disconnects.</comment>
   </data>
+  <data name="ScoreServer_Log_ClientConnected" xml:space="preserve">
+    <value>Client Connected</value>
+    <comment>Displays in the logs when a client connects.</comment>
+  </data>
+  <data name="ScoreServer_Log_ClientConnectFailed" xml:space="preserve">
+    <value>Client Failed to Connect</value>
+    <comment>Displays in the logs when a client connection failed.</comment>
+  </data>
+  <data name="ScoreServer_Log_ClientDisconnected" xml:space="preserve">
+    <value>Client Disconnected</value>
+    <comment>Displays in the logs when a client disconnects.</comment>
+  </data>
   <data name="ScoreServer_Log_ServerConnected" xml:space="preserve">
     <value>Listening for Web Clients on Port 80</value>
     <comment>Displays in the logs when the server beings listening successfully.</comment>
+  </data>
+  <data name="ScoreServer_Log_ServerDisconnected" xml:space="preserve">
+    <value>Server Disconnected</value>
+    <comment>Displays in the logs when the server disconnects.</comment>
   </data>
 </root>

@@ -53,10 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientCommunicator.cs" />
-    <Compile Include="SpaceWarsServer.cs" />
+    <Compile Include="GameServerController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpaceWarsServer.GameLoop.cs" />
-    <Compile Include="SpaceWarsServerConfiguration.cs" />
+    <Compile Include="GameServerController.GameLoop.cs" />
+    <Compile Include="GameServerConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameComponents\GameComponents.csproj">

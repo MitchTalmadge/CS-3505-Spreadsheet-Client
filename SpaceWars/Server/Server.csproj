@@ -97,9 +97,13 @@
       <Project>{d3ec5fa3-37ad-4eb8-a05a-735044634ea5}</Project>
       <Name>Properties</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServerController\ServerController.csproj">
+    <ProjectReference Include="..\ScoreboardServerController\ScoreboardServerController.csproj">
+      <Project>{D220DA49-BA39-41DC-B7E6-C23119B42559}</Project>
+      <Name>ScoreboardServerController</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServerController\GameServerController.csproj">
       <Project>{7AB2E330-DBE6-489D-AE36-B4DF8AA5F0FA}</Project>
-      <Name>ServerController</Name>
+      <Name>GameServerController</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

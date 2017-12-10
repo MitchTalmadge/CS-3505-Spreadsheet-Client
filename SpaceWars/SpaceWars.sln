@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{DA562CCD-920E-4D4C-9CB7-D594CE96F302}"
 EndProject
@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controller Projects", "Cont
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{BB94FA7F-273D-4EBE-944B-F88DBBAEF6EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerController", "ServerController\ServerController.csproj", "{7AB2E330-DBE6-489D-AE36-B4DF8AA5F0FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServerController", "ServerController\GameServerController.csproj", "{7AB2E330-DBE6-489D-AE36-B4DF8AA5F0FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldTests", "WorldTests\WorldTests.csproj", "{E4005B5B-58CB-47F0-B8E7-E57D8F0B9AC8}"
 EndProject
@@ -44,6 +44,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertiesTests", "PropertiesTests\PropertiesTests.csproj", "{F6DC3B49-4A3E-497A-B5CA-3C14D4EE2E38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLoop", "GameLoop\GameLoop.csproj", "{2F197520-803A-4660-8B9C-92CFE6B3D1A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoreboardServerController", "ScoreboardServerController\ScoreboardServerController.csproj", "{D220DA49-BA39-41DC-B7E6-C23119B42559}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,6 +116,10 @@ Global
 		{2F197520-803A-4660-8B9C-92CFE6B3D1A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F197520-803A-4660-8B9C-92CFE6B3D1A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F197520-803A-4660-8B9C-92CFE6B3D1A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D220DA49-BA39-41DC-B7E6-C23119B42559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D220DA49-BA39-41DC-B7E6-C23119B42559}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D220DA49-BA39-41DC-B7E6-C23119B42559}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D220DA49-BA39-41DC-B7E6-C23119B42559}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -136,6 +142,7 @@ Global
 		{E9C56F62-7324-4DD0-A8B8-D4DF2C834554} = {E1AD77C2-8281-4C26-8627-D407C431D36C}
 		{F6DC3B49-4A3E-497A-B5CA-3C14D4EE2E38} = {F7DED078-03C8-4E25-8D30-67275C44DAAF}
 		{2F197520-803A-4660-8B9C-92CFE6B3D1A5} = {F7DED078-03C8-4E25-8D30-67275C44DAAF}
+		{D220DA49-BA39-41DC-B7E6-C23119B42559} = {F33033F4-6BC8-4D2C-BDD5-01906ABBBC81}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FA88E468-FA51-4B6C-84C1-321CBFB2D6EC}

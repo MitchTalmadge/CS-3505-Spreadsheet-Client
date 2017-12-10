@@ -14,6 +14,7 @@ namespace SpaceWars
     /// The Game Server listens on port 11000
     /// and listens for game clients, updating the world according to its state.
     /// </summary>
+    /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     internal class GameServer
     {
         /// <summary>
@@ -29,19 +30,17 @@ namespace SpaceWars
         /// <summary>
         /// The server controller instance attached to this view.
         /// </summary>
-        private static SpaceWarsServer _spaceWarsServer;
+        private static GameServerController _gameServerController;
 
         /// <summary>
-        /// Initializes this static console window.
-        /// The console is a singleton, and does not need state,
-        /// therefore, every part of it remains static.
+        /// Initializes the game server controller and logger.
         /// </summary>
         internal GameServer()
         {
             var configuration = InitializeProperties();
 
             // Configure and create server instance.
-            _spaceWarsServer = new SpaceWarsServer(configuration);
+            _gameServerController = new GameServerController(configuration);
 
             Logger.Log(LogLevel.Info, Resources.GameServer_Log_ServerConnected);
 
@@ -52,7 +51,7 @@ namespace SpaceWars
         /// Initializes the properties file and checks for errors.
         /// Also checks for missing properties and writes their default values.
         /// </summary>
-        private static SpaceWarsServerConfiguration InitializeProperties()
+        private static GameServerConfiguration InitializeProperties()
         {
             // If there is no properties file, generate one.
             if (!File.Exists(PropertiesFilePath))
@@ -61,7 +60,7 @@ namespace SpaceWars
                 var properties = new PropertiesFile(PropertiesFilePath);
 
                 // Create a config with defaults.
-                var config = new SpaceWarsServerConfiguration();
+                var config = new GameServerConfiguration();
 
                 // Write defaults to properties file.
                 properties.SetProperties(config.ToProperties());
@@ -76,7 +75,7 @@ namespace SpaceWars
                 var properties = new PropertiesFile(PropertiesFilePath);
 
                 // Create a config with defaults.
-                var config = new SpaceWarsServerConfiguration();
+                var config = new GameServerConfiguration();
 
                 // Populate the config with the properties file.
                 config.FromProperties(properties.GetAllProperties());
@@ -104,18 +103,18 @@ namespace SpaceWars
         private static void InitializeLoggingListeners()
         {
             // Log when the server disconnects.
-            _spaceWarsServer.ServerDisconnected +=
+            _gameServerController.ServerDisconnected +=
                 () => Logger.Log(LogLevel.Info, Resources.GameServer_Log_ServerDisconnected);
 
             // Log when a client connects.
-            _spaceWarsServer.ClientConnected += () => Logger.Log(LogLevel.Info, Resources.GameServer_Log_ClientConnected);
+            _gameServerController.ClientConnected += () => Logger.Log(LogLevel.Info, Resources.GameServer_Log_ClientConnected);
 
             // Log when a client fails to connect.
-            _spaceWarsServer.ClientConnectFailed +=
+            _gameServerController.ClientConnectFailed +=
                 () => Logger.Log(LogLevel.Warn, Resources.GameServer_Log_ClientConnectFailed);
 
             // Log when a client disconnects.
-            _spaceWarsServer.ClientDisconnected +=
+            _gameServerController.ClientDisconnected +=
                 () => Logger.Log(LogLevel.Info, Resources.GameServer_Log_ClientDisconnected);
         }
     }

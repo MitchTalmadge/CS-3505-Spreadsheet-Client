@@ -5,7 +5,7 @@ namespace SpaceWars
     /// <summary>
     /// This section of the server handles the game loop and its logic.
     /// </summary>
-    public partial class SpaceWarsServer
+    public partial class GameServerController
     {
         /// <summary>
         /// The game loop for this server.

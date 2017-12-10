@@ -6,11 +6,11 @@ namespace SpaceWars
 {
     /// <inheritdoc />
     /// <summary>
-    /// This configuration is used by the SpaceWarsServer and should be passed into its constructor.
+    /// This configuration is used by the game server controller and should be passed into its constructor.
     /// This allows the creator of the server instance to configure the server.
     /// </summary>
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
-    public class SpaceWarsServerConfiguration : IPropertySerializable
+    public class GameServerConfiguration : IPropertySerializable
     {
         /// <summary>
         /// The width and height of the world.

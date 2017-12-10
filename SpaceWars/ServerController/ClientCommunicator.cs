@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using Networking;
 using Newtonsoft.Json;
 
@@ -28,7 +27,7 @@ namespace SpaceWars
         /// <summary>
         /// The SpaceWars server instance.
         /// </summary>
-        private readonly SpaceWarsServer _server;
+        private readonly GameServerController _gameServerController;
 
         /// <summary>
         /// The client's SocketState.
@@ -66,11 +65,11 @@ namespace SpaceWars
         /// <summary>
         /// Creates an instance from a connected client SocketState.
         /// </summary>
-        /// <param name="server">The SpaceWars server instance.</param>
+        /// <param name="gameServerController">The SpaceWars server instance.</param>
         /// <param name="state">The client's SocketState.</param>
-        public ClientCommunicator(SpaceWarsServer server, SocketState state)
+        public ClientCommunicator(GameServerController gameServerController, SocketState state)
         {
-            _server = server;
+            _gameServerController = gameServerController;
 
             _state = state;
 
@@ -98,7 +97,7 @@ namespace SpaceWars
             packet.Append(Id).Append('\n');
 
             // World Size
-            packet.Append(_server.Configuration.WorldSize).Append('\n');
+            packet.Append(_gameServerController.Configuration.WorldSize).Append('\n');
 
             // Send packet.
             AbstractNetworking.Send(_state, packet.ToString());
@@ -151,7 +150,7 @@ namespace SpaceWars
                 SendFirstPacket();
 
                 // Listen for server events.
-                _server.WorldUpdated += OnWorldUpdated;
+                _gameServerController.WorldUpdated += OnWorldUpdated;
             }
             else
             {
@@ -179,7 +178,7 @@ namespace SpaceWars
         private void OnDisconnected()
         {
             // Unsubscribe from event listeners
-            _server.WorldUpdated -= OnWorldUpdated;
+            _gameServerController.WorldUpdated -= OnWorldUpdated;
             _state.DataReceived -= OnDataReceived;
             _state.Disconnected -= OnDisconnected;
 

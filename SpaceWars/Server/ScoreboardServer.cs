@@ -7,6 +7,7 @@ namespace SpaceWars
     /// The Scoreboard Server listens on port 80
     /// and listens for web clients, serving the scoreboard from the database.
     /// </summary>
+    /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     internal class ScoreboardServer
     {
         /// <summary>
@@ -15,12 +16,17 @@ namespace SpaceWars
         private static readonly ILogger Logger = LogManager.GetLogger("Scoreboard Server");
 
         /// <summary>
-        /// Initializes this static console window.
-        /// The console is a singleton, and does not need state,
-        /// therefore, every part of it remains static.
+        /// The server controller instance attached to this view.
+        /// </summary>
+        private static ScoreboardServerController _scoreboardServerController;
+
+        /// <summary>
+        /// Initializes the scoreboard server controller and logger.
         /// </summary>
         internal ScoreboardServer()
         {
+            _scoreboardServerController = new ScoreboardServerController();
+
             Logger.Log(LogLevel.Info, Resources.ScoreServer_Log_ServerConnected);
 
             InitializeLoggingListeners();
@@ -31,6 +37,20 @@ namespace SpaceWars
         /// </summary>
         private static void InitializeLoggingListeners()
         {
+            // Log when the server disconnects.
+            _scoreboardServerController.ServerDisconnected +=
+                () => Logger.Log(LogLevel.Info, Resources.ScoreServer_Log_ServerDisconnected);
+
+            // Log when a client connects.
+            _scoreboardServerController.ClientConnected += () => Logger.Log(LogLevel.Info, Resources.ScoreServer_Log_ClientConnected);
+
+            // Log when a client fails to connect.
+            _scoreboardServerController.ClientConnectFailed +=
+                () => Logger.Log(LogLevel.Warn, Resources.ScoreServer_Log_ClientConnectFailed);
+
+            // Log when a client disconnects.
+            _scoreboardServerController.ClientDisconnected +=
+                () => Logger.Log(LogLevel.Info, Resources.ScoreServer_Log_ClientDisconnected);
         }
 
     }

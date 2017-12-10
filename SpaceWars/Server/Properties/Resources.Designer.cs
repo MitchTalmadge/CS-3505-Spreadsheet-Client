@@ -115,11 +115,47 @@ namespace SpaceWars.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client Connected.
+        /// </summary>
+        internal static string ScoreServer_Log_ClientConnected {
+            get {
+                return ResourceManager.GetString("ScoreServer_Log_ClientConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client Failed to Connect.
+        /// </summary>
+        internal static string ScoreServer_Log_ClientConnectFailed {
+            get {
+                return ResourceManager.GetString("ScoreServer_Log_ClientConnectFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client Disconnected.
+        /// </summary>
+        internal static string ScoreServer_Log_ClientDisconnected {
+            get {
+                return ResourceManager.GetString("ScoreServer_Log_ClientDisconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Listening for Web Clients on Port 80.
         /// </summary>
         internal static string ScoreServer_Log_ServerConnected {
             get {
                 return ResourceManager.GetString("ScoreServer_Log_ServerConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server Disconnected.
+        /// </summary>
+        internal static string ScoreServer_Log_ServerDisconnected {
+            get {
+                return ResourceManager.GetString("ScoreServer_Log_ServerDisconnected", resourceCulture);
             }
         }
     }
