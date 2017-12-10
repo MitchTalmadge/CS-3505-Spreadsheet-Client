@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Networking;
+using SpaceWars.Properties;
 
 namespace SpaceWars
 {
@@ -9,6 +11,11 @@ namespace SpaceWars
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     internal class ClientCommunicator
     {
+        /// <summary>
+        /// The regex pattern for matching URL paths.
+        /// </summary>
+        private static readonly Regex PathMatchRegex = new Regex(@"^GET (.+) HTTP/1.1");
+
         /// <summary>
         /// This static counter ensures that all new instances have a unique id.
         /// </summary>
@@ -65,9 +72,45 @@ namespace SpaceWars
         /// <param name="data">The data from the client.</param>
         private void OnDataReceived(string data)
         {
-            Console.Out.WriteLine(data);
+            // Only accept GET requests
+            if(!data.StartsWith("GET"))
+            {
+                _state.Disconnect();
+                return;
+            }
 
-            AbstractNetworking.GetData(_state);
+            // Get path accessed
+            var matches = PathMatchRegex.Matches(data);
+            if (matches.Count == 0 || matches[0].Groups.Count != 2 || !matches[0].Groups[1].Success)
+            {
+                // A path could not be found in the request.
+                _state.Disconnect();
+                return;
+            }
+            var path = matches[0].Groups[1].Value;
+
+            switch (path)
+            {
+                case "/":
+                    SendResponse("Front page");
+                    break;
+                default:
+                    SendResponse("This page has no content.");
+                    break;
+            }
+
+            _state.Disconnect();
+        }
+
+        /// <summary>
+        /// Sends an http response packet to the client, with the given data.
+        /// </summary>
+        /// <param name="data">The data of the response.</param>
+        private void SendResponse(string data)
+        {
+            AbstractNetworking.Send(
+                _state, 
+                Resources.Scoreboard_HTTP_Response + data);
         }
 
         /// <summary>
