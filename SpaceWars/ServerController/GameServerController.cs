@@ -19,6 +19,13 @@ namespace SpaceWars
         internal GameServerConfiguration Configuration { get; }
 
         /// <summary>
+        /// The connection string.
+        /// The databse our Game Server uses is cs3500_u0980890
+        /// </summary>
+        public const string connectionString = "server=atr.eng.utah.edu;database=cs3500_u0980890;" +
+            "uid=cs3500_u0980890;password=burntchickennugget";
+
+        /// <summary>
         /// The TcpState that the server is using to accept client connections.
         /// </summary>
         private TcpState _tcpState;
@@ -119,6 +126,7 @@ namespace SpaceWars
         /// <summary>
         /// Disconnects from the TcpState that accepts client connections.
         /// This server instance may not be used after calling this method.
+        /// Calls the method that writes data to the Game's MySQL database. 
         /// </summary>
         public void Disconnect()
         {
@@ -126,5 +134,14 @@ namespace SpaceWars
             StopGameLoop();
             ServerDisconnected?.Invoke();
         }
+
+        /// <summary>
+        /// Writes each game's total time duration to the database, as well
+        /// as each player's maximum score and projectile accuracy.
+        /// </summary>
+        private void writeToDatabase()
+        {
+            
+    }
     }
 }
