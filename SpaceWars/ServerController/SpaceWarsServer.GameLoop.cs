@@ -153,6 +153,8 @@ namespace SpaceWars
                 var clientCommunicator = _clients[ship.Id];
                 if (clientCommunicator.ClientCommands[Ship.Command.Fire])
                 {
+                    //increase total fired counter
+                    ship.totalFired++;
                     ship.ProjectileCooldown = Configuration.FramesPerShot;
                     var projectile = new Projectile(ship.Id)
                     {
@@ -292,6 +294,8 @@ namespace SpaceWars
                     if (distanceVector.Length() < Configuration.ShipCollisionRadius)
                     {
                         proj.Active = false;
+                        //increase counter tracking projectiles that have hit other Ships
+                        _world.GetComponent<Ship>(proj.OwnerShipId).totalHits++;
                         ship.Health--;
 
                         //Dead ships are set to respawn in a certain amount of frames and a point is given to the ship that killed it

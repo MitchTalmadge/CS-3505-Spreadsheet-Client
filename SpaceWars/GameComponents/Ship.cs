@@ -37,6 +37,17 @@ namespace SpaceWars
         public override int Id => _shipId;
 
         /// <summary>
+        /// Keeps track of total projectiles fired, to compute accuracy.
+        /// </summary>
+        public int totalFired { get; set; }
+
+        /// <summary>
+        /// Keeps track of total projectiles fired from this ship that
+        /// have hit another ship, to compute accuracy.
+        /// </summary>
+        public int totalHits { get; set; }
+
+        /// <summary>
         /// The name of this ship (aka the player's name).
         /// </summary>
         [JsonProperty("name")]
@@ -93,6 +104,8 @@ namespace SpaceWars
         {
             _shipId = id;
             Name = name;
+            totalFired = 0;
+            totalHits = 0;
         }
 
         /// <inheritdoc />
@@ -131,6 +144,15 @@ namespace SpaceWars
             Left,
             Right,
             Fire
+        }
+
+        /// <summary>
+        /// Returns the accuracy, the percentage of projectiles fired 
+        /// by this player that hits another Ship.
+        /// </summary>
+        public double getAccuracy()
+        {
+            return (double) totalHits / totalFired;
         }
     }
 }
