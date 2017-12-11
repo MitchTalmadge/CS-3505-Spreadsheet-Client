@@ -41,7 +41,15 @@ namespace SpaceWars
             // Read forever
             while (true)
             {
-                Console.Read();
+                var input = Console.ReadLine();
+
+                // Stop the server when the user types "stop".
+                if (input == "stop")
+                {
+                    _gameServer.Shutdown();
+                    _scoreboardServer.Shutdown();
+                    return;
+                }
             }
         }
     }

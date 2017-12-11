@@ -18,7 +18,8 @@ namespace Networking
         /// <param name="established">The callback for when a connection to a client has been established.</param>
         /// <param name="failed">The callback for when a connection to a client has failed.</param>
         /// <returns>A TcpState, which can be used to stop accepting connections from clients.</returns>
-        public static TcpState AwaitClientConnections(int port, ConnectionEstablished established, ConnectionFailed failed)
+        public static TcpState AwaitClientConnections(int port, ConnectionEstablished established,
+            ConnectionFailed failed)
         {
             var listener = new TcpListener(IPAddress.Any, port);
             var tcpState = new TcpState(listener, established, failed);
@@ -45,17 +46,28 @@ namespace Networking
         {
             var tcpState = (TcpState) asyncResult.AsyncState;
 
-            var socket = tcpState.TcpListener.EndAcceptSocket(asyncResult);
+            try
+            {
+                var socket = tcpState.TcpListener.EndAcceptSocket(asyncResult);
 
-            // Create a socket state from the connection.
-            var socketState = new SocketState(socket, tcpState.ConnectionEstablished, tcpState.ConnectionFailed);
+                // Create a socket state from the connection.
+                var socketState = new SocketState(socket, tcpState.ConnectionEstablished, tcpState.ConnectionFailed);
 
-            // Notify callback of connection established.
-            socketState.ConnectionEstablished(socketState);
+                // Notify callback of connection established.
+                socketState.ConnectionEstablished(socketState);
 
-            // Exit immediately if we are not supposed to accept any more connections.
-            if (tcpState.Stopped)
+                // Exit immediately if we are not supposed to accept any more connections.
+                if (tcpState.Stopped)
+                    return;
+            }
+            catch (SocketException e)
+            {
+                tcpState.ConnectionFailed(e.Message);
+            }
+            catch (ObjectDisposedException)
+            {
                 return;
+            }
 
             // Accept another connection.
             try

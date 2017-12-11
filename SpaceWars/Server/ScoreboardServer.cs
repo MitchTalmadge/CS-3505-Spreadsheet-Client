@@ -33,6 +33,14 @@ namespace SpaceWars
         }
 
         /// <summary>
+        /// Shuts down the scoreboard server.
+        /// </summary>
+        internal void Shutdown()
+        {
+            _scoreboardServerController.Disconnect();
+        }
+
+        /// <summary>
         /// Adds any event listeners needed for logging.
         /// </summary>
         private static void InitializeLoggingListeners()

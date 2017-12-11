@@ -48,6 +48,14 @@ namespace SpaceWars
         }
 
         /// <summary>
+        /// Shuts down the game server.
+        /// </summary>
+        internal void Shutdown()
+        {
+            _gameServerController.Disconnect();
+        }
+
+        /// <summary>
         /// Initializes the properties file and checks for errors.
         /// Also checks for missing properties and writes their default values.
         /// </summary>
