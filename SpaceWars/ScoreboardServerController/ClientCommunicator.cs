@@ -14,7 +14,7 @@ namespace SpaceWars
         /// <summary>
         /// The regex pattern for matching URL paths.
         /// </summary>
-        private static readonly Regex PathMatchRegex = new Regex(@"^GET (.+) HTTP/1.1");
+        private static readonly Regex PathMatchRegex = new Regex(@"^GET ([^?]+)(\?([^=]+)=(.+))? HTTP\/1.1");
 
         /// <summary>
         /// This static counter ensures that all new instances have a unique id.
@@ -73,7 +73,7 @@ namespace SpaceWars
         private void OnDataReceived(string data)
         {
             // Only accept GET requests
-            if(!data.StartsWith("GET"))
+            if (!data.StartsWith("GET"))
             {
                 SendResponse(Resources.html_path_options);
                 _state.Disconnect();
@@ -82,7 +82,7 @@ namespace SpaceWars
 
             // Get path accessed
             var matches = PathMatchRegex.Matches(data);
-            if (matches.Count == 0 || matches[0].Groups.Count != 2 || !matches[0].Groups[1].Success)
+            if (matches.Count == 0 || !matches[0].Groups[1].Success)
             {
                 // A path could not be found in the request.
                 SendResponse(Resources.html_path_options);
@@ -91,8 +91,19 @@ namespace SpaceWars
             }
             var path = matches[0].Groups[1].Value;
 
+            // Get key and value if applicable.
+            var key = matches[0].Groups[3].Success ? matches[0].Groups[3].Value : null;
+            var value = matches[0].Groups[4].Success ? matches[0].Groups[4].Value : null;
+
+            // Serve pages based on path.
             switch (path)
             {
+                case "/game":
+                    if (key == "id")
+                        SendResponse(value);
+                    else
+                        SendResponse(Resources.html_path_options);
+                    break;
                 default:
                     SendResponse(Resources.html_path_options);
                     break;
@@ -108,7 +119,7 @@ namespace SpaceWars
         private void SendResponse(string data)
         {
             AbstractNetworking.Send(
-                _state, 
+                _state,
                 Resources.Scoreboard_HTTP_Response_Prefix + data);
         }
 
