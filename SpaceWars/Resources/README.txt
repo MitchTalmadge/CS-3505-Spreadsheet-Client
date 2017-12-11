@@ -3,6 +3,23 @@ u0980890
 Mitch Talmadge
 u1031378
 
+PS9: Database README
+
+Our database is organized as follows:
+
+Games Table:
+************************
+*  GameID  *  Runtime  *
+************************
+The GameID column is Auto Increment and Primary Key.
+
+Players Table:
+*******************************************************************
+*  PlayerID  *  ShipID  *  GameID  *  Score  *  Accuracy  * Name  *
+*******************************************************************
+The PlayerID column is Auto Increment and Primary Key. 
+
+
 PS8: Server README
 
 Testing:
