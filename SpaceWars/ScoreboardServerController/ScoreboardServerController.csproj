@@ -62,7 +62,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="html\game.html" />
     <Content Include="html\path_options.html" />
+    <Content Include="html\games.html" />
+    <Content Include="html\scores.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

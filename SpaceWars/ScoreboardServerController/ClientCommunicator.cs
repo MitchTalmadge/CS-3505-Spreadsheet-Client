@@ -98,9 +98,18 @@ namespace SpaceWars
             // Serve pages based on path.
             switch (path)
             {
+                case "/scores":
+                    SendResponse(Resources.html_scores);
+                    break;
                 case "/game":
                     if (key == "id")
-                        SendResponse(value);
+                        SendResponse(Resources.html_game);
+                    else
+                        SendResponse(Resources.html_path_options);
+                    break;
+                case "/games":
+                    if (key == "player")
+                        SendResponse(Resources.html_games);
                     else
                         SendResponse(Resources.html_path_options);
                     break;

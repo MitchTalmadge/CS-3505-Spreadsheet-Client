@@ -63,6 +63,42 @@ namespace SpaceWars.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///&lt;head&gt;
+        ///	&lt;title&gt;Space Wars Scoreboard - Game Scores&lt;/title&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///
+        ///TABLE
+        ///
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        internal static string html_game {
+            get {
+                return ResourceManager.GetString("html_game", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///	&lt;title&gt;Space Wars Scoreboard - Player Scores&lt;/title&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///
+        ///TABLE
+        ///
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        internal static string html_games {
+            get {
+                return ResourceManager.GetString("html_games", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
         ///	&lt;title&gt;Space Wars Scoreboard - Path Not Found&lt;/title&gt;
         ///&lt;/head&gt;
         ///&lt;body&gt;
@@ -75,11 +111,30 @@ namespace SpaceWars.Properties {
         ///	&lt;li&gt;/game?id=ID - Reports the scores and duration of the game with the given ID.&lt;/li&gt;
         ///&lt;/ul&gt;
         ///
+        ///&lt;/body&gt;
         ///&lt;/html&gt;.
         /// </summary>
         internal static string html_path_options {
             get {
                 return ResourceManager.GetString("html_path_options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///	&lt;title&gt;Space Wars Scoreboard - All Scores&lt;/title&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///
+        ///TABLE
+        ///
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        internal static string html_scores {
+            get {
+                return ResourceManager.GetString("html_scores", resourceCulture);
             }
         }
         

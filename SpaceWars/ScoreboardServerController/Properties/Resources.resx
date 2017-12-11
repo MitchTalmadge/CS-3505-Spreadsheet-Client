@@ -118,8 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="html_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\html\game.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="html_games" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\html\games.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="html_path_options" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\html\path_options.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="html_scores" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\html\scores.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="Scoreboard_HTTP_Response_Prefix" xml:space="preserve">
     <value>HTTP/1.1 200 OK
