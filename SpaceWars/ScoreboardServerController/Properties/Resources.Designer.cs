@@ -61,15 +61,38 @@ namespace SpaceWars.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///	&lt;title&gt;Space Wars Scoreboard - Path Not Found&lt;/title&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///The path you requested could not be found.&lt;br/&gt;
+        ///A list of valid paths are as follows:&lt;br/&gt;
+        ///
+        ///&lt;ul&gt;
+        ///	&lt;li&gt;/scores - Reports the scores of all players in all games, and the games&apos; durations.&lt;/li&gt;
+        ///	&lt;li&gt;/games?player=NAME - Reports the scores for all games played by the player with the given NAME&lt;/li&gt;
+        ///	&lt;li&gt;/game?id=ID - Reports the scores and duration of the game with the given ID.&lt;/li&gt;
+        ///&lt;/ul&gt;
+        ///
+        ///&lt;/html&gt;.
+        /// </summary>
+        internal static string html_path_options {
+            get {
+                return ResourceManager.GetString("html_path_options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HTTP/1.1 200 OK
         ///Connection: close
         ///Content-Type: text/html; charset=UTF-8
         ///
         ///.
         /// </summary>
-        internal static string Scoreboard_HTTP_Response {
+        internal static string Scoreboard_HTTP_Response_Prefix {
             get {
-                return ResourceManager.GetString("Scoreboard_HTTP_Response", resourceCulture);
+                return ResourceManager.GetString("Scoreboard_HTTP_Response_Prefix", resourceCulture);
             }
         }
     }

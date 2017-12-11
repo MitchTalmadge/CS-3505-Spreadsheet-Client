@@ -75,6 +75,7 @@ namespace SpaceWars
             // Only accept GET requests
             if(!data.StartsWith("GET"))
             {
+                SendResponse(Resources.html_path_options);
                 _state.Disconnect();
                 return;
             }
@@ -84,6 +85,7 @@ namespace SpaceWars
             if (matches.Count == 0 || matches[0].Groups.Count != 2 || !matches[0].Groups[1].Success)
             {
                 // A path could not be found in the request.
+                SendResponse(Resources.html_path_options);
                 _state.Disconnect();
                 return;
             }
@@ -91,11 +93,8 @@ namespace SpaceWars
 
             switch (path)
             {
-                case "/":
-                    SendResponse("Front page");
-                    break;
                 default:
-                    SendResponse("This page has no content.");
+                    SendResponse(Resources.html_path_options);
                     break;
             }
 
@@ -110,7 +109,7 @@ namespace SpaceWars
         {
             AbstractNetworking.Send(
                 _state, 
-                Resources.Scoreboard_HTTP_Response + data);
+                Resources.Scoreboard_HTTP_Response_Prefix + data);
         }
 
         /// <summary>
