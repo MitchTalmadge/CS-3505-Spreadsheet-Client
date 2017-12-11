@@ -100,6 +100,62 @@ namespace SpaceWars
         }
 
         /// <summary>
+        /// Generates an html table containing all player scores for all games.
+        /// This should include a row for every player in every game. 
+        /// 
+        /// Each row should contain the ID of the game in which the score took place, the duration of the game, 
+        /// the name of the player, the player's score, and the player's accuracy.
+        /// 
+        /// The HTML table should have one row for each player in each game in the database and one column for 
+        /// each of the above required pieces of information. 
+        /// 
+        /// The table should be ordered by top score.
+        /// </summary>
+        /// <returns>The table in html format.</returns>
+        internal string GenerateScoresTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Generates an html table containing all player scores for a given game.
+        /// This should include a row for every player in the particular game. 
+        /// 
+        /// Each row should contain the ID of the game in which the score took place, the duration of the game, 
+        /// the name of the player, the player's score, and the player's accuracy.
+        /// 
+        /// The HTML table should have one row for each player in the game and one column for 
+        /// each of the above required pieces of information.
+        ///  
+        /// The table should be ordered by top score.
+        /// </summary>
+        /// <param name="gameId">The ID of the game to generate a table for.</param>
+        /// <returns>The table in html format.</returns>
+        internal string GenerateGameTable(int gameId)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Generates an html table containing scores for all games played by the given player.
+        /// This should include a row for every game played by the player. 
+        /// 
+        /// Each row should contain the ID of the game in which the score took place, the duration of the game, 
+        /// the name of the player, the player's score, and the player's accuracy.
+        /// 
+        /// The HTML table should have one row for each game the player scored in, and one column for 
+        /// each of the above required pieces of information. 
+        /// 
+        /// The table should be ordered by top score.
+        /// </summary>
+        /// <param name="playerName">The name of the player.</param>
+        /// <returns>The table in html format.</returns>
+        internal string GenerateGamesTable(string playerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Disconnects from the TcpState that accepts client connections.
         /// This server instance may not be used after calling this method.
         /// </summary>

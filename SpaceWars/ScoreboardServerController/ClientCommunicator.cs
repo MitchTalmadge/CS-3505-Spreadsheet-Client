@@ -99,17 +99,24 @@ namespace SpaceWars
             switch (path)
             {
                 case "/scores":
-                    SendResponse(Resources.html_scores);
+                    var scoresTable = _scoreboardServerController.GenerateScoresTable();
+                    SendResponse(Resources.html_scores.Replace("TABLE", scoresTable));
                     break;
                 case "/game":
-                    if (key == "id")
-                        SendResponse(Resources.html_game);
+                    if (key == "id" && int.TryParse(value, out var id))
+                    {
+                        var gameTable = _scoreboardServerController.GenerateGameTable(id);
+                        SendResponse(Resources.html_game.Replace("TABLE", gameTable));
+                    }
                     else
                         SendResponse(Resources.html_path_options);
                     break;
                 case "/games":
                     if (key == "player")
-                        SendResponse(Resources.html_games);
+                    {
+                        var gamesTable = _scoreboardServerController.GenerateGamesTable(value);
+                        SendResponse(Resources.html_games.Replace("TABLE", gamesTable));
+                    }
                     else
                         SendResponse(Resources.html_path_options);
                     break;
