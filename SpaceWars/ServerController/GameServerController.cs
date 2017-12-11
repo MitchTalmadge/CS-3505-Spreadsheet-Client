@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Networking;
 using System.Collections.Concurrent;
+using MySql.Data.MySqlClient;
 
 namespace SpaceWars
 {
@@ -60,10 +61,23 @@ namespace SpaceWars
         public event Action ServerDisconnected;
 
         /// <summary>
+        /// Tracks the starting time (or ticks) when a Server/game starts.
+        /// Used to compute total game time to save to the database. 
+        /// </summary>
+        private int StartTicks;
+
+        /// <summary>
+        /// Tracks the ending time (or ticks) when a Server/game ends in the Disconnect method.
+        /// Used to compute total game time to save to the database. 
+        /// </summary>
+        private int EndTicks;
+
+        /// <summary>
         /// Creates a new game server controller that will listen for clients.
         /// </summary>
         public GameServerController(GameServerConfiguration configuration)
         {
+            StartTicks = Environment.TickCount;
             Configuration = configuration;
             AcceptConnectionsAsync();
             StartGameLoopAsync();
@@ -130,9 +144,11 @@ namespace SpaceWars
         /// </summary>
         public void Disconnect()
         {
+            EndTicks = Environment.TickCount;
             _tcpState?.StopAcceptingClientConnections();
             StopGameLoop();
             ServerDisconnected?.Invoke();
+            writeToDatabase();
         }
 
         /// <summary>
@@ -141,7 +157,52 @@ namespace SpaceWars
         /// </summary>
         private void writeToDatabase()
         {
-            
-    }
+            int gameTime = StartTicks - EndTicks;
+
+            // Open a connection
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    // Open a connection
+                    conn.Open();
+
+                    //Command writing Game information (total run time) to database
+                    MySqlCommand gameCommand = conn.CreateCommand();
+                    gameCommand.CommandText = $"INSERT INTO Games (Runtime) VALUES ({gameTime.ToString()})";
+
+                    // Execute the command and cycle through the DataReader object
+                    using (MySqlDataReader reader = gameCommand.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Console.WriteLine(reader);
+                        }
+                    }
+
+                    //Command writing all player information for each player in each client
+                    foreach (var ship in _world.GetComponents<Ship>())
+                    {
+                        MySqlCommand playersCommand = conn.CreateCommand();
+                        playersCommand.CommandText = $"INSERT INTO Players (ShipID, GameID, Score, Accuracy, Name) " +
+                            $"VALUES ({ship.Id.ToString()}, {"GET GAMEID FROM OTHER TABLE"}, {ship.Score.ToString()}," +
+                            $"{ship.getAccuracy().ToString()}, {ship.Name})";
+
+                        // Execute the command and cycle through the DataReader object
+                        using (MySqlDataReader reader = playersCommand.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Console.WriteLine(reader);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+        }
     }
 }
