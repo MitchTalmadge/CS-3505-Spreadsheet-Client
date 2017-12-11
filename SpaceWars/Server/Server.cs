@@ -48,7 +48,8 @@ namespace SpaceWars
                 {
                     _gameServer.Shutdown();
                     _scoreboardServer.Shutdown();
-                    return;
+                    
+                    //return;
                 }
             }
         }

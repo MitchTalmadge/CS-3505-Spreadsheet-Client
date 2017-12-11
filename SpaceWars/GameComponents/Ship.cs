@@ -39,12 +39,14 @@ namespace SpaceWars
         /// <summary>
         /// Keeps track of total projectiles fired, to compute accuracy.
         /// </summary>
+        [JsonIgnore]
         public int totalFired { get; set; }
 
         /// <summary>
         /// Keeps track of total projectiles fired from this ship that
         /// have hit another ship, to compute accuracy.
         /// </summary>
+        [JsonIgnore]
         public int totalHits { get; set; }
 
         /// <summary>
@@ -152,6 +154,9 @@ namespace SpaceWars
         /// </summary>
         public double getAccuracy()
         {
+            if (totalHits == 0 || totalFired == 0)
+                return 0;
+
             return (double) totalHits / totalFired;
         }
     }

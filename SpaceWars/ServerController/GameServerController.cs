@@ -67,12 +67,6 @@ namespace SpaceWars
         private int StartTicks;
 
         /// <summary>
-        /// Tracks the ending time (or ticks) when a Server/game ends in the Disconnect method.
-        /// Used to compute total game time to save to the database. 
-        /// </summary>
-        private int EndTicks;
-
-        /// <summary>
         /// Creates a new game server controller that will listen for clients.
         /// </summary>
         public GameServerController(GameServerConfiguration configuration)
@@ -144,11 +138,10 @@ namespace SpaceWars
         /// </summary>
         public void Disconnect()
         {
-            EndTicks = Environment.TickCount;
             _tcpState?.StopAcceptingClientConnections();
             StopGameLoop();
-            ServerDisconnected?.Invoke();
             writeToDatabase();
+            ServerDisconnected?.Invoke();
         }
 
         /// <summary>
@@ -157,7 +150,7 @@ namespace SpaceWars
         /// </summary>
         private void writeToDatabase()
         {
-            int gameTime = StartTicks - EndTicks;
+            var gameTime = (Environment.TickCount - StartTicks) / 1000d;
 
             // Open a connection
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -180,13 +173,23 @@ namespace SpaceWars
                         }
                     }
 
+                    // Get the last game id that was auto incremented
+                    MySqlCommand getGameIdCommand = conn.CreateCommand();
+                    getGameIdCommand.CommandText = $"SELECT LAST_INSERT_ID() FROM Games";
+                    var id = 0;
+                    using (MySqlDataReader reader = getGameIdCommand.ExecuteReader())
+                    {
+                        reader.Read();
+                        int.TryParse(reader.GetString(0), out id);
+                    }
+
                     //Command writing all player information for each player in each client
                     foreach (var ship in _world.GetComponents<Ship>())
                     {
                         MySqlCommand playersCommand = conn.CreateCommand();
                         playersCommand.CommandText = $"INSERT INTO Players (ShipID, GameID, Score, Accuracy, Name) " +
-                            $"VALUES ({ship.Id.ToString()}, {"GET GAMEID FROM OTHER TABLE"}, {ship.Score.ToString()}," +
-                            $"{ship.getAccuracy().ToString()}, {ship.Name})";
+                            $"VALUES ({ship.Id.ToString()}, {id}, {ship.Score.ToString()}," +
+                            $"{ship.getAccuracy().ToString()}, \"{ship.Name}\")";
 
                         // Execute the command and cycle through the DataReader object
                         using (MySqlDataReader reader = playersCommand.ExecuteReader())
