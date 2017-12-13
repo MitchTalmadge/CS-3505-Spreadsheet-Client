@@ -2,6 +2,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Networking;
+using MySql.Data.MySqlClient;
+using System.Text;
 
 namespace SpaceWars
 {
@@ -13,6 +15,13 @@ namespace SpaceWars
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     public class ScoreboardServerController
     {
+        /// <summary>
+        /// The connection string.
+        /// The databse our Game Server uses is cs3500_u0980890
+        /// </summary>
+        public const string connectionString = "server=atr.eng.utah.edu;database=cs3500_u0980890;" +
+            "uid=cs3500_u0980890;password=burntchickennugget";
+
         /// <summary>
         /// The TcpState that the server is using to accept client connections.
         /// </summary>
@@ -114,7 +123,33 @@ namespace SpaceWars
         /// <returns>The table in html format.</returns>
         internal string GenerateScoresTable()
         {
-            throw new NotImplementedException();
+            //Stringbuilder holding data the query returns
+            StringBuilder data = new StringBuilder();
+
+            // Open a connection
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    // Open a connection
+                    conn.Open();
+
+                    //Command writing Game information (total run time) to database
+                    MySqlCommand selectCommand = conn.CreateCommand();
+                    selectCommand.CommandText = $"SELECT Games.GameID, Games.Runtime, Players.Name, Players.Score," +
+                        $"Players.Accuracy FROM Games, Players WHERE Games.GameID = Players.GameID;";
+
+                    // Execute the command and cycle through the DataReader object
+                    using (MySqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        data.Append($"<table><tr>{reader.GetString(0)}<tr></table>");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
         }
 
         /// <summary>
@@ -133,7 +168,33 @@ namespace SpaceWars
         /// <returns>The table in html format.</returns>
         internal string GenerateGameTable(int gameId)
         {
-            throw new NotImplementedException();
+            //Stringbuilder holding data the query returns
+            StringBuilder data = new StringBuilder();
+
+            // Open a connection
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    // Open a connection
+                    conn.Open();
+
+                    //Command getting all players in all games' information, 5 columns total 
+                    MySqlCommand selectCommand = conn.CreateCommand();
+                    selectCommand.CommandText = $"SELECT Games.GameID, Games.Runtime, Players.Name, Players.Score," +
+                        $"Players.Accuracy FROM Games, Players WHERE Games.GameID = Players.GameID;";
+
+                    // Execute the command and cycle through the DataReader object
+                    using (MySqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        data.Append($"<table><tr>{reader.GetString(0)}<tr></table>");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
         }
 
         /// <summary>
@@ -152,7 +213,33 @@ namespace SpaceWars
         /// <returns>The table in html format.</returns>
         internal string GenerateGamesTable(string playerName)
         {
-            throw new NotImplementedException();
+            //Stringbuilder holding data the query returns
+            StringBuilder data = new StringBuilder();
+
+            // Open a connection
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    // Open a connection
+                    conn.Open();
+
+                    //Command getting all players in all games' information, 5 columns total 
+                    MySqlCommand selectCommand = conn.CreateCommand();
+                    selectCommand.CommandText = $"SELECT Games.GameID, Games.Runtime, Players.Name, Players.Score," +
+                        $"Players.Accuracy FROM Games, Players WHERE Games.GameID = Players.GameID;";
+
+                    // Execute the command and cycle through the DataReader object
+                    using (MySqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        data.Append($"<table><tr>{reader.GetString(0)}<tr></table>");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
         }
 
         /// <summary>
