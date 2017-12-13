@@ -142,7 +142,7 @@ namespace SpaceWars
                     // Execute the command and cycle through the DataReader object
                     using (MySqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        data.Append($"<table><tr>{reader.GetString(0)}<tr></table>");
+                        data.Append($"<table border=1><tr>{reader.GetString(0)}<tr></table>");
                     }
                 }
                 catch (Exception e)
