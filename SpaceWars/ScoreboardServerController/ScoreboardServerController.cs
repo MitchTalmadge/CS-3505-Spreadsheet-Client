@@ -136,13 +136,19 @@ namespace SpaceWars
 
                     //Command writing Game information (total run time) to database
                     MySqlCommand selectCommand = conn.CreateCommand();
-                    selectCommand.CommandText = $"SELECT Games.GameID, Games.Runtime, Players.Name, Players.Score," +
-                        $"Players.Accuracy FROM Games, Players WHERE Games.GameID = Players.GameID;";
+                    selectCommand.CommandText = $"SELECT * FROM Games, Players;";
 
                     // Execute the command and cycle through the DataReader object
                     using (MySqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        data.Append($"<table border=1><tr>{reader.GetString(0)}<tr></table>");
+                        data.Append("<table><tr><th>Game ID</th><th>Game Duration</th><th>Player Name</th><th>Score</th>" +
+                            "<th>Accuracy</th><tr>");
+                        while (reader.Read())
+                        {
+                            data.Append($"<tr><th>{reader["GameID"].ToString()}</th><th>{reader["Runtime"].ToString()}</th>" +
+                                $"<th>{reader["Name"].ToString()}</th><th>{reader["Score"].ToString()}</th><th>" +
+                                $"{reader["Accuracy"].ToString()}</th></tr>");
+                        }
                     }
                 }
                 catch (Exception e)
@@ -183,8 +189,7 @@ namespace SpaceWars
 
                     //Command getting all players in all games' information, 5 columns total 
                     MySqlCommand selectCommand = conn.CreateCommand();
-                    selectCommand.CommandText = $"SELECT Games.GameID, Games.Runtime, Players.Name, Players.Score," +
-                        $"Players.Accuracy FROM Games, Players WHERE Games.GameID = Players.GameID;";
+                    selectCommand.CommandText = $"SELECT * FROM Games, Players WHERE Games.GameID = Players.GameID;";
 
                     // Execute the command and cycle create a string to create an html table
                     using (MySqlDataReader reader = selectCommand.ExecuteReader())
@@ -236,13 +241,19 @@ namespace SpaceWars
 
                     //Command getting all players in all games' information, 5 columns total 
                     MySqlCommand selectCommand = conn.CreateCommand();
-                    selectCommand.CommandText = $"SELECT Games.GameID, Games.Runtime, Players.Name, Players.Score," +
-                        $"Players.Accuracy FROM Games, Players WHERE Games.GameID = Players.GameID;";
+                    selectCommand.CommandText = $"SELECT * FROM Games, Players WHERE Games.GameID = Players.GameID;";
 
                     // Execute the command and cycle create a string to create an html table
                     using (MySqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        data.Append($"<table><tr>{reader.GetString(0)}<tr></table>");
+                        data.Append("<table><tr><th>Game ID</th><th>Game Duration</th><th>Player Name</th><th>Score</th>" +
+                            "<th>Accuracy</th><tr>");
+                        while (reader.Read())
+                        {
+                            data.Append($"<tr><th>{reader["GameID"].ToString()}</th><th>{reader["Runtime"].ToString()}</th>" +
+                                $"<th>{reader["Name"].ToString()}</th><th>{reader["Score"].ToString()}</th><th>" +
+                                $"{reader["Accuracy"].ToString()}</th></tr>");
+                        }
                     }
                 }
                 catch (Exception e)
