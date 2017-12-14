@@ -19,6 +19,9 @@ Players Table:
 *******************************************************************
 The PlayerID column is Auto Increment and Primary Key. 
 
+Our web server and game server run together in the same project. You'll have to run the game to collect some data, stop the server
+by typing "stop" into the console, then start it back up again for the web server to have the new data. (This is because the game
+server writes data at the end after the stop command is typed.)
 
 PS8: Server README
 
