@@ -150,6 +150,8 @@ namespace SpaceWars
                     Console.WriteLine(e.Message);
                 }
             }
+
+            return data.ToString();
         }
 
         /// <summary>
@@ -184,10 +186,17 @@ namespace SpaceWars
                     selectCommand.CommandText = $"SELECT Games.GameID, Games.Runtime, Players.Name, Players.Score," +
                         $"Players.Accuracy FROM Games, Players WHERE Games.GameID = Players.GameID;";
 
-                    // Execute the command and cycle through the DataReader object
+                    // Execute the command and cycle create a string to create an html table
                     using (MySqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        data.Append($"<table><tr>{reader.GetString(0)}<tr></table>");
+                        data.Append("<table><tr><th>Game ID</th><th>Game Duration</th><th>Player Name</th><th>Score</th>" +
+                            "<th>Accuracy</th><tr>");
+                        while (reader.Read())
+                        {
+                            data.Append($"<tr><th>{reader["GameID"].ToString()}</th><th>{reader["Runtime"].ToString()}</th>" +
+                                $"<th>{reader["Name"].ToString()}</th><th>{reader["Score"].ToString()}</th><th>" +
+                                $"{reader["Accuracy"].ToString()}</th></tr>");
+                        }
                     }
                 }
                 catch (Exception e)
@@ -195,6 +204,7 @@ namespace SpaceWars
                     Console.WriteLine(e.Message);
                 }
             }
+            return data.ToString();
         }
 
         /// <summary>
@@ -229,7 +239,7 @@ namespace SpaceWars
                     selectCommand.CommandText = $"SELECT Games.GameID, Games.Runtime, Players.Name, Players.Score," +
                         $"Players.Accuracy FROM Games, Players WHERE Games.GameID = Players.GameID;";
 
-                    // Execute the command and cycle through the DataReader object
+                    // Execute the command and cycle create a string to create an html table
                     using (MySqlDataReader reader = selectCommand.ExecuteReader())
                     {
                         data.Append($"<table><tr>{reader.GetString(0)}<tr></table>");
@@ -240,6 +250,7 @@ namespace SpaceWars
                     Console.WriteLine(e.Message);
                 }
             }
+            return data.ToString();
         }
 
         /// <summary>
