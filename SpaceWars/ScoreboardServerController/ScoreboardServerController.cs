@@ -20,7 +20,7 @@ namespace SpaceWars
         /// The databse our Game Server uses is cs3500_u0980890
         /// </summary>
         public const string connectionString = "server=atr.eng.utah.edu;database=cs3500_u0980890;" +
-            "uid=cs3500_u0980890;password=burntchickennugget";
+                                               "uid=cs3500_u0980890;password=burntchickennugget";
 
         /// <summary>
         /// The TcpState that the server is using to accept client connections.
@@ -54,7 +54,8 @@ namespace SpaceWars
         /// <summary>
         /// A list of connected client communicators.
         /// </summary>
-        private readonly IDictionary<int, ClientCommunicator> _clients = new ConcurrentDictionary<int, ClientCommunicator>();
+        private readonly IDictionary<int, ClientCommunicator> _clients =
+            new ConcurrentDictionary<int, ClientCommunicator>();
 
         /// <summary>
         /// Creates a new scoreboard server controller that will listen for clients.
@@ -69,7 +70,8 @@ namespace SpaceWars
         /// </summary>
         private void AcceptConnectionsAsync()
         {
-            _tcpState = ServerNetworking.AwaitClientConnections(80, ClientConnectionEstablished, ClientConnectionFailed);
+            _tcpState = ServerNetworking.AwaitClientConnections(80, ClientConnectionEstablished,
+                ClientConnectionFailed);
         }
 
         /// <summary>
@@ -141,11 +143,13 @@ namespace SpaceWars
                     // Execute the command and cycle through the DataReader object
                     using (MySqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        data.Append("<table><tr><th>Game ID</th><th>Game Duration</th><th>Player Name</th><th>Score</th>" +
+                        data.Append(
+                            "<table><tr><th>Game ID</th><th>Game Duration</th><th>Player Name</th><th>Score</th>" +
                             "<th>Accuracy</th><tr>");
                         while (reader.Read())
                         {
-                            data.Append($"<tr><th>{reader["GameID"].ToString()}</th><th>{reader["Runtime"].ToString()}</th>" +
+                            data.Append(
+                                $"<tr><th>{reader["GameID"].ToString()}</th><th>{reader["Runtime"].ToString()}</th>" +
                                 $"<th>{reader["Name"].ToString()}</th><th>{reader["Score"].ToString()}</th><th>" +
                                 $"{reader["Accuracy"].ToString()}</th></tr>");
                         }
@@ -177,7 +181,7 @@ namespace SpaceWars
         internal string GenerateGameTable(int gameId)
         {
             //Stringbuilder holding data the query returns
-            StringBuilder data = new StringBuilder();
+            var data = new StringBuilder();
 
             // Open a connection
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -189,18 +193,30 @@ namespace SpaceWars
 
                     //Command getting all players in all games' information, 5 columns total 
                     MySqlCommand selectCommand = conn.CreateCommand();
-                    selectCommand.CommandText = $"SELECT * FROM Games, Players WHERE Games.GameID = Players.GameID;";
+                    selectCommand.CommandText =
+                        $"SELECT * FROM Games, Players WHERE Games.GameID = Players.GameID AND Games.GameID = {gameId};";
 
                     // Execute the command and cycle create a string to create an html table
                     using (MySqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        data.Append("<table><tr><th>Game ID</th><th>Game Duration</th><th>Player Name</th><th>Score</th>" +
-                            "<th>Accuracy</th><tr>");
+                        data.Append(
+                            "<table border=1>" +
+                            "<tr>" +
+                            "<th>Game ID</th>" +
+                            "<th>Game Duration</th>" +
+                            "<th>Player Name</th>" +
+                            "<th>Score</th>" +
+                            "<th>Accuracy</th>" +
+                            "<tr>");
                         while (reader.Read())
                         {
-                            data.Append($"<tr><th>{reader["GameID"].ToString()}</th><th>{reader["Runtime"].ToString()}</th>" +
-                                $"<th>{reader["Name"].ToString()}</th><th>{reader["Score"].ToString()}</th><th>" +
-                                $"{reader["Accuracy"].ToString()}</th></tr>");
+                            data.Append("<tr>" +
+                                        $"<td>{reader["GameID"].ToString()}</td>" +
+                                        $"<td>{reader["Runtime"].ToString()}</td>" +
+                                        $"<td>{reader["Name"].ToString()}</td>" +
+                                        $"<td>{reader["Score"].ToString()}</td>" +
+                                        $"<td>{reader["Accuracy"].ToString()}</td>" +
+                                        "</tr>");
                         }
                     }
                 }
@@ -208,6 +224,8 @@ namespace SpaceWars
                 {
                     Console.WriteLine(e.Message);
                 }
+
+                data.Append("</table>");
             }
             return data.ToString();
         }
@@ -246,11 +264,13 @@ namespace SpaceWars
                     // Execute the command and cycle create a string to create an html table
                     using (MySqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        data.Append("<table><tr><th>Game ID</th><th>Game Duration</th><th>Player Name</th><th>Score</th>" +
+                        data.Append(
+                            "<table><tr><th>Game ID</th><th>Game Duration</th><th>Player Name</th><th>Score</th>" +
                             "<th>Accuracy</th><tr>");
                         while (reader.Read())
                         {
-                            data.Append($"<tr><th>{reader["GameID"].ToString()}</th><th>{reader["Runtime"].ToString()}</th>" +
+                            data.Append(
+                                $"<tr><th>{reader["GameID"].ToString()}</th><th>{reader["Runtime"].ToString()}</th>" +
                                 $"<th>{reader["Name"].ToString()}</th><th>{reader["Score"].ToString()}</th><th>" +
                                 $"{reader["Accuracy"].ToString()}</th></tr>");
                         }
@@ -273,6 +293,5 @@ namespace SpaceWars
             _tcpState?.StopAcceptingClientConnections();
             ServerDisconnected?.Invoke();
         }
-
     }
 }
