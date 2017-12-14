@@ -158,5 +158,14 @@ namespace SpaceWars.Properties {
                 return ResourceManager.GetString("ScoreServer_Log_ServerDisconnected", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to **** SERVER STOPPED. PRESS ANY KEY TO CLOSE ****.
+        /// </summary>
+        internal static string Server_Stopped_ExitMessage {
+            get {
+                return ResourceManager.GetString("Server_Stopped_ExitMessage", resourceCulture);
+            }
+        }
     }
 }

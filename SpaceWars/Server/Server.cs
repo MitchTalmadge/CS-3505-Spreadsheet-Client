@@ -1,4 +1,5 @@
 ﻿using System;
+using SpaceWars.Properties;
 
 namespace SpaceWars
 {
@@ -49,6 +50,10 @@ namespace SpaceWars
                     _gameServer.Shutdown();
                     _scoreboardServer.Shutdown();
                     
+                    Console.WriteLine(Resources.Server_Stopped_ExitMessage);
+
+                    Console.Read();
+
                     return;
                 }
             }

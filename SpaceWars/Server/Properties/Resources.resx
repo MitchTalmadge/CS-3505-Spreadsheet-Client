@@ -161,4 +161,8 @@
     <value>Server Disconnected</value>
     <comment>Displays in the logs when the server disconnects.</comment>
   </data>
+  <data name="Server_Stopped_ExitMessage" xml:space="preserve">
+    <value>**** SERVER STOPPED. PRESS ANY KEY TO CLOSE ****</value>
+    <comment>Sent when the server closes and prompts the user to press a key to close the window.</comment>
+  </data>
 </root>
