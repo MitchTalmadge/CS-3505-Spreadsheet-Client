@@ -91,11 +91,13 @@ namespace SpreadsheetUtilities
         /// The associated normalizer and validator are the second and third parameters,
         /// respectively.  
         /// 
+        /// /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT***********************/
         /// If the formula contains a variable v such that normalize(v) is not a legal variable, 
         /// throws a FormulaFormatException with an explanatory message. 
         /// 
         /// If the formula contains a variable v such that isValid(normalize(v)) is false,
         /// throws a FormulaFormatException with an explanatory message.
+        /// /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT***********************/
         /// 
         /// Suppose that N is a method that converts all the letters in a string to upper case, and
         /// that V is a method that returns true only if a string consists of one letter followed
@@ -115,8 +117,10 @@ namespace SpreadsheetUtilities
             normalizer = normalize;
             validator = isValid;
 
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT***********************/
             //All syntax and delegate normalizing/validating is done in this method
-            ValidateSyntax(tokens);
+            //ValidateSyntax(tokens);
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT***********************/
         }
 
 
@@ -394,6 +398,7 @@ namespace SpreadsheetUtilities
 
         }
 
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT***********************/
         /// <summary>
         /// Method that ensures the overall syntax of the input formula,
         /// as well if the tokens are valid. Also adds valid variables to the
@@ -405,106 +410,107 @@ namespace SpreadsheetUtilities
         /// symbols +, -, *, and /.  
         /// </summary>
         /// <param name="tokens"></param>
-        private void ValidateSyntax(IEnumerable<string> tokens)
-        {
-            if (tokens.Count() < 1)
-            {
-                throw new FormulaFormatException("Formula must have at least one token!");
-            }
+        //private void ValidateSyntax(IEnumerable<string> tokens)
+        //{
+        //    if (tokens.Count() < 1)
+        //    {
+        //        throw new FormulaFormatException("Formula must have at least one token!");
+        //    }
 
-            //counter, pointer, and boolean flag variables to check syntax
-            int leftParenthesisCount = 0, rightParenthesisCount = 0;
-            string firstToken = null, lastToken = null;
-            bool followingOpenParen = false, followingCloseParen = false;
+        //    //counter, pointer, and boolean flag variables to check syntax
+        //    int leftParenthesisCount = 0, rightParenthesisCount = 0;
+        //    string firstToken = null, lastToken = null;
+        //    bool followingOpenParen = false, followingCloseParen = false;
 
-            //Set to ensure no repeat variables are added in constant lookup time
-            HashSet<string> varSet = new HashSet<string>();
-            //List to hold valid variables in this formula
-            List<string> varList = new List<string>();
+        //    //Set to ensure no repeat variables are added in constant lookup time
+        //    HashSet<string> varSet = new HashSet<string>();
+        //    //List to hold valid variables in this formula
+        //    List<string> varList = new List<string>();
 
-            for (int i = 0; i < tokens.Count(); i++)
-            {
-                string token = tokens.ElementAt(i);
-                if (firstToken == null)
-                {
-                    firstToken = token;
-                    //the first token of an expression must be a number, a variable, or an opening parenthesis.
-                    if (!FollowingRule(firstToken, "(", normalizer, validator))
-                    {
-                        throw new FormulaFormatException("The first token of the formula must be a number, variable, or openeing parenthesis!");
-                    }
-                }
-                //token after an opening parenthesis or operator must be a number, variable, or opening parenthesis.
-                if (followingOpenParen == true)
-                {
-                    if (!FollowingRule(token, "(", normalizer, validator))
-                    {
-                        throw new FormulaFormatException("Any token after an opening parenthesis or an operator" +
-                            " must be either a number, a variable, or an opening parenthesis!");
-                    }
-                    followingOpenParen = false;
-                }
-                //token after a number, variable, or closing parenthesis must be either an operator or a closing parenthesis.
-                if (followingCloseParen == true)
-                {
-                    if (!IsOperator(token) && token != ")")
-                    {
-                        throw new FormulaFormatException("Any token aftera number, variable, " +
-                            "or closing parenthesis must be either an operator or a closing parenthesis.");
-                    }
-                    followingCloseParen = false;
-                }
-                if (token == "(")
-                {
-                    leftParenthesisCount++;
-                    followingOpenParen = true;
-                }
-                if (token == ")")
-                {
-                    rightParenthesisCount++;
-                    followingCloseParen = true;
-                }
-                if (IsOperator(token))
-                {
-                    followingOpenParen = true;
-                }
-                if (IsNum(token) || ValidVariable(token))
-                {
-                    //if the token is a valid variable, handle it so it's added to the variables field array
-                    if (ValidVariable(token))
-                    {
-                        string var = normalizer(token);
-                        if (!varSet.Contains(var))
-                        {
-                            varSet.Add(var);
-                            varList.Add(var);
-                        }
-                    }
-                    followingCloseParen = true;
-                }
-                if (rightParenthesisCount > leftParenthesisCount)
-                {
-                    throw new FormulaFormatException("Number of closing parenthesis is greater than opening parenthesis!");
-                }
-                if (i == tokens.Count() - 1)
-                {
-                    lastToken = token;
-                    //the last token of an expression must be a number, a variable, or a closing parenthesis.
-                    if (!FollowingRule(lastToken, ")", normalizer, validator))
-                    {
-                        throw new FormulaFormatException("The last token of the formula must be a number, variable, or closing parenthesis!");
-                    }
-                }
-            }
+        //    for (int i = 0; i < tokens.Count(); i++)
+        //    {
+        //        string token = tokens.ElementAt(i);
+        //        if (firstToken == null)
+        //        {
+        //            firstToken = token;
+        //            //the first token of an expression must be a number, a variable, or an opening parenthesis.
+        //            if (!FollowingRule(firstToken, "(", normalizer, validator))
+        //            {
+        //                throw new FormulaFormatException("The first token of the formula must be a number, variable, or openeing parenthesis!");
+        //            }
+        //        }
+        //        //token after an opening parenthesis or operator must be a number, variable, or opening parenthesis.
+        //        if (followingOpenParen == true)
+        //        {
+        //            if (!FollowingRule(token, "(", normalizer, validator))
+        //            {
+        //                throw new FormulaFormatException("Any token after an opening parenthesis or an operator" +
+        //                    " must be either a number, a variable, or an opening parenthesis!");
+        //            }
+        //            followingOpenParen = false;
+        //        }
+        //        //token after a number, variable, or closing parenthesis must be either an operator or a closing parenthesis.
+        //        if (followingCloseParen == true)
+        //        {
+        //            if (!IsOperator(token) && token != ")")
+        //            {
+        //                throw new FormulaFormatException("Any token aftera number, variable, " +
+        //                    "or closing parenthesis must be either an operator or a closing parenthesis.");
+        //            }
+        //            followingCloseParen = false;
+        //        }
+        //        if (token == "(")
+        //        {
+        //            leftParenthesisCount++;
+        //            followingOpenParen = true;
+        //        }
+        //        if (token == ")")
+        //        {
+        //            rightParenthesisCount++;
+        //            followingCloseParen = true;
+        //        }
+        //        if (IsOperator(token))
+        //        {
+        //            followingOpenParen = true;
+        //        }
+        //        if (IsNum(token) || ValidVariable(token))
+        //        {
+        //            //if the token is a valid variable, handle it so it's added to the variables field array
+        //            if (ValidVariable(token))
+        //            {
+        //                string var = normalizer(token);
+        //                if (!varSet.Contains(var))
+        //                {
+        //                    varSet.Add(var);
+        //                    varList.Add(var);
+        //                }
+        //            }
+        //            followingCloseParen = true;
+        //        }
+        //        if (rightParenthesisCount > leftParenthesisCount)
+        //        {
+        //            throw new FormulaFormatException("Number of closing parenthesis is greater than opening parenthesis!");
+        //        }
+        //        if (i == tokens.Count() - 1)
+        //        {
+        //            lastToken = token;
+        //            //the last token of an expression must be a number, a variable, or a closing parenthesis.
+        //            if (!FollowingRule(lastToken, ")", normalizer, validator))
+        //            {
+        //                throw new FormulaFormatException("The last token of the formula must be a number, variable, or closing parenthesis!");
+        //            }
+        //        }
+        //    }
 
-            //ensuring parenthesis match
-            if (rightParenthesisCount != leftParenthesisCount)
-            {
-                throw new FormulaFormatException("Unmatched parenthesis in input formula!");
-            }
+        //    //ensuring parenthesis match
+        //    if (rightParenthesisCount != leftParenthesisCount)
+        //    {
+        //        throw new FormulaFormatException("Unmatched parenthesis in input formula!");
+        //    }
 
-            this.variables = varList.ToArray();
-        }
+        //    this.variables = varList.ToArray();
+        //}
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT***********************/
 
         /// <summary>
         /// Determines if a token adheres to the syntax rules of following an opening 
