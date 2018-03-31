@@ -584,22 +584,20 @@ namespace SpreadsheetUtilities
             }
         }
     }
-
-    /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-    /// <summary>
-    /// Used to report syntactic errors in the argument to the Formula constructor.
-    /// </summary>
-    //public class FormulaFormatException : Exception
-    //{
-    //    /// <summary>
-    //    /// Constructs a FormulaFormatException containing the explanatory message.
-    //    /// </summary>
-    //    public FormulaFormatException(String message)
-    //        : base(message)
-    //    {
-    //    }
-    //}
-    /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
+    
+    // <summary>
+    // Used to report syntactic errors in the argument to the Formula constructor.
+    // </summary>
+    public class FormulaFormatException : Exception
+    {
+        /// <summary>
+        /// Constructs a FormulaFormatException containing the explanatory message.
+        /// </summary>
+        public FormulaFormatException(String message)
+            : base(message)
+        {
+        }
+    }
 
     /// <summary>
     /// Used as a possible return value of the Formula.Evaluate method.
