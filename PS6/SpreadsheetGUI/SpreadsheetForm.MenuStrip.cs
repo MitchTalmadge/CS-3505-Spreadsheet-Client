@@ -8,7 +8,7 @@ namespace SpreadsheetGUI
     /// <summary>
     /// A partial class of SpreadsheetForm to organize menu strip logic.
     /// </summary>
-    /// <authors>Jiahui Chen and Mitch Talmadge</authors>
+    /// <authors>Jiahui Chen, Tarun Sunkaraneni, Mark Van der Merwe and Mitch Talmadge</authors>
     public partial class SpreadsheetForm
     {
         /// <summary>
@@ -22,26 +22,6 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Called when the File -> Save menu item is clicked.
-        /// </summary>
-        /// <param name="sender">The menu item clicked.</param>
-        /// <param name="e">A click event.</param>
-        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveSpreadsheet();
-        }
-
-        /// <summary>
-        /// Called when the File -> Save As menu item is clicked.
-        /// </summary>
-        /// <param name="sender">The menu item clicked.</param>
-        /// <param name="e">A click event.</param>
-        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveSpreadsheet(true);
-        }
-
-        /// <summary>
         /// Called when the File -> Open menu item is clicked.
         /// </summary>
         /// <param name="sender">The menu item clicked.</param>
@@ -49,6 +29,16 @@ namespace SpreadsheetGUI
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenSpreadsheet();
+        }
+
+        /// <summary>
+        /// Called when the File -> Open menu item is clicked.
+        /// </summary>
+        /// <param name="sender">The menu item clicked.</param>
+        /// <param name="e">A click event.</param>
+        private void DisconnectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DisconnectSpreadsheet();
         }
 
         /// <summary>

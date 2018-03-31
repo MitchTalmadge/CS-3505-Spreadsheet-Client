@@ -176,11 +176,11 @@ namespace SpreadsheetGUI
         /// <summary>
         /// Opens a spreadsheet from a file, replacing the contents of the current spreadsheet (saving if needed).
         /// </summary>
-        /// <param name="filePath">An optional file path to open. If not specified, a dialog box will be opened for choosing the file.</param>
-        private void OpenSpreadsheet(string filePath = null)
+        /// <param name="fileName"> An optional file path to open. If not specified, a dialog box will be opened for choosing the file.</param>
+        private void OpenSpreadsheet(string fileName)
         {
             // Show a file chooser if no file path was provided.
-            if (filePath == null)
+            if (fileName == null)
             {
                 // Opens the menu for user to choose file to open
                 var fileDialogue = new OpenFileDialog {Filter = Resources.SpreadsheetForm_File_Extension_Filter};
@@ -194,14 +194,14 @@ namespace SpreadsheetGUI
                     return;
 
 
-                filePath = fileDialogue.FileName;
+                fileName = fileDialogue.FileName;
             }
 
             // Attempt to create a new spreadsheet from the given file.
             Spreadsheet spreadsheet;
             try
             {
-                spreadsheet = new Spreadsheet(filePath, IsValid, Normalize, SpreadsheetVersion);
+                spreadsheet = new Spreadsheet(fileName, IsValid, Normalize, SpreadsheetVersion);
             }
             catch (SpreadsheetReadWriteException)
             {
@@ -215,7 +215,7 @@ namespace SpreadsheetGUI
 
             // Load the new spreadsheet
             _spreadsheet = spreadsheet;
-            OpenedFilePath = filePath;
+            OpenedFilePath = fileName;
 
             // Load the data from the new spreadsheet into the spreadsheet panel.
             RefreshCellValues(_spreadsheet.GetNamesOfAllNonemptyCells());
@@ -225,9 +225,17 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Clears all parts of the spreadsheet GUI, selects A1, and sets the spreadsheet to null.
+        /// Disconnects the current client instance from the server it is connected to.
         /// </summary>
-        private void ClearSpreadsheet()
+        private void DisconnectSpreadsheet()
+        {
+            //TODO. Everything L O L.
+        }
+
+            /// <summary>
+            /// Clears all parts of the spreadsheet GUI, selects A1, and sets the spreadsheet to null.
+            /// </summary>
+            private void ClearSpreadsheet()
         {
             ClearSpreadsheetPanel();
             ClearCellEditor();
