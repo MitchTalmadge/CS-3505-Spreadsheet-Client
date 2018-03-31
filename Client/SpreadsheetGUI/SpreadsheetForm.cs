@@ -177,7 +177,7 @@ namespace SpreadsheetGUI
         /// Opens a spreadsheet from a file, replacing the contents of the current spreadsheet (saving if needed).
         /// </summary>
         /// <param name="fileName"> An optional file path to open. If not specified, a dialog box will be opened for choosing the file.</param>
-        private void OpenSpreadsheet(string fileName)
+        private void OpenSpreadsheet(string fileName=null)
         {
             // Show a file chooser if no file path was provided.
             if (fileName == null)
