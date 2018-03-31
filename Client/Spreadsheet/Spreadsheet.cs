@@ -21,10 +21,12 @@ namespace SS
         /// </summary>
         private Dictionary<string, Cell> cells;
 
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
         /// <summary>
         /// Dependency Graph mapping each cell to its dependents and dependees. 
         /// </summary>
-        private DependencyGraph dependencyGraph;
+        //private DependencyGraph dependencyGraph;
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
 
         /// <summary>
         /// 0 argument constructor: has no extra validity conditions, 
@@ -34,7 +36,9 @@ namespace SS
             base(v => true, s => s, "default")
         {
             cells = new Dictionary<string, Cell>();
-            dependencyGraph = new DependencyGraph();
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
+            //dependencyGraph = new DependencyGraph();
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
         }
 
         /// <summary>
@@ -46,7 +50,9 @@ namespace SS
             base (isValid, normalize, version)
         {
             cells =  new Dictionary<string, Cell>();
-            dependencyGraph = new DependencyGraph();
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
+            //dependencyGraph = new DependencyGraph();
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
         }
 
         /// <summary>
@@ -67,7 +73,9 @@ namespace SS
             }
             
             cells = new Dictionary<string, Cell>();
-            dependencyGraph = new DependencyGraph();
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
+            //dependencyGraph = new DependencyGraph();
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
             LoadSpreadsheet(filePath);
         }
 
@@ -474,40 +482,52 @@ namespace SS
             }
             string normalizedName = Normalize(name);
 
+            /******************************************* SOME PARTS REMOVED AS PART OF 3505 FINAL PROJECT*************************/
             //saving old dependees and contents in case a circular dependency is found
-            List<string> oldDependees = new List<string>(dependencyGraph.GetDependees(normalizedName));
-            cells.TryGetValue(normalizedName, out var oldContents);
+            //List<string> oldDependees = new List<string>(dependencyGraph.GetDependees(normalizedName));
+            //cells.TryGetValue(normalizedName, out var oldContents);
 
-            //dependees are replaced with dependees (variables) of new formula
-            dependencyGraph.ReplaceDependees(normalizedName, formula.GetVariables());
+            ////dependees are replaced with dependees (variables) of new formula
+            //dependencyGraph.ReplaceDependees(normalizedName, formula.GetVariables());
             cells[normalizedName] =  new Cell(normalizedName, formula, LookupCellValue);
 
             //a circular dependency is checked for, old dependees and content are kept if one is found
-            try
-            {
-                //recalculating necessary cell values
-                List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(normalizedName));
-                RecalculateCellValues(recalculatedCells);
+            //try
+            //{
+            //    //recalculating necessary cell values
+            //    List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(normalizedName));
+            //    RecalculateCellValues(recalculatedCells);
 
-                //successful return means spreadsheet is changed
-                Changed = true;
-                return new HashSet<string>(recalculatedCells);
-            }
-            catch (CircularException)
-            {
-                if (oldContents != null)
-                {
-                    cells[normalizedName] = new Cell(normalizedName, oldContents.Contents, LookupCellValue);
-                }
-                else //if the cell was empty before setting to this invalid formula, leave it empty
-                {
-                    cells.Remove(normalizedName);
-                }
-                dependencyGraph.ReplaceDependees(normalizedName, oldDependees);
-                throw;
-            }
+            //    //successful return means spreadsheet is changed
+            //    Changed = true;
+            //    return new HashSet<string>(recalculatedCells);
+            //}
+            //catch (CircularException)
+            //{
+            //    if (oldContents != null)
+            //    {
+            //        cells[normalizedName] = new Cell(normalizedName, oldContents.Contents, LookupCellValue);
+            //    }
+            //    else //if the cell was empty before setting to this invalid formula, leave it empty
+            //    {
+            //        cells.Remove(normalizedName);
+            //    }
+            //    dependencyGraph.ReplaceDependees(normalizedName, oldDependees);
+            //    throw;
+            //}
+
+
+            /********************************UNTIL THE SERVER'S DEP. CHECKING IS DONE, THIS WILL RETURN AN EMPTY SET*****/
+            return new HashSet<string>();
+
+
+
+
+
+            //TODO: Handle dependencies/get cells that need to be changed from Server
         }
 
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
         /// <summary>
         /// If name is null, throws an ArgumentNullException.
         /// 
@@ -525,20 +545,21 @@ namespace SS
         /// D1 contains the formula B1 - C1
         /// The direct dependents of A1 are B1 and C1
         /// </summary>
-        protected override IEnumerable<string> GetDirectDependents(string name)
-        {
-            if (name == null)
-            {
-                throw new ArgumentNullException();
-            }
-            if (!ValidVariable(name))
-            {
-                throw new InvalidNameException();
-            }
-            //dependency graph's get dependents enumerates all unique dependents 
-            //and returns an empty list if the cell does not have dependents
-            return dependencyGraph.GetDependents(Normalize(name));
-        }
+        //protected override IEnumerable<string> GetDirectDependents(string name)
+        //{
+        //    if (name == null)
+        //    {
+        //        throw new ArgumentNullException();
+        //    }
+        //    if (!ValidVariable(name))
+        //    {
+        //        throw new InvalidNameException();
+        //    }
+        //    //dependency graph's get dependents enumerates all unique dependents 
+        //    //and returns an empty list if the cell does not have dependents
+        //    return dependencyGraph.GetDependents(Normalize(name));
+        //}
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
 
         /// <summary>
         /// Helper method for SetCellContent methods where content of Cell is double or string. 
@@ -561,16 +582,18 @@ namespace SS
             }
             if (cells.TryGetValue(name, out var oldContents))
             {
-                //dependencies must be removed if the old contents are a formula with variables
-                if (oldContents.Contents is Formula)
-                {
-                    Formula oldFormula = (Formula)oldContents.Contents;
+                /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
+                ////dependencies must be removed if the old contents are a formula with variables
+                //if (oldContents.Contents is Formula)
+                //{
+                //    Formula oldFormula = (Formula)oldContents.Contents;
 
-                    foreach (var oldCell in oldFormula.GetVariables())
-                    {
-                        dependencyGraph.RemoveDependency(oldCell, name);
-                    }
-                }
+                //    foreach (var oldCell in oldFormula.GetVariables())
+                //    {
+                //        dependencyGraph.RemoveDependency(oldCell, name);
+                //    }
+                //}
+                /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
             }
             //don't add an empty cell 
             if (contents is string && (string)contents == "")
@@ -579,17 +602,29 @@ namespace SS
                 {
                     cells.Remove(name);
                 }
-                return new HashSet<string>(GetCellsToRecalculate(name));
+                /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
+                //return new HashSet<string>(GetCellsToRecalculate(name));
+                /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
             }
             cells[name] = new Cell(name, contents, LookupCellValue);
 
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
             //recalculating necessary cell values
-            List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(name));
-            RecalculateCellValues(recalculatedCells);
+            //List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(name));
+            //RecalculateCellValues(recalculatedCells);
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
 
             //successful return means spreadsheet is changed
             Changed = true;
-            return new HashSet<string>(recalculatedCells);
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
+            //return new HashSet<string>(recalculatedCells);
+            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
+
+            /********************************UNTIL THE SERVER'S DEP. CHECKING IS DONE, THIS WILL RETURN AN EMPTY SET*****/
+            return new HashSet<string>();
+
+
+            //TODO: Handle dependencies/get cells that need to be changed from Server
         }
 
         /// <summary>

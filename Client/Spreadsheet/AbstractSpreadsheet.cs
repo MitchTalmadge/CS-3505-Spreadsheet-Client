@@ -292,7 +292,7 @@ namespace SS
         /// </summary>
         protected abstract ISet<String> SetCellContents(String name, Formula formula);
 
-
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
         /// <summary>
         /// If name is null, throws an ArgumentNullException.
         /// 
@@ -310,9 +310,11 @@ namespace SS
         /// D1 contains the formula B1 - C1
         /// The direct dependents of A1 are B1 and C1
         /// </summary>
-        protected abstract IEnumerable<String> GetDirectDependents(String name);
+        //protected abstract IEnumerable<String> GetDirectDependents(String name);
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
 
 
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
         /// <summary>
         /// Requires that names be non-null.  Also requires that if names contains s,
         /// then s must be a valid non-null cell name.
@@ -338,50 +340,55 @@ namespace SS
         /// Please note that this method depends on the abstract GetDirectDependents.
         /// It won't work until GetDirectDependents is implemented correctly.
         /// </summary>
-        protected IEnumerable<String> GetCellsToRecalculate(ISet<String> names)
-        {
-            LinkedList<String> changed = new LinkedList<String>();
-            HashSet<String> visited = new HashSet<String>();
-            foreach (String name in names)
-            {
-                if (!visited.Contains(name))
-                {
-                    Visit(name, name, visited, changed);
-                }
-            }
-            return changed;
-        }
+        //protected IEnumerable<String> GetCellsToRecalculate(ISet<String> names)
+        //{
+        //    LinkedList<String> changed = new LinkedList<String>();
+        //    HashSet<String> visited = new HashSet<String>();
+        //    foreach (String name in names)
+        //    {
+        //        if (!visited.Contains(name))
+        //        {
+        //            Visit(name, name, visited, changed);
+        //        }
+        //    }
+        //    return changed;
+        //}
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
 
 
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
         /// <summary>
         /// A convenience method for invoking the other version of GetCellsToRecalculate
         /// with a singleton set of names.  See the other version for details.
         /// </summary>
-        protected IEnumerable<String> GetCellsToRecalculate(String name)
-        {
-            return GetCellsToRecalculate(new HashSet<String>() { name });
-        }
+        //protected IEnumerable<String> GetCellsToRecalculate(String name)
+        //{
+        //    return GetCellsToRecalculate(new HashSet<String>() { name });
+        //}
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
 
 
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
         /// <summary>
         /// A helper for the GetCellsToRecalculate method.
         /// </summary>
-        private void Visit(String start, String name, ISet<String> visited, LinkedList<String> changed)
-        {
-            visited.Add(name);
-            foreach (String n in GetDirectDependents(name))
-            {
-                if (n.Equals(start))
-                {
-                    throw new CircularException();
-                }
-                else if (!visited.Contains(n))
-                {
-                    Visit(start, n, visited, changed);
-                }
-            }
-            changed.AddFirst(name);
-        }
+        //private void Visit(String start, String name, ISet<String> visited, LinkedList<String> changed)
+        //{
+        //    visited.Add(name);
+        //    foreach (String n in GetDirectDependents(name))
+        //    {
+        //        if (n.Equals(start))
+        //        {
+        //            throw new CircularException();
+        //        }
+        //        else if (!visited.Contains(n))
+        //        {
+        //            Visit(start, n, visited, changed);
+        //        }
+        //    }
+        //    changed.AddFirst(name);
+        //}
+        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
 
     }
 }
