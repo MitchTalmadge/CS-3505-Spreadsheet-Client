@@ -431,34 +431,6 @@ namespace SpreadsheetTests
             Assert.AreEqual(new Formula(".5 * (4.4 + 5)"), spreadsheet.GetCellContents("a1"));
         }
 
-        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-        //[TestMethod]
-        //public void testgetdirectdependents()
-        //{
-        //    abstractspreadsheet spreadsheet = new spreadsheet();
-
-        //    spreadsheet.setcontentsofcell("a1", "10.78");
-
-        //    // these cells depend on "a1"
-        //    spreadsheet.setcontentsofcell("b1", "= a1 + independent1");
-        //    spreadsheet.setcontentsofcell("c1", "=1.10 + 8 * a1");
-
-        //    // these cells do not depend on a1
-        //    spreadsheet.setcontentsofcell("independent1", "= 5 + 10");
-        //    spreadsheet.setcontentsofcell("dannyboii2", "= 4.0 * 3500");
-
-        //    // check direct dependents of a1
-        //    privateobject sheetaccessor = new privateobject(spreadsheet);
-        //    ienumerable<string> directdependents = (ienumerable<string>)sheetaccessor.invoke("getdirectdependents", new string[1] { "a1" });
-
-        //    assert.areequal(2, directdependents.count());
-        //    assert.istrue(directdependents.contains("b1"));
-        //    assert.istrue(directdependents.contains("c1"));
-        //    assert.isfalse(directdependents.contains("independent1"));
-        //    assert.isfalse(directdependents.contains("dannyboii2"));
-        //}
-        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-
         /// <summary>
         /// When a cell is set to an empty string, it should be removed
         /// from the dictionary keeping track of non-empty cells.
@@ -492,46 +464,6 @@ namespace SpreadsheetTests
             spreadsheet.SetContentsOfCell("a1", "");
             Assert.IsFalse(spreadsheet.GetNamesOfAllNonemptyCells().Contains("a1"));
         }
-
-        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-        /// <summary>
-        /// Tests creating a circular dependency.
-        /// </summary>
-        //[TestMethod]
-        //public void TestCircularDependency()
-        //{
-        //    AbstractSpreadsheet spreadsheet = new Spreadsheet();
-        //    spreadsheet.SetContentsOfCell("a1", "= a3 * d3");
-        //    spreadsheet.SetContentsOfCell("a3", "= a2 - 5");
-        //    spreadsheet.SetContentsOfCell("a2", "2.3");
-        //    Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
-
-        //    // Adding this cell will cause the circular dependency.
-        //    Assert.ThrowsException<CircularException>(() => spreadsheet.SetContentsOfCell("a2", "= a1 + d3"));
-
-        //    // Make sure nothing was changed since circular dependency was found
-        //    Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
-        //}
-        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-
-        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-        /// <summary>
-        /// Tests creating a circular dependency with a previously
-        /// empty cell's new contents.
-        /// </summary>
-        //[TestMethod]
-        //public void TestCircularDependencyNewCell()
-        //{
-        //    AbstractSpreadsheet spreadsheet = new Spreadsheet();
-        //    spreadsheet.SetContentsOfCell("a1", "=  a3 * d3");
-        //    spreadsheet.SetContentsOfCell("a3", "= a2 - 5");
-
-        //    Assert.ThrowsException<CircularException>(() => spreadsheet.SetContentsOfCell("a2", "= a1 + d3"));
-
-        //    // Make sure the cell wasn't added since a circular dependency was found
-        //    Assert.IsFalse(spreadsheet.GetNamesOfAllNonemptyCells().Contains("a2"));
-        //}
-        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
 
         [TestMethod]
         public void TestGetNonEmptyCells()
@@ -569,24 +501,6 @@ namespace SpreadsheetTests
             spreadsheet.SetContentsOfCell("a1", "yay");
             spreadsheet.SetContentsOfCell("a1", nullString);
         }
-
-        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-        //[TestMethod]
-        //public void TestReplaceFormula()
-        //{
-        //    AbstractSpreadsheet spreadsheet = new Spreadsheet();
-        //    PrivateObject accessSheet = new PrivateObject(spreadsheet);
-        //    DependencyGraph deps = (DependencyGraph)accessSheet.GetField("dependencyGraph");
-
-        //    //setting cell to formula with dependees
-        //    spreadsheet.SetContentsOfCell("a1", "=9.8 + u1 + dannyboi9 + 8.7");
-        //    Assert.IsTrue(deps.HasDependees("a1"));
-
-        //    //replacing cell with double contents with no dependees
-        //    spreadsheet.SetContentsOfCell("a1", "9.43");
-        //    Assert.IsFalse(deps.HasDependees("a1"));
-        //}
-        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
 
         [TestMethod]
         public void TestSetInvalidNames()
