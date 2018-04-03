@@ -431,32 +431,6 @@ namespace SpreadsheetTests
             Assert.AreEqual(new Formula(".5 * (4.4 + 5)"), spreadsheet.GetCellContents("a1"));
         }
 
-        [TestMethod]
-        public void TestGetDirectDependents()
-        {
-            AbstractSpreadsheet spreadsheet = new Spreadsheet();
-
-            spreadsheet.SetContentsOfCell("a1", "10.78");
-
-            // These cells depend on "a1"
-            spreadsheet.SetContentsOfCell("b1", "= a1 + independent1");
-            spreadsheet.SetContentsOfCell("c1", "=1.10 + 8 * a1");
-
-            // These cells do not depend on a1
-            spreadsheet.SetContentsOfCell("independent1", "= 5 + 10");
-            spreadsheet.SetContentsOfCell("dannyboii2", "= 4.0 * 3500");
-
-            // Check direct dependents of a1
-            PrivateObject sheetAccessor = new PrivateObject(spreadsheet);
-            IEnumerable<string> directDependents = (IEnumerable<string>)sheetAccessor.Invoke("GetDirectDependents", new String[1] { "a1" });
-
-            Assert.AreEqual(2, directDependents.Count());
-            Assert.IsTrue(directDependents.Contains("b1"));
-            Assert.IsTrue(directDependents.Contains("c1"));
-            Assert.IsFalse(directDependents.Contains("independent1"));
-            Assert.IsFalse(directDependents.Contains("dannyboii2"));
-        }
-
         /// <summary>
         /// When a cell is set to an empty string, it should be removed
         /// from the dictionary keeping track of non-empty cells.
@@ -489,42 +463,6 @@ namespace SpreadsheetTests
             //adding a new cell with contents
             spreadsheet.SetContentsOfCell("a1", "");
             Assert.IsFalse(spreadsheet.GetNamesOfAllNonemptyCells().Contains("a1"));
-        }
-
-        /// <summary>
-        /// Tests creating a circular dependency.
-        /// </summary>
-        [TestMethod]
-        public void TestCircularDependency()
-        {
-            AbstractSpreadsheet spreadsheet = new Spreadsheet();
-            spreadsheet.SetContentsOfCell("a1", "= a3 * d3");
-            spreadsheet.SetContentsOfCell("a3", "= a2 - 5");
-            spreadsheet.SetContentsOfCell("a2", "2.3");
-            Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
-
-            // Adding this cell will cause the circular dependency.
-            Assert.ThrowsException<CircularException>(() => spreadsheet.SetContentsOfCell("a2", "= a1 + d3"));
-
-            // Make sure nothing was changed since circular dependency was found
-            Assert.AreEqual(2.3, spreadsheet.GetCellContents("a2"));
-        }
-
-        /// <summary>
-        /// Tests creating a circular dependency with a previously
-        /// empty cell's new contents.
-        /// </summary>
-        [TestMethod]
-        public void TestCircularDependencyNewCell()
-        {
-            AbstractSpreadsheet spreadsheet = new Spreadsheet();
-            spreadsheet.SetContentsOfCell("a1", "=  a3 * d3");
-            spreadsheet.SetContentsOfCell("a3", "= a2 - 5");
-
-            Assert.ThrowsException<CircularException>(() => spreadsheet.SetContentsOfCell("a2", "= a1 + d3"));
-
-            // Make sure the cell wasn't added since a circular dependency was found
-            Assert.IsFalse(spreadsheet.GetNamesOfAllNonemptyCells().Contains("a2"));
         }
 
         [TestMethod]
@@ -562,22 +500,6 @@ namespace SpreadsheetTests
 
             spreadsheet.SetContentsOfCell("a1", "yay");
             spreadsheet.SetContentsOfCell("a1", nullString);
-        }
-
-        [TestMethod]
-        public void TestReplaceFormula()
-        {
-            AbstractSpreadsheet spreadsheet = new Spreadsheet();
-            PrivateObject accessSheet = new PrivateObject(spreadsheet);
-            DependencyGraph deps = (DependencyGraph)accessSheet.GetField("dependencyGraph");
-
-            //setting cell to formula with dependees
-            spreadsheet.SetContentsOfCell("a1", "=9.8 + u1 + dannyboi9 + 8.7");
-            Assert.IsTrue(deps.HasDependees("a1"));
-
-            //replacing cell with double contents with no dependees
-            spreadsheet.SetContentsOfCell("a1", "9.43");
-            Assert.IsFalse(deps.HasDependees("a1"));
         }
 
         [TestMethod]
@@ -685,7 +607,7 @@ namespace SpreadsheetTests
         }
 
         [TestMethod]
-        public void TestGetDependentsInalidName()
+        public void TestGetDependentsInvalidName()
         {
             AbstractSpreadsheet spreadsheet = new Spreadsheet();
             PrivateObject sheetAccessor = new PrivateObject(spreadsheet);
