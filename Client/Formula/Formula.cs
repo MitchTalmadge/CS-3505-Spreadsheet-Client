@@ -15,12 +15,6 @@
 // Change log:
 //  (Version 1.2) Changed the definition of equality with regards
 //                to numeric tokens
-
-///
-/// Jiahui Chen
-/// u0980890
-/// CS 3500 PS3
-///
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,14 +84,6 @@ namespace SpreadsheetUtilities
         /// 
         /// The associated normalizer and validator are the second and third parameters,
         /// respectively.  
-        /// 
-        /// /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT***********************/
-        /// If the formula contains a variable v such that normalize(v) is not a legal variable, 
-        /// throws a FormulaFormatException with an explanatory message. 
-        /// 
-        /// If the formula contains a variable v such that isValid(normalize(v)) is false,
-        /// throws a FormulaFormatException with an explanatory message.
-        /// /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT***********************/
         /// 
         /// Suppose that N is a method that converts all the letters in a string to upper case, and
         /// that V is a method that returns true only if a string consists of one letter followed
@@ -466,9 +452,9 @@ namespace SpreadsheetUtilities
         }
     }
     
-    // <summary>
-    // Used to report syntactic errors in the argument to the Formula constructor.
-    // </summary>
+    /// <summary>
+    /// Used to report syntactic errors in the argument to the Formula constructor.
+    /// </summary>
     public class FormulaFormatException : Exception
     {
         /// <summary>

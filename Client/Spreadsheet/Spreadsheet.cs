@@ -7,11 +7,6 @@ using SpreadsheetUtilities;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-///
-/// Jiahui Chen
-/// u0980890
-/// CS 3500 PS5
-///
 namespace SS
 {
     public class Spreadsheet : AbstractSpreadsheet
@@ -21,13 +16,6 @@ namespace SS
         /// </summary>
         private Dictionary<string, Cell> cells;
 
-        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-        /// <summary>
-        /// Dependency Graph mapping each cell to its dependents and dependees. 
-        /// </summary>
-        //private DependencyGraph dependencyGraph;
-        /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-
         /// <summary>
         /// 0 argument constructor: has no extra validity conditions, 
         /// normalizes every cell name to itself, and has version "default".
@@ -36,9 +24,6 @@ namespace SS
             base(v => true, s => s, "default")
         {
             cells = new Dictionary<string, Cell>();
-            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-            //dependencyGraph = new DependencyGraph();
-            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
         }
 
         /// <summary>
@@ -50,9 +35,6 @@ namespace SS
             base (isValid, normalize, version)
         {
             cells =  new Dictionary<string, Cell>();
-            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-            //dependencyGraph = new DependencyGraph();
-            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
         }
 
         /// <summary>
@@ -73,9 +55,6 @@ namespace SS
             }
             
             cells = new Dictionary<string, Cell>();
-            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
-            //dependencyGraph = new DependencyGraph();
-            /******************************************* REMOVED AS PART OF 3505 FINAL PROJECT*************************/
             LoadSpreadsheet(filePath);
         }
 
