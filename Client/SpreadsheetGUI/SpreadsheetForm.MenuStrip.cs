@@ -19,6 +19,7 @@ namespace SpreadsheetGUI
         private void NewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SpreadsheetApplicationContext.Instance.OpenSpreadsheet();
+            //TODO: Open a new instance of the client.
         }
 
         /// <summary>
@@ -48,6 +49,7 @@ namespace SpreadsheetGUI
         /// <param name="e">A click event.</param>
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            DisconnectSpreadsheet();
             Close();
         }
 
