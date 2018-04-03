@@ -50,10 +50,6 @@
       <Project>{7ebfc72b-9445-4872-8239-bac92ef64d21}</Project>
       <Name>Formula</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SpreadsheetUtilities\SpreadsheetUtilities.csproj">
-      <Project>{53520ba5-34a3-4e6c-b784-a550fd443e8c}</Project>
-      <Name>SpreadsheetUtilities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
