@@ -46,12 +46,13 @@ namespace SpreadsheetGUI
 
         /// <inheritdoc />
         /// <summary>
-        /// Creates a SpreadsheetForm by loading the provided file.
+        /// Creates a SpreadsheetForm by loading the provided file. Since to "open" we need to have access to the server,
+        /// that is a required argument here. 
         /// </summary>
-        /// <param name="fileName">The path to the spreadsheet file to load.</param>
-        public SpreadsheetForm(string fileName) : this()
+        /// <param name="serverAddress">The address of the server we need to connect to.</param>
+        public SpreadsheetForm(string serverAddress) : this()
         {
-            OpenSpreadsheet();
+            OpenSpreadsheet(serverAddress);
         }
 
         /// <summary>
@@ -97,7 +98,8 @@ namespace SpreadsheetGUI
         /// <summary>
         /// Clears the cells in this sheet and enables the user to edit the document textbox to open another document in the same server.
         /// </summary>
-        private void OpenSpreadsheet()
+        /// <param name="serverAddress">The address of the server we need to connect to.</param>
+        private void OpenSpreadsheet(string serverAddress)
         {
             ClearSpreadsheet();
             //TODO Open a new instance of the spreadsheet.

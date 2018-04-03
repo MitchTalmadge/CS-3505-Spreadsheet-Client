@@ -29,7 +29,7 @@ namespace SpreadsheetGUI
         /// <param name="e">A click event.</param>
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenSpreadsheet();
+            OpenSpreadsheet("SERVERADDRESSLOL");
         }
 
         /// <summary>
