@@ -7,7 +7,7 @@ namespace SpreadsheetGUI
     /// <summary>
     /// An application context for the Spreadsheet GUI which keeps track of multiple spreadsheet windows.
     /// </summary>
-    /// <authors>Jiahui Chen and Mitch Talmadge</authors>
+    /// <authors>Jiahui Chen, Tarun Sunkaraneni, Mark Van der Merwe and Mitch Talmadge</authors>
     internal class SpreadsheetApplicationContext : ApplicationContext
     {
         private static SpreadsheetApplicationContext _instance;
@@ -34,11 +34,10 @@ namespace SpreadsheetGUI
         /// <summary>
         /// Creates and displays a new spreadsheet in the current application context.
         /// </summary>
-        /// <param name="filePath">An optional file path for loading a spreadsheet.</param>
-        internal void OpenSpreadsheet(string filePath = null)
+        internal void OpenSpreadsheet()
         {
             // Create a spreadsheet
-            var spreadsheet = filePath != null ? new SpreadsheetForm(filePath) : new SpreadsheetForm();
+            SpreadsheetForm spreadsheet = new SpreadsheetForm();
             OpenSpreadsheets++;
 
             // Add a listener for when the spreadsheet form is closed.
@@ -72,7 +71,7 @@ namespace SpreadsheetGUI
             Application.Run(new SplashscreenForm());
 
             // Open one spreadsheet.
-            SpreadsheetApplicationContext.Instance.OpenSpreadsheet(args.Length > 0 ? args[0] : null);
+            SpreadsheetApplicationContext.Instance.OpenSpreadsheet();
 
             // Run the singleton Spreadsheet Application Context
             Application.Run(SpreadsheetApplicationContext.Instance);

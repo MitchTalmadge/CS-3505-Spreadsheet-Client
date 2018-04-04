@@ -32,12 +32,10 @@
             this.spreadsheetPanel = new SS.SpreadsheetPanel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutSpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upgradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,10 +55,10 @@
             // 
             this.topTableLayoutPanel.SetColumnSpan(this.spreadsheetPanel, 3);
             this.spreadsheetPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.spreadsheetPanel.Location = new System.Drawing.Point(0, 117);
+            this.spreadsheetPanel.Location = new System.Drawing.Point(0, 94);
             this.spreadsheetPanel.Margin = new System.Windows.Forms.Padding(0);
             this.spreadsheetPanel.Name = "spreadsheetPanel";
-            this.spreadsheetPanel.Size = new System.Drawing.Size(2157, 998);
+            this.spreadsheetPanel.Size = new System.Drawing.Size(1618, 798);
             this.spreadsheetPanel.TabIndex = 0;
             this.spreadsheetPanel.SelectionChanged += new SS.SelectionChangedHandler(this.SpreadsheetPanel_SelectionChanged);
             // 
@@ -75,7 +73,8 @@
             this.upgradeToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(2157, 40);
+            this.menuStrip.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
+            this.menuStrip.Size = new System.Drawing.Size(1618, 32);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip";
             // 
@@ -87,34 +86,34 @@
             this.disconnectToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(64, 36);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(50, 28);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(211, 38);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(183, 30);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(211, 38);
-            this.openToolStripMenuItem.Text = "Open...";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(183, 30);
+            this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
             // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(211, 38);
-            this.newToolStripMenuItem.Text = "Disconnect";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.DisconnectToolStripMenuItem_Click);
+            this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(183, 30);
+            this.disconnectToolStripMenuItem.Text = "Disconnect";
+            this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.DisconnectToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(211, 38);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(183, 30);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
@@ -123,13 +122,13 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutSpreadsheetToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(77, 36);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(61, 28);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // aboutSpreadsheetToolStripMenuItem
             // 
             this.aboutSpreadsheetToolStripMenuItem.Name = "aboutSpreadsheetToolStripMenuItem";
-            this.aboutSpreadsheetToolStripMenuItem.Size = new System.Drawing.Size(318, 38);
+            this.aboutSpreadsheetToolStripMenuItem.Size = new System.Drawing.Size(249, 30);
             this.aboutSpreadsheetToolStripMenuItem.Text = "About Spreadsheet";
             this.aboutSpreadsheetToolStripMenuItem.Click += new System.EventHandler(this.AboutSpreadsheetToolStripMenuItem_Click);
             // 
@@ -138,13 +137,13 @@
             this.upgradeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.professionalVersionToolStripMenuItem});
             this.upgradeToolStripMenuItem.Name = "upgradeToolStripMenuItem";
-            this.upgradeToolStripMenuItem.Size = new System.Drawing.Size(118, 36);
+            this.upgradeToolStripMenuItem.Size = new System.Drawing.Size(93, 28);
             this.upgradeToolStripMenuItem.Text = "Upgrade";
             // 
             // professionalVersionToolStripMenuItem
             // 
             this.professionalVersionToolStripMenuItem.Name = "professionalVersionToolStripMenuItem";
-            this.professionalVersionToolStripMenuItem.Size = new System.Drawing.Size(327, 38);
+            this.professionalVersionToolStripMenuItem.Size = new System.Drawing.Size(255, 30);
             this.professionalVersionToolStripMenuItem.Text = "Professional Version";
             this.professionalVersionToolStripMenuItem.Click += new System.EventHandler(this.professionalVersionToolStripMenuItem_Click);
             // 
@@ -170,81 +169,87 @@
             this.topTableLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.topTableLayoutPanel.Name = "topTableLayoutPanel";
             this.topTableLayoutPanel.RowCount = 4;
-            this.topTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.topTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.topTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.topTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.topTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.topTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.topTableLayoutPanel.Size = new System.Drawing.Size(2157, 1115);
+            this.topTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.topTableLayoutPanel.Size = new System.Drawing.Size(1618, 892);
             this.topTableLayoutPanel.TabIndex = 3;
             // 
             // cellNameLabel
             // 
             this.cellNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cellNameLabel.Location = new System.Drawing.Point(3, 43);
+            this.cellNameLabel.Location = new System.Drawing.Point(2, 34);
+            this.cellNameLabel.Margin = new System.Windows.Forms.Padding(2);
             this.cellNameLabel.Name = "cellNameLabel";
             this.cellNameLabel.ReadOnly = true;
-            this.cellNameLabel.Size = new System.Drawing.Size(533, 31);
+            this.cellNameLabel.Size = new System.Drawing.Size(400, 26);
             this.cellNameLabel.TabIndex = 5;
             this.cellNameLabel.Text = "Cell Name:";
             // 
             // editorNameTextBox
             // 
             this.editorNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editorNameTextBox.Location = new System.Drawing.Point(3, 83);
+            this.editorNameTextBox.Location = new System.Drawing.Point(2, 66);
+            this.editorNameTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.editorNameTextBox.Name = "editorNameTextBox";
             this.editorNameTextBox.ReadOnly = true;
-            this.editorNameTextBox.Size = new System.Drawing.Size(533, 31);
+            this.editorNameTextBox.Size = new System.Drawing.Size(400, 26);
             this.editorNameTextBox.TabIndex = 2;
             // 
             // editorContentTextBox
             // 
             this.editorContentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editorContentTextBox.Location = new System.Drawing.Point(542, 83);
+            this.editorContentTextBox.Location = new System.Drawing.Point(406, 66);
+            this.editorContentTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.editorContentTextBox.Name = "editorContentTextBox";
-            this.editorContentTextBox.Size = new System.Drawing.Size(1072, 31);
+            this.editorContentTextBox.Size = new System.Drawing.Size(805, 26);
             this.editorContentTextBox.TabIndex = 3;
             this.editorContentTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.EditorContentTextBox_KeyUp);
             // 
             // editorValueTextBox
             // 
             this.editorValueTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editorValueTextBox.Location = new System.Drawing.Point(1620, 83);
+            this.editorValueTextBox.Location = new System.Drawing.Point(1215, 66);
+            this.editorValueTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.editorValueTextBox.Name = "editorValueTextBox";
             this.editorValueTextBox.ReadOnly = true;
-            this.editorValueTextBox.Size = new System.Drawing.Size(534, 31);
+            this.editorValueTextBox.Size = new System.Drawing.Size(401, 26);
             this.editorValueTextBox.TabIndex = 4;
             // 
             // inputLabel
             // 
             this.inputLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inputLabel.Location = new System.Drawing.Point(542, 43);
+            this.inputLabel.Location = new System.Drawing.Point(406, 34);
+            this.inputLabel.Margin = new System.Windows.Forms.Padding(2);
             this.inputLabel.Name = "inputLabel";
             this.inputLabel.ReadOnly = true;
-            this.inputLabel.Size = new System.Drawing.Size(1072, 31);
+            this.inputLabel.Size = new System.Drawing.Size(805, 26);
             this.inputLabel.TabIndex = 6;
             this.inputLabel.Text = "Input:";
             // 
             // cellValueLabel
             // 
             this.cellValueLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cellValueLabel.Location = new System.Drawing.Point(1620, 43);
+            this.cellValueLabel.Location = new System.Drawing.Point(1215, 34);
+            this.cellValueLabel.Margin = new System.Windows.Forms.Padding(2);
             this.cellValueLabel.Name = "cellValueLabel";
             this.cellValueLabel.ReadOnly = true;
-            this.cellValueLabel.Size = new System.Drawing.Size(534, 31);
+            this.cellValueLabel.Size = new System.Drawing.Size(401, 26);
             this.cellValueLabel.TabIndex = 7;
             this.cellValueLabel.Text = "Cell Value:";
             // 
             // SpreadsheetForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2157, 1115);
+            this.ClientSize = new System.Drawing.Size(1618, 892);
             this.Controls.Add(this.topTableLayoutPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SpreadsheetForm";
-            this.Text = "Untitled - Spreadsheet 3500";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SpreadsheetForm_FormClosing);
+            this.Text = "Untitled - Spreadsheet 3505";
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.topTableLayoutPanel.ResumeLayout(false);
@@ -260,9 +265,8 @@
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutSpreadsheetToolStripMenuItem;
