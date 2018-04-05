@@ -13,10 +13,6 @@ namespace SpreadsheetGUI
     /// <authors>Jiahui Chen, Tarun Sunkaraneni, Mark Van der Merwe and Mitch Talmadge</authors>
     public partial class SpreadsheetForm : Form
     {
-        /// <summary>
-        /// The version of this spreadsheet application.
-        /// </summary>
-        private const string SpreadsheetVersion = "ps6";
 
         /// <summary>
         /// The regex pattern used for validating cell names.
@@ -38,7 +34,7 @@ namespace SpreadsheetGUI
             InitializeComponent();
 
             // Create a new, empty spreadsheet.
-            _spreadsheet = new Spreadsheet(IsValid, Normalize, SpreadsheetVersion);
+            _spreadsheet = new Spreadsheet(IsValid, Normalize);
 
             // Select the first cell.
             spreadsheetPanel.SetSelection(0, 0);
@@ -112,8 +108,7 @@ namespace SpreadsheetGUI
         {
             ClearSpreadsheetPanel();
             ClearCellEditor();
-
-            _spreadsheet = new Spreadsheet(IsValid, Normalize, SpreadsheetVersion);
+            _spreadsheet = new Spreadsheet(IsValid, Normalize);
         }
     }
 }
