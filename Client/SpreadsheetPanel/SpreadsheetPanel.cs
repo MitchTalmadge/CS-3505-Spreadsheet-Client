@@ -93,13 +93,14 @@ namespace SS
             hScroll.Scroll += drawingPanel.HandleHScroll;
             vScroll.Scroll += drawingPanel.HandleVScroll;
 
-            // Cell input box is same size as a cell, 
-            // and isn't visible until the SpreadsheetPanel's DrawingPanel is clicked
+            // Cell input box is same size as a cell and starts out in the first cell
             cellInputTextBox = new TextBox()
             {
                 Location = new Point(LABEL_COL_WIDTH, LABEL_ROW_HEIGHT), 
                 Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT)
             };
+            // Event handler for when enter is pressed while cell is being edited
+            cellInputTextBox.KeyUp += new KeyEventHandler(cellInputTextBox_KeyUp);
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
 
@@ -202,6 +203,23 @@ namespace SS
         /// </summary>
 
         public event SelectionChangedHandler SelectionChanged;
+
+        /// <summary>
+        /// Called when a key is released while the cell content text box is focused.
+        /// Saves/displays the contents when the enter key is pressed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cellInputTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Displaying the contents that were entered in selected cell
+                int x; int y;
+                drawingPanel.GetSelection(out x, out y);
+                SetValue(x, y, cellInputTextBox.Text);
+            }
+        }
 
         /// <summary>
         /// Makes the spreadsheet read-only or edtiable based on parameter.
@@ -503,9 +521,7 @@ namespace SS
             protected override void OnMouseClick(MouseEventArgs e)
             {
                 base.OnClick(e);
-                // computes the column and row index (click's x-coord - label width, divided by the width gives row, same with y and heigth for y)
-                /// DATA_COL_WIDTH is width of text box
-                /// DATA_ROW_HEIGHT is height of text box
+                // computes the column and row index 
                 int x = (e.X-LABEL_COL_WIDTH) / DATA_COL_WIDTH;
                 int y = (e.Y-LABEL_ROW_HEIGHT) / DATA_ROW_HEIGHT;
                 if (e.X > LABEL_COL_WIDTH && e.Y > LABEL_ROW_HEIGHT && (x + _firstColumn < COL_COUNT) && (y + _firstRow < ROW_COUNT))
@@ -513,28 +529,17 @@ namespace SS
                     _selectedCol = x + _firstColumn;
                     _selectedRow = y + _firstRow;
 
-                    // computing location the cell text input box should be placed at (top left corner)
-                    /// Top left corner of cell:
-                    /// X coord = index_x * col_width
-                    /// Y coord = index_y * row_height
+                    // computing location the cell text input box should be placed at (top left corner point)
                     int cell_x = (x * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
                     int cell_y = (y * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
                     _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
+                    _ssp.cellInputTextBox.Focus();
 
                     if (_ssp.SelectionChanged != null)
                     {
                         _ssp.SelectionChanged(_ssp);
                     }
-                }
-
-                /// TODO: Create input text box, position it where the selected cell is
-
-
-                /// TODO: when enter is pressed, SetValue(int col, int row, string value) is called 
-                /// editorContentTextBox.Text gets value,  _selectedCol, _selectedRow
-
-
-
+                }               
                 Invalidate();
             }
 
