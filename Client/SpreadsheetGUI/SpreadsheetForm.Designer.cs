@@ -179,6 +179,7 @@
             this.connectedServerTextBox.Name = "connectedServerTextBox";
             this.connectedServerTextBox.Size = new System.Drawing.Size(705, 26);
             this.connectedServerTextBox.TabIndex = 11;
+            this.connectedServerTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.connectedServerTextBox_KeyUp);
             // 
             // documentNameTextBox
             // 
@@ -188,6 +189,7 @@
             this.documentNameTextBox.Name = "documentNameTextBox";
             this.documentNameTextBox.Size = new System.Drawing.Size(501, 26);
             this.documentNameTextBox.TabIndex = 10;
+            this.documentNameTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.documentNameTextBox_KeyUp);
             // 
             // connectedServerLabel
             // 
