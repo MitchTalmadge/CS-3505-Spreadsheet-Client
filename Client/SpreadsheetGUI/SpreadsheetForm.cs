@@ -110,5 +110,16 @@ namespace SpreadsheetGUI
             ClearCellEditor();
             _spreadsheet = new Spreadsheet(IsValid, Normalize);
         }
+
+
+        /// <summary>
+        /// Clears the cell editor.
+        /// </summary>
+        private void ClearCellEditor()
+        {
+            editorNameTextBox.Clear();
+            spreadsheetPanel.cellInputTextBox.Clear();
+            editorValueTextBox.Clear();
+        }
     }
 }

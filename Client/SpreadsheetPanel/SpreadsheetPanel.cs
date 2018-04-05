@@ -217,6 +217,7 @@ namespace SS
                 // Displaying the contents that were entered in selected cell
                 drawingPanel.GetSelection(out var row, out var col);
                 SetValue(row, col, cellInputTextBox.Text);
+                
 
                 // Moving cell selection down after value is entered
                 if (row < 98)
@@ -539,7 +540,6 @@ namespace SS
                     int cell_x = (x * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
                     int cell_y = (y * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
                     _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
-                    //_ssp.cellInputTextBox.Focus();
 
                     if (_ssp.SelectionChanged != null)
                     {

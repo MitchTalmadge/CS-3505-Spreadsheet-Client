@@ -23,6 +23,43 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
+        /// Using the currently selected cell in the spreadsheet panel, displays the name, content, and value in the cell editor.
+        /// </summary>
+        private void DisplayCurrentCellInEditor()
+        {
+            // Display the cell name in the editor.
+            var cellName = GetSelectedCellName();
+            editorNameTextBox.Text = cellName;
+            GetColumnAndRowFromCellName(cellName, out var col, out var row);
+
+            // Display the cell contents in the editor (and add an equals sign to formulas).
+            var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
+            if (contents is Formula)
+            {
+                contents = "=" + contents;
+            }
+
+            spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
+
+            // Move the text cursor to the content edit text box.
+            spreadsheetPanel.cellInputTextBox.Focus();
+            spreadsheetPanel.cellInputTextBox.SelectAll();
+
+            // Display the cell value in the editor.
+            // Currently, this doesn't return anything cause we aren't setting actual values in the spreadsheet
+            //value = _spreadsheet.GetCellValue(cellName); 
+            //if (value is FormulaError)
+            //{
+            //    value = Resources.SpreadsheetForm_Formula_Error_Value;
+            //}
+            //editorValueTextBox.Text = value.ToString();
+
+            // SpreadsheetPanel has Dictionary of cell values (only as strings/display form)
+            spreadsheetPanel.GetValue(col, row, out string val);
+            editorValueTextBox.Text = val;
+        }
+
+        /// <summary>
         /// From a cell name, determines the column and row of the cell in the spreadsheet panel.
         /// </summary>
         /// <param name="cellName">The name of the cell.</param>

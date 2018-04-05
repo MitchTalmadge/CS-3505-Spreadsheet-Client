@@ -13,33 +13,6 @@ namespace SpreadsheetGUI
     partial class SpreadsheetForm
     {
         /// <summary>
-        /// Called when a key is released while the editor content text box is focused.
-        /// Saves the contents when the enter key is pressed, and selects cells with the arrow keys.
-        /// </summary>
-        private void EditorContentTextBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Enter:
-                    if(SubmitChanges())
-                        spreadsheetPanel.MoveSelectionDown();
-                    break;
-                case Keys.Up:
-                    spreadsheetPanel.MoveSelectionUp();
-                    break;
-                case Keys.Down:
-                    spreadsheetPanel.MoveSelectionDown();
-                    break;
-                case Keys.Left:
-                    spreadsheetPanel.MoveSelectionLeft();
-                    break;
-                case Keys.Right:
-                    spreadsheetPanel.MoveSelectionRight();
-                    break;
-            }
-        }
-
-        /// <summary>
         /// Updates the currently selected cell with the contents of the content input field.
         /// </summary>
         /// <returns>True if the cell was successfully changed, false if there was an error.</returns>
@@ -72,43 +45,35 @@ namespace SpreadsheetGUI
 
         /// <summary>
         /// Using the currently selected cell in the spreadsheet panel, displays the name, content, and value in the cell editor.
+        /// 
+        /// MOVED TO SPREADHSEETFORM.SPREADSHEETPANEL
         /// </summary>
-        private void DisplayCurrentCellInEditor()
-        {
-            // Display the cell name in the editor.
-            var cellName = GetSelectedCellName();
-            editorNameTextBox.Text = cellName;
+        //private void DisplayCurrentCellInEditor()
+        //{
+        //    // Display the cell name in the editor.
+        //    var cellName = GetSelectedCellName();
+        //    editorNameTextBox.Text = cellName;
 
-            // Display the cell contents in the editor (and add an equals sign to formulas).
-            var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
-            if (contents is Formula)
-            {
-                contents = "=" + contents;
-            }
+        //    // Display the cell contents in the editor (and add an equals sign to formulas).
+        //    var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
+        //    if (contents is Formula)
+        //    {
+        //        contents = "=" + contents;
+        //    }
 
-            spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
+        //    spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
 
-            // Move the text cursor to the content edit text box.
-            spreadsheetPanel.cellInputTextBox.Focus();
-            spreadsheetPanel.cellInputTextBox.SelectAll();
+        //    // Move the text cursor to the content edit text box.
+        //    spreadsheetPanel.cellInputTextBox.Focus();
+        //    spreadsheetPanel.cellInputTextBox.SelectAll();
 
-            // Display the cell value in the editor.
-            var value = _spreadsheet.GetCellValue(cellName);
-            if (value is FormulaError)
-            {
-                value = Resources.SpreadsheetForm_Formula_Error_Value;
-            }
-            editorValueTextBox.Text = value.ToString();
-        }
-
-        /// <summary>
-        /// Clears the cell editor.
-        /// </summary>
-        private void ClearCellEditor()
-        {
-            editorNameTextBox.Clear();
-            spreadsheetPanel.cellInputTextBox.Clear();
-            editorValueTextBox.Clear();
-        }
+        //    // Display the cell value in the editor.
+        //    var value = _spreadsheet.GetCellValue(cellName);
+        //    if (value is FormulaError)
+        //    {
+        //        value = Resources.SpreadsheetForm_Formula_Error_Value;
+        //    }
+        //    editorValueTextBox.Text = value.ToString();
+        //}
     }
 }
