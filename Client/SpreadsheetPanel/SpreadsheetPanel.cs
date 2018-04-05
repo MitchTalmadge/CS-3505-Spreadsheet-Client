@@ -40,6 +40,9 @@ namespace SS
         private HScrollBar hScroll;
         private VScrollBar vScroll;
 
+        // Text box within a cell being edited
+        private TextBox cellInputTextBox;
+
         // These constants control the layout of the spreadsheet grid.  The height and
         // width measurements are in pixels.
         private const int DATA_COL_WIDTH = 80;
@@ -50,8 +53,7 @@ namespace SS
         private const int SCROLLBAR_WIDTH = 20;
         private const int COL_COUNT = 26;
         private const int ROW_COUNT = 99;
-
-
+        
         /// <summary>
         /// Flag indicating if the spreadsheet is editable
         /// </summary>
@@ -63,7 +65,6 @@ namespace SS
 
         public SpreadsheetPanel()
         {
-
             InitializeComponent();
 
             // The DrawingPanel is quite large, since it has 26 columns and 99 rows.  The
@@ -91,6 +92,16 @@ namespace SS
             // Arrange for the drawing panel to be notified when it needs to scroll itself.
             hScroll.Scroll += drawingPanel.HandleHScroll;
             vScroll.Scroll += drawingPanel.HandleVScroll;
+
+            // Cell input box is same size as a cell, 
+            // and isn't visible until the SpreadsheetPanel's DrawingPanel is clicked
+            cellInputTextBox = new TextBox()
+            {
+                Location = new Point(LABEL_COL_WIDTH, LABEL_ROW_HEIGHT), 
+                Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT)
+            };
+            Controls.Add(cellInputTextBox);
+            cellInputTextBox.BringToFront();
 
             // By default the spreadsheet is editable
             editable = true;
@@ -201,7 +212,6 @@ namespace SS
             editable = flag;
         }
 
-
         /// <summary>
         /// Used internally to keep track of cell addresses
         /// </summary>
@@ -257,14 +267,12 @@ namespace SS
             // The containing panel
             private SpreadsheetPanel _ssp;
 
-
             public DrawingPanel(SpreadsheetPanel ss)
             {
                 DoubleBuffered = true;
                 _values = new Dictionary<Address, String>();
                 _ssp = ss;
             }
-
 
             private bool InvalidAddress(int col, int row)
             {
@@ -347,7 +355,7 @@ namespace SS
                 Invalidate();
             }
 
-
+            
             protected override void OnPaint(PaintEventArgs e)
             {
 
@@ -488,23 +496,45 @@ namespace SS
             /// <summary>
             /// Determines which cell, if any, was clicked.  Generates a SelectionChanged event.  All of
             /// the indexes are zero based.
+            /// Also activates the input text box in the position of the selected cell. 
             /// </summary>
             /// <param name="e"></param>
 
             protected override void OnMouseClick(MouseEventArgs e)
             {
                 base.OnClick(e);
+                // computes the column and row index (click's x-coord - label width, divided by the width gives row, same with y and heigth for y)
+                /// DATA_COL_WIDTH is width of text box
+                /// DATA_ROW_HEIGHT is height of text box
                 int x = (e.X-LABEL_COL_WIDTH) / DATA_COL_WIDTH;
                 int y = (e.Y-LABEL_ROW_HEIGHT) / DATA_ROW_HEIGHT;
                 if (e.X > LABEL_COL_WIDTH && e.Y > LABEL_ROW_HEIGHT && (x + _firstColumn < COL_COUNT) && (y + _firstRow < ROW_COUNT))
                 {
                     _selectedCol = x + _firstColumn;
                     _selectedRow = y + _firstRow;
+
+                    // computing location the cell text input box should be placed at (top left corner)
+                    /// Top left corner of cell:
+                    /// X coord = index_x * col_width
+                    /// Y coord = index_y * row_height
+                    int cell_x = (x * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
+                    int cell_y = (y * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
+                    _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
+
                     if (_ssp.SelectionChanged != null)
                     {
                         _ssp.SelectionChanged(_ssp);
                     }
                 }
+
+                /// TODO: Create input text box, position it where the selected cell is
+
+
+                /// TODO: when enter is pressed, SetValue(int col, int row, string value) is called 
+                /// editorContentTextBox.Text gets value,  _selectedCol, _selectedRow
+
+
+
                 Invalidate();
             }
 

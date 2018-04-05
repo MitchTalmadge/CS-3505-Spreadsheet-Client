@@ -29,15 +29,12 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpreadsheetForm));
-            this.spreadsheetPanel = new SS.SpreadsheetPanel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutSpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upgradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,20 +46,10 @@
             this.editorValueTextBox = new System.Windows.Forms.TextBox();
             this.inputLabel = new System.Windows.Forms.TextBox();
             this.cellValueLabel = new System.Windows.Forms.TextBox();
+            this.spreadsheetPanel = new SS.SpreadsheetPanel();
             this.menuStrip.SuspendLayout();
             this.topTableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // spreadsheetPanel
-            // 
-            this.topTableLayoutPanel.SetColumnSpan(this.spreadsheetPanel, 3);
-            this.spreadsheetPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.spreadsheetPanel.Location = new System.Drawing.Point(0, 117);
-            this.spreadsheetPanel.Margin = new System.Windows.Forms.Padding(0);
-            this.spreadsheetPanel.Name = "spreadsheetPanel";
-            this.spreadsheetPanel.Size = new System.Drawing.Size(2157, 998);
-            this.spreadsheetPanel.TabIndex = 0;
-            this.spreadsheetPanel.SelectionChanged += new SS.SelectionChangedHandler(this.SpreadsheetPanel_SelectionChanged);
             // 
             // menuStrip
             // 
@@ -93,28 +80,26 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(211, 38);
-            this.newToolStripMenuItem.Text = "New";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(232, 38);
+            this.newToolStripMenuItem.Text = "Disconnect";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.DisconnectToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(211, 38);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(232, 38);
             this.openToolStripMenuItem.Text = "Open...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
             // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(211, 38);
-            this.newToolStripMenuItem.Text = "Disconnect";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.DisconnectToolStripMenuItem_Click);
+            this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(232, 38);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(211, 38);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(232, 38);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
@@ -158,12 +143,12 @@
             this.topTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.topTableLayoutPanel.Controls.Add(this.cellNameLabel, 0, 1);
             this.topTableLayoutPanel.Controls.Add(this.menuStrip, 0, 0);
-            this.topTableLayoutPanel.Controls.Add(this.spreadsheetPanel, 0, 3);
             this.topTableLayoutPanel.Controls.Add(this.editorNameTextBox, 0, 2);
             this.topTableLayoutPanel.Controls.Add(this.editorContentTextBox, 1, 2);
             this.topTableLayoutPanel.Controls.Add(this.editorValueTextBox, 2, 2);
             this.topTableLayoutPanel.Controls.Add(this.inputLabel, 1, 1);
             this.topTableLayoutPanel.Controls.Add(this.cellValueLabel, 2, 1);
+            this.topTableLayoutPanel.Controls.Add(this.spreadsheetPanel, 0, 3);
             this.topTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.topTableLayoutPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.topTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
@@ -234,6 +219,17 @@
             this.cellValueLabel.TabIndex = 7;
             this.cellValueLabel.Text = "Cell Value:";
             // 
+            // spreadsheetPanel
+            // 
+            this.topTableLayoutPanel.SetColumnSpan(this.spreadsheetPanel, 3);
+            this.spreadsheetPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.spreadsheetPanel.Location = new System.Drawing.Point(0, 117);
+            this.spreadsheetPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.spreadsheetPanel.Name = "spreadsheetPanel";
+            this.spreadsheetPanel.Size = new System.Drawing.Size(2157, 998);
+            this.spreadsheetPanel.TabIndex = 0;
+            this.spreadsheetPanel.SelectionChanged += new SS.SelectionChangedHandler(this.SpreadsheetPanel_SelectionChanged);
+            // 
             // SpreadsheetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -275,6 +271,12 @@
         private System.Windows.Forms.TextBox cellValueLabel;
         private System.Windows.Forms.ToolStripMenuItem upgradeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem professionalVersionToolStripMenuItem;
+
+        //// Text box within a cell being edited
+        //private System.Windows.Forms.TextBox cellInputTextBox;
+        //// 
+        //// SpreadsheetForm
+        //// 
     }
 }
 
