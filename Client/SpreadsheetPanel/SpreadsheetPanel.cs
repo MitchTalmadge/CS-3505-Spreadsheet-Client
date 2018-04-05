@@ -215,9 +215,12 @@ namespace SS
             if (e.KeyCode == Keys.Enter)
             {
                 // Displaying the contents that were entered in selected cell
-                int x; int y;
-                drawingPanel.GetSelection(out x, out y);
-                SetValue(x, y, cellInputTextBox.Text);
+                drawingPanel.GetSelection(out var row, out var col);
+                SetValue(row, col, cellInputTextBox.Text);
+
+                // Moving cell selection down after value is entered
+                if (row < 98)
+                   SetSelection(col, ++row);
             }
         }
 
@@ -521,6 +524,9 @@ namespace SS
             protected override void OnMouseClick(MouseEventArgs e)
             {
                 base.OnClick(e);
+                _ssp.cellInputTextBox.Clear();
+                _ssp.cellInputTextBox.Focus();
+
                 // computes the column and row index 
                 int x = (e.X-LABEL_COL_WIDTH) / DATA_COL_WIDTH;
                 int y = (e.Y-LABEL_ROW_HEIGHT) / DATA_ROW_HEIGHT;
@@ -533,7 +539,7 @@ namespace SS
                     int cell_x = (x * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
                     int cell_y = (y * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
                     _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
-                    _ssp.cellInputTextBox.Focus();
+                    //_ssp.cellInputTextBox.Focus();
 
                     if (_ssp.SelectionChanged != null)
                     {
