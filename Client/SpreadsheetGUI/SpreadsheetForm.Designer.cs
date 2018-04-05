@@ -41,10 +41,10 @@
             this.upgradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.professionalVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.connectedServerTextBox = new System.Windows.Forms.TextBox();
+            this.documentNameTextBox = new System.Windows.Forms.TextBox();
+            this.connectedServerLabel = new System.Windows.Forms.TextBox();
+            this.documentNameLabel = new System.Windows.Forms.TextBox();
             this.cellNameLabel = new System.Windows.Forms.TextBox();
             this.editorNameTextBox = new System.Windows.Forms.TextBox();
             this.editorContentTextBox = new System.Windows.Forms.TextBox();
@@ -57,7 +57,7 @@
             // 
             // spreadsheetPanel
             // 
-            this.topTableLayoutPanel.SetColumnSpan(this.spreadsheetPanel, 4);
+            this.topTableLayoutPanel.SetColumnSpan(this.spreadsheetPanel, 5);
             this.spreadsheetPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.spreadsheetPanel.Location = new System.Drawing.Point(0, 94);
             this.spreadsheetPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -68,7 +68,7 @@
             // 
             // menuStrip
             // 
-            this.topTableLayoutPanel.SetColumnSpan(this.menuStrip, 4);
+            this.topTableLayoutPanel.SetColumnSpan(this.menuStrip, 5);
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -155,24 +155,24 @@
             // 
             this.topTableLayoutPanel.AutoSize = true;
             this.topTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.topTableLayoutPanel.ColumnCount = 4;
+            this.topTableLayoutPanel.ColumnCount = 5;
             this.topTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.topTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.topTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.topTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.topTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.topTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.topTableLayoutPanel.Controls.Add(this.textBox4, 3, 2);
-            this.topTableLayoutPanel.Controls.Add(this.textBox3, 2, 2);
-            this.topTableLayoutPanel.Controls.Add(this.textBox2, 3, 1);
-            this.topTableLayoutPanel.Controls.Add(this.textBox1, 2, 1);
+            this.topTableLayoutPanel.Controls.Add(this.connectedServerTextBox, 4, 2);
+            this.topTableLayoutPanel.Controls.Add(this.documentNameTextBox, 3, 2);
+            this.topTableLayoutPanel.Controls.Add(this.connectedServerLabel, 4, 1);
+            this.topTableLayoutPanel.Controls.Add(this.documentNameLabel, 3, 1);
             this.topTableLayoutPanel.Controls.Add(this.cellNameLabel, 0, 1);
             this.topTableLayoutPanel.Controls.Add(this.menuStrip, 0, 0);
             this.topTableLayoutPanel.Controls.Add(this.spreadsheetPanel, 0, 3);
             this.topTableLayoutPanel.Controls.Add(this.editorNameTextBox, 0, 2);
             this.topTableLayoutPanel.Controls.Add(this.editorContentTextBox, 1, 2);
-            this.topTableLayoutPanel.Controls.Add(this.editorValueTextBox, 1, 2);
+            this.topTableLayoutPanel.Controls.Add(this.editorValueTextBox, 2, 2);
             this.topTableLayoutPanel.Controls.Add(this.inputLabel, 1, 1);
-            this.topTableLayoutPanel.Controls.Add(this.cellValueLabel, 1, 1);
+            this.topTableLayoutPanel.Controls.Add(this.cellValueLabel, 2, 1);
             this.topTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.topTableLayoutPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.topTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
@@ -186,45 +186,45 @@
             this.topTableLayoutPanel.Size = new System.Drawing.Size(1618, 892);
             this.topTableLayoutPanel.TabIndex = 3;
             // 
-            // textBox4
+            // connectedServerTextBox
             // 
-            this.textBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox4.Location = new System.Drawing.Point(1051, 66);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(565, 26);
-            this.textBox4.TabIndex = 11;
+            this.connectedServerTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.connectedServerTextBox.Location = new System.Drawing.Point(1051, 66);
+            this.connectedServerTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.connectedServerTextBox.Name = "connectedServerTextBox";
+            this.connectedServerTextBox.Size = new System.Drawing.Size(565, 26);
+            this.connectedServerTextBox.TabIndex = 11;
             // 
-            // textBox3
+            // documentNameTextBox
             // 
-            this.textBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox3.Location = new System.Drawing.Point(647, 66);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(400, 26);
-            this.textBox3.TabIndex = 10;
+            this.documentNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.documentNameTextBox.Location = new System.Drawing.Point(647, 66);
+            this.documentNameTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.documentNameTextBox.Name = "documentNameTextBox";
+            this.documentNameTextBox.Size = new System.Drawing.Size(400, 26);
+            this.documentNameTextBox.TabIndex = 10;
             // 
-            // textBox2
+            // connectedServerLabel
             // 
-            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox2.Location = new System.Drawing.Point(1051, 34);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(565, 26);
-            this.textBox2.TabIndex = 9;
-            this.textBox2.Text = "Connected Server:";
+            this.connectedServerLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.connectedServerLabel.Location = new System.Drawing.Point(1051, 34);
+            this.connectedServerLabel.Margin = new System.Windows.Forms.Padding(2);
+            this.connectedServerLabel.Name = "connectedServerLabel";
+            this.connectedServerLabel.ReadOnly = true;
+            this.connectedServerLabel.Size = new System.Drawing.Size(565, 26);
+            this.connectedServerLabel.TabIndex = 9;
+            this.connectedServerLabel.Text = "Connected Server:";
             // 
-            // textBox1
+            // documentNameLabel
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(647, 34);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(400, 26);
-            this.textBox1.TabIndex = 8;
-            this.textBox1.Text = "Document Name:";
+            this.documentNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.documentNameLabel.Location = new System.Drawing.Point(647, 34);
+            this.documentNameLabel.Margin = new System.Windows.Forms.Padding(2);
+            this.documentNameLabel.Name = "documentNameLabel";
+            this.documentNameLabel.ReadOnly = true;
+            this.documentNameLabel.Size = new System.Drawing.Size(400, 26);
+            this.documentNameLabel.TabIndex = 8;
+            this.documentNameLabel.Text = "Document Name:";
             // 
             // cellNameLabel
             // 
@@ -321,17 +321,17 @@
         private System.Windows.Forms.ToolStripMenuItem aboutSpreadsheetToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel topTableLayoutPanel;
         private System.Windows.Forms.TextBox editorValueTextBox;
-        private System.Windows.Forms.TextBox editorContentTextBox;
         private System.Windows.Forms.TextBox editorNameTextBox;
         private System.Windows.Forms.TextBox cellNameLabel;
-        private System.Windows.Forms.TextBox inputLabel;
         private System.Windows.Forms.TextBox cellValueLabel;
         private System.Windows.Forms.ToolStripMenuItem upgradeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem professionalVersionToolStripMenuItem;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox connectedServerTextBox;
+        private System.Windows.Forms.TextBox documentNameTextBox;
+        private System.Windows.Forms.TextBox connectedServerLabel;
+        private System.Windows.Forms.TextBox documentNameLabel;
+        private System.Windows.Forms.TextBox editorContentTextBox;
+        private System.Windows.Forms.TextBox inputLabel;
     }
 }
 

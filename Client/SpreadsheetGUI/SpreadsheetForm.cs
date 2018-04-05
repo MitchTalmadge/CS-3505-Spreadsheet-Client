@@ -78,7 +78,7 @@ namespace SpreadsheetGUI
         private void NewSpreadsheet()
         {
             // TODO: Add open another instance of the spreadsheet
-            
+
         }
 
         /// <summary>
