@@ -67,9 +67,6 @@ namespace SpreadsheetGUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Start splashscreen
-            Application.Run(new SplashscreenForm());
-
             // Open one spreadsheet.
             SpreadsheetApplicationContext.Instance.OpenSpreadsheet();
 

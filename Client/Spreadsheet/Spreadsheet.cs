@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpreadsheetUtilities;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -17,113 +14,14 @@ namespace SS
         private Dictionary<string, Cell> cells;
 
         /// <summary>
-        /// 0 argument constructor: has no extra validity conditions, 
-        /// normalizes every cell name to itself, and has version "default".
-        /// </summary>
-        public Spreadsheet() :
-            base(v => true, s => s, "default")
-        {
-            cells = new Dictionary<string, Cell>();
-        }
-
-        /// <summary>
         /// 3 argument constructor: allows the user to provide a validity delegate
         /// (first parameter), a normalization delegate (second parameter),
         /// and a version (third parameter).
         /// </summary>
-        public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize, string version): 
-            base (isValid, normalize, version)
+        public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize): 
+            base (isValid, normalize)
         {
             cells =  new Dictionary<string, Cell>();
-        }
-
-        /// <summary>
-        /// 4 argument constructor: allows the user to provide a string representing 
-        /// a path to a file (first parameter), a validity delegate (second parameter), 
-        /// a normalization delegate (third parameter), and a version (fourth parameter).
-        /// Reads a saved spreadsheet from a file and uses it to construct a new spreadsheet. 
-        /// New spreadsheet should use the provided validity delegate, normalization delegate, 
-        /// and version.
-        /// </summary>
-        public Spreadsheet(string filePath, Func<string, bool> isValid, Func<string, string> normalize, string version) :
-            base(isValid, normalize, version)
-        {
-            // Make sure version of file matches parameter version
-            if (GetSavedVersion(filePath) != version)
-            {
-                throw new SpreadsheetReadWriteException("The provided version does not match the version of the passed in file!");
-            }
-            
-            cells = new Dictionary<string, Cell>();
-            LoadSpreadsheet(filePath);
-        }
-
-        /// <summary>
-        /// Helper method that reads an input XML file and tries to construct
-        /// a new spreadsheet from the it. 
-        /// </summary>
-        /// <param name="filename"></param>
-        private void LoadSpreadsheet(string filepath)
-        {
-            XmlReaderSettings readerSettings = new XmlReaderSettings
-            {
-                IgnoreWhitespace = true
-            };
-
-            try {
-                using (XmlReader reader = XmlReader.Create(filepath, readerSettings))
-                {
-                    //reading the auto-generated XML header
-                    reader.Read();
-                    //first element will always be spreadhseet since previous checks in constructor/GetSavedVersion already checked
-                    reader.Read();
-
-                    while (reader.Read())
-                    {
-                        //stop reading if closing spreadsheet tag is reached
-                        if (reader.Name == "spreadsheet" && reader.NodeType == XmlNodeType.EndElement)
-                        {
-                            break;
-                        }
-
-                        string name;
-                        string contents;
-                        if (reader.Name == "cell")
-                        {
-                            //this should read in the cell's name
-                            reader.Read(); 
-                            if (reader.Name == "name") 
-                            {
-                                name = reader.ReadElementContentAsString();
-                                
-                                //this should read in cell's contents
-                                if (reader.Name == "contents")
-                                {
-                                    contents = reader.ReadElementContentAsString();
-                                }
-                                else throw new SpreadsheetReadWriteException("XML file's cell element did not have contents!");
-                            }
-                            else throw new SpreadsheetReadWriteException("XML file's cell element did not have a name!");
-                        }
-                        else throw new SpreadsheetReadWriteException("XML file contained an element other than a cell!");
-                        
-                        //checks for closing tag of cell
-                        if (reader.Name != "cell" || reader.NodeType != XmlNodeType.EndElement)
-                        {
-                            throw new SpreadsheetReadWriteException("XML file contained cell element without closing tag!");
-                        }
-                        //loads each cell element
-                        LoadCell(name, contents);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw new SpreadsheetReadWriteException(e.Message);
-            }
-
-            // Set changed to false since nothing was truly changed.
-            Changed = false;
         }
 
         /// <summary>
@@ -152,12 +50,6 @@ namespace SS
                 throw new SpreadsheetReadWriteException("A Circular Dependency was found within a formula in this XML file!");
             }
         }
-
-        /// <summary>
-        /// True if this spreadsheet has been modified since it was created or saved                  
-        /// (whichever happened most recently); false otherwise.
-        /// </summary>
-        public override bool Changed { get; protected set; }
 
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
@@ -208,120 +100,6 @@ namespace SS
         public override IEnumerable<string> GetNamesOfAllNonemptyCells()
         {
             return new List<string>(cells.Keys);
-        }
-
-        /// <summary>
-        /// Returns the version information of the spreadsheet saved in the named file.
-        /// If there are any problems opening, reading, or closing the file, the method
-        /// should throw a SpreadsheetReadWriteException with an explanatory message.
-        /// </summary>
-        public override string GetSavedVersion(string filename)
-        {
-            XmlReaderSettings readerSettings = new XmlReaderSettings
-            {
-                IgnoreWhitespace = true
-            };
-
-            try
-            {
-                using (XmlReader reader = XmlReader.Create(filename, readerSettings))
-                {
-                    //reading the default generated XML header
-                    reader.Read();
-
-                    //reading in first element
-                    reader.Read();
-                    if (reader.Name == "spreadsheet")
-                    {
-                        if (reader.GetAttribute("version") != null)
-                        {
-                            return reader.GetAttribute("version");
-                        }
-                    }
-                    throw new SpreadsheetReadWriteException("XML File does not contain spreadsheet or does not have Version!");
-                }
-            }
-            catch (Exception e)
-            {
-                throw new SpreadsheetReadWriteException(e.Message);
-            }
-        }
-
-        /// <summary>
-        /// Writes the contents of this spreadsheet to the named file using an XML format.
-        /// The XML elements should be structured as follows:
-        /// 
-        /// <spreadsheet version="version information goes here">
-        /// 
-        /// <cell>
-        /// <name>
-        /// cell name goes here
-        /// </name>
-        /// <contents>
-        /// cell contents goes here
-        /// </contents>    
-        /// </cell>
-        /// 
-        /// </spreadsheet>
-        /// 
-        /// There should be one cell element for each non-empty cell in the spreadsheet.  
-        /// If the cell contains a string, it should be written as the contents.  
-        /// If the cell contains a double d, d.ToString() should be written as the contents.  
-        /// If the cell contains a Formula f, f.ToString() with "=" prepended should be written as the contents.
-        /// 
-        /// If there are any problems opening, writing, or closing the file, the method should throw a
-        /// SpreadsheetReadWriteException with an explanatory message.
-        /// </summary>
-        public override void Save(string filename)
-        {
-            XmlWriterSettings settings = new XmlWriterSettings
-            {
-                Indent = true,
-                IndentChars = ("  ")
-            };
-            try
-            {
-                using (XmlWriter writer = XmlWriter.Create(filename))
-                {
-                    writer.WriteStartDocument();
-                    //writing spreadsheet element with version attribute
-                    writer.WriteStartElement("spreadsheet");
-                    writer.WriteAttributeString("version", Version);
-
-                    //writing each cell into the XML document
-                    foreach (KeyValuePair<string, Cell> cell in cells)
-                    {
-                        writer.WriteStartElement("cell");
-
-                        //writing cell's name
-                        writer.WriteStartElement("name");
-                        writer.WriteString(cell.Key);
-                        writer.WriteEndElement(); //ends cell name element
-
-                        //writing cell's contents
-                        writer.WriteStartElement("contents");
-                        if (cell.Value.Contents is Formula formula)
-                        {
-                            writer.WriteString("=" + formula.ToString());
-                        }
-                        else if (cell.Value.Contents is double num)
-                        {
-                            writer.WriteString(num.ToString());
-                        }
-                        else writer.WriteString((string)cell.Value.Contents);
-                        writer.WriteEndElement(); //ends cell contents element
-
-                        writer.WriteEndElement(); //ends cell element
-                    }
-                    writer.WriteEndElement(); //ends spreadsheet element
-                    writer.WriteEndDocument();
-                }
-            }
-            catch (Exception e)
-            {
-                throw new SpreadsheetReadWriteException(e.Message);
-            }
-            Changed = false;
         }
 
         /// If content is null, throws an ArgumentNullException.
@@ -464,7 +242,6 @@ namespace SS
             /// For now, cell is set regardless of contents
             /// TODO: relay to server the cell that is being changed
             cells[normalizedName] =  new Cell(normalizedName, formula, LookupCellValue);
-            Changed = true;
             
             /// TODO: get and return all cells that need to be changed (from Server)
             return new HashSet<string>();
@@ -504,7 +281,6 @@ namespace SS
             /// For now, cell is set regardless of contents
             /// TODO: relay to server the cell that is being changed
             cells[name] = new Cell(name, contents, LookupCellValue);
-            Changed = true;
 
             /// TODO: get and return all cells that need to be changed (from Server)
             return new HashSet<string>();

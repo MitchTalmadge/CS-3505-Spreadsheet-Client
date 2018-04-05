@@ -117,8 +117,6 @@ namespace SS
         /// <summary>
         /// True if this spreadsheet has been modified since it was created or saved                  
         /// (whichever happened most recently); false otherwise.
-        /// </summary>
-        public abstract bool Changed { get; protected set; }
 
         // ADDED FOR PS5
         /// <summary>
@@ -133,12 +131,7 @@ namespace SS
         /// Normalize might convert names to upper case.
         /// </summary>
         public Func<string, string> Normalize { get; protected set; }
-
-        // ADDED FOR PS5
-        /// <summary>
-        /// Version information
-        /// </summary>
-        public string Version { get; protected set; }
+        
 
         // ADDED FOR PS5
         /// <summary>
@@ -149,48 +142,12 @@ namespace SS
         /// equality test should be used thoughout to determine whether two variables are
         /// equal.
         /// </summary>
-        public AbstractSpreadsheet(Func<string, bool> isValid, Func<string, string> normalize, string version)
+        public AbstractSpreadsheet(Func<string, bool> isValid, Func<string, string> normalize)
         {
             this.IsValid = isValid;
             this.Normalize = normalize;
-            this.Version = version;
         }
 
-        // ADDED FOR PS5
-        /// <summary>
-        /// Returns the version information of the spreadsheet saved in the named file.
-        /// If there are any problems opening, reading, or closing the file, the method
-        /// should throw a SpreadsheetReadWriteException with an explanatory message.
-        /// </summary>
-        public abstract string GetSavedVersion(String filename);
-
-        // ADDED FOR PS5
-        /// <summary>
-        /// Writes the contents of this spreadsheet to the named file using an XML format.
-        /// The XML elements should be structured as follows:
-        /// 
-        /// <spreadsheet version="version information goes here">
-        /// 
-        /// <cell>
-        /// <name>
-        /// cell name goes here
-        /// </name>
-        /// <contents>
-        /// cell contents goes here
-        /// </contents>    
-        /// </cell>
-        /// 
-        /// </spreadsheet>
-        /// 
-        /// There should be one cell element for each non-empty cell in the spreadsheet.  
-        /// If the cell contains a string, it should be written as the contents.  
-        /// If the cell contains a double d, d.ToString() should be written as the contents.  
-        /// If the cell contains a Formula f, f.ToString() with "=" prepended should be written as the contents.
-        /// 
-        /// If there are any problems opening, writing, or closing the file, the method should throw a
-        /// SpreadsheetReadWriteException with an explanatory message.
-        /// </summary>
-        public abstract void Save(String filename);
 
         // ADDED FOR PS5
         /// <summary>
