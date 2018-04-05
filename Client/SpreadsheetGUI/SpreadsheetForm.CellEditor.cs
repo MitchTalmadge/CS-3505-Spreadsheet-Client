@@ -48,7 +48,7 @@ namespace SpreadsheetGUI
             try
             {
                 // Set the contents of the cell, and update the values of any dependents.
-                RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), editorContentTextBox.Text));
+                RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), spreadsheetPanel.cellInputTextBox.Text));
                 return true;
             }
             catch (CircularException)
@@ -86,11 +86,11 @@ namespace SpreadsheetGUI
                 contents = "=" + contents;
             }
 
-            editorContentTextBox.Text = contents.ToString();
+            spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
 
             // Move the text cursor to the content edit text box.
-            editorContentTextBox.Focus();
-            editorContentTextBox.SelectAll();
+            spreadsheetPanel.cellInputTextBox.Focus();
+            spreadsheetPanel.cellInputTextBox.SelectAll();
 
             // Display the cell value in the editor.
             var value = _spreadsheet.GetCellValue(cellName);
@@ -107,7 +107,7 @@ namespace SpreadsheetGUI
         private void ClearCellEditor()
         {
             editorNameTextBox.Clear();
-            editorContentTextBox.Clear();
+            spreadsheetPanel.cellInputTextBox.Clear();
             editorValueTextBox.Clear();
         }
     }
