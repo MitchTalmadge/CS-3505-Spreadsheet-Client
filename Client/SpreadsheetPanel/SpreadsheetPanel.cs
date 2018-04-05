@@ -19,8 +19,7 @@ namespace SS
     /// </summary>
     /// <param name="sender"></param>
     
-    public delegate void SelectionChangedHandler(SpreadsheetPanel sender);
-
+    public delegate void SelectionChangedHandler(SpreadsheetPanel sender);    
 
     /// <summary>
     /// A panel that displays a spreadsheet with 26 columns (labeled A-Z) and 99 rows
@@ -29,9 +28,9 @@ namespace SS
     /// SelectionChanged event is fired.  Clients can register to be notified of
     /// such events.
     /// 
-    /// None of the cells are editable.  They are for display purposes only.
+    /// Cells are editable (for 3505 final project). 
     /// </summary>
-    
+
     public partial class SpreadsheetPanel : UserControl
     {
 
@@ -54,9 +53,14 @@ namespace SS
 
 
         /// <summary>
+        /// Flag indicating if the spreadsheet is editable
+        /// </summary>
+        private bool editable;
+
+        /// <summary>
         /// Creates an empty SpreadsheetPanel
         /// </summary>
-        
+
         public SpreadsheetPanel()
         {
 
@@ -88,6 +92,8 @@ namespace SS
             hScroll.Scroll += drawingPanel.HandleHScroll;
             vScroll.Scroll += drawingPanel.HandleVScroll;
 
+            // By default the spreadsheet is editable
+            editable = true;
         }
 
 
@@ -157,8 +163,7 @@ namespace SS
         {
             drawingPanel.GetSelection(out col, out row);
         }
-
-
+        
         /// <summary>
         /// When the SpreadsheetPanel is resized, we set the size and locations of the three
         /// components that make it up.
@@ -187,11 +192,20 @@ namespace SS
 
         public event SelectionChangedHandler SelectionChanged;
 
+        /// <summary>
+        /// Makes the spreadsheet read-only or edtiable based on parameter.
+        /// </summary>
+        /// <param name="eventargs"></param>
+        protected void ReadOnly(bool flag)
+        {
+            editable = flag;
+        }
+
 
         /// <summary>
         /// Used internally to keep track of cell addresses
         /// </summary>
-        
+
         private class Address
         {
 
