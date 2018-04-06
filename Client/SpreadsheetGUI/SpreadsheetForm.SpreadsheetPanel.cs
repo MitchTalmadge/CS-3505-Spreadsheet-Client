@@ -19,14 +19,6 @@ namespace SpreadsheetGUI
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
-            DisplayCurrentCellInEditor();
-        }
-
-        /// <summary>
-        /// Using the currently selected cell in the spreadsheet panel, displays the name, content, and value in the cell editor.
-        /// </summary>
-        private void DisplayCurrentCellInEditor()
-        {
             // Display the cell name in the editor.
             var cellName = GetSelectedCellName();
             editorNameTextBox.Text = cellName;
@@ -76,9 +68,19 @@ namespace SpreadsheetGUI
             // so displaying the value of the input directly 
             spreadsheetPanel.SetValue(col, row, spreadsheetPanel.cellInputTextBox.Text);
 
-            // Moving selection down
+            // Moving cell selection down
             spreadsheetPanel.MoveSelectionDown();
+            // Moving cell editor down
+            //MoveCellEditorDown();
         }
+
+        /// <summary>
+        /// Moves cell editor text box down one cell. 
+        ///// </summary>
+        //private void MoveCellEditorDown()
+        //{
+
+        //}
 
         /// <summary>
         /// From a cell name, determines the column and row of the cell in the spreadsheet panel.

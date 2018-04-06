@@ -212,6 +212,9 @@ namespace SS
 
         public event SelectionChangedHandler SelectionChanged;
 
+        /// <summary>
+        /// The event used when the Enter button is pressed while the cell editor is in use
+        /// </summary>
         public event CellInputHandler CellEditEnter;
 
         /// <summary>
@@ -226,14 +229,6 @@ namespace SS
             {
                 // Invokes event handler for when the a value should be input into spreadsheet
                 CellEditEnter(this);
-                //// Displaying the contents that were entered in selected cell
-                //drawingPanel.GetSelection(out var row, out var col);
-                //SetValue(row, col, cellInputTextBox.Text);
-                
-
-                //// Moving cell selection down after value is entered
-                //if (row < 98)
-                //   SetSelection(col, ++row);
             }
         }
 
@@ -356,7 +351,13 @@ namespace SS
                 return true;
             }
 
-
+            /// <summary>
+            /// Sets selected cell to row and col location in parameters.
+            /// Also sets the location of the cell editor text box to the selected cell. 
+            /// </summary>
+            /// <param name="col"></param>
+            /// <param name="row"></param>
+            /// <returns></returns>
             public bool SetSelection(int col, int row)
             {
                 if (InvalidAddress(col, row))
@@ -365,6 +366,14 @@ namespace SS
                 }
                 _selectedCol = col;
                 _selectedRow = row;
+
+
+                // Moving cell cellInputTextBox to selected cell's location
+                // computing location the cell text input box should be placed at (top left corner point)
+                int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
+                int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
+                _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
+
                 Invalidate();
                 return true;
             }
