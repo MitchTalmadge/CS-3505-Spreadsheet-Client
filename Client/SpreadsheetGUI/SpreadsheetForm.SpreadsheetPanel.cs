@@ -70,17 +70,7 @@ namespace SpreadsheetGUI
 
             // Moving cell selection down
             spreadsheetPanel.MoveSelectionDown();
-            // Moving cell editor down
-            //MoveCellEditorDown();
         }
-
-        /// <summary>
-        /// Moves cell editor text box down one cell. 
-        ///// </summary>
-        //private void MoveCellEditorDown()
-        //{
-
-        //}
 
         /// <summary>
         /// From a cell name, determines the column and row of the cell in the spreadsheet panel.
