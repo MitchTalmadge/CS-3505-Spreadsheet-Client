@@ -19,7 +19,15 @@ namespace SS
     /// </summary>
     /// <param name="sender"></param>
     
-    public delegate void SelectionChangedHandler(SpreadsheetPanel sender);    
+    public delegate void SelectionChangedHandler(SpreadsheetPanel sender);
+
+    /// <summary>
+    /// The type of delegate used to register for CellEditEnter events
+    /// Triggered when the enter button is pressed while cell editor text box is selected. 
+    /// </summary>
+    /// <param name="sender"></param>
+
+    public delegate void CellInputHandler(SpreadsheetPanel sender);
 
     /// <summary>
     /// A panel that displays a spreadsheet with 26 columns (labeled A-Z) and 99 rows
@@ -40,7 +48,7 @@ namespace SS
         private HScrollBar hScroll;
         private VScrollBar vScroll;
 
-        // Text box within a cell being edited
+        /// Text box within a cell being edited
         public TextBox cellInputTextBox;
 
         // These constants control the layout of the spreadsheet grid.  The height and
@@ -204,6 +212,8 @@ namespace SS
 
         public event SelectionChangedHandler SelectionChanged;
 
+        public event CellInputHandler CellEditEnter;
+
         /// <summary>
         /// Called when a key is released while the cell content text box is focused.
         /// Saves/displays the contents when the enter key is pressed.
@@ -214,14 +224,16 @@ namespace SS
         {
             if (e.KeyCode == Keys.Enter)
             {
-                // Displaying the contents that were entered in selected cell
-                drawingPanel.GetSelection(out var row, out var col);
-                SetValue(row, col, cellInputTextBox.Text);
+                // Invokes event handler for when the a value should be input into spreadsheet
+                CellEditEnter(this);
+                //// Displaying the contents that were entered in selected cell
+                //drawingPanel.GetSelection(out var row, out var col);
+                //SetValue(row, col, cellInputTextBox.Text);
                 
 
-                // Moving cell selection down after value is entered
-                if (row < 98)
-                   SetSelection(col, ++row);
+                //// Moving cell selection down after value is entered
+                //if (row < 98)
+                //   SetSelection(col, ++row);
             }
         }
 

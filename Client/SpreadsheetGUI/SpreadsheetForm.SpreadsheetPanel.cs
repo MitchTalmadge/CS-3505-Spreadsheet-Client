@@ -60,6 +60,27 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
+        /// Called when enter is pressed while cell editor text box is selected. 
+        /// </summary>
+        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
+        private void SpreadsheetPanel_CellEditEnter(SpreadsheetPanel sender)
+        {
+            // Display the selected cell value in the editor.
+            var cellName = GetSelectedCellName();
+            GetColumnAndRowFromCellName(cellName, out var col, out var row);
+            // val in the spreadsheetPanel is not being set (as of now)
+            //spreadsheetPanel.GetValue(col, row, out string val);
+
+            // Setting and displaying input value in spreadsheet
+            //spreadsheetPanel.SetValue(col, row, val);
+            // so displaying the value of the input directly 
+            spreadsheetPanel.SetValue(col, row, spreadsheetPanel.cellInputTextBox.Text);
+
+            // Moving selection down
+            spreadsheetPanel.MoveSelectionDown();
+        }
+
+        /// <summary>
         /// From a cell name, determines the column and row of the cell in the spreadsheet panel.
         /// </summary>
         /// <param name="cellName">The name of the cell.</param>

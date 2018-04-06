@@ -263,6 +263,7 @@
             this.spreadsheetPanel.Size = new System.Drawing.Size(1618, 798);
             this.spreadsheetPanel.TabIndex = 0;
             this.spreadsheetPanel.SelectionChanged += new SS.SelectionChangedHandler(this.SpreadsheetPanel_SelectionChanged);
+            this.spreadsheetPanel.CellEditEnter += new SS.CellInputHandler(this.SpreadsheetPanel_CellEditEnter);
             // 
             // SpreadsheetForm
             // 
