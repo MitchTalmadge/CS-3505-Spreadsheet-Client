@@ -129,5 +129,13 @@ namespace SpreadsheetGUI
             spreadsheetPanel.SetSelection(0, 0);
             spreadsheetPanel.Clear();
         }
+
+        /// <summary>
+        /// Clears the cell editor text box.
+        /// </summary>
+        private void ClearCellEditor()
+        {
+            spreadsheetPanel.cellInputTextBox.Clear();
+        }
     }
 }

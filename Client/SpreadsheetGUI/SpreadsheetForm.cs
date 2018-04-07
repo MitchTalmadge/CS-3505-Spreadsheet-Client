@@ -107,7 +107,7 @@ namespace SpreadsheetGUI
         private void ClearSpreadsheet()
         {
             ClearSpreadsheetPanel();
-            //ClearCellEditor();
+            ClearCellEditor();
 
             this.documentNameTextBox.Text = "";
             this.documentNameTextBox.ReadOnly = false;
