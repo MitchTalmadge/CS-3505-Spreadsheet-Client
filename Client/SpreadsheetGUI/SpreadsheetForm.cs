@@ -32,12 +32,12 @@ namespace SpreadsheetGUI
         public SpreadsheetForm()
         {
             InitializeComponent();
-
+            this.spreadsheetPanel.ReadOnly(true);
+            this.documentNameTextBox.ReadOnly = true;
             // Create a new, empty spreadsheet.
             _spreadsheet = new Spreadsheet(IsValid, Normalize);
 
-            // Select the first cell.
-            spreadsheetPanel.SetSelection(0, 0);
+            this.connectedServerTextBox.Focus();
         }
 
         /// <inheritdoc />
@@ -73,15 +73,6 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Opens a new instance of the client.
-        /// </summary>
-        private void NewSpreadsheet()
-        {
-            // TODO: Add open another instance of the spreadsheet
-
-        }
-
-        /// <summary>
         /// Disconnects the current client instance from the server it is connected to. This essentially resets this instance of the client to 
         /// its startup state
         /// </summary>
@@ -89,6 +80,7 @@ namespace SpreadsheetGUI
         {
             ClearSpreadsheet();
             //TODO. Disconnect logic.
+
         }
 
         /// <summary>
@@ -97,8 +89,16 @@ namespace SpreadsheetGUI
         /// <param name="serverAddress">The address of the server we need to connect to.</param>
         private void OpenSpreadsheet(string serverAddress)
         {
+            if (!this.connectedServerTextBox.ReadOnly)
+            {
+                ClearSpreadsheet();
+                return;
+            }
             ClearSpreadsheet();
-            //TODO Open a new instance of the spreadsheet.
+            //TODO Open a new instance of the spreadsheet. Connect to the Server
+            this.connectedServerTextBox.Text = serverAddress;
+            this.connectedServerTextBox.ReadOnly = true;
+            this.spreadsheetPanel.ReadOnly(true);
         }
 
         /// <summary>
@@ -108,7 +108,35 @@ namespace SpreadsheetGUI
         {
             ClearSpreadsheetPanel();
             ClearCellEditor();
+
+            this.documentNameTextBox.Text = "";
+            this.documentNameTextBox.ReadOnly = false;
+            this.connectedServerTextBox.Text = "";
+            this.connectedServerTextBox.ReadOnly = false;
+
             _spreadsheet = new Spreadsheet(IsValid, Normalize);
+        }
+
+        private void connectedServerTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ( !((TextBox)sender).ReadOnly &&  e.KeyCode == Keys.Enter)
+            {
+                //ESTABLISH SERVER CONNECTION
+                this.documentNameTextBox.ReadOnly = false;
+                this.connectedServerTextBox.ReadOnly = true;
+                this.documentNameTextBox.Focus();
+            }
+        }
+
+        private void documentNameTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!((TextBox)sender).ReadOnly && e.KeyCode == Keys.Enter)
+            {
+                //RETRIEVE DOCUMENT
+                this.documentNameTextBox.ReadOnly = true;
+                this.spreadsheetPanel.cellInputTextBox.Focus();
+
+            }
         }
     }
 }
