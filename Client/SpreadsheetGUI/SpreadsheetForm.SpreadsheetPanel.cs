@@ -24,14 +24,18 @@ namespace SpreadsheetGUI
             editorNameTextBox.Text = cellName;
             GetColumnAndRowFromCellName(cellName, out var col, out var row);
 
+            // Cell's contents aren't being set (yet) 
             // Display the cell contents in the editor (and add an equals sign to formulas).
-            var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
-            if (contents is Formula)
-            {
-                contents = "=" + contents;
-            }
-
-            spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
+            //var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
+            //if (contents is Formula)
+            //{
+            //    contents = "=" + contents;
+            //}
+            //spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
+            
+            // For now, just display string contents in cell, kept track of within SpreadsheetPanel
+            spreadsheetPanel.GetValue(col, row, out string val);
+            spreadsheetPanel.cellInputTextBox.Text = val;
 
             // Move the text cursor to the content edit text box.
             spreadsheetPanel.cellInputTextBox.Focus();
@@ -47,8 +51,8 @@ namespace SpreadsheetGUI
             //editorValueTextBox.Text = value.ToString();
 
             // SpreadsheetPanel has Dictionary of cell values (only as strings/display form)
-            spreadsheetPanel.GetValue(col, row, out string val);
-            editorValueTextBox.Text = val;
+            spreadsheetPanel.GetValue(col, row, out string value);
+            editorValueTextBox.Text = value;
         }
 
         /// <summary>
@@ -60,11 +64,7 @@ namespace SpreadsheetGUI
             // Display the selected cell value in the editor.
             var cellName = GetSelectedCellName();
             GetColumnAndRowFromCellName(cellName, out var col, out var row);
-            // val in the spreadsheetPanel is not being set (as of now)
-            //spreadsheetPanel.GetValue(col, row, out string val);
-
-            // Setting and displaying input value in spreadsheet
-            //spreadsheetPanel.SetValue(col, row, val);
+            // val in the spreadsheetPanel is not being set (as of now)            
             // so displaying the value of the input directly 
             spreadsheetPanel.SetValue(col, row, spreadsheetPanel.cellInputTextBox.Text);
 
