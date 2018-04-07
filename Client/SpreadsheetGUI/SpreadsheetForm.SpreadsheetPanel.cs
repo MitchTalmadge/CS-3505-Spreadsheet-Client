@@ -75,6 +75,54 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
+        /// Called when down arrow key is pressed while cell editor text box is selected. 
+        /// </summary>
+        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
+        private void SpreadsheetPanel_CellEditDown(SpreadsheetPanel sender)
+        {
+            // Moving cell selection down
+            spreadsheetPanel.MoveSelectionDown();
+            // Changing selection display 
+            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
+        }
+
+        /// <summary>
+        /// Called when up arrow key is pressed while cell editor text box is selected. 
+        /// </summary>
+        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
+        private void SpreadsheetPanel_CellEditUp(SpreadsheetPanel sender)
+        {
+            // Moving cell selection down
+            spreadsheetPanel.MoveSelectionUp();
+            // Changing selection display 
+            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
+        }
+
+        /// <summary>
+        /// Called when up arrow key is pressed while cell editor text box is selected. 
+        /// </summary>
+        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
+        private void SpreadsheetPanel_CellEditRight(SpreadsheetPanel sender)
+        {
+            // Moving cell selection down
+            spreadsheetPanel.MoveSelectionRight();
+            // Changing selection display 
+            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
+        }
+
+        /// <summary>
+        /// Called when left arrow key is pressed while cell editor text box is selected. 
+        /// </summary>
+        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
+        private void SpreadsheetPanel_CellEditLeft(SpreadsheetPanel sender)
+        {
+            // Moving cell selection down
+            spreadsheetPanel.MoveSelectionLeft();
+            // Changing selection display 
+            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
+        }
+
+        /// <summary>
         /// From a cell name, determines the column and row of the cell in the spreadsheet panel.
         /// </summary>
         /// <param name="cellName">The name of the cell.</param>

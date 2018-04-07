@@ -108,7 +108,7 @@ namespace SS
                 Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT)
             };
             // Event handler for when enter is pressed while cell is being edited
-            cellInputTextBox.KeyUp += new KeyEventHandler(cellInputTextBox_KeyUp);
+            cellInputTextBox.KeyUp += new KeyEventHandler(cellInputTextBox_KeyDown);
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
 
@@ -218,17 +218,56 @@ namespace SS
         public event CellInputHandler CellEditEnter;
 
         /// <summary>
+        /// The event used when the down arrow key is pressed while the cell editor is in use
+        /// </summary>
+        public event CellInputHandler CellEditDown;
+
+        /// <summary>
+        /// The event used when the up arrow key is pressed while the cell editor is in use
+        /// </summary>
+        public event CellInputHandler CellEditUp;
+
+        /// <summary>
+        /// The event used when the right arrow key is pressed while the cell editor is in use
+        /// </summary>
+        public event CellInputHandler CellEditRight;
+
+        /// <summary>
+        /// The event used when the left arrow key is pressed while the cell editor is in use
+        /// </summary>
+        public event CellInputHandler CellEditLeft;
+
+        /// <summary>
         /// Called when a key is released while the cell content text box is focused.
         /// Saves/displays the contents when the enter key is pressed.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cellInputTextBox_KeyUp(object sender, KeyEventArgs e)
+        private void cellInputTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 // Invokes event handler for when the a value should be input into spreadsheet
                 CellEditEnter(this);
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                CellEditDown(this);
+            }
+            if (e.KeyCode == Keys.Up)
+            {
+                CellEditUp(this);
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+                CellEditRight(this);
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                CellEditLeft(this);
             }
         }
 
