@@ -70,6 +70,8 @@ namespace SpreadsheetGUI
 
             // Moving cell selection down
             spreadsheetPanel.MoveSelectionDown();
+            // Changing selection display 
+            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
         }
 
         /// <summary>
