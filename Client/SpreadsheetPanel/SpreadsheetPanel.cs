@@ -235,8 +235,8 @@ namespace SS
         /// <summary>
         /// Makes the spreadsheet read-only or edtiable based on parameter.
         /// </summary>
-        /// <param name="eventargs"></param>
-        protected void ReadOnly(bool flag)
+        /// <param name="flag"></param>
+        public void ReadOnly(bool flag)
         {
             editable = flag;
         }
