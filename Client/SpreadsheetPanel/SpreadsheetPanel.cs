@@ -57,7 +57,7 @@ namespace SS
         /// <summary>
         /// Flag indicating if the spreadsheet is editable
         /// </summary>
-        private bool editable;
+        //private bool editable;
 
         /// <summary>
         /// Creates an empty SpreadsheetPanel
@@ -105,7 +105,7 @@ namespace SS
             cellInputTextBox.BringToFront();
 
             // By default the spreadsheet is editable
-            editable = true;
+            ReadOnly(false);
         }
 
 
@@ -230,7 +230,14 @@ namespace SS
         /// <param name="flag"></param>
         public void ReadOnly(bool flag)
         {
-            editable = flag;
+            if (flag)
+            {
+                cellInputTextBox.ReadOnly = true;
+            }
+            else
+            {
+                cellInputTextBox.ReadOnly = false;
+            }
         }
 
         /// <summary>
@@ -300,13 +307,11 @@ namespace SS
                 return col < 0 || row < 0 || col >= COL_COUNT || row >= ROW_COUNT;
             }
 
-
             public void Clear()
             {
                 _values.Clear();
                 Invalidate();
             }
-
 
             public bool SetValue(int col, int row, string c)
             {
