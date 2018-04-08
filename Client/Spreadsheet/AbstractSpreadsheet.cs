@@ -1,9 +1,9 @@
 ﻿// Written by Joe Zachary for CS 3500, September 2012
 // Version 1.7
-// Revision history:  
+// Revision history:
 //   Version 1.1 9/20/12 12:59 p.m.  Fixed comment that describes circular dependencies
 //   Version 1.2 9/20/12 1:38 p.m.   Changed return type of GetCellContents to object
-//   Version 1.3 9/24/12 8:41 a.m.   Modified the specification of GetCellsToRecalculate by 
+//   Version 1.3 9/24/12 8:41 a.m.   Modified the specification of GetCellsToRecalculate by
 //                                   adding a requirement for the names parameter
 // Branched from PS4Skeleton
 //   Version 1.4                     Branched from PS4Skeleton
@@ -26,10 +26,9 @@
 ///// Jiahui Chen
 ///// u0980890
 ///// CS 3500 PS5
-using System;
-using System.IO;
-using System.Collections.Generic;
 using SpreadsheetUtilities;
+using System;
+using System.Collections.Generic;
 
 namespace SS
 {
@@ -40,14 +39,12 @@ namespace SS
     {
     }
 
-
     /// <summary>
     /// Thrown to indicate that a name parameter was either null or invalid.
     /// </summary>
     public class InvalidNameException : Exception
     {
     }
-
 
     // ADDED FOR PS5
     /// <summary>
@@ -64,47 +61,46 @@ namespace SS
         }
     }
 
-
     // PARAGRAPHS 2 and 3 modified for PS5.
     /// <summary>
-    /// An AbstractSpreadsheet object represents the state of a simple spreadsheet.  A 
+    /// An AbstractSpreadsheet object represents the state of a simple spreadsheet.  A
     /// spreadsheet consists of an infinite number of named cells.
-    /// 
+    ///
     /// A string is a cell name if and only if it consists of one or more letters,
     /// followed by one or more digits AND it satisfies the predicate IsValid.
     /// For example, "A15", "a15", "XY032", and "BC7" are cell names so long as they
     /// satisfy IsValid.  On the other hand, "Z", "X_", and "hello" are not cell names,
     /// regardless of IsValid.
-    /// 
+    ///
     /// Any valid incoming cell name, whether passed as a parameter or embedded in a formula,
-    /// must be normalized with the Normalize method before it is used by or saved in 
+    /// must be normalized with the Normalize method before it is used by or saved in
     /// this spreadsheet.  For example, if Normalize is s => s.ToUpper(), then
     /// the Formula "x3+a5" should be converted to "X3+A5" before use.
-    /// 
-    /// A spreadsheet contains a cell corresponding to every possible cell name.  
+    ///
+    /// A spreadsheet contains a cell corresponding to every possible cell name.
     /// In addition to a name, each cell has a contents and a value.  The distinction is
     /// important.
-    /// 
+    ///
     /// The contents of a cell can be (1) a string, (2) a double, or (3) a Formula.  If the
     /// contents is an empty string, we say that the cell is empty.  (By analogy, the contents
     /// of a cell in Excel is what is displayed on the editing line when the cell is selected.)
-    /// 
+    ///
     /// In a new spreadsheet, the contents of every cell is the empty string.
-    ///  
-    /// The value of a cell can be (1) a string, (2) a double, or (3) a FormulaError.  
+    ///
+    /// The value of a cell can be (1) a string, (2) a double, or (3) a FormulaError.
     /// (By analogy, the value of an Excel cell is what is displayed in that cell's position
     /// in the grid.)
-    /// 
+    ///
     /// If a cell's contents is a string, its value is that string.
-    /// 
+    ///
     /// If a cell's contents is a double, its value is that double.
-    /// 
+    ///
     /// If a cell's contents is a Formula, its value is either a double or a FormulaError,
     /// as reported by the Evaluate method of the Formula class.  The value of a Formula,
-    /// of course, can depend on the values of variables.  The value of a variable is the 
-    /// value of the spreadsheet cell it names (if that cell's value is a double) or 
+    /// of course, can depend on the values of variables.  The value of a variable is the
+    /// value of the spreadsheet cell it names (if that cell's value is a double) or
     /// is undefined (otherwise).
-    /// 
+    ///
     /// Spreadsheets are never allowed to contain a combination of Formulas that establish
     /// a circular dependency.  A circular dependency exists when a cell depends on itself.
     /// For example, suppose that A1 contains B1*2, B1 contains C1*2, and C1 contains A1*2.
@@ -115,7 +111,7 @@ namespace SS
     {
         // ADDED FOR PS5
         /// <summary>
-        /// True if this spreadsheet has been modified since it was created or saved                  
+        /// True if this spreadsheet has been modified since it was created or saved
         /// (whichever happened most recently); false otherwise.
 
         // ADDED FOR PS5
@@ -131,7 +127,6 @@ namespace SS
         /// Normalize might convert names to upper case.
         /// </summary>
         public Func<string, string> Normalize { get; protected set; }
-        
 
         // ADDED FOR PS5
         /// <summary>
@@ -148,11 +143,10 @@ namespace SS
             this.Normalize = normalize;
         }
 
-
         // ADDED FOR PS5
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, returns the value (as opposed to the contents) of the named cell.  The return
         /// value should be either a string, a double, or a SpreadsheetUtilities.FormulaError.
         /// </summary>
@@ -165,7 +159,7 @@ namespace SS
 
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, returns the contents (as opposed to the value) of the named cell.  The return
         /// value should be either a string, a double, or a Formula.
         /// </summary>
@@ -174,30 +168,30 @@ namespace SS
         // ADDED FOR PS5
         /// <summary>
         /// If content is null, throws an ArgumentNullException.
-        /// 
+        ///
         /// Otherwise, if name is null or invalid, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, if content parses as a double, the contents of the named
         /// cell becomes that double.
-        /// 
+        ///
         /// Otherwise, if content begins with the character '=', an attempt is made
         /// to parse the remainder of content into a Formula f using the Formula
         /// constructor.  There are then three possibilities:
-        /// 
-        ///   (1) If the remainder of content cannot be parsed into a Formula, a 
+        ///
+        ///   (1) If the remainder of content cannot be parsed into a Formula, a
         ///       SpreadsheetUtilities.FormulaFormatException is thrown.
-        ///       
+        ///
         ///   (2) Otherwise, if changing the contents of the named cell to be f
         ///       would cause a circular dependency, a CircularException is thrown.
-        ///       
+        ///
         ///   (3) Otherwise, the contents of the named cell becomes f.
-        /// 
+        ///
         /// Otherwise, the contents of the named cell becomes content.
-        /// 
+        ///
         /// If an exception is not thrown, the method returns a set consisting of
         /// name plus the names of all other cells whose value depends, directly
         /// or indirectly, on the named cell.
-        /// 
+        ///
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
@@ -206,11 +200,11 @@ namespace SS
         // MODIFIED PROTECTION FOR PS5
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, the contents of the named cell becomes number.  The method returns a
-        /// set consisting of name plus the names of all other cells whose value depends, 
+        /// set consisting of name plus the names of all other cells whose value depends,
         /// directly or indirectly, on the named cell.
-        /// 
+        ///
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
@@ -219,13 +213,13 @@ namespace SS
         // MODIFIED PROTECTION FOR PS5
         /// <summary>
         /// If text is null, throws an ArgumentNullException.
-        /// 
+        ///
         /// Otherwise, if name is null or invalid, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, the contents of the named cell becomes text.  The method returns a
-        /// set consisting of name plus the names of all other cells whose value depends, 
+        /// set consisting of name plus the names of all other cells whose value depends,
         /// directly or indirectly, on the named cell.
-        /// 
+        ///
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
@@ -234,16 +228,16 @@ namespace SS
         // MODIFIED PROTECTION FOR PS5
         /// <summary>
         /// If formula parameter is null, throws an ArgumentNullException.
-        /// 
+        ///
         /// Otherwise, if name is null or invalid, throws an InvalidNameException.
-        /// 
-        /// Otherwise, if changing the contents of the named cell to be the formula would cause a 
+        ///
+        /// Otherwise, if changing the contents of the named cell to be the formula would cause a
         /// circular dependency, throws a CircularException.
-        /// 
+        ///
         /// Otherwise, the contents of the named cell becomes formula.  The method returns a
         /// Set consisting of name plus the names of all other cells whose value depends,
         /// directly or indirectly, on the named cell.
-        /// 
+        ///
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
