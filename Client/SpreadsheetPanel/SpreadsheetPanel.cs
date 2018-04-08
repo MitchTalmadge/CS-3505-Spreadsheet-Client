@@ -108,7 +108,8 @@ namespace SS
                 Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT)
             };
             // Event handler for when enter is pressed while cell is being edited
-            cellInputTextBox.KeyUp += new KeyEventHandler(cellInputTextBox_KeyDown);
+            cellInputTextBox.KeyPress += new KeyPressEventHandler(cellInputTextBox_KeyPress);
+            cellInputTextBox.KeyDown += new KeyEventHandler(cellInputTextBox_KeyDown);
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
         }
@@ -235,21 +236,30 @@ namespace SS
         public event CellInputHandler CellEditLeft;
 
         /// <summary>
-        /// Called when a key is released while the cell content text box is focused.
+        /// Called when a key is pressed while the cell content text box is focused.
+        /// Saves/displays the contents when the enter key is pressed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cellInputTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                // Invokes event handler for when the a value should be input into spreadsheet
+                CellEditEnter(this);
+
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Called when a key is pressed while the cell content text box is focused.
         /// Saves/displays the contents when the enter key is pressed.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void cellInputTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                // Invokes event handler for when the a value should be input into spreadsheet
-                CellEditEnter(this);
-
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-            }
             if (e.KeyCode == Keys.Down)
             {
                 CellEditDown(this);
