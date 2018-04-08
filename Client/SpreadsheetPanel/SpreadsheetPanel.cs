@@ -19,7 +19,15 @@ namespace SS
     /// </summary>
     /// <param name="sender"></param>
     
-    public delegate void SelectionChangedHandler(SpreadsheetPanel sender);    
+    public delegate void SelectionChangedHandler(SpreadsheetPanel sender);
+
+    /// <summary>
+    /// The type of delegate used to register for CellEditEnter events
+    /// Triggered when the enter button is pressed while cell editor text box is selected. 
+    /// </summary>
+    /// <param name="sender"></param>
+
+    public delegate void CellInputHandler(SpreadsheetPanel sender);
 
     /// <summary>
     /// A panel that displays a spreadsheet with 26 columns (labeled A-Z) and 99 rows
@@ -40,7 +48,7 @@ namespace SS
         private HScrollBar hScroll;
         private VScrollBar vScroll;
 
-        // Text box within a cell being edited
+        /// Text box within a cell being edited
         public TextBox cellInputTextBox;
 
         // These constants control the layout of the spreadsheet grid.  The height and
@@ -100,7 +108,7 @@ namespace SS
                 Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT)
             };
             // Event handler for when enter is pressed while cell is being edited
-            cellInputTextBox.KeyUp += new KeyEventHandler(cellInputTextBox_KeyUp);
+            cellInputTextBox.KeyUp += new KeyEventHandler(cellInputTextBox_KeyDown);
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
 
@@ -205,22 +213,61 @@ namespace SS
         public event SelectionChangedHandler SelectionChanged;
 
         /// <summary>
+        /// The event used when the Enter button is pressed while the cell editor is in use
+        /// </summary>
+        public event CellInputHandler CellEditEnter;
+
+        /// <summary>
+        /// The event used when the down arrow key is pressed while the cell editor is in use
+        /// </summary>
+        public event CellInputHandler CellEditDown;
+
+        /// <summary>
+        /// The event used when the up arrow key is pressed while the cell editor is in use
+        /// </summary>
+        public event CellInputHandler CellEditUp;
+
+        /// <summary>
+        /// The event used when the right arrow key is pressed while the cell editor is in use
+        /// </summary>
+        public event CellInputHandler CellEditRight;
+
+        /// <summary>
+        /// The event used when the left arrow key is pressed while the cell editor is in use
+        /// </summary>
+        public event CellInputHandler CellEditLeft;
+
+        /// <summary>
         /// Called when a key is released while the cell content text box is focused.
         /// Saves/displays the contents when the enter key is pressed.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cellInputTextBox_KeyUp(object sender, KeyEventArgs e)
+        private void cellInputTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                // Displaying the contents that were entered in selected cell
-                drawingPanel.GetSelection(out var row, out var col);
-                SetValue(row, col, cellInputTextBox.Text);
+                // Invokes event handler for when the a value should be input into spreadsheet
+                CellEditEnter(this);
 
-                // Moving cell selection down after value is entered
-                if (row < 98)
-                   SetSelection(col, ++row);
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                CellEditDown(this);
+            }
+            if (e.KeyCode == Keys.Up)
+            {
+                CellEditUp(this);
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+                CellEditRight(this);
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                CellEditLeft(this);
             }
         }
 
@@ -348,7 +395,13 @@ namespace SS
                 return true;
             }
 
-
+            /// <summary>
+            /// Sets selected cell to row and col location in parameters.
+            /// Also sets the location of the cell editor text box to the selected cell. 
+            /// </summary>
+            /// <param name="col"></param>
+            /// <param name="row"></param>
+            /// <returns></returns>
             public bool SetSelection(int col, int row)
             {
                 if (InvalidAddress(col, row))
@@ -357,6 +410,14 @@ namespace SS
                 }
                 _selectedCol = col;
                 _selectedRow = row;
+
+
+                // Moving cell cellInputTextBox to selected cell's location
+                // computing location the cell text input box should be placed at (top left corner point)
+                int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
+                int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
+                _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
+
                 Invalidate();
                 return true;
             }
@@ -544,7 +605,6 @@ namespace SS
                     int cell_x = (x * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
                     int cell_y = (y * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
                     _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
-                    //_ssp.cellInputTextBox.Focus();
 
                     if (_ssp.SelectionChanged != null)
                     {

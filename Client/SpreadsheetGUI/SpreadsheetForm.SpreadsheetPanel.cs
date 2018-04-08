@@ -19,7 +19,107 @@ namespace SpreadsheetGUI
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
-            DisplayCurrentCellInEditor();
+            // Display the cell name in the editor.
+            var cellName = GetSelectedCellName();
+            editorNameTextBox.Text = cellName;
+            GetColumnAndRowFromCellName(cellName, out var col, out var row);
+
+            // Cell's contents aren't being set (yet) 
+            // Display the cell contents in the editor (and add an equals sign to formulas).
+            //var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
+            //if (contents is Formula)
+            //{
+            //    contents = "=" + contents;
+            //}
+            //spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
+            
+            // For now, just display string contents in cell, kept track of within SpreadsheetPanel
+            spreadsheetPanel.GetValue(col, row, out string val);
+            spreadsheetPanel.cellInputTextBox.Text = val;
+
+            // Move the text cursor to the content edit text box.
+            spreadsheetPanel.cellInputTextBox.Focus();
+            spreadsheetPanel.cellInputTextBox.SelectAll();
+
+            // Display the cell value in the editor.
+            // Currently, this doesn't return anything cause we aren't setting actual values in the spreadsheet
+            //value = _spreadsheet.GetCellValue(cellName); 
+            //if (value is FormulaError)
+            //{
+            //    value = Resources.SpreadsheetForm_Formula_Error_Value;
+            //}
+            //editorValueTextBox.Text = value.ToString();
+
+            // SpreadsheetPanel has Dictionary of cell values (only as strings/display form)
+            spreadsheetPanel.GetValue(col, row, out string value);
+            editorValueTextBox.Text = value;
+        }
+
+        /// <summary>
+        /// Called when enter is pressed while cell editor text box is selected. 
+        /// </summary>
+        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
+        private void SpreadsheetPanel_CellEditEnter(SpreadsheetPanel sender)
+        {
+            // Display the selected cell value in the editor.
+            var cellName = GetSelectedCellName();
+            GetColumnAndRowFromCellName(cellName, out var col, out var row);
+            // val in the spreadsheetPanel is not being set (as of now)            
+            // so displaying the value of the input directly 
+            spreadsheetPanel.SetValue(col, row, spreadsheetPanel.cellInputTextBox.Text);
+
+            // Moving cell selection down
+            spreadsheetPanel.MoveSelectionDown();
+            // Changing selection display 
+            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
+        }
+
+        /// <summary>
+        /// Called when down arrow key is pressed while cell editor text box is selected. 
+        /// </summary>
+        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
+        private void SpreadsheetPanel_CellEditDown(SpreadsheetPanel sender)
+        {
+            // Moving cell selection down
+            spreadsheetPanel.MoveSelectionDown();
+            // Changing selection display 
+            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
+        }
+
+        /// <summary>
+        /// Called when up arrow key is pressed while cell editor text box is selected. 
+        /// </summary>
+        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
+        private void SpreadsheetPanel_CellEditUp(SpreadsheetPanel sender)
+        {
+            // Moving cell selection down
+            spreadsheetPanel.MoveSelectionUp();
+            // Changing selection display 
+            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
+        }
+
+        /// <summary>
+        /// Called when up arrow key is pressed while cell editor text box is selected. 
+        /// </summary>
+        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
+        private void SpreadsheetPanel_CellEditRight(SpreadsheetPanel sender)
+        {
+            // Moving cell selection down
+            spreadsheetPanel.MoveSelectionRight();
+            // Changing selection display 
+            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
+        }
+
+        /// <summary>
+        /// Called when left arrow key is pressed while cell editor text box is selected. 
+        /// </summary>
+        /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
+        private void SpreadsheetPanel_CellEditLeft(SpreadsheetPanel sender)
+        {
+            // Moving cell selection down
+            spreadsheetPanel.MoveSelectionLeft();
+            // Changing selection display 
+            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
         }
 
         /// <summary>
@@ -78,6 +178,14 @@ namespace SpreadsheetGUI
         {
             spreadsheetPanel.SetSelection(0, 0);
             spreadsheetPanel.Clear();
+        }
+
+        /// <summary>
+        /// Clears the cell editor text box.
+        /// </summary>
+        private void ClearCellEditor()
+        {
+            spreadsheetPanel.cellInputTextBox.Clear();
         }
     }
 }

@@ -21,7 +21,9 @@ namespace SpreadsheetGUI
         {
             panel.GetSelection(out var col, out var row);
             if (row < 98)
+            {
                 panel.SetSelection(col, ++row);
+            }
         }
 
         /// <summary>
