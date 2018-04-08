@@ -61,11 +61,15 @@ namespace SS
         private const int SCROLLBAR_WIDTH = 20;
         private const int COL_COUNT = 26;
         private const int ROW_COUNT = 99;
-        
+
         /// <summary>
-        /// Flag indicating if the spreadsheet is editable
+        /// Determines if this spreadsheet can be edited or not.
         /// </summary>
-        //private bool editable;
+        public bool ReadOnly
+        {
+            get => cellInputTextBox.ReadOnly;
+            set => cellInputTextBox.ReadOnly = value;
+        }
 
         /// <summary>
         /// Creates an empty SpreadsheetPanel
@@ -102,13 +106,13 @@ namespace SS
             vScroll.Scroll += drawingPanel.HandleVScroll;
 
             // Cell input box is same size as a cell and starts out in the first cell
-            cellInputTextBox = new TextBox()
+            cellInputTextBox = new TextBox
             {
                 Location = new Point(LABEL_COL_WIDTH, LABEL_ROW_HEIGHT), 
                 Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT)
             };
             // Event handler for when enter is pressed while cell is being edited
-            cellInputTextBox.KeyUp += new KeyEventHandler(cellInputTextBox_KeyDown);
+            cellInputTextBox.KeyUp += cellInputTextBox_KeyDown;
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
         }
@@ -265,22 +269,6 @@ namespace SS
             if (e.KeyCode == Keys.Left)
             {
                 CellEditLeft(this);
-            }
-        }
-
-        /// <summary>
-        /// Makes the spreadsheet read-only or edtiable based on parameter.
-        /// </summary>
-        /// <param name="flag"></param>
-        public void ReadOnly(bool flag)
-        {
-            if (flag)
-            {
-                cellInputTextBox.ReadOnly = true;
-            }
-            else
-            {
-                cellInputTextBox.ReadOnly = false;
             }
         }
 
