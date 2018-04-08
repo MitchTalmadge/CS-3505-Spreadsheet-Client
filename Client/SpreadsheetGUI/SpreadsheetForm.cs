@@ -32,7 +32,9 @@ namespace SpreadsheetGUI
         public SpreadsheetForm()
         {
             InitializeComponent();
-            this.spreadsheetPanel.ReadOnly(true);
+
+            ///TODO: Change to read-only by default after we're done testing!!!
+            this.spreadsheetPanel.ReadOnly(false);
             this.documentNameTextBox.ReadOnly = true;
             // Create a new, empty spreadsheet.
             _spreadsheet = new Spreadsheet(IsValid, Normalize);
@@ -98,6 +100,7 @@ namespace SpreadsheetGUI
             //TODO Open a new instance of the spreadsheet. Connect to the Server
             this.connectedServerTextBox.Text = serverAddress;
             this.connectedServerTextBox.ReadOnly = true;
+            ///TODO: Change to read-only by default after we're done testing!!!
             this.spreadsheetPanel.ReadOnly(true);
         }
 

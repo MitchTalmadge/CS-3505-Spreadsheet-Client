@@ -111,9 +111,6 @@ namespace SS
             cellInputTextBox.KeyUp += new KeyEventHandler(cellInputTextBox_KeyDown);
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
-
-            // By default the spreadsheet is editable
-            ReadOnly(false);
         }
 
 
