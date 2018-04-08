@@ -265,6 +265,11 @@
             this.spreadsheetPanel.Size = new System.Drawing.Size(1618, 798);
             this.spreadsheetPanel.TabIndex = 0;
             this.spreadsheetPanel.SelectionChanged += new SS.SelectionChangedHandler(this.SpreadsheetPanel_SelectionChanged);
+            this.spreadsheetPanel.CellEditEnter += new SS.CellInputHandler(this.SpreadsheetPanel_CellEditEnter);
+            this.spreadsheetPanel.CellEditDown += new SS.CellInputHandler(this.SpreadsheetPanel_CellEditDown);
+            this.spreadsheetPanel.CellEditUp += new SS.CellInputHandler(this.SpreadsheetPanel_CellEditUp);
+            this.spreadsheetPanel.CellEditRight += new SS.CellInputHandler(this.SpreadsheetPanel_CellEditRight);
+            this.spreadsheetPanel.CellEditLeft += new SS.CellInputHandler(this.SpreadsheetPanel_CellEditLeft);
             // 
             // SpreadsheetForm
             // 
