@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SpreadsheetForm.Callbacks.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SpreadsheetForm.MenuStrip.cs">
       <SubType>Form</SubType>
     </Compile>
