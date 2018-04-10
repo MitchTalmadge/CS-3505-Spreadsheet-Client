@@ -34,7 +34,7 @@ namespace SpreadsheetGUI
             InitializeComponent();
 
             ///TODO: Change to read-only by default after we're done testing!!!
-            this.spreadsheetPanel.ReadOnly(false);
+            this.spreadsheetPanel.ReadOnly = false;
             this.documentNameTextBox.ReadOnly = true;
             // Create a new, empty spreadsheet.
             _spreadsheet = new Spreadsheet(IsValid, Normalize);
@@ -101,7 +101,7 @@ namespace SpreadsheetGUI
             this.connectedServerTextBox.Text = serverAddress;
             this.connectedServerTextBox.ReadOnly = true;
             ///TODO: Change to read-only by default after we're done testing!!!
-            this.spreadsheetPanel.ReadOnly(true);
+            this.spreadsheetPanel.ReadOnly = true;
         }
 
         /// <summary>
