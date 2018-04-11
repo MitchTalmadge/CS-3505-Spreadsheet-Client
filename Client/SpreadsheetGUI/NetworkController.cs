@@ -16,6 +16,17 @@ namespace SpreadsheetGUI
         private readonly Action<string> SuccessfulConnection;
 
         /// <summary>
+        /// This event is fired when the connection to the server has been lost,
+        /// whether unexpectedly or by calling the Disconnect method.
+        /// </summary>
+        public event Action Disconnected;
+
+        /// <summary>
+        /// Socket that the connection is made through.
+        /// </summary>
+        private SocketState _socketState;
+
+        /// <summary>
         /// Create a new Network Controller for the class. THIS IS USED BY THE CLIENT
         /// </summary>
         public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection)
@@ -33,30 +44,45 @@ namespace SpreadsheetGUI
         {
             // This is where we connect to the server for the first time. After the setup is done we
             // want our callback to be FirstContact.
-            ClientNetworking.ConnectToServer(server, FirstContact, ConnectFailed);
+            ClientNetworking.ConnectToServer(server,
+                state =>
+                {
+                    SuccessfulConnection("Connected to ");
 
-            // Set the username to be used later.
-            // this.name = name + "\n";
+                    _socketState = state;
+
+                    // Listen for when data is received on the socket.
+                    _socketState.DataReceived += DataReceived;
+
+                    // Listen for when the socket disconnects.
+                    _socketState.Disconnected += () => { Disconnected?.Invoke(); };
+
+                    // Send the register message with the server.
+                    AbstractNetworking.Send(state, "register" + (Char)3);
+
+                    // Wait for data.
+                    AbstractNetworking.GetData(state);
+                },
+                reason => ErrorCallback(reason));
         }
 
         /// <summary>
-        /// This is called whenever we are not able to connect properly to a client. Our background worker is
-        /// supposed to handle the exception we are going to throw.
+        /// Called when data is received on the socket.
         /// </summary>
-        /// <param name="reason"></param>
-        public void ConnectFailed(String reason)
+        /// <param name="data">The data that was received.</param>
+        public void DataReceived(string data)
         {
-            ErrorCallback(reason);
+            // Get new data.
+            AbstractNetworking.GetData(_socketState);
         }
 
         /// <summary>
-        /// This is part of the initial handshake. Once we hear it, we can start listening for more regular
-        /// world data to come in.
+        /// Disconnects from the server.
+        /// This client instance should no longer be used once this method is called.
         /// </summary>
-        private void FirstContact(SocketState state)
+        public void Disconnect()
         {
-            // the only reason we needed a socketState is because we are changing the callback
-            AbstractNetworking.GetData(state);
+            _socketState.Disconnect();
         }
     }
 }
