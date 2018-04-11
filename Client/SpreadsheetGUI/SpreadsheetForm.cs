@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using SpreadsheetGUI.Properties;
 using SS;
+using System;
 
 namespace SpreadsheetGUI
 {
@@ -13,7 +13,6 @@ namespace SpreadsheetGUI
     /// <authors>Jiahui Chen, Tarun Sunkaraneni, Mark Van der Merwe and Mitch Talmadge</authors>
     public partial class SpreadsheetForm : Form
     {
-
         /// <summary>
         /// The regex pattern used for validating cell names.
         /// This pattern only allows cells with columns from A to Z, and rows from 1 to 99.
@@ -25,6 +24,8 @@ namespace SpreadsheetGUI
         /// </summary>
         private Spreadsheet _spreadsheet;
 
+        private NetworkController networkController;
+
         /// <inheritdoc />
         /// <summary>
         /// Creates a SpreadsheetForm with a new, empty spreadsheet.
@@ -32,18 +33,20 @@ namespace SpreadsheetGUI
         public SpreadsheetForm()
         {
             InitializeComponent();
+
+            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded);
             this.spreadsheetPanel.ReadOnly(true);
             this.documentNameTextBox.ReadOnly = true;
             // Create a new, empty spreadsheet.
             _spreadsheet = new Spreadsheet(IsValid, Normalize);
-
             this.connectedServerTextBox.Focus();
+            this.registerServerConnect_backgroundworker();
         }
 
         /// <inheritdoc />
         /// <summary>
         /// Creates a SpreadsheetForm by loading the provided file. Since to "open" we need to have access to the server,
-        /// that is a required argument here. 
+        /// that is a required argument here.
         /// </summary>
         /// <param name="serverAddress">The address of the server we need to connect to.</param>
         public SpreadsheetForm(string serverAddress) : this()
@@ -73,14 +76,13 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Disconnects the current client instance from the server it is connected to. This essentially resets this instance of the client to 
+        /// Disconnects the current client instance from the server it is connected to. This essentially resets this instance of the client to
         /// its startup state
         /// </summary>
         private void DisconnectSpreadsheet()
         {
             ClearSpreadsheet();
             //TODO. Disconnect logic.
-
         }
 
         /// <summary>
@@ -119,12 +121,10 @@ namespace SpreadsheetGUI
 
         private void connectedServerTextBox_KeyUp(object sender, KeyEventArgs e)
         {
-            if ( !((TextBox)sender).ReadOnly &&  e.KeyCode == Keys.Enter)
+            if (!((TextBox)sender).ReadOnly && e.KeyCode == Keys.Enter)
             {
-                //ESTABLISH SERVER CONNECTION
-                this.documentNameTextBox.ReadOnly = false;
                 this.connectedServerTextBox.ReadOnly = true;
-                this.documentNameTextBox.Focus();
+                serverConnect_backgroundworker.RunWorkerAsync(connectedServerTextBox.Text);
             }
         }
 
@@ -135,8 +135,60 @@ namespace SpreadsheetGUI
                 //RETRIEVE DOCUMENT
                 this.documentNameTextBox.ReadOnly = true;
                 this.spreadsheetPanel.cellInputTextBox.Focus();
-
             }
+        }
+
+        private void registerServerConnect_backgroundworker()
+        {
+            // What our background worker for establishing a connection has to do
+            serverConnect_backgroundworker.DoWork += (backgrounWorker_Sender, backgroundWorker_e) =>
+            {
+                networkController.ConnectToServer((String)backgroundWorker_e.Argument);
+            };
+            // what happens when the background worker either successfully connects or fails connecting to the given name
+            serverConnect_backgroundworker.RunWorkerCompleted += (backgrounWorker_Sender, backgroundWorker_e) =>
+            {
+                if (backgroundWorker_e.Error is ArgumentException)
+                {
+                    MessageBox.Show(backgroundWorker_e.Error.Message + "\nTry again!", "Error!", MessageBoxButtons.OK,
+                        MessageBoxIcon.Stop);
+                    this.connectedServerTextBox.ReadOnly = false;
+                }
+            };
+        }
+
+        ////////////////////////// Network Controller Delegates /////////////////////////////////////////
+        /// <summary>
+        /// Called when a connection to the server has failed.
+        /// Displays a warning message dialog.
+        /// </summary>
+        /// <param name="reason">Why the connection failed.</param>
+        private void ConnectionFailed(string reason)
+        {
+            Invoke(new MethodInvoker(() =>
+            {
+                this.connectedServerTextBox.ReadOnly = false;
+                MessageBox.Show(reason,
+                    "Error!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }));
+        }
+
+        /// <summary>
+        /// Called when a connection to the SpaceWars server has failed.
+        /// Displays a warning message dialog.
+        /// </summary>
+        /// <param name="reason">Why the connection failed.</param>
+        private void ConnectionSucceded(string message)
+        {
+            this.documentNameTextBox.ReadOnly = false;
+            this.documentNameTextBox.Focus();
+            Invoke(new MethodInvoker(() =>
+            {
+                MessageBox.Show(message,
+                    "Error!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }));
         }
     }
 }

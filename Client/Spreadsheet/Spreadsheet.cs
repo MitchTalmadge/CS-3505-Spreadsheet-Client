@@ -1,15 +1,14 @@
-﻿using System;
+﻿using SpreadsheetUtilities;
+using System;
 using System.Collections.Generic;
-using SpreadsheetUtilities;
 using System.Text.RegularExpressions;
-using System.Xml;
 
 namespace SS
 {
     public class Spreadsheet : AbstractSpreadsheet
     {
         /// <summary>
-        /// Maps cell names to their Cell object. Only contains non-empty cells. 
+        /// Maps cell names to their Cell object. Only contains non-empty cells.
         /// </summary>
         private Dictionary<string, Cell> cells;
 
@@ -18,16 +17,16 @@ namespace SS
         /// (first parameter), a normalization delegate (second parameter),
         /// and a version (third parameter).
         /// </summary>
-        public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize): 
-            base (isValid, normalize)
+        public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize) :
+            base(isValid, normalize)
         {
-            cells =  new Dictionary<string, Cell>();
+            cells = new Dictionary<string, Cell>();
         }
 
         /// <summary>
-        /// Helper method that loads the Cell corresponding to the ame parameter. 
-        /// Tries to add the Cell to the spreadsheet and throws a SpreadsheetReadWrite 
-        /// Exception reporting the specific error if it fails to do so. 
+        /// Helper method that loads the Cell corresponding to the ame parameter.
+        /// Tries to add the Cell to the spreadsheet and throws a SpreadsheetReadWrite
+        /// Exception reporting the specific error if it fails to do so.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="contents"></param>
@@ -53,7 +52,7 @@ namespace SS
 
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, returns the contents (as opposed to the value) of the named cell.  The return
         /// value should be either a string, a double, or a Formula.
         /// </summary>
@@ -73,7 +72,7 @@ namespace SS
 
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, returns the value (as opposed to the contents) of the named cell.  The return
         /// value should be either a string, a double, or a SpreadsheetUtilities.FormulaError.
         /// </summary>
@@ -90,7 +89,7 @@ namespace SS
             {
                 return "";
             }
-            
+
             return cell.Value;
         }
 
@@ -103,37 +102,37 @@ namespace SS
         }
 
         /// If content is null, throws an ArgumentNullException.
-        /// 
+        ///
         /// Otherwise, if name is null or invalid, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, if content parses as a double, the contents of the named
         /// cell becomes that double.
-        /// 
+        ///
         /// Otherwise, if content begins with the character '=', an attempt is made
         /// to parse the remainder of content into a Formula f using the Formula
         /// constructor.  There are then three possibilities:
-        /// 
-        ///   (1) If the remainder of content cannot be parsed into a Formula, a 
+        ///
+        ///   (1) If the remainder of content cannot be parsed into a Formula, a
         ///       SpreadsheetUtilities.FormulaFormatException is thrown.
-        ///       
+        ///
         ///   (2) Otherwise, if changing the contents of the named cell to be f
         ///       would cause a circular dependency, a CircularException is thrown.
-        ///       
+        ///
         ///   (3) Otherwise, the contents of the named cell becomes f.
-        /// 
+        ///
         /// Otherwise, the contents of the named cell becomes content.
-        /// 
+        ///
         /// If an exception is not thrown, the method returns a set consisting of
         /// name plus the names of all other cells whose value depends, directly
         /// or indirectly, on the named cell.
-        /// 
+        ///
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
-        /// 
-        /// The returned cells that need to be recalculated are passed into the RecalculateCellValues 
+        ///
+        /// The returned cells that need to be recalculated are passed into the RecalculateCellValues
         /// helper method, where their values are updated, in the corresponding SetCellContents helper
-        /// method. 
-        /// 
+        /// method.
+        ///
         public override ISet<string> SetContentsOfCell(string name, string content)
         {
             if (content == null)
@@ -163,9 +162,9 @@ namespace SS
         /// <summary>
         /// Recalculates and stores cell values of all Cells corresponding
         /// to names in parameter string Set, in the order they occur in the parameter.
-        /// 
-        /// Will never find empty cell, since the passed in cells were found to 
-        /// be dependent on a changed cell. 
+        ///
+        /// Will never find empty cell, since the passed in cells were found to
+        /// be dependent on a changed cell.
         /// </summary>
         /// <param name="recalculatedCells"></param>
         private void RecalculateCellValues(IEnumerable<string> recalculatedCells)
@@ -179,11 +178,11 @@ namespace SS
 
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, the contents of the named cell becomes number.  The method returns a
-        /// set consisting of name plus the names of all other cells whose value depends, 
+        /// set consisting of name plus the names of all other cells whose value depends,
         /// directly or indirectly, on the named cell.
-        /// 
+        ///
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
@@ -194,13 +193,13 @@ namespace SS
 
         /// <summary>
         /// If text is null, throws an ArgumentNullException.
-        /// 
+        ///
         /// Otherwise, if name is null or invalid, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, the contents of the named cell becomes text.  The method returns a
-        /// set consisting of name plus the names of all other cells whose value depends, 
+        /// set consisting of name plus the names of all other cells whose value depends,
         /// directly or indirectly, on the named cell.
-        /// 
+        ///
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
@@ -215,16 +214,16 @@ namespace SS
 
         /// <summary>
         /// If the formula parameter is null, throws an ArgumentNullException.
-        /// 
+        ///
         /// Otherwise, if name is null or invalid, throws an InvalidNameException.
-        /// 
-        /// Otherwise, if changing the contents of the named cell to be the formula would cause a 
+        ///
+        /// Otherwise, if changing the contents of the named cell to be the formula would cause a
         /// circular dependency, throws a CircularException.  (No change is made to the spreadsheet.)
-        /// 
+        ///
         /// Otherwise, the contents of the named cell becomes formula.  The method returns a
         /// Set consisting of name plus the names of all other cells whose value depends,
         /// directly or indirectly, on the named cell.
-        /// 
+        ///
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         protected override ISet<string> SetCellContents(string name, Formula formula)
@@ -241,20 +240,20 @@ namespace SS
 
             /// For now, cell is set regardless of contents
             /// TODO: relay to server the cell that is being changed
-            cells[normalizedName] =  new Cell(normalizedName, formula, LookupCellValue);
-            
+            cells[normalizedName] = new Cell(normalizedName, formula, LookupCellValue);
+
             /// TODO: get and return all cells that need to be changed (from Server)
             return new HashSet<string>();
         }
 
         /// <summary>
-        /// Helper method for SetCellContent methods where content of Cell is double or string. 
-        /// 
+        /// Helper method for SetCellContent methods where content of Cell is double or string.
+        ///
         /// If name is null or invalid, throws an InvalidNameException.
-        /// Name is already normalized by the Normalize delegate. 
+        /// Name is already normalized by the Normalize delegate.
         /// Otherwise, the contents of the named cell becomes object parameter which can
-        /// be a double, Formula, or string. The method returns a set consisting of name 
-        /// plus the names of all other cells whose value depends, directly or indirectly, 
+        /// be a double, Formula, or string. The method returns a set consisting of name
+        /// plus the names of all other cells whose value depends, directly or indirectly,
         /// on the named cell.
         /// </summary>
         /// <param name="name"></param>
@@ -269,7 +268,7 @@ namespace SS
             if (cells.TryGetValue(name, out var oldContents))
             {
             }
-            //don't add an empty cell 
+            //don't add an empty cell
             if (contents is string && (string)contents == "")
             {
                 if (oldContents != null)
@@ -284,14 +283,13 @@ namespace SS
 
             /// TODO: get and return all cells that need to be changed (from Server)
             return new HashSet<string>();
-            
         }
 
         /// <summary>
         /// Helper method to determining if the token is a valid variable by the base syntax rule:
         /// The string starts with one or more letters and is followed by one or more numbers.
-        /// 
-        /// Input name is normalized and checked if it follows base syntax rule, 
+        ///
+        /// Input name is normalized and checked if it follows base syntax rule,
         /// if syntax check passes, name is also checked if the variable name passes the input IsValid function.
         /// </summary>
         /// <param name="token"></param>
@@ -303,7 +301,7 @@ namespace SS
 
         /// <summary>
         /// Looks up a Cell's value, is delegate that's passed into the Evaluate method
-        /// of a Formula object. Used and passed into the Cell object. 
+        /// of a Formula object. Used and passed into the Cell object.
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>

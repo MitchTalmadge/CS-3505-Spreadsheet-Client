@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SpreadsheetGUI.Properties;
+using System;
 using System.Windows.Forms;
-using SpreadsheetGUI.Properties;
 
 namespace SpreadsheetGUI
 {
