@@ -34,13 +34,13 @@ namespace SpreadsheetGUI
         {
             InitializeComponent();
 
-            networkController = new NetworkController();
+            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded);
             this.spreadsheetPanel.ReadOnly(true);
             this.documentNameTextBox.ReadOnly = true;
             // Create a new, empty spreadsheet.
             _spreadsheet = new Spreadsheet(IsValid, Normalize);
-
             this.connectedServerTextBox.Focus();
+            this.registerServerConnect_backgroundworker();
         }
 
         /// <inheritdoc />
@@ -124,27 +124,6 @@ namespace SpreadsheetGUI
             if (!((TextBox)sender).ReadOnly && e.KeyCode == Keys.Enter)
             {
                 this.connectedServerTextBox.ReadOnly = true;
-
-                // What our background worker for establishing a connection has to do
-                serverConnect_backgroundworker.DoWork += (backgrounWorker_Sender, backgroundWorker_e) =>
-                {
-                    networkController.ConnectToServer((String)backgroundWorker_e.Argument);
-                };
-                // what happens when the background worker either successfully connects or fails connecting to the given name
-                serverConnect_backgroundworker.RunWorkerCompleted += (backgrounWorker_Sender, backgroundWorker_e) =>
-                {
-                    if (backgroundWorker_e.Error is ArgumentException)
-                    {
-                        MessageBox.Show("Could not resolve a server connection. Try again!", "Error!");
-                        this.connectedServerTextBox.ReadOnly = false;
-                    }
-                    else
-                    {
-                        this.documentNameTextBox.ReadOnly = false;
-                        this.documentNameTextBox.Focus();
-                    }
-                };
-
                 serverConnect_backgroundworker.RunWorkerAsync(connectedServerTextBox.Text);
             }
         }
@@ -157,6 +136,59 @@ namespace SpreadsheetGUI
                 this.documentNameTextBox.ReadOnly = true;
                 this.spreadsheetPanel.cellInputTextBox.Focus();
             }
+        }
+
+        private void registerServerConnect_backgroundworker()
+        {
+            // What our background worker for establishing a connection has to do
+            serverConnect_backgroundworker.DoWork += (backgrounWorker_Sender, backgroundWorker_e) =>
+            {
+                networkController.ConnectToServer((String)backgroundWorker_e.Argument);
+            };
+            // what happens when the background worker either successfully connects or fails connecting to the given name
+            serverConnect_backgroundworker.RunWorkerCompleted += (backgrounWorker_Sender, backgroundWorker_e) =>
+            {
+                if (backgroundWorker_e.Error is ArgumentException)
+                {
+                    MessageBox.Show(backgroundWorker_e.Error.Message + "\nTry again!", "Error!", MessageBoxButtons.OK,
+                        MessageBoxIcon.Stop);
+                    this.connectedServerTextBox.ReadOnly = false;
+                }
+            };
+        }
+
+        ////////////////////////// Network Controller Delegates /////////////////////////////////////////
+        /// <summary>
+        /// Called when a connection to the server has failed.
+        /// Displays a warning message dialog.
+        /// </summary>
+        /// <param name="reason">Why the connection failed.</param>
+        private void ConnectionFailed(string reason)
+        {
+            Invoke(new MethodInvoker(() =>
+            {
+                this.connectedServerTextBox.ReadOnly = false;
+                MessageBox.Show(reason,
+                    "Error!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }));
+        }
+
+        /// <summary>
+        /// Called when a connection to the SpaceWars server has failed.
+        /// Displays a warning message dialog.
+        /// </summary>
+        /// <param name="reason">Why the connection failed.</param>
+        private void ConnectionSucceded(string message)
+        {
+            this.documentNameTextBox.ReadOnly = false;
+            this.documentNameTextBox.Focus();
+            Invoke(new MethodInvoker(() =>
+            {
+                MessageBox.Show(message,
+                    "Error!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }));
         }
     }
 }

@@ -111,9 +111,9 @@
       <Project>{98164f79-68a4-4a60-b9af-880f93066f55}</Project>
       <Name>Networking</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NetworkingLibrary\NetworkingLibrary.csproj">
+    <ProjectReference Include="..\NetworkingLibrary\Networking.csproj">
       <Project>{0ccb52b7-b994-470c-a636-2bb000f26632}</Project>
-      <Name>NetworkingLibrary</Name>
+      <Name>Networking</Name>
     </ProjectReference>
     <ProjectReference Include="..\SpreadsheetPanel\SpreadsheetPanel.csproj">
       <Project>{f31299dc-288f-4e46-a3af-6bf461b21c79}</Project>

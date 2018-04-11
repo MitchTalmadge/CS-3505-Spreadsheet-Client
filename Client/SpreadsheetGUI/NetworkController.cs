@@ -1,4 +1,4 @@
-﻿using NetworkingLibrary;
+﻿using Networking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +12,16 @@ namespace SpreadsheetGUI
     /// </summary>
     public class NetworkController
     {
+        private readonly Action<string> ErrorCallback;
+        private readonly Action<string> SuccessfulConnection;
+
         /// <summary>
         /// Create a new Network Controller for the class. THIS IS USED BY THE CLIENT
         /// </summary>
-        public NetworkController()
+        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection)
         {
+            this.ErrorCallback = ErrorCallback;
+            this.SuccessfulConnection = SuccessfulConnection;
         }
 
         /// <summary>
@@ -24,14 +29,24 @@ namespace SpreadsheetGUI
         /// </summary>
         /// <param name="server">String ip of the server.</param>
         /// <param name="name">Name to send.</param>
-        public void ConnectToServer(String server, String name = null)
+        public void ConnectToServer(String server, String name = "Tarun")
         {
             // This is where we connect to the server for the first time. After the setup is done we
             // want our callback to be FirstContact.
-            NetworkLibrary.ConnectToServer(FirstContact, server);
+            ClientNetworking.ConnectToServer(server, FirstContact, ConnectFailed);
 
             // Set the username to be used later.
             // this.name = name + "\n";
+        }
+
+        /// <summary>
+        /// This is called whenever we are not able to connect properly to a client. Our background worker is
+        /// supposed to handle the exception we are going to throw.
+        /// </summary>
+        /// <param name="reason"></param>
+        public void ConnectFailed(String reason)
+        {
+            ErrorCallback(reason);
         }
 
         /// <summary>
@@ -41,17 +56,7 @@ namespace SpreadsheetGUI
         private void FirstContact(SocketState state)
         {
             // the only reason we needed a socketState is because we are changing the callback
-            state.callMe = ReceiveStartup;
-            NetworkLibrary.GetData(state);
-        }
-
-        /// <summary>
-        ///
-        ///
-        /// </summary>
-        /// <param name="state"></param>
-        private void ReceiveStartup(SocketState state)
-        {
+            AbstractNetworking.GetData(state);
         }
     }
 }
