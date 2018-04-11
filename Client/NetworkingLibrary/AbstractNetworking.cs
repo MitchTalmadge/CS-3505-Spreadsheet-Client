@@ -24,61 +24,6 @@ namespace Networking
         public delegate void ConnectionFailed(string reason);
 
         /// <summary>
-        /// Copied code from Professor Kopta's implementation of lab FancyChatClient
-        /// </summary>
-        /// <param name="hostName"></param>
-        /// <param name="socket"></param>
-        /// <param name="ipAddress"></param>
-        /// <returns></returns>
-        protected static bool MakeSocket(string hostName, out Socket socket, out IPAddress ipAddress)
-        {
-            ipAddress = IPAddress.None;
-            socket = null;
-            try
-            {
-                // Endpoint for socket
-                IPHostEntry ipHostInfo;
-                // Checking if we are using an URL or an IP
-                try
-                {
-                    ipHostInfo = Dns.GetHostEntry(hostName);
-                    bool foundIPV4 = false;
-                    foreach (IPAddress addr in ipHostInfo.AddressList)
-                    {
-                        if (addr.AddressFamily != AddressFamily.InterNetworkV6)
-                        {
-                            foundIPV4 = true;
-                            ipAddress = addr;
-                        }
-                    }
-                    // No IPV4 addresses found.
-                    if (!foundIPV4)
-                    {
-                        System.Diagnostics.Debug.WriteLine("Invalid address: " + hostName);
-                        throw new ArgumentException("Cannot establish a connection with host name or address: '" + hostName + "'");
-                    }
-                }
-                catch (Exception)
-                {
-                    // this is when we see if we need to use an ipAdress
-                    System.Diagnostics.Debug.WriteLine("using IP");
-                    ipAddress = IPAddress.Parse(hostName);
-                }
-
-                // Now we are ready to create the TCP/IP socket
-                socket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                socket.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
-                socket.NoDelay = true;
-                return true;
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("Unable to create socket. Error occured " + e);
-                throw new ArgumentException("Cannot establish a connection with host name or address: '" + hostName + "'");
-            }
-        }
-
-        /// <summary>
         /// Is called in delegate (which is passed in/called within the Client).
         /// Wrapper for BeginReceive, called by client since the client decides if it wants data.
         /// </summary>

@@ -24,8 +24,8 @@ namespace Networking
         public static void ConnectToServer(string hostName, ConnectionEstablished established, ConnectionFailed failed)
         {
             // Create a SocketState.
-            if (!MakeSocket(hostName, out Socket socket, out IPAddress ipAddress)) failed("Cannot establish a connection with host name or address: '" + hostName + "'");
-            SocketState socketState = new SocketState(socket, established, failed);
+            var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            var socketState = new SocketState(socket, established, failed);
 
             // Attempt connection to the address on the default port.
             try

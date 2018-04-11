@@ -34,9 +34,9 @@ namespace SpreadsheetGUI
         {
             InitializeComponent();
 
-            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded);
+            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList);
             this.spreadsheetPanel.ReadOnly(true);
-            this.documentNameTextBox.ReadOnly = true;
+            this.documentNameDropdown.Enabled = false;
             // Create a new, empty spreadsheet.
             _spreadsheet = new Spreadsheet(IsValid, Normalize);
             this.connectedServerTextBox.Focus();
@@ -111,13 +111,15 @@ namespace SpreadsheetGUI
             ClearSpreadsheetPanel();
             ClearCellEditor();
 
-            this.documentNameTextBox.Text = "";
-            this.documentNameTextBox.ReadOnly = false;
+            this.documentNameDropdown.Text = "";
+            this.documentNameDropdown.Enabled = false;
             this.connectedServerTextBox.Text = "";
             this.connectedServerTextBox.ReadOnly = false;
 
-            _spreadsheet = new Spreadsheet(IsValid, Normalize);
+            _spreadsheet = null;
         }
+
+        /////////////////// Events ////////////////////
 
         private void connectedServerTextBox_KeyUp(object sender, KeyEventArgs e)
         {
@@ -128,14 +130,22 @@ namespace SpreadsheetGUI
             }
         }
 
-        private void documentNameTextBox_KeyUp(object sender, KeyEventArgs e)
+        private void documentNameDropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!((TextBox)sender).ReadOnly && e.KeyCode == Keys.Enter)
+            ComboBox documentsDropdown = (ComboBox)sender;
+            // IF we check for the index instead of text, a spreadsheet named "New..." wouldn't become a loophole anymore
+            if (documentsDropdown.SelectedIndex.Equals(documentsDropdown.Items.Count - 1))
+            {
+                _spreadsheet = new Spreadsheet(IsValid, Normalize);
+            }
+            else
             {
                 //RETRIEVE DOCUMENT
-                this.documentNameTextBox.ReadOnly = true;
+                this.documentNameDropdown.Enabled = false;
                 this.spreadsheetPanel.cellInputTextBox.Focus();
             }
+
+            this.spreadsheetPanel.ReadOnly(false);
         }
 
         private void registerServerConnect_backgroundworker()
@@ -170,7 +180,7 @@ namespace SpreadsheetGUI
                 this.connectedServerTextBox.ReadOnly = false;
                 MessageBox.Show(reason,
                     "Error!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }));
         }
 
@@ -181,13 +191,26 @@ namespace SpreadsheetGUI
         /// <param name="reason">Why the connection failed.</param>
         private void ConnectionSucceded(string message)
         {
-            this.documentNameTextBox.ReadOnly = false;
-            this.documentNameTextBox.Focus();
+            this.documentNameDropdown.Enabled = true;
+            this.documentNameDropdown.Focus();
             Invoke(new MethodInvoker(() =>
             {
                 MessageBox.Show(message,
-                    "Error!",
+                    "Success",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }));
+        }
+
+        /// <summary>
+        /// Called when a handshake message from the server has been sent to the client, along with a list of all documents on the server
+        /// </summary>
+        /// <param name="reason">Why the connection failed.</param>
+        private void RecieveDocumentsList(string[] documents)
+        {
+            Invoke(new MethodInvoker(() =>
+            {
+                this.documentNameDropdown.Items.AddRange(documents);
+                this.documentNameDropdown.Items.Add("New...");
             }));
         }
     }

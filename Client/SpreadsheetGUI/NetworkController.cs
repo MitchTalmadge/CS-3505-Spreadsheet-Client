@@ -1,4 +1,5 @@
 ﻿using Networking;
+using SS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,15 @@ using System.Threading.Tasks;
 namespace SpreadsheetGUI
 {
     /// <summary>
-    /// Controls the interactions with the Network for the game.
+    /// Controls the interactions with the Network for the Spreadsheet.
     /// </summary>
     public class NetworkController
     {
+        private static readonly string CONNECTION_ACCEPTED_PREFIX = "connect_accepted";
         private readonly Action<string> ErrorCallback;
         private readonly Action<string> SuccessfulConnection;
+        private readonly Action<string[]> PopulateDocuments;
+        private Spreadsheet backingSheet;
 
         /// <summary>
         /// This event is fired when the connection to the server has been lost,
@@ -29,10 +33,11 @@ namespace SpreadsheetGUI
         /// <summary>
         /// Create a new Network Controller for the class. THIS IS USED BY THE CLIENT
         /// </summary>
-        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection)
+        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocuments)
         {
             this.ErrorCallback = ErrorCallback;
             this.SuccessfulConnection = SuccessfulConnection;
+            this.PopulateDocuments = PopulateDocuments;
         }
 
         /// <summary>
@@ -72,8 +77,32 @@ namespace SpreadsheetGUI
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
+            // We know the first packet has been handled once the world is not null.
+            if (backingSheet == null)
+                ParseFirstPacket(data);
+            else
+                ;// this needs to be changed.
+
             // Get new data.
-            AbstractNetworking.GetData(_socketState);
+            // AbstractNetworking.GetData(_socketState);
+        }
+
+        /// <summary>
+        /// Parses the first packet sent by the server, which contains the documents the current server holds.
+        /// </summary>
+        /// <param name="data">The first packet's data.</param>
+        private void ParseFirstPacket(string data)
+        {
+            if (!data.StartsWith(CONNECTION_ACCEPTED_PREFIX))
+            {
+                Disconnect();
+                ErrorCallback("The server Handshake message didn't begin with 'connect_accepted'");
+            }
+            string[] documents = data.Replace(CONNECTION_ACCEPTED_PREFIX, "").Split('\n');
+            PopulateDocuments(documents);
+
+            // Notify the listener that the connection was established and the world is ready.
+            //_connectionEstablishedCallback(this);
         }
 
         /// <summary>

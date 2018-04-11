@@ -41,7 +41,7 @@
             this.professionalVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.connectedServerTextBox = new System.Windows.Forms.TextBox();
-            this.documentNameTextBox = new System.Windows.Forms.TextBox();
+            this.documentNameDropdown = new System.Windows.Forms.ComboBox();
             this.connectedServerLabel = new System.Windows.Forms.TextBox();
             this.documentNameLabel = new System.Windows.Forms.TextBox();
             this.cellNameLabel = new System.Windows.Forms.TextBox();
@@ -150,7 +150,7 @@
             this.topTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.75F));
             this.topTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 13F));
             this.topTableLayoutPanel.Controls.Add(this.connectedServerTextBox, 3, 2);
-            this.topTableLayoutPanel.Controls.Add(this.documentNameTextBox, 2, 2);
+            this.topTableLayoutPanel.Controls.Add(this.documentNameDropdown, 2, 2);
             this.topTableLayoutPanel.Controls.Add(this.connectedServerLabel, 3, 1);
             this.topTableLayoutPanel.Controls.Add(this.documentNameLabel, 2, 1);
             this.topTableLayoutPanel.Controls.Add(this.cellNameLabel, 0, 1);
@@ -182,15 +182,15 @@
             this.connectedServerTextBox.TabIndex = 11;
             this.connectedServerTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.connectedServerTextBox_KeyUp);
             // 
-            // documentNameTextBox
+            // documentNameDropdown
             // 
-            this.documentNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.documentNameTextBox.Location = new System.Drawing.Point(269, 43);
-            this.documentNameTextBox.Margin = new System.Windows.Forms.Padding(1);
-            this.documentNameTextBox.Name = "documentNameTextBox";
-            this.documentNameTextBox.Size = new System.Drawing.Size(335, 20);
-            this.documentNameTextBox.TabIndex = 10;
-            this.documentNameTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.documentNameTextBox_KeyUp);
+            this.documentNameDropdown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.documentNameDropdown.Location = new System.Drawing.Point(269, 43);
+            this.documentNameDropdown.Margin = new System.Windows.Forms.Padding(1);
+            this.documentNameDropdown.Name = "documentNameDropdown";
+            this.documentNameDropdown.Size = new System.Drawing.Size(335, 21);
+            this.documentNameDropdown.TabIndex = 10;
+            this.documentNameDropdown.SelectedIndexChanged += new System.EventHandler(this.documentNameDropdown_SelectedIndexChanged);
             // 
             // connectedServerLabel
             // 
@@ -260,10 +260,10 @@
             // 
             this.topTableLayoutPanel.SetColumnSpan(this.spreadsheetPanel, 4);
             this.spreadsheetPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.spreadsheetPanel.Location = new System.Drawing.Point(0, 64);
+            this.spreadsheetPanel.Location = new System.Drawing.Point(0, 65);
             this.spreadsheetPanel.Margin = new System.Windows.Forms.Padding(0);
             this.spreadsheetPanel.Name = "spreadsheetPanel";
-            this.spreadsheetPanel.Size = new System.Drawing.Size(1079, 516);
+            this.spreadsheetPanel.Size = new System.Drawing.Size(1079, 515);
             this.spreadsheetPanel.TabIndex = 0;
             this.spreadsheetPanel.SelectionChanged += new SS.SelectionChangedHandler(this.SpreadsheetPanel_SelectionChanged);
             this.spreadsheetPanel.CellEditEnter += new SS.CellInputHandler(this.SpreadsheetPanel_CellEditEnter);
@@ -311,7 +311,7 @@
         private System.Windows.Forms.ToolStripMenuItem upgradeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem professionalVersionToolStripMenuItem;
         private System.Windows.Forms.TextBox connectedServerTextBox;
-        private System.Windows.Forms.TextBox documentNameTextBox;
+        private System.Windows.Forms.ComboBox documentNameDropdown;
         private System.Windows.Forms.TextBox connectedServerLabel;
         private System.Windows.Forms.TextBox documentNameLabel;
         private System.ComponentModel.BackgroundWorker serverConnect_backgroundworker;
