@@ -35,7 +35,7 @@ namespace SpreadsheetGUI
             InitializeComponent();
 
             networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList);
-            this.spreadsheetPanel.ReadOnly(true);
+            // this.spreadsheetPanel.ReadOnly(true);
             this.documentNameDropdown.Enabled = false;
             // Create a new, empty spreadsheet.
             _spreadsheet = new Spreadsheet(IsValid, Normalize);
@@ -100,7 +100,7 @@ namespace SpreadsheetGUI
             //TODO Open a new instance of the spreadsheet. Connect to the Server
             this.connectedServerTextBox.Text = serverAddress;
             this.connectedServerTextBox.ReadOnly = true;
-            this.spreadsheetPanel.ReadOnly(true);
+            // this.spreadsheetPanel.ReadOnly(true);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace SpreadsheetGUI
                 this.spreadsheetPanel.cellInputTextBox.Focus();
             }
 
-            this.spreadsheetPanel.ReadOnly(false);
+            // this.spreadsheetPanel.ReadOnly(false);
         }
 
         private void registerServerConnect_backgroundworker()

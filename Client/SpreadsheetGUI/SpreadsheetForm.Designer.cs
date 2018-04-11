@@ -263,6 +263,7 @@
             this.spreadsheetPanel.Location = new System.Drawing.Point(0, 65);
             this.spreadsheetPanel.Margin = new System.Windows.Forms.Padding(0);
             this.spreadsheetPanel.Name = "spreadsheetPanel";
+            this.spreadsheetPanel.ReadOnly = false;
             this.spreadsheetPanel.Size = new System.Drawing.Size(1079, 515);
             this.spreadsheetPanel.TabIndex = 0;
             this.spreadsheetPanel.SelectionChanged += new SS.SelectionChangedHandler(this.SpreadsheetPanel_SelectionChanged);
