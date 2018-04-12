@@ -26,16 +26,17 @@ namespace SpreadsheetGUI
 
             // Cell's contents aren't being set (yet) 
             // Display the cell contents in the editor (and add an equals sign to formulas).
-            //var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
-            //if (contents is Formula)
-            //{
-            //    contents = "=" + contents;
-            //}
-            //spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
-            
+            var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
+            if (contents is Formula)
+            {
+                contents = "=" + contents;
+            }
+            spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
+
+            /********************** PART OF THE UN-RESTORED CLIENT**********************/
             // For now, just display string contents in cell, kept track of within SpreadsheetPanel
-            spreadsheetPanel.GetValue(col, row, out string val);
-            spreadsheetPanel.cellInputTextBox.Text = val;
+            //spreadsheetPanel.GetValue(col, row, out string val);
+            //spreadsheetPanel.cellInputTextBox.Text = val;
 
             // Move the text cursor to the content edit text box.
             spreadsheetPanel.cellInputTextBox.Focus();
@@ -43,16 +44,17 @@ namespace SpreadsheetGUI
 
             // Display the cell value in the editor.
             // Currently, this doesn't return anything cause we aren't setting actual values in the spreadsheet
-            //value = _spreadsheet.GetCellValue(cellName); 
-            //if (value is FormulaError)
-            //{
-            //    value = Resources.SpreadsheetForm_Formula_Error_Value;
-            //}
-            //editorValueTextBox.Text = value.ToString();
+            var value = _spreadsheet.GetCellValue(cellName);
+            if (value is FormulaError)
+            {
+                value = Resources.SpreadsheetForm_Formula_Error_Value;
+            }
+            editorValueTextBox.Text = value.ToString();
 
+            /********************** PART OF THE UN-RESTORED CLIENT**********************/
             // SpreadsheetPanel has Dictionary of cell values (only as strings/display form)
-            spreadsheetPanel.GetValue(col, row, out string value);
-            editorValueTextBox.Text = value;
+            //spreadsheetPanel.GetValue(col, row, out string value);
+            //editorValueTextBox.Text = value;
         }
 
         /// <summary>
