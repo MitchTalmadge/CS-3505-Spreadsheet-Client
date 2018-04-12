@@ -14,6 +14,11 @@ namespace SS
         private Dictionary<string, Cell> cells;
 
         /// <summary>
+        /// Dependency Graph mapping each cell to its dependents and dependees. 
+        /// </summary>
+        private DependencyGraph dependencyGraph;
+
+        /// <summary>
         /// 3 argument constructor: allows the user to provide a validity delegate
         /// (first parameter), a normalization delegate (second parameter),
         /// and a version (third parameter).
@@ -22,6 +27,7 @@ namespace SS
             base (isValid, normalize)
         {
             cells =  new Dictionary<string, Cell>();
+            dependencyGraph = new DependencyGraph();
         }
 
         /// <summary>
@@ -144,8 +150,8 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-
             string normalizedName = Normalize(name);
+
             if (Double.TryParse(content, out var num) == true)
             {
                 return SetCellContents(normalizedName, num);
@@ -239,12 +245,70 @@ namespace SS
             }
             string normalizedName = Normalize(name);
 
-            /// For now, cell is set regardless of contents
-            /// TODO: relay to server the cell that is being changed
+            //saving old dependees and contents in case a circular dependency is found
+            List<string> oldDependees = new List<string>(dependencyGraph.GetDependees(normalizedName));
+            cells.TryGetValue(normalizedName, out var oldContents);
+
+            //dependees are replaced with dependees (variables) of new formula
+            dependencyGraph.ReplaceDependees(normalizedName, formula.GetVariables());
             cells[normalizedName] =  new Cell(normalizedName, formula, LookupCellValue);
-            
+
+            try
+            {
+                //recalculating necessary cell values
+                List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(normalizedName));
+                RecalculateCellValues(recalculatedCells);
+                //successful return means spreadsheet is changed
+                return new HashSet<string>(recalculatedCells);
+            }
+            catch (CircularException)
+            {
+                if (oldContents != null)
+                {
+                    cells[normalizedName] = new Cell(normalizedName, oldContents.Contents, LookupCellValue);
+                }
+                else //if the cell was empty before setting to this invalid formula, leave it empty
+                {
+                    cells.Remove(normalizedName);
+                }
+                dependencyGraph.ReplaceDependees(normalizedName, oldDependees);
+                throw;
+            }
+
             /// TODO: get and return all cells that need to be changed (from Server)
             return new HashSet<string>();
+        }
+
+        /// <summary>
+        /// If name is null, throws an ArgumentNullException.
+        /// 
+        /// Otherwise, if name isn't a valid cell name, throws an InvalidNameException.
+        /// 
+        /// Otherwise, returns an enumeration, without duplicates, of the names of all cells whose
+        /// values depend directly on the value of the named cell.  In other words, returns
+        /// an enumeration, without duplicates, of the names of all cells that contain
+        /// formulas containing name.
+        /// 
+        /// For example, suppose that
+        /// A1 contains 3
+        /// B1 contains the formula A1 * A1
+        /// C1 contains the formula B1 + A1
+        /// D1 contains the formula B1 - C1
+        /// The direct dependents of A1 are B1 and C1
+        /// </summary>
+        protected override IEnumerable<string> GetDirectDependents(string name)
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (!ValidVariable(name))
+            {
+                throw new InvalidNameException();
+            }
+            //dependency graph's get dependents enumerates all unique dependents 
+            //and returns an empty list if the cell does not have dependents
+            return dependencyGraph.GetDependents(Normalize(name));
         }
 
         /// <summary>
@@ -268,6 +332,16 @@ namespace SS
             }
             if (cells.TryGetValue(name, out var oldContents))
             {
+                //dependencies must be removed if the old contents are a formula with variables
+                if (oldContents.Contents is Formula)
+                {
+                    Formula oldFormula = (Formula)oldContents.Contents;
+
+                    foreach (var oldCell in oldFormula.GetVariables())
+                    {
+                        dependencyGraph.RemoveDependency(oldCell, name);
+                    }
+                }
             }
             //don't add an empty cell 
             if (contents is string && (string)contents == "")
@@ -276,15 +350,17 @@ namespace SS
                 {
                     cells.Remove(name);
                 }
+                return new HashSet<string>(GetCellsToRecalculate(name));
             }
-
-            /// For now, cell is set regardless of contents
-            /// TODO: relay to server the cell that is being changed
+            
             cells[name] = new Cell(name, contents, LookupCellValue);
 
-            /// TODO: get and return all cells that need to be changed (from Server)
-            return new HashSet<string>();
-            
+            //recalculating necessary cell values
+            List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(name));
+            RecalculateCellValues(recalculatedCells);
+
+            //successful return means spreadsheet is changed
+            return new HashSet<string>(recalculatedCells);            
         }
 
         /// <summary>
