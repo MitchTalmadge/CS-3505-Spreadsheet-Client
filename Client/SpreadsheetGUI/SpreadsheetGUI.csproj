@@ -113,6 +113,10 @@
       <Project>{f31299dc-288f-4e46-a3af-6bf461b21c79}</Project>
       <Name>SpreadsheetPanel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SpreadsheetUtilities\SpreadsheetUtilities.csproj">
+      <Project>{0319dea3-a7e8-49c1-8748-a075db9527e8}</Project>
+      <Name>SpreadsheetUtilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spreadsheet\Spreadsheet.csproj">
       <Project>{d54038d9-b157-4517-80f5-b4756633b764}</Project>
       <Name>Spreadsheet</Name>
