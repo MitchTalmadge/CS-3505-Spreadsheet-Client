@@ -48,9 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SpreadsheetForm.Callbacks.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="NetworkController.cs" />
     <Compile Include="SpreadsheetForm.MenuStrip.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +107,14 @@
       <Project>{7ebfc72b-9445-4872-8239-bac92ef64d21}</Project>
       <Name>Formula</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NetworkController\Networking.csproj">
+      <Project>{98164f79-68a4-4a60-b9af-880f93066f55}</Project>
+      <Name>Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkingLibrary\Networking.csproj">
+      <Project>{0ccb52b7-b994-470c-a636-2bb000f26632}</Project>
+      <Name>Networking</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SpreadsheetPanel\SpreadsheetPanel.csproj">
       <Project>{f31299dc-288f-4e46-a3af-6bf461b21c79}</Project>
       <Name>SpreadsheetPanel</Name>
@@ -117,6 +123,9 @@
       <Project>{d54038d9-b157-4517-80f5-b4756633b764}</Project>
       <Name>Spreadsheet</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
