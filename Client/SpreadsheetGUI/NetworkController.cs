@@ -52,7 +52,7 @@ namespace SpreadsheetGUI
             ClientNetworking.ConnectToServer(server,
                 state =>
                 {
-                    SuccessfulConnection("Connected to ");
+                    SuccessfulConnection("Connected to host: " + server);
 
                     _socketState = state;
 

@@ -11,6 +11,7 @@ namespace Networking
     /// <authors>Jiahui Chen, Mitch Talmadge</authors>
     public abstract class AbstractNetworking
     {
+        public static readonly string END_OF_TEXT = ((char)3).ToString();
         /// <summary>
         /// This delegate is called when a connection has been established, whether to a client or a server.
         /// </summary>
@@ -90,8 +91,8 @@ namespace Networking
             var data = Encoding.UTF8.GetString(state.DataBuffer, 0, numBytes);
             state.DataStringBuilder.Append(data);
 
-            // Check for newline terminator.
-            if (!data.EndsWith("\n"))
+            // Check for End of text character.
+            if ( !data.EndsWith(END_OF_TEXT))
             {
                 // No newline, so there must be more data.
                 GetData(state);
