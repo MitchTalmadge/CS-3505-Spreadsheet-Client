@@ -70,6 +70,7 @@ namespace SpreadsheetGUI
 
                 //// Moving cell selection down if cell edit is valid
                 spreadsheetPanel.MoveSelectionDown();
+                spreadsheetPanel.cellInputTextBox.Clear();
             }
             catch (CircularException)
             {
