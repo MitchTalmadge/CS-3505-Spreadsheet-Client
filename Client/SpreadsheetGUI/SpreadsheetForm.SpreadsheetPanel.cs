@@ -63,17 +63,40 @@ namespace SpreadsheetGUI
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanel_CellEditEnter(SpreadsheetPanel sender)
         {
-            // Display the selected cell value in the editor.
-            var cellName = GetSelectedCellName();
-            GetColumnAndRowFromCellName(cellName, out var col, out var row);
-            // val in the spreadsheetPanel is not being set (as of now)            
-            // so displaying the value of the input directly 
-            spreadsheetPanel.SetValue(col, row, spreadsheetPanel.cellInputTextBox.Text);
+            try
+            {
+                // Set the contents of the cell, and update the values of any dependents.
+                RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), spreadsheetPanel.cellInputTextBox.Text));
 
-            // Moving cell selection down
-            spreadsheetPanel.MoveSelectionDown();
-            // Changing selection display 
-            SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
+                //// Moving cell selection down if cell edit is valid
+                spreadsheetPanel.MoveSelectionDown();
+            }
+            catch (CircularException)
+            {
+                MessageBox.Show(Resources.SpreadsheetForm_inputTextBox_Circular_Dependency,
+                    Resources.SpreadsheetForm_inputTextBox_Invalid_Cell_Input);
+            }
+            catch (InvalidNameException)
+            {
+                MessageBox.Show(Resources.SpreadsheetForm_inputTextBox_Invalid_Cell_Name,
+                    Resources.SpreadsheetForm_inputTextBox_Invalid_Cell_Input);
+            }
+            catch (FormulaFormatException)
+            {
+                MessageBox.Show(Resources.SpreadsheetForm_inputTextBox_Invalid_Formula,
+                    Resources.SpreadsheetForm_inputTextBox_Invalid_Cell_Input);
+            }
+
+            /****************PART OF THE UNRESTORED CLIENT*******************************/
+            // Display the selected cell value in the editor.
+            //var cellName = GetSelectedCellName();
+            //GetColumnAndRowFromCellName(cellName, out var col, out var row);
+            //// val in the spreadsheetPanel is not being set (as of now)            
+            //// so displaying the value of the input directly 
+            //spreadsheetPanel.SetValue(col, row, spreadsheetPanel.cellInputTextBox.Text);
+
+            //// Changing selection display 
+            //SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
         }
 
         /// <summary>
