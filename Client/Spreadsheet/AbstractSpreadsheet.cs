@@ -111,25 +111,6 @@ namespace SS
     {
         // ADDED FOR PS5
         /// <summary>
-        /// True if this spreadsheet has been modified since it was created or saved
-        /// (whichever happened most recently); false otherwise.
-
-        // ADDED FOR PS5
-        /// <summary>
-        /// Method used to determine whether a string that consists of one or more letters
-        /// followed by one or more digits is a valid variable name.
-        /// </summary>
-        public Func<string, bool> IsValid { get; protected set; }
-
-        // ADDED FOR PS5
-        /// <summary>
-        /// Method used to convert a cell name to its standard form.  For example,
-        /// Normalize might convert names to upper case.
-        /// </summary>
-        public Func<string, string> Normalize { get; protected set; }
-
-        // ADDED FOR PS5
-        /// <summary>
         /// Constructs an abstract spreadsheet by recording its variable validity test,
         /// its normalization method, and its version information.  The variable validity
         /// test is used throughout to determine whether a string that consists of one or
@@ -137,10 +118,8 @@ namespace SS
         /// equality test should be used thoughout to determine whether two variables are
         /// equal.
         /// </summary>
-        public AbstractSpreadsheet(Func<string, bool> isValid, Func<string, string> normalize)
+        public AbstractSpreadsheet()
         {
-            this.IsValid = isValid;
-            this.Normalize = normalize;
         }
 
         // ADDED FOR PS5
