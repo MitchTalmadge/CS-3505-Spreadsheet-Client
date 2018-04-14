@@ -30,6 +30,14 @@ namespace SS
     public delegate void CellInputHandler(SpreadsheetPanel sender);
 
     /// <summary>
+    /// The type of delegate used to register for CellEditEnter events
+    /// Triggered when the enter button is pressed while cell editor text box is selected. 
+    /// </summary>
+    /// <param name="sender"></param>
+
+    public delegate void CellMovementHandler(SpreadsheetPanel sender);
+
+    /// <summary>
     /// A panel that displays a spreadsheet with 26 columns (labeled A-Z) and 99 rows
     /// (labeled 1-99).  Each cell on the grid can display a non-editable string.  One 
     /// of the cells is always selected (and highlighted).  When the selection changes, a 
@@ -222,22 +230,22 @@ namespace SS
         /// <summary>
         /// The event used when the down arrow key is pressed while the cell editor is in use
         /// </summary>
-        public event CellInputHandler CellEditDown;
+        public event CellMovementHandler CellEditDown;
 
         /// <summary>
         /// The event used when the up arrow key is pressed while the cell editor is in use
         /// </summary>
-        public event CellInputHandler CellEditUp;
+        public event CellMovementHandler CellEditUp;
 
         /// <summary>
         /// The event used when the right arrow key is pressed while the cell editor is in use
         /// </summary>
-        public event CellInputHandler CellEditRight;
+        public event CellMovementHandler CellEditRight;
 
         /// <summary>
         /// The event used when the left arrow key is pressed while the cell editor is in use
         /// </summary>
-        public event CellInputHandler CellEditLeft;
+        public event CellMovementHandler CellEditLeft;
 
         /// <summary>
         /// Called when a key is pressed while the cell content text box is focused.

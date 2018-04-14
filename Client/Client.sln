@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formula", "Formula\Formula.csproj", "{7EBFC72B-9445-4872-8239-BAC92EF64D21}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetGUI", "SpreadsheetGUI\SpreadsheetGUI.csproj", "{95BF3041-B768-4A8D-B289-4C8E3A91680C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetPanel", "SpreadsheetPanel\SpreadsheetPanel.csproj", "{F31299DC-288F-4E46-A3AF-6BF461B21C79}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetUtilities", "SpreadsheetUtilities\SpreadsheetUtilities.csproj", "{0319DEA3-A7E8-49C1-8748-A075DB9527E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networking", "NetworkingLibrary\Networking.csproj", "{0CCB52B7-B994-470C-A636-2BB000F26632}"
 EndProject
@@ -62,6 +64,14 @@ Global
 		{F31299DC-288F-4E46-A3AF-6BF461B21C79}.Release|Any CPU.ActiveCfg = Release|x86
 		{F31299DC-288F-4E46-A3AF-6BF461B21C79}.Release|x86.ActiveCfg = Release|x86
 		{F31299DC-288F-4E46-A3AF-6BF461B21C79}.Release|x86.Build.0 = Release|x86
+		{0319DEA3-A7E8-49C1-8748-A075DB9527E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0319DEA3-A7E8-49C1-8748-A075DB9527E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0319DEA3-A7E8-49C1-8748-A075DB9527E8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0319DEA3-A7E8-49C1-8748-A075DB9527E8}.Debug|x86.Build.0 = Debug|Any CPU
+		{0319DEA3-A7E8-49C1-8748-A075DB9527E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0319DEA3-A7E8-49C1-8748-A075DB9527E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0319DEA3-A7E8-49C1-8748-A075DB9527E8}.Release|x86.ActiveCfg = Release|Any CPU
+		{0319DEA3-A7E8-49C1-8748-A075DB9527E8}.Release|x86.Build.0 = Release|Any CPU
 		{0CCB52B7-B994-470C-A636-2BB000F26632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0CCB52B7-B994-470C-A636-2BB000F26632}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CCB52B7-B994-470C-A636-2BB000F26632}.Debug|x86.ActiveCfg = Debug|Any CPU
