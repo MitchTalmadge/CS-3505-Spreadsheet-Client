@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Windows.Forms;
-using SpreadsheetGUI.Properties;
+﻿using SpreadsheetGUI.Properties;
 using SpreadsheetUtilities;
 using SS;
+using System.Collections.Generic;
 
 namespace SpreadsheetGUI
 {
@@ -171,7 +170,7 @@ namespace SpreadsheetGUI
         private string GetSelectedCellName()
         {
             spreadsheetPanel.GetSelection(out var col, out var row);
-            var cellName = (char) ('A' + col) + (++row).ToString();
+            var cellName = (char)('A' + col) + (++row).ToString();
 
             return cellName;
         }

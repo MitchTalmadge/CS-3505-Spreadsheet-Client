@@ -1,16 +1,17 @@
-﻿///
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpreadsheetUtilities;
+
+///
 /// Jiahui Chen
 /// u0980890
 /// CS 3500 PS3
 ///
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SpreadsheetUtilities;
 
 namespace FormulaTester
 {
     /// <summary>
-    /// Units tests for the Formula object/class. 
+    /// Units tests for the Formula object/class.
     /// </summary>
     [TestClass]
     public class FormulaTester
@@ -149,7 +150,7 @@ namespace FormulaTester
         {
             Formula inavlid = new Formula("4.20 + 9.67 89");
         }
-        
+
         [TestMethod]
         public void PublicTestValidParenthesis()
         {
@@ -246,7 +247,7 @@ namespace FormulaTester
         }
 
         /// <summary>
-        /// Tests the == operator override. 
+        /// Tests the == operator override.
         /// </summary>
         [TestMethod]
         public void PublicTestEqualsOperator()
@@ -269,7 +270,7 @@ namespace FormulaTester
         }
 
         /// <summary>
-        /// Tests the != operator override. 
+        /// Tests the != operator override.
         /// </summary>
         [TestMethod]
         public void PublicTestNotEqualsOperator()
@@ -380,42 +381,42 @@ namespace FormulaTester
         }
 
         /// <summary>
-        /// Testing with multiplication and division expressions, including weird 
+        /// Testing with multiplication and division expressions, including weird
         /// spacing cases.
         /// </summary>
         [TestMethod]
         public void MultiplyDivideOperator()
         {
-            Assert.AreEqual(10.0,  new Formula("5   * 2").Evaluate(s => s.Length));
-            Assert.AreEqual(24.0,  new Formula("UB9 * 2 * 4").Evaluate( s => s.Length));
-            Assert.AreEqual(7.0, new Formula("21 /   S33").Evaluate( s => s.Length));
-            Assert.AreEqual(2.0, new Formula("28 / SEVEN77 / 2 ").Evaluate( s => s.Length));
+            Assert.AreEqual(10.0, new Formula("5   * 2").Evaluate(s => s.Length));
+            Assert.AreEqual(24.0, new Formula("UB9 * 2 * 4").Evaluate(s => s.Length));
+            Assert.AreEqual(7.0, new Formula("21 /   S33").Evaluate(s => s.Length));
+            Assert.AreEqual(2.0, new Formula("28 / SEVEN77 / 2 ").Evaluate(s => s.Length));
         }
 
         /// <summary>
-        /// Testing expressions with parenthesis, including weird 
+        /// Testing expressions with parenthesis, including weird
         /// spacing cases.
         /// </summary>
         [TestMethod]
         public void Parenthesis()
         {
-            Assert.AreEqual(5.0, new Formula("(5   * 2) / a8").Evaluate( s => s.Length));
-            Assert.AreEqual(1.0, new Formula(" (   5 + 12) / 17").Evaluate( s => s.Length));
-            Assert.AreEqual(2.0, new Formula(" ((5 + 1) * 2) / 6").Evaluate( s => s.Length));
-            Assert.AreEqual(2.0, new Formula("(2)").Evaluate( s => s.Length));
-            Assert.AreEqual(2.15, new Formula("(4.3)/ (2)").Evaluate( s => s.Length));
+            Assert.AreEqual(5.0, new Formula("(5   * 2) / a8").Evaluate(s => s.Length));
+            Assert.AreEqual(1.0, new Formula(" (   5 + 12) / 17").Evaluate(s => s.Length));
+            Assert.AreEqual(2.0, new Formula(" ((5 + 1) * 2) / 6").Evaluate(s => s.Length));
+            Assert.AreEqual(2.0, new Formula("(2)").Evaluate(s => s.Length));
+            Assert.AreEqual(2.15, new Formula("(4.3)/ (2)").Evaluate(s => s.Length));
         }
 
         /// <summary>
         /// Tests to ensure that order of operations is followed
-        /// when expressions are evaluated. 
+        /// when expressions are evaluated.
         /// </summary>
         [TestMethod]
         public void PEMDAS()
         {
-            Assert.AreEqual(17.0, new Formula("6 + 5 * 2 + 1").Evaluate( s => s.Length));
+            Assert.AreEqual(17.0, new Formula("6 + 5 * 2 + 1").Evaluate(s => s.Length));
             Assert.AreEqual(15.4, new Formula("2*6+3.4").Evaluate(s => s.Length));
-            Assert.AreEqual(-6.0, new Formula(" 5 + 12 / 2 - 17").Evaluate( s => s.Length));
+            Assert.AreEqual(-6.0, new Formula(" 5 + 12 / 2 - 17").Evaluate(s => s.Length));
             Assert.AreEqual(2.0, new Formula(" ((5 + 1 * 2 - 3) * 2) / 4").Evaluate(s => s.Length));
         }
 
