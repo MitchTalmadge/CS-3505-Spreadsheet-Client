@@ -33,11 +33,6 @@ namespace SpreadsheetGUI
             }
             spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
 
-            /********************** PART OF THE UN-RESTORED CLIENT**********************/
-            // For now, just display string contents in cell, kept track of within SpreadsheetPanel
-            //spreadsheetPanel.GetValue(col, row, out string val);
-            //spreadsheetPanel.cellInputTextBox.Text = val;
-
             // Move the text cursor to the content edit text box.
             spreadsheetPanel.cellInputTextBox.Focus();
             spreadsheetPanel.cellInputTextBox.SelectAll();
@@ -50,11 +45,6 @@ namespace SpreadsheetGUI
                 value = Resources.SpreadsheetForm_Formula_Error_Value;
             }
             editorValueTextBox.Text = value.ToString();
-
-            /********************** PART OF THE UN-RESTORED CLIENT**********************/
-            // SpreadsheetPanel has Dictionary of cell values (only as strings/display form)
-            //spreadsheetPanel.GetValue(col, row, out string value);
-            //editorValueTextBox.Text = value;
         }
 
         /// <summary>
@@ -87,17 +77,6 @@ namespace SpreadsheetGUI
                 MessageBox.Show(Resources.SpreadsheetForm_inputTextBox_Invalid_Formula,
                     Resources.SpreadsheetForm_inputTextBox_Invalid_Cell_Input);
             }
-
-            /****************PART OF THE UNRESTORED CLIENT*******************************/
-            // Display the selected cell value in the editor.
-            //var cellName = GetSelectedCellName();
-            //GetColumnAndRowFromCellName(cellName, out var col, out var row);
-            //// val in the spreadsheetPanel is not being set (as of now)            
-            //// so displaying the value of the input directly 
-            //spreadsheetPanel.SetValue(col, row, spreadsheetPanel.cellInputTextBox.Text);
-
-            //// Changing selection display 
-            //SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
         }
 
         /// <summary>
