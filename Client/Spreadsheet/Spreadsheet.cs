@@ -18,12 +18,18 @@ namespace SS
         private DependencyGraph dependencyGraph;
 
         /// <summary>
-        /// 3 argument constructor: allows the user to provide a validity delegate
-        /// (first parameter), a normalization delegate (second parameter),
-        /// and a version (third parameter).
+        /// The regex pattern used for validating cell names.
+        /// This pattern only allows cells with columns from A to Z, and rows from 1 to 99.
         /// </summary>
-        public Spreadsheet(Func<string, bool> isValid, Func<string, string> normalize) :
-            base(isValid, normalize)
+        private static readonly Regex CellValidityPattern = new Regex("^[A-Z][1-9][0-9]?$");
+
+        /// <summary>
+        /// No arguments in constructor. Cell validity has same rule for all
+        /// spreadsheets, and is determined by IsValid method in this class.
+        /// Cell name normalization has same rule (all uppercase letters) for all
+        /// spreadsheets, and is determined by Normalize method in this class.
+        /// </summary>
+        public Spreadsheet()
         {
             cells =  new Dictionary<string, Cell>();
             dependencyGraph = new DependencyGraph();
@@ -393,6 +399,29 @@ namespace SS
                 }
             }
             throw new ArgumentException("Lookup did not find double cell value!");
+        }
+
+        /// <summary>
+        /// Determines if a cell name is valid (exists within the spreadsheet panel).
+        /// A valid cell/variable name is a string that consists of one or more letters
+        /// followed by one or more digits.
+        /// </summary>
+        /// <param name="cellName">The name of the cell to validate.</param>
+        /// <returns>True if the cell name is valid, false otherwise.</returns>
+        private static bool IsValid(string cellName)
+        {
+            return CellValidityPattern.IsMatch(cellName);
+        }
+
+        /// <summary>
+        /// Normalizes the given cell name to maintain consistency.
+        /// Lowercase cell names are converted to uppercase.
+        /// </summary>
+        /// <param name="cellName">The name of the cell to normalize.</param>
+        /// <returns>The normalized cell name.</returns>
+        private static string Normalize(string cellName)
+        {
+            return cellName.ToUpper();
         }
     }
 }
