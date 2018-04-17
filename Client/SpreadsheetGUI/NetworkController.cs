@@ -18,6 +18,7 @@ namespace SpreadsheetGUI
         private static readonly string PING_RESPONSE = "ping_response " + END_OF_TEXT; // "ping_response \3"
         private static readonly string FOCUS_PREFIX = "focus "; // “focus A9:unique_1\3”
         private static readonly string UNFOCUS_PREFIX = "unfocus "; // “unfocus unique1\3”
+        private static readonly string LOAD_PREFIX = "load ";
 
         //////////////////////// Recieve specific Constants
         private static readonly string CONNECTION_ACCEPTED_PREFIX = "connect_accepted "; // "connect_accepted sales\nmarketing ideas\nanother_sheet\3" or "connect_accepted\3"
@@ -32,12 +33,23 @@ namespace SpreadsheetGUI
         public static readonly string DISCONNECT = "disconnect " + END_OF_TEXT; // "disconnect \3"
 
         /// <summary>
-        /// Delegates from the main form invoked in this controller
+        /// Delegate called when an error is ocurrred in the connection. 
         /// </summary>
         private readonly Action<string> ErrorCallback;
 
+        /// <summary>
+        /// Delegate called when the connection is successful.
+        /// </summary>
         private readonly Action<string> SuccessfulConnection;
+
+        /// <summary>
+        /// Delegate called to populate documents.
+        /// </summary>
         private readonly Action<string[]> PopulateDocuments;
+
+        /// <summary>
+        /// Delegate called when ????
+        /// </summary>
         private readonly Action<string, string, bool> FocusCallback;
 
         // This is the same Spreadsheet backing the original document.
@@ -71,7 +83,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// This attempts to connect to the server ip provided.
+        /// This attempts to connect to the server at the ip provided.
         /// </summary>
         /// <param name="server">String ip of the server.</param>
         /// <param name="name">Name to send.</param>
@@ -103,6 +115,19 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
+        /// Sends a message to the server that 
+        /// </summary>
+        /// <param name="name"></param>
+        public void Load(String name)
+        {
+            // protocol-specified string for a load message to the Server
+            string loadMessage = LOAD_PREFIX + name + END_OF_TEXT;
+
+            // sending the message to the Server
+            AbstractNetworking.Send(_socketState, name);
+        }
+
+        /// <summary>
         /// Called when data is received on the socket.
         /// </summary>
         /// <param name="data">The data that was received.</param>
@@ -129,6 +154,12 @@ namespace SpreadsheetGUI
             // AbstractNetworking.GetData(_socketState);
         }
 
+        /// <summary>
+        /// Handles focusing or unfocusing cells being edited by other clients.
+        /// Will call the FocusCallback which is implemented in SpreadsheetForm.cs and passed in as a callback.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="command"></param>
         private void FocusUnfocus(string data, string command)
         {
             string[] focusCell = data.Replace(command, "").Split(':');

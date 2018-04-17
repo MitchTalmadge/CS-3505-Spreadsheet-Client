@@ -127,9 +127,9 @@ namespace SpreadsheetGUI
             }
             else
             {
-                //RETRIEVE DOCUMENT
-                // LOAD MESSAGE SEND
-                
+                // sending load message to the Server, to retreive the selected spreadsheet
+                networkController.Load(documentNameDropdown.SelectedItem.ToString());
+
                 this.spreadsheetPanel.cellInputTextBox.Focus();
             }
 
