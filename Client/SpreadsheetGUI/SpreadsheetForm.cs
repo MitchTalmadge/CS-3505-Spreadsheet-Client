@@ -120,7 +120,7 @@ namespace SpreadsheetGUI
             {
                 //RETRIEVE DOCUMENT
                 // LOAD MESSAGE SEND
-                // CALL RECEIVING OF FULL_STATE MESSAGE
+                
                 this.spreadsheetPanel.cellInputTextBox.Focus();
             }
 
