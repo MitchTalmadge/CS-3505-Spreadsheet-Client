@@ -85,6 +85,7 @@ namespace SpreadsheetGUI
             ClearCellEditor();
 
             this.documentNameDropdown.Text = "";
+            this.documentNameDropdown.Items.Clear();
             this.documentNameDropdown.Enabled = false;
             this.connectedServerTextBox.Text = "";
             this.connectedServerTextBox.ReadOnly = false;
@@ -114,6 +115,14 @@ namespace SpreadsheetGUI
             // IF we check for the index instead of text, a spreadsheet named "New..." wouldn't become a loophole anymore
             if (documentsDropdown.SelectedIndex.Equals(documentsDropdown.Items.Count - 1))
             {
+                Invoke(new MethodInvoker(() =>
+                {
+                    string input = Microsoft.VisualBasic.Interaction.InputBox("Enter Document Name",
+                        "New Document on",
+                        "Default",
+                        0,
+                        0);
+                }));
                 _spreadsheet = new Spreadsheet();
             }
             else
