@@ -10,7 +10,7 @@ namespace SpreadsheetGUI
     /// <summary>
     /// A partial class of SpreadsheetForm to organize spreadsheet panel logic.
     /// </summary>
-    /// <authors>Jiahui Chen and Mitch Talmadge</authors>
+    /// <authors>Jiahui Chen, Tarun Sunkaraneni, Mark Van der Merwe and Mitch Talmadge</authors>
     partial class SpreadsheetForm
     {
         /// <summary>
@@ -24,7 +24,7 @@ namespace SpreadsheetGUI
             editorNameTextBox.Text = cellName;
             GetColumnAndRowFromCellName(cellName, out var col, out var row);
 
-            // Cell's contents aren't being set (yet) 
+            // Cell's contents aren't being set (yet)
             // Display the cell contents in the editor (and add an equals sign to formulas).
             var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
             if (contents is Formula)
@@ -48,7 +48,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Called when enter is pressed while cell editor text box is selected. 
+        /// Called when enter is pressed while cell editor text box is selected.
         /// </summary>
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanel_CellEditEnter(SpreadsheetPanel sender)
@@ -80,50 +80,50 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Called when down arrow key is pressed while cell editor text box is selected. 
+        /// Called when down arrow key is pressed while cell editor text box is selected.
         /// </summary>
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanel_CellEditDown(SpreadsheetPanel sender)
         {
             // Moving cell selection down
             spreadsheetPanel.MoveSelectionDown();
-            // Changing selection display 
+            // Changing selection display
             SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
         }
 
         /// <summary>
-        /// Called when up arrow key is pressed while cell editor text box is selected. 
+        /// Called when up arrow key is pressed while cell editor text box is selected.
         /// </summary>
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanel_CellEditUp(SpreadsheetPanel sender)
         {
             // Moving cell selection down
             spreadsheetPanel.MoveSelectionUp();
-            // Changing selection display 
+            // Changing selection display
             SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
         }
 
         /// <summary>
-        /// Called when up arrow key is pressed while cell editor text box is selected. 
+        /// Called when up arrow key is pressed while cell editor text box is selected.
         /// </summary>
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanel_CellEditRight(SpreadsheetPanel sender)
         {
             // Moving cell selection down
             spreadsheetPanel.MoveSelectionRight();
-            // Changing selection display 
+            // Changing selection display
             SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
         }
 
         /// <summary>
-        /// Called when left arrow key is pressed while cell editor text box is selected. 
+        /// Called when left arrow key is pressed while cell editor text box is selected.
         /// </summary>
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanel_CellEditLeft(SpreadsheetPanel sender)
         {
             // Moving cell selection down
             spreadsheetPanel.MoveSelectionLeft();
-            // Changing selection display 
+            // Changing selection display
             SpreadsheetPanel_SelectionChanged(spreadsheetPanel);
         }
 

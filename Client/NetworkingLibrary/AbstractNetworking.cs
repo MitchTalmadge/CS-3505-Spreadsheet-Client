@@ -12,6 +12,7 @@ namespace Networking
     public abstract class AbstractNetworking
     {
         public static readonly string END_OF_TEXT = ((char)3).ToString();
+
         /// <summary>
         /// This delegate is called when a connection has been established, whether to a client or a server.
         /// </summary>
@@ -92,9 +93,9 @@ namespace Networking
             state.DataStringBuilder.Append(data);
 
             // Check for End of text character.
-            if ( !data.EndsWith(END_OF_TEXT))
+            if (!data.EndsWith(END_OF_TEXT))
             {
-                // No newline, so there must be more data.
+                // No  End of text, so there must be more data.
                 GetData(state);
                 return;
             }
