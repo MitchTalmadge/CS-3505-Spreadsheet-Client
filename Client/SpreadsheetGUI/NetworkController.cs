@@ -13,23 +13,23 @@ namespace SpreadsheetGUI
     /// </summary>
     public class NetworkController
     {
-        private static readonly string END_OF_TEXT = ((Char)3).ToString();
-        private static readonly string PING = "ping" + END_OF_TEXT; // "ping \3"
-        private static readonly string PING_RESPONSE = "ping_response" + END_OF_TEXT; // "ping_response \3"
-        private static readonly string FOCUS_PREFIX = "focus"; // “focus A9:unique_1\3”
-        private static readonly string UNFOCUS_PREFIX = "unfocus"; // “unfocus unique1\3”
+        private static readonly string END_OF_TEXT = AbstractNetworking.END_OF_TEXT;
+        private static readonly string PING = "ping " + END_OF_TEXT; // "ping \3"
+        private static readonly string PING_RESPONSE = "ping_response " + END_OF_TEXT; // "ping_response \3"
+        private static readonly string FOCUS_PREFIX = "focus "; // “focus A9:unique_1\3”
+        private static readonly string UNFOCUS_PREFIX = "unfocus "; // “unfocus unique1\3”
 
         //////////////////////// Recieve specific Constants
         private static readonly string CONNECTION_ACCEPTED_PREFIX = "connect_accepted"; // "connect_accepted sales\nmarketing ideas\nanother_sheet\3" or "connect_accepted\3"
 
-        private static readonly string FULL_STATE_PREFIX = "full_State"; // "full_state A6:3\nA9:=A6/2\n\3" or "full_state \3"
-        private static readonly string CHANGE_PREFIX = "change"; // "change A4:=A1+A3\3"
-        private static readonly string FILE_LOAD_ERROR = "file_load_error" + END_OF_TEXT; // "file_load_error \3"
+        private static readonly string FULL_STATE_PREFIX = "full_State "; // "full_state A6:3\nA9:=A6/2\n\3" or "full_state \3"
+        private static readonly string CHANGE_PREFIX = "change "; // "change A4:=A1+A3\3"
+        private static readonly string FILE_LOAD_ERROR = "file_load_error " + END_OF_TEXT; // "file_load_error \3"
 
         //////////////////////// Send specific Constants
-        public static readonly string REGISTER = "register" + END_OF_TEXT; // "register \3"
+        public static readonly string REGISTER = "register " + END_OF_TEXT; // "register \3"
 
-        public static readonly string DISCONNECT = "disconnect" + END_OF_TEXT; // "disconnect \3"
+        public static readonly string DISCONNECT = "disconnect " + END_OF_TEXT; // "disconnect \3"
 
         /// <summary>
         /// Delegates from the main form invoked in this controller
@@ -38,6 +38,7 @@ namespace SpreadsheetGUI
 
         private readonly Action<string> SuccessfulConnection;
         private readonly Action<string[]> PopulateDocuments;
+        private readonly Action<string, string, bool> FocusCallback;
 
         // This is the same Spreadsheet backing the original document.
         private Spreadsheet backingSheet;
@@ -60,11 +61,12 @@ namespace SpreadsheetGUI
         /// <param name="ErrorCallback"> Whenever an error happens, this will be used to show the user a message describing the problem </param>
         /// <param name="SuccessfulConnection"> When a successful connection happens, we will notify the user that they were able to connect </param>
         /// <param name="PopulateDocuments">triggers populating dropdown with options of documents </param>
-        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocuments)
+        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocuments, Action<string, string, bool> FocusCallback = null)
         {
             this.ErrorCallback = ErrorCallback;
             this.SuccessfulConnection = SuccessfulConnection;
             this.PopulateDocuments = PopulateDocuments;
+            this.FocusCallback = FocusCallback;
             this.backingSheet = null;
         }
 
@@ -91,6 +93,7 @@ namespace SpreadsheetGUI
                     _socketState.Disconnected += () => { Disconnected?.Invoke(); };
 
                     // Send the register message with the server.
+                    System.Diagnostics.Debug.WriteLine(REGISTER, "sending register message");
                     AbstractNetworking.Send(state, REGISTER);
 
                     // Wait for data.
@@ -105,11 +108,12 @@ namespace SpreadsheetGUI
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
-            System.Diagnostics.Debug.WriteLine(data);
+            data = data.Replace(END_OF_TEXT, "").TrimEnd();
+            System.Diagnostics.Debug.WriteLine(data, "data recieved from the server");
             // We know the first packet has been handled once the world is not null.
             if (data.Equals(DISCONNECT)) Disconnect();
             if (data.Equals(PING)) AbstractNetworking.Send(_socketState, PING_RESPONSE);
-            // TODO (Karen needs to fill out PING_RESPONSE)
+            if (data.Equals(PING_RESPONSE)) ;// TODO (Karen needs to fill out PING_RESPONSE)
             if (backingSheet == null)
                 ParseFirstPacket(data);
             else
@@ -128,20 +132,20 @@ namespace SpreadsheetGUI
 
         private void FocusUnfocus(string data, string command)
         {
-            string[] focusCell = data.Replace(command, "").TrimStart().Split(':');
+            string[] focusCell = data.Replace(command, "").Split(':');
             if (command.Equals(FOCUS_PREFIX))
             {
-                //somthing like FocusCallback(focusCell[0], focusCell[1], userName, true);
+                FocusCallback(focusCell[0], focusCell[1], true);
             }
             else if (command.Equals(UNFOCUS_PREFIX))
             {
-                //somthing like FocusCallback(focusCell[0], focusCell[1], userName, false);
+                FocusCallback(focusCell[0], focusCell[1], false);
             }
         }
 
         private void PopulateDocument(string data, string command)
         {
-            string[] cellContents = data.Replace(command, "").TrimStart().Split('\n');
+            string[] cellContents = data.Replace(command, "").Split('\n');
             foreach (string content in cellContents)
             {
                 string[] cellValue = content.Split(':');
@@ -158,8 +162,8 @@ namespace SpreadsheetGUI
             System.Diagnostics.Debug.WriteLine(data);
             if (_socketState != null)
             {
-                data += ClientNetworking.END_OF_TEXT;
-                ClientNetworking.Send(_socketState, data);
+                data += END_OF_TEXT;
+                AbstractNetworking.Send(_socketState, data);
             }
         }
 
@@ -180,7 +184,7 @@ namespace SpreadsheetGUI
             }
             else
             {
-                string[] documents = data.Replace(CONNECTION_ACCEPTED_PREFIX, "").Split('\n');
+                string[] documents = data.Replace(CONNECTION_ACCEPTED_PREFIX, "").Trim().Split('\n');
                 PopulateDocuments(documents);
                 backingSheet = new Spreadsheet();
             }
@@ -194,6 +198,7 @@ namespace SpreadsheetGUI
         /// </summary>
         public void Disconnect()
         {
+            System.Diagnostics.Debug.WriteLine("Disconnecting");
             // Send the disconnect message with the server.
             _socketState.Disconnect();
         }
