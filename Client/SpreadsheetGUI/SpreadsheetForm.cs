@@ -164,8 +164,6 @@ namespace SpreadsheetGUI
         /// <param name="reason">Why the connection failed.</param>
         private void ConnectionSucceded(string message)
         {
-            this.documentNameDropdown.Enabled = true;
-            this.documentNameDropdown.Focus();
             Invoke(new MethodInvoker(() =>
             {
                 MessageBox.Show(message,
@@ -182,6 +180,8 @@ namespace SpreadsheetGUI
         {
             Invoke(new MethodInvoker(() =>
             {
+                this.documentNameDropdown.Enabled = true;
+                this.documentNameDropdown.Focus();
                 this.documentNameDropdown.Items.AddRange(documents);
                 this.documentNameDropdown.Items.Add("New...");
             }));
