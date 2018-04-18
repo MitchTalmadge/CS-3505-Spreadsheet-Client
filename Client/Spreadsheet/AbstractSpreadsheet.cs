@@ -299,6 +299,10 @@ namespace SS
             {
                 if (n.Equals(start))
                 {
+                    // change value of cell with name n to #REF 
+                    // as indicator of Circular Exception
+                    // then keep iterating and do it for all found n before
+                    // set a boolean circularExecption to true, at end of method, if true throw
                     throw new CircularException();
                 }
                 else if (!visited.Contains(n))
