@@ -55,10 +55,11 @@ namespace SpreadsheetGUI
         {
             try
             {
+                // Send edit message to Server
+                networkController.Edit(GetSelectedCellName());
+
                 // Set the contents of the cell, and update the values of any dependents.
                 RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), spreadsheetPanel.cellInputTextBox.Text));
-
-                // SEND EDIT SERVER MESSAGE 
 
                 //// Moving cell selection down if cell edit is valid
                 spreadsheetPanel.MoveSelectionDown();

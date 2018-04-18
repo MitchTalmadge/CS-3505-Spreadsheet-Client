@@ -23,7 +23,8 @@ namespace SpreadsheetGUI
         private static readonly string FOCUS_PREFIX = "focus "; // “focus A9:unique_1\3”
         private static readonly string UNFOCUS_PREFIX = "unfocus "; // “unfocus unique1\3”
         private static readonly string LOAD_PREFIX = "load ";
-        public static readonly string REVERT_PREFIX = "revert";
+        public static readonly string REVERT_PREFIX = "revert ";
+        public static readonly string EDIT_PREFIX = "edit";
 
         /// <summary>
         /// String constants, specified by protocl, used in Server's 
@@ -40,7 +41,7 @@ namespace SpreadsheetGUI
         /// </summary>
         public static readonly string REGISTER = "register " + END_OF_TEXT; // "register \3"
         public static readonly string DISCONNECT = "disconnect " + END_OF_TEXT; // "disconnect \3"
-        public static readonly string UNDO = "undo" + END_OF_TEXT;
+        public static readonly string UNDO = "undo " + END_OF_TEXT;
 
         /// <summary>
         /// Timer that ensures the Client pings the Server every 10 seconds
@@ -163,6 +164,15 @@ namespace SpreadsheetGUI
         public void Revert(String cell)
         {
             AbstractNetworking.Send(_socketState, REVERT_PREFIX + cell + END_OF_TEXT);
+        }
+
+        /// <summary>
+        /// Sends a message to the server requesting an Edit action with the specified cell.
+        /// </summary>
+        /// <param name="cell"></param>
+        public void Edit(String cell)
+        {
+            AbstractNetworking.Send(_socketState, EDIT_PREFIX + cell + END_OF_TEXT);
         }
 
         /// <summary>
