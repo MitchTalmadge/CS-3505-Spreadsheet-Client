@@ -114,6 +114,12 @@ namespace SpreadsheetGUI
                 {
                     string input = Microsoft.VisualBasic.Interaction.InputBox("Enter Document Name",
                         "New Document on" + connectedServerTextBox.Text);
+                    if (input.Length > 0)
+                    {
+                        this.Text = input + " - Spreadsheet 3505";
+                        this.documentNameLabel.Text = "Document Name: " + input;
+                        documentNameDropdown.Enabled = false;
+                    }
                 }));
                 _spreadsheet = new Spreadsheet();
             }

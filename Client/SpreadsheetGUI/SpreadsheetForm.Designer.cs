@@ -1,4 +1,6 @@
-﻿namespace SpreadsheetGUI
+﻿using System.Windows.Forms;
+
+namespace SpreadsheetGUI
 {
     partial class SpreadsheetForm
     {
@@ -188,6 +190,7 @@
             this.documentNameDropdown.Location = new System.Drawing.Point(406, 66);
             this.documentNameDropdown.Margin = new System.Windows.Forms.Padding(2);
             this.documentNameDropdown.Name = "documentNameDropdown";
+            this.documentNameDropdown.DropDownStyle = ComboBoxStyle.DropDownList;
             this.documentNameDropdown.Size = new System.Drawing.Size(501, 28);
             this.documentNameDropdown.TabIndex = 10;
             this.documentNameDropdown.SelectedIndexChanged += new System.EventHandler(this.documentNameDropdown_SelectedIndexChanged);

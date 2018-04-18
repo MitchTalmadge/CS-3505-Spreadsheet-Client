@@ -20,7 +20,7 @@ namespace SpreadsheetGUI
         private static readonly string UNFOCUS_PREFIX = "unfocus "; // “unfocus unique1\3”
 
         //////////////////////// Recieve specific Constants
-        private static readonly string CONNECTION_ACCEPTED_PREFIX = "connect_accepted"; // "connect_accepted sales\nmarketing ideas\nanother_sheet\3" or "connect_accepted\3"
+        private static readonly string CONNECTION_ACCEPTED_PREFIX = "connect_accepted "; // "connect_accepted sales\nmarketing ideas\nanother_sheet\3" or "connect_accepted\3"
 
         private static readonly string FULL_STATE_PREFIX = "full_State "; // "full_state A6:3\nA9:=A6/2\n\3" or "full_state \3"
         private static readonly string CHANGE_PREFIX = "change "; // "change A4:=A1+A3\3"
@@ -108,7 +108,6 @@ namespace SpreadsheetGUI
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
-            data = data.Replace(END_OF_TEXT, "").TrimEnd();
             System.Diagnostics.Debug.WriteLine(data, "data recieved from the server");
             // We know the first packet has been handled once the world is not null.
             if (data.Equals(DISCONNECT)) Disconnect();
@@ -184,7 +183,7 @@ namespace SpreadsheetGUI
             }
             else
             {
-                string[] documents = data.Replace(CONNECTION_ACCEPTED_PREFIX, "").Trim().Split('\n');
+                string[] documents = data.Replace(END_OF_TEXT, "").Replace(CONNECTION_ACCEPTED_PREFIX, "").Trim().Split('\n');
                 PopulateDocuments(documents);
                 backingSheet = new Spreadsheet();
             }
