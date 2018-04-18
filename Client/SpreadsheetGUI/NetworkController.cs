@@ -2,6 +2,7 @@
 using SS;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,9 @@ namespace SpreadsheetGUI
     /// </summary>
     public class NetworkController
     {
+        /// <summary>
+        /// String constants, specified by protocl, used in communication messages. 
+        /// </summary>
         private static readonly string END_OF_TEXT = AbstractNetworking.END_OF_TEXT;
         private static readonly string PING = "ping " + END_OF_TEXT; // "ping \3"
         private static readonly string PING_RESPONSE = "ping_response " + END_OF_TEXT; // "ping_response \3"
@@ -20,17 +24,32 @@ namespace SpreadsheetGUI
         private static readonly string UNFOCUS_PREFIX = "unfocus "; // “unfocus unique1\3”
         private static readonly string LOAD_PREFIX = "load ";
 
-        //////////////////////// Recieve specific Constants
+        /// <summary>
+        /// String constants, specified by protocl, used in Server's 
+        /// messages that are received. 
+        /// </summary>
         private static readonly string CONNECTION_ACCEPTED_PREFIX = "connect_accepted "; // "connect_accepted sales\nmarketing ideas\nanother_sheet\3" or "connect_accepted\3"
-
         private static readonly string FULL_STATE_PREFIX = "full_State "; // "full_state A6:3\nA9:=A6/2\n\3" or "full_state \3"
         private static readonly string CHANGE_PREFIX = "change "; // "change A4:=A1+A3\3"
         private static readonly string FILE_LOAD_ERROR = "file_load_error " + END_OF_TEXT; // "file_load_error \3"
 
-        //////////////////////// Send specific Constants
+        /// <summary>
+        /// String constants, specified by protocl, used in Client's 
+        /// messages that are sent to the Server. 
+        /// </summary>
         public static readonly string REGISTER = "register " + END_OF_TEXT; // "register \3"
-
         public static readonly string DISCONNECT = "disconnect " + END_OF_TEXT; // "disconnect \3"
+
+        /// <summary>
+        /// Timer that ensures the Client pings the Server every 10 seconds
+        /// </summary>
+        Stopwatch pingTimer = new Stopwatch();
+
+        /// <summary>
+        /// Timer that ensures a Server's ping_response is received every 60 
+        /// seconds to validate Server is still up.
+        /// </summary>
+        Stopwatch serverTimer = new Stopwatch();
 
         /// <summary>
         /// Delegate called when an error is ocurrred in the connection. 
@@ -134,16 +153,49 @@ namespace SpreadsheetGUI
         public void DataReceived(string data)
         {
             System.Diagnostics.Debug.WriteLine(data, "data recieved from the server");
-            // We know the first packet has been handled once the world is not null.
+
+            // If a disconnect message is received, Disconnect the client
             if (data.Equals(DISCONNECT)) Disconnect();
+
+            // If a ping is received from the Server, send a ping_response back
             if (data.Equals(PING)) AbstractNetworking.Send(_socketState, PING_RESPONSE);
-            if (data.Equals(PING_RESPONSE)) ;// TODO (Karen needs to fill out PING_RESPONSE)
+
+            // If a ping response is received from the Server, the Server ping response timer is reset
+            if (data.Equals(PING_RESPONSE))
+            {
+                // timer ensuring Server is still up resets, Server has another 60 seconds until
+                // another ping_response is necessary
+                serverTimer.Restart();
+            }
+
+            // We know the first packet has been handled once the world is not null.
             if (backingSheet == null)
                 ParseFirstPacket(data);
             else
             {
+                // full_state is only received upon initial loading of spreadsheet
+                // and the ping loop begins after the full_state message is received
                 if (data.StartsWith(FULL_STATE_PREFIX))
+                {
                     PopulateDocument(data, FULL_STATE_PREFIX);
+
+                    // ping loop begins as both timers are started
+                    pingTimer.Start();
+                    serverTimer.Start();
+
+                    // every 10 seconds (10000 milliseconds) another ping is sent to the Server
+                    if (pingTimer.ElapsedMilliseconds == 10000)
+                    {
+                        AbstractNetworking.Send(_socketState, PING);
+                        pingTimer.Restart();
+                    }
+
+                    // if the Server doesn't send a ping_response in 60 seconds the Client is disconnected
+                    if (serverTimer.ElapsedMilliseconds == 60000)
+                    {
+                        Disconnect();
+                    }
+                }
                 else if (data.StartsWith(CHANGE_PREFIX))
                     PopulateDocument(data, CHANGE_PREFIX);
                 else if (data.StartsWith(FOCUS_PREFIX))
@@ -172,7 +224,13 @@ namespace SpreadsheetGUI
                 FocusCallback(focusCell[0], focusCell[1], false);
             }
         }
-
+        
+        /// <summary>
+        /// Processes full_state message, receiving a complete spreadsheet's data and
+        /// loading it into the spreadsheet. 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="command"></param>
         private void PopulateDocument(string data, string command)
         {
             string[] cellContents = data.Replace(command, "").Split('\n');
@@ -229,7 +287,9 @@ namespace SpreadsheetGUI
         public void Disconnect()
         {
             System.Diagnostics.Debug.WriteLine("Disconnecting");
-            // Send the disconnect message with the server.
+            // Sending disconnect message to the server.
+            AbstractNetworking.Send(_socketState, DISCONNECT);
+            // disconnecting socket
             _socketState.Disconnect();
         }
     }
