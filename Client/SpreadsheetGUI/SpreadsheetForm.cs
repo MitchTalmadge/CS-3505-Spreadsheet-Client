@@ -93,7 +93,7 @@ namespace SpreadsheetGUI
             _spreadsheet = null;
         }
 
-        /////////////////// Events ////////////////////
+        /////////////////// Event ////////////////////
 
         private void connectedServerTextBox_KeyUp(object sender, KeyEventArgs e)
         {
@@ -104,6 +104,11 @@ namespace SpreadsheetGUI
             }
         }
 
+        /// <summary>
+        /// Called when a spreadsheet is selected in the dropdown menu. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void documentNameDropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox documentsDropdown = (ComboBox)sender;
@@ -125,8 +130,9 @@ namespace SpreadsheetGUI
             }
             else
             {
-                //RETRIEVE DOCUMENT
-                this.documentNameDropdown.Enabled = false;
+                // sending load message to the Server, to retreive the selected spreadsheet
+                networkController.Load(documentNameDropdown.SelectedItem.ToString());
+
                 this.spreadsheetPanel.cellInputTextBox.Focus();
             }
 
