@@ -699,8 +699,6 @@ namespace SS
                     }
                 }
 
-                _ssp.Focus("A6", "A6");
-
                 Invalidate();
             }
 
