@@ -82,7 +82,7 @@ namespace SpreadsheetGUI
 
         /// <summary>
         /// Delegate called when Focus GUI update must be done.
-        /// Parameter is user id. 
+        /// Parameter is user id.
         /// </summary>
         private readonly Action<string> UnfocusCallback;
 
@@ -279,7 +279,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Calls the FocusCallback to update GUI display to reflect another client editing a cell. 
+        /// Calls the FocusCallback to update GUI display to reflect another client editing a cell.
         /// </summary>
         /// <param name="data"></param>
         /// <param name="command"></param>
@@ -291,7 +291,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Calls the unFocusCallback to update GUI display to reflect another client has stopped editing a cell. 
+        /// Calls the unFocusCallback to update GUI display to reflect another client has stopped editing a cell.
         /// </summary>
         /// <param name="data"></param>
         /// <param name="command"></param>
@@ -314,6 +314,7 @@ namespace SpreadsheetGUI
             foreach (string content in cellContents)
             {
                 string[] cellValue = content.Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                if (cellValue.Length < 2) return;
                 this.SpreadsheetEditCallback(cellValue[0], cellValue[1]);
             }
         }
