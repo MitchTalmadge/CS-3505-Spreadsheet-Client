@@ -28,9 +28,11 @@ namespace SpreadsheetGUI
         {
             InitializeComponent();
 
-            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList);
+            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList, null /*FocusCallback*/, this.EditSpreadsheet);
             // this.spreadsheetPanel.ReadOnly(true);
             this.documentNameDropdown.Enabled = false;
+            this.undoButton.Enabled = false;
+            this.revertButton.Enabled = false;
             // Create a new, empty spreadsheet.
             _spreadsheet = new Spreadsheet();
             this.connectedServerTextBox.Focus();
@@ -93,7 +95,7 @@ namespace SpreadsheetGUI
             _spreadsheet = null;
         }
 
-        /////////////////// Event ////////////////////
+        /////////////////// Events ////////////////////
 
         private void connectedServerTextBox_KeyUp(object sender, KeyEventArgs e)
         {
@@ -105,7 +107,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Called when a spreadsheet is selected in the dropdown menu. 
+        /// Called when a spreadsheet is selected in the dropdown menu.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -115,24 +117,28 @@ namespace SpreadsheetGUI
             // IF we check for the index instead of text, a spreadsheet named "New..." wouldn't become a loophole anymore
             if (documentsDropdown.SelectedIndex.Equals(documentsDropdown.Items.Count - 1))
             {
-                Invoke(new MethodInvoker(() =>
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Enter Document Name",
+                    "New Document on " + connectedServerTextBox.Text);
+                if (input.Length > 0)
                 {
-                    string input = Microsoft.VisualBasic.Interaction.InputBox("Enter Document Name",
-                        "New Document on",
-                        "Default",
-                        0,
-                        0);
-                }));
-                _spreadsheet = new Spreadsheet();
+                    this.Text = input + " - Spreadsheet 3505";
+                    this.documentNameLabel.Text = "Document Name: " + input;
+                    networkController.Load(input);
+                }
             }
             else
             {
                 // sending load message to the Server, to retreive the selected spreadsheet
                 networkController.Load(documentNameDropdown.SelectedItem.ToString());
-
+                this.Text = documentNameDropdown.SelectedItem.ToString() + " - Spreadsheet 3505";
+                this.documentNameLabel.Text = "Document Name: " + documentNameDropdown.SelectedItem.ToString();
                 this.spreadsheetPanel.cellInputTextBox.Focus();
             }
 
+            this.documentNameDropdown.Enabled = false;
+            this.undoButton.Enabled = true;
+            this.revertButton.Enabled = true;
+            _spreadsheet = new Spreadsheet();
             // this.spreadsheetPanel.ReadOnly(false);
         }
 
@@ -153,6 +159,27 @@ namespace SpreadsheetGUI
                     this.connectedServerTextBox.ReadOnly = false;
                 }
             };
+        }
+
+        /// <summary>
+        /// Simple Gui event to trigger Undo command everytime
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void undoButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.networkController.Undo();
+        }
+
+        /// <summary>
+        ///  Gui event to trigger Revert command
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void revertButton_Click(object sender, EventArgs e)
+        {
+            this.spreadsheetPanel.GetSelection(out int column, out int row);
+            this.networkController.Revert(((char)(column + 'A')).ToString() + (row + 1).ToString());
         }
 
         ////////////////////////// Network Controller Delegates /////////////////////////////////////////
@@ -199,6 +226,20 @@ namespace SpreadsheetGUI
                 this.documentNameDropdown.Focus();
                 this.documentNameDropdown.Items.AddRange(documents);
                 this.documentNameDropdown.Items.Add("New...");
+            }));
+        }
+
+        /// <summary>
+        /// This is how we are able to edit our spreadsheet without having threading issues, the Networking Controller should
+        /// be calling this often
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="content"></param>
+        private void EditSpreadsheet(string cell, string content)
+        {
+            Invoke(new MethodInvoker(() =>
+            {
+                this._spreadsheet.SetContentsOfCell(cell, content);
             }));
         }
     }
