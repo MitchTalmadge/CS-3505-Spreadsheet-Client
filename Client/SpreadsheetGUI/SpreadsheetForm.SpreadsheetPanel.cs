@@ -49,6 +49,24 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
+        /// Edits GUI of spreadsheet panel to display cells being edited by other clients on the Server. 
+        /// </summary>
+        /// <param name="cell"></param>
+        private void SpreadsheetPanel_Focus(string cell)
+        {
+
+        }
+
+        /// <summary>
+        /// Edits GUI of spreadsheet panel to stop displaying cells no longer being
+        /// edited by other clients on the Server. 
+        /// </summary>
+        private void SpreadsheetPanel_Unfocus()
+        {
+
+        }
+
+        /// <summary>
         /// Called when enter is pressed while cell editor text box is selected.
         /// </summary>
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
@@ -56,10 +74,13 @@ namespace SpreadsheetGUI
         {
             try
             {
+                // Send edit message to Server
+                networkController.Edit(GetSelectedCellName());
+
                 // Set the contents of the cell, and update the values of any dependents.
                 RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), spreadsheetPanel.cellInputTextBox.Text));
 
-                // SEND EDIT SERVER MESSAGE
+                // SEND EDIT SERVER MESSAGE 
 
                 //// Moving cell selection down if cell edit is valid
                 spreadsheetPanel.MoveSelectionDown();
