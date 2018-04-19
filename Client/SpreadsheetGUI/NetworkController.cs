@@ -25,7 +25,7 @@ namespace SpreadsheetGUI
         private static readonly string UNFOCUS_PREFIX = "unfocus "; // “unfocus unique1\3”
         private static readonly string LOAD_PREFIX = "load ";
         public static readonly string REVERT_PREFIX = "revert ";
-        public static readonly string EDIT_PREFIX = "edit";
+        public static readonly string EDIT_PREFIX = "edit ";
 
         /// <summary>
         /// String constants, specified by protocl, used in Server's
@@ -33,7 +33,7 @@ namespace SpreadsheetGUI
         /// </summary>
         private static readonly string CONNECTION_ACCEPTED_PREFIX = "connect_accepted "; // "connect_accepted sales\nmarketing ideas\nanother_sheet\3" or "connect_accepted\3"
 
-        private static readonly string FULL_STATE_PREFIX = "full_State "; // "full_state A6:3\nA9:=A6/2\n\3" or "full_state \3"
+        private static readonly string FULL_STATE_PREFIX = "full_state "; // "full_state A6:3\nA9:=A6/2\n\3" or "full_state \3"
         private static readonly string CHANGE_PREFIX = "change "; // "change A4:=A1+A3\3"
         private static readonly string FILE_LOAD_ERROR = "file_load_error " + END_OF_TEXT; // "file_load_error \3"
 
@@ -179,14 +179,14 @@ namespace SpreadsheetGUI
         /// Sends a message to the server requesting an Edit action with the specified cell.
         /// </summary>
         /// <param name="cell"></param>
-        public void Edit(String cell)
+        public void Edit(String cell, string content)
         {
-            AbstractNetworking.Send(_socketState, EDIT_PREFIX + cell + END_OF_TEXT);
+            AbstractNetworking.Send(_socketState, EDIT_PREFIX + cell + ":" + content + END_OF_TEXT);
         }
 
         /// <summary>
         /// Sends a message to the server requesting a Focus action with the specified cell.
-        /// Used so other clients may be notified that this client is editing a cell. 
+        /// Used so other clients may be notified that this client is editing a cell.
         /// </summary>
         /// <param name="cell"></param>
         public void Focus(String cell)
@@ -196,7 +196,7 @@ namespace SpreadsheetGUI
 
         /// <summary>
         /// Sends a message to the server requesting a Unfocus action with the specified cell.
-        /// Used so other clients may be notified that this client has stopped editing a cell. 
+        /// Used so other clients may be notified that this client has stopped editing a cell.
         /// </summary>
         public void Unfocus()
         {
@@ -204,7 +204,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Sends a ping message to the Server, is the delegate used when the pingTimer's Elapse event occurs. 
+        /// Sends a ping message to the Server, is the delegate used when the pingTimer's Elapse event occurs.
         /// </summary>
         public void Ping(object sender, ElapsedEventArgs e)
         {
@@ -246,7 +246,7 @@ namespace SpreadsheetGUI
 
                     // if serverTimer reaches 60s, disconnect from the Server
                     serverTimer.Enabled = true;
-                    serverTimer.AutoReset = false; 
+                    serverTimer.AutoReset = false;
                     serverTimer.Elapsed += new System.Timers.ElapsedEventHandler(Disconnect);
 
                     // every 10 seconds (10000 milliseconds) another ping is sent to the Server
@@ -264,7 +264,7 @@ namespace SpreadsheetGUI
             }
 
             // Get new data.
-            // AbstractNetworking.GetData(_socketState);
+            AbstractNetworking.GetData(_socketState);
         }
 
         /// <summary>
@@ -310,13 +310,14 @@ namespace SpreadsheetGUI
         /// <param name="command"></param>
         private void FullStateDocumentDocument(string data)
         {
-            string[] cellContents = data.Replace(FULL_STATE_PREFIX, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            string[] cellContents = data.Replace(END_OF_TEXT, "").Replace(FULL_STATE_PREFIX, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
             this.CreateSpreadsheet();
-            foreach (string content in cellContents)
-            {
-                string[] cellValue = content.Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                this.SpreadsheetEditCallback(cellValue[0], cellValue[1]);
-            }
+            if (cellContents.Length > 0)
+                foreach (string content in cellContents)
+                {
+                    string[] cellValue = content.Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                    this.SpreadsheetEditCallback(cellValue[0], cellValue[1]);
+                }
         }
 
         /// <summary>
@@ -369,7 +370,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Disconnect wrapper delegate so it may handle Elapsed events of Timers. 
+        /// Disconnect wrapper delegate so it may handle Elapsed events of Timers.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
