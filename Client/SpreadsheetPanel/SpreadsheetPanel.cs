@@ -71,8 +71,7 @@ namespace SS
         /// Used for random color selection for Focus display.
         /// </summary>
         private Random rnd;
-        //Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-
+        
         /// <summary>
         /// Tracks which cells are being edited, and maps them by name to a textbox that will 
         /// show a different color for each other Client.
@@ -140,8 +139,7 @@ namespace SS
             // initializing focused cells map
             focusedCells = new Dictionary<string, TextBox>();
         }
-
-
+        
         /// <summary>
         /// Clears the display.
         /// </summary>
@@ -150,7 +148,6 @@ namespace SS
         {
             drawingPanel.Clear();
         }
-
 
         /// <summary>
         /// If the zero-based column and row are in range, sets the value of that
@@ -311,7 +308,6 @@ namespace SS
 
         private class Address
         {
-
             public int Col { get; set; }
             public int Row { get; set; }
 
@@ -338,14 +334,48 @@ namespace SS
         }
 
         /// <summary>
-        /// Creates a colored text box at the location of the cell to indicate that
-        /// another client is editing it. 
+        /// Creates a colored, uneditable text box at the location of the cell 
+        /// to indicate that another client is editing it. 
         /// </summary>
         /// <param name="user"></param>
         /// <param name="cell"></param>
         public void Focus(string user, string cell)
         {
+            //if the user already has a focus box just move it to the cell the user is editing
+            if (focusedCells.TryGetValue(user, out var box))
+            {
+                // getting cell's location (and textbox's location) from cell name
+                GetColumnAndRowFromCellName(cell, out var col, out var row);
+                int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
+                int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
 
+                box.Location = new Point(cell_x, cell_y);
+            }
+            else  // create a new Textbox, give it a random color, and move it to cell the user is editing
+            {
+                // random color the textbox will be
+                Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+
+                // getting cell's location (and textbox's location) from cell name
+                GetColumnAndRowFromCellName(cell, out var col, out var row);
+                int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
+                int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
+
+                // creating focus display box and making it visible
+                TextBox focusBox = new TextBox()
+                {
+                    Location = new Point(cell_x, cell_y),
+                    Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT),
+                    BackColor = randomColor,
+                    ReadOnly = true,
+                    Visible = true
+                };
+                Controls.Add(focusBox);
+                focusBox.BringToFront();
+
+                // Adding textbox into map to track it
+                focusedCells.Add(user, focusBox);
+            }
         }
 
         /// <summary>
@@ -355,7 +385,27 @@ namespace SS
         /// <param name="user"></param>
         public void Unfocus(string user)
         {
+            // if a user has a corresponding focus display box, make it invisible
+            if (focusedCells.TryGetValue(user, out var box))
+            {
+                box.Visible = false;
+            }
+        }
 
+        /// <summary>
+        /// From a cell name, determines the column and row of the cell in the spreadsheet panel.
+        /// </summary>
+        /// <param name="cellName">The name of the cell.</param>
+        /// <param name="col">The variable to store the column in.</param>
+        /// <param name="row">The variable to store the row in.</param>
+        private static void GetColumnAndRowFromCellName(string cellName, out int col, out int row)
+        {
+            // Column
+            col = cellName[0] - 'A';
+
+            // Row
+            int.TryParse(cellName.Substring(1), out row);
+            row = row - 1;
         }
 
         /// <summary>
@@ -647,7 +697,10 @@ namespace SS
                     {
                         _ssp.SelectionChanged(_ssp);
                     }
-                }               
+                }
+
+                _ssp.Focus("A6", "A6");
+
                 Invalidate();
             }
 

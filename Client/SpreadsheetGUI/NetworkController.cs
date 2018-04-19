@@ -160,7 +160,7 @@ namespace SpreadsheetGUI
             string loadMessage = LOAD_PREFIX + name + END_OF_TEXT;
 
             // sending the message to the Server
-            AbstractNetworking.Send(_socketState, name);
+            AbstractNetworking.Send(_socketState, loadMessage);
         }
 
         /// <summary>
