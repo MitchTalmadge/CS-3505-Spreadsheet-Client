@@ -176,6 +176,25 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
+        /// Sends a message to the server requesting a Focus action with the specified cell.
+        /// Used so other clients may be notified that this client is editing a cell. 
+        /// </summary>
+        /// <param name="cell"></param>
+        public void Focus(String cell)
+        {
+            AbstractNetworking.Send(_socketState, FOCUS_PREFIX + cell + END_OF_TEXT);
+        }
+
+        /// <summary>
+        /// Sends a message to the server requesting a Unfocus action with the specified cell.
+        /// Used so other clients may be notified that this client has stopped editing a cell. 
+        /// </summary>
+        public void Unfocus()
+        {
+            AbstractNetworking.Send(_socketState, UNFOCUS_PREFIX + END_OF_TEXT);
+        }
+
+        /// <summary>
         /// Called when data is received on the socket.
         /// </summary>
         /// <param name="data">The data that was received.</param>
