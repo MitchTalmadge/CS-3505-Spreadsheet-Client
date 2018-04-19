@@ -110,9 +110,8 @@ namespace SpreadsheetGUI
         /// <param name="ErrorCallback"> Whenever an error happens, this will be used to show the user a message describing the problem </param>
         /// <param name="SuccessfulConnection"> When a successful connection happens, we will notify the user that they were able to connect </param>
         /// <param name="PopulateDocumentListCallback">triggers populating dropdown with options of documents </param>
-        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocumentListCallback, 
-            Action<string, string> FocusCallback, Action<string> UnfocusCallback, Action<string, string> SpreadsheetEditCallback)
-        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocumentListCallback, Action CreateSpreadsheet, Action<string, string, bool> FocusCallback, Action<string, string> SpreadsheetEditCallback)
+        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocumentListCallback,
+            Action CreateSpreadsheet, Action<string, string> FocusCallback, Action<string> UnfocusCallback, Action<string, string> SpreadsheetEditCallback)
         {
             this.ErrorCallback = ErrorCallback;
             this.SuccessfulConnection = SuccessfulConnection;
