@@ -51,7 +51,7 @@ namespace SpreadsheetGUI
         /// Edits GUI of spreadsheet panel to display cells being edited by other clients on the Server. 
         /// </summary>
         /// <param name="cell"></param>
-        private void SpreadsheetPanel_Focus(string cell)
+        private void SpreadsheetPanel_Focus(string cell, string user)
         {
 
         }
@@ -60,7 +60,7 @@ namespace SpreadsheetGUI
         /// Edits GUI of spreadsheet panel to stop displaying cells no longer being
         /// edited by other clients on the Server. 
         /// </summary>
-        private void SpreadsheetPanel_Unfocus()
+        private void SpreadsheetPanel_Unfocus(string user)
         {
 
         }

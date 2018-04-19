@@ -12,8 +12,6 @@ using System.Windows.Forms;
 
 namespace SS
 {
-
-
     /// <summary>
     /// The type of delegate used to register for SelectionChanged events
     /// </summary>
@@ -49,7 +47,6 @@ namespace SS
 
     public partial class SpreadsheetPanel : UserControl
     {
-
         // The SpreadsheetPanel is composed of a DrawingPanel (where the grid is drawn),
         // a horizontal scroll bar, and a vertical scroll bar.
         private DrawingPanel drawingPanel;
@@ -69,6 +66,18 @@ namespace SS
         private const int SCROLLBAR_WIDTH = 20;
         private const int COL_COUNT = 26;
         private const int ROW_COUNT = 99;
+
+        /// <summary>
+        /// Used for random color selection for Focus display.
+        /// </summary>
+        private Random rnd;
+        //Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+
+        /// <summary>
+        /// Tracks which cells are being edited, and maps them by name to a textbox that will 
+        /// show a different color for each other Client.
+        /// </summary>
+        private Dictionary<string, TextBox> focusedCells;
 
         /// <summary>
         /// Determines if this spreadsheet can be edited or not.
@@ -124,6 +133,14 @@ namespace SS
             cellInputTextBox.KeyDown += new KeyEventHandler(cellInputTextBox_KeyDown);
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
+
+            cellInputTextBox.Location = new Point(50, 50);
+
+            // initializing Random generator
+            rnd = new Random();
+
+            // initializing focused cells map
+            focusedCells = new Dictionary<string, TextBox>();
         }
 
 
@@ -322,12 +339,32 @@ namespace SS
 
         }
 
+        /// <summary>
+        /// Creates a colored text box at the location of the cell to indicate that
+        /// another client is editing it. 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cell"></param>
+        public void Focus(string user, string cell)
+        {
+
+        }
+
+        /// <summary>
+        /// Makes colored text box at the location of the cell indicating that
+        /// another client is editing it invisible. 
+        /// </summary>
+        /// <param name="user"></param>
+        public void Unfocus(string user)
+        {
+
+        }
 
         /// <summary>
         /// The panel where the spreadsheet grid is drawn.  It keeps track of the
         /// current selection as well as what is supposed to be drawn in each cell.
         /// </summary>
-        
+
         private class DrawingPanel : Panel
         {
             // Columns and rows are numbered beginning with 0.  This is the coordinate
@@ -413,7 +450,6 @@ namespace SS
                 }
                 _selectedCol = col;
                 _selectedRow = row;
-
 
                 // Moving cell cellInputTextBox to selected cell's location
                 // computing location the cell text input box should be placed at (top left corner point)

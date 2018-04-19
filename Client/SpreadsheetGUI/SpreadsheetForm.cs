@@ -28,7 +28,8 @@ namespace SpreadsheetGUI
         {
             InitializeComponent();
 
-            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList, null /*FocusCallback*/, this.EditSpreadsheet);
+            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList,
+                this.SpreadsheetPanel_Focus, this.SpreadsheetPanel_Unfocus, this.EditSpreadsheet);
             // this.spreadsheetPanel.ReadOnly(true);
             this.documentNameDropdown.Enabled = false;
             this.undoButton.Enabled = false;
