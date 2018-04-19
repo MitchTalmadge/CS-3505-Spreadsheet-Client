@@ -24,7 +24,7 @@ namespace SpreadsheetGUI
         private static readonly string FOCUS_PREFIX = "focus "; // “focus A9:unique_1\3”
         private static readonly string UNFOCUS_PREFIX = "unfocus "; // “unfocus unique1\3”
         private static readonly string LOAD_PREFIX = "load ";
-        public static readonly string REVERT_PREFIX = "revert";
+        public static readonly string REVERT_PREFIX = "revert ";
 
         /// <summary>
         /// String constants, specified by protocl, used in Server's
@@ -43,7 +43,7 @@ namespace SpreadsheetGUI
         public static readonly string REGISTER = "register " + END_OF_TEXT; // "register \3"
 
         public static readonly string DISCONNECT = "disconnect " + END_OF_TEXT; // "disconnect \3"
-        public static readonly string UNDO = "undo" + END_OF_TEXT;
+        public static readonly string UNDO = "undo " + END_OF_TEXT;
 
         /// <summary>
         /// Timer that ensures the Client pings the Server every 10 seconds

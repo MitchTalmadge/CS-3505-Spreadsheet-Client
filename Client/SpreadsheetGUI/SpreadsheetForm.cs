@@ -95,7 +95,7 @@ namespace SpreadsheetGUI
             _spreadsheet = null;
         }
 
-        /////////////////// Event ////////////////////
+        /////////////////// Events ////////////////////
 
         private void connectedServerTextBox_KeyUp(object sender, KeyEventArgs e)
         {
@@ -179,7 +179,7 @@ namespace SpreadsheetGUI
         private void revertButton_Click(object sender, EventArgs e)
         {
             this.spreadsheetPanel.GetSelection(out int column, out int row);
-            this.networkController.Revert((column + 'A') + row.ToString());
+            this.networkController.Revert(((char)(column + 'A')).ToString() + (row + 1).ToString());
         }
 
         ////////////////////////// Network Controller Delegates /////////////////////////////////////////
