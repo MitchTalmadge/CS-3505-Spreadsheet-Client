@@ -19,6 +19,7 @@ namespace SpreadsheetGUI
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
+            if (_spreadsheet == null) return;
             // Display the cell name in the editor.
             var cellName = GetSelectedCellName();
             editorNameTextBox.Text = cellName;
@@ -58,7 +59,7 @@ namespace SpreadsheetGUI
                 // Set the contents of the cell, and update the values of any dependents.
                 RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), spreadsheetPanel.cellInputTextBox.Text));
 
-                // SEND EDIT SERVER MESSAGE 
+                // SEND EDIT SERVER MESSAGE
 
                 //// Moving cell selection down if cell edit is valid
                 spreadsheetPanel.MoveSelectionDown();

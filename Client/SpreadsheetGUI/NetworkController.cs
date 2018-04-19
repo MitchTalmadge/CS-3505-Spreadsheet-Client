@@ -59,27 +59,29 @@ namespace SpreadsheetGUI
         /// <summary>
         /// Delegate called when an error is ocurrred in the connection.
         /// </summary>
-        private readonly Action<string> ErrorCallback;
+        private event Action<string> ErrorCallback;
 
         /// <summary>
         /// Delegate called when the connection is successful.
         /// </summary>
-        private readonly Action<string> SuccessfulConnection;
+        private event Action<string> SuccessfulConnection;
 
         /// <summary>
         /// Delegate called to populate documents.
         /// </summary>
-        private readonly Action<string[]> PopulateDocumentList;
+        private event Action<string[]> PopulateDocumentListCallback;
+
+        private event Action CreateSpreadsheet;
 
         /// <summary>
         /// Delegate called when ????
         /// </summary>
-        private readonly Action<string, string, bool> FocusCallback;
+        private event Action<string, string, bool> FocusCallback;
 
         /// <summary>
         /// This is how we'll be able to edit our spreadsheet.
         /// </summary>
-        private readonly Action<string, string> SpreadsheetEditCallback;
+        private event Action<string, string> SpreadsheetEditCallback;
 
         /// <summary>
         /// This event is fired when the connection to the server has been lost,
@@ -92,6 +94,7 @@ namespace SpreadsheetGUI
         /// </summary>
         private SocketState _socketState;
 
+        //if (this._spreadsheet == null) { this._spreadsheet = new Spreadsheet(); this.spreadsheetPanel.ReadOnly = false; }
         /// <summary>
         /// Creates a Network Controller. All the parameters are delegates which will be called based on events that occur
         /// in this controller. These delegates are all going to affect the GUI somehow.
@@ -99,11 +102,12 @@ namespace SpreadsheetGUI
         /// <param name="ErrorCallback"> Whenever an error happens, this will be used to show the user a message describing the problem </param>
         /// <param name="SuccessfulConnection"> When a successful connection happens, we will notify the user that they were able to connect </param>
         /// <param name="PopulateDocumentListCallback">triggers populating dropdown with options of documents </param>
-        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocumentListCallback, Action<string, string, bool> FocusCallback, Action<string, string> SpreadsheetEditCallback)
+        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocumentListCallback, Action CreateSpreadsheet, Action<string, string, bool> FocusCallback, Action<string, string> SpreadsheetEditCallback)
         {
             this.ErrorCallback = ErrorCallback;
             this.SuccessfulConnection = SuccessfulConnection;
-            this.PopulateDocumentList = PopulateDocumentListCallback;
+            this.PopulateDocumentListCallback = PopulateDocumentListCallback;
+            this.CreateSpreadsheet = CreateSpreadsheet;
             this.FocusCallback = FocusCallback;
             this.SpreadsheetEditCallback = SpreadsheetEditCallback;
         }
@@ -150,7 +154,7 @@ namespace SpreadsheetGUI
             string loadMessage = LOAD_PREFIX + name + END_OF_TEXT;
 
             // sending the message to the Server
-            AbstractNetworking.Send(_socketState, name);
+            AbstractNetworking.Send(_socketState, loadMessage);
         }
 
         /// <summary>
@@ -201,7 +205,7 @@ namespace SpreadsheetGUI
                 // and the ping loop begins after the full_state message is received
                 if (data.StartsWith(FULL_STATE_PREFIX))
                 {
-                    PopulateDocument(data, FULL_STATE_PREFIX);
+                    FullStateDocumentDocument(data);
 
                     // ping loop begins as both timers are started
                     pingTimer.Start();
@@ -221,7 +225,7 @@ namespace SpreadsheetGUI
                     }
                 }
                 else if (data.StartsWith(CHANGE_PREFIX))
-                    PopulateDocument(data, CHANGE_PREFIX);
+                    ChangeDocument(data);
                 else if (data.StartsWith(FOCUS_PREFIX))
                     FocusUnfocus(data, UNFOCUS_PREFIX);// this needs to be changed.
             }
@@ -238,7 +242,7 @@ namespace SpreadsheetGUI
         /// <param name="command"></param>
         private void FocusUnfocus(string data, string command)
         {
-            string[] focusCell = data.Replace(command, "").Split(':');
+            string[] focusCell = data.Replace(command, "").Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
             if (command.Equals(FOCUS_PREFIX))
             {
                 FocusCallback(focusCell[0], focusCell[1], true);
@@ -255,9 +259,26 @@ namespace SpreadsheetGUI
         /// </summary>
         /// <param name="data"></param>
         /// <param name="command"></param>
-        private void PopulateDocument(string data, string command)
+        private void ChangeDocument(string data)
         {
-            string[] cellContents = data.Replace(command, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            string[] cellContents = data.Replace(CHANGE_PREFIX, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            foreach (string content in cellContents)
+            {
+                string[] cellValue = content.Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                this.SpreadsheetEditCallback(cellValue[0], cellValue[1]);
+            }
+        }
+
+        /// <summary>
+        /// Processes full_state message, receiving a complete spreadsheet's data and
+        /// loading it into the spreadsheet.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="command"></param>
+        private void FullStateDocumentDocument(string data)
+        {
+            string[] cellContents = data.Replace(FULL_STATE_PREFIX, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            this.CreateSpreadsheet();
             foreach (string content in cellContents)
             {
                 string[] cellValue = content.Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
@@ -292,7 +313,7 @@ namespace SpreadsheetGUI
             else
             {
                 string[] documents = data.Replace(END_OF_TEXT, "").Replace(CONNECTION_ACCEPTED_PREFIX, "").Trim().Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                PopulateDocumentList(documents);
+                PopulateDocumentListCallback(documents);
             }
             // Notify the listener that the connection was established and the world is ready.
             //_connectionEstablishedCallback(this);
