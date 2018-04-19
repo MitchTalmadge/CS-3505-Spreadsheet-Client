@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 
 namespace SpreadsheetGUI
 {
@@ -47,15 +47,15 @@ namespace SpreadsheetGUI
         public static readonly string UNDO = "undo " + END_OF_TEXT;
 
         /// <summary>
-        /// Timer that ensures the Client pings the Server every 10 seconds
+        /// Timer that ensures the Client pings the Server every 10 seconds (10000ms)
         /// </summary>
-        private Stopwatch pingTimer = new Stopwatch();
+        private Timer pingTimer = new Timer(10000);
 
         /// <summary>
         /// Timer that ensures a Server's ping_response is received every 60
-        /// seconds to validate Server is still up.
+        /// seconds (60000ms) to validate Server is still up.
         /// </summary>
-        private Stopwatch serverTimer = new Stopwatch();
+        private Timer serverTimer = new Timer(60000);
 
         /// <summary>
         /// Delegate called when an error is ocurrred in the connection.
@@ -200,6 +200,14 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
+        /// Sends a ping message to the Server, is the delegate used when the pingTimer's Elapse event occurs. 
+        /// </summary>
+        public void Ping(object sender, ElapsedEventArgs e)
+        {
+            AbstractNetworking.Send(_socketState, PING);
+        }
+
+        /// <summary>
         /// Called when data is received on the socket.
         /// </summary>
         /// <param name="data">The data that was received.</param>
@@ -218,7 +226,7 @@ namespace SpreadsheetGUI
             {
                 // timer ensuring Server is still up resets, Server has another 60 seconds until
                 // another ping_response is necessary
-                serverTimer.Restart();
+                serverTimer.Stop(); serverTimer.Start();
             }
 
             // We know the first packet has been handled once the world is not null.
@@ -232,22 +240,17 @@ namespace SpreadsheetGUI
                 {
                     PopulateDocument(data, FULL_STATE_PREFIX);
 
+                    // if serverTimer reaches 60s, disconnect from the Server
+                    serverTimer.Enabled = true;
+                    serverTimer.Elapsed += new System.Timers.ElapsedEventHandler(Disconnect);
+
+                    // every 10 seconds (10000 milliseconds) another ping is sent to the Server
+                    pingTimer.Enabled = true;
+                    pingTimer.Elapsed += new System.Timers.ElapsedEventHandler(Ping);
+
                     // ping loop begins as both timers are started
                     pingTimer.Start();
                     serverTimer.Start();
-
-                    // every 10 seconds (10000 milliseconds) another ping is sent to the Server
-                    if (pingTimer.ElapsedMilliseconds == 10000)
-                    {
-                        AbstractNetworking.Send(_socketState, PING);
-                        pingTimer.Restart();
-                    }
-
-                    // if the Server doesn't send a ping_response in 60 seconds the Client is disconnected
-                    if (serverTimer.ElapsedMilliseconds == 60000)
-                    {
-                        Disconnect();
-                    }
                 }
                 else if (data.StartsWith(CHANGE_PREFIX))
                     PopulateDocument(data, CHANGE_PREFIX);
@@ -338,6 +341,16 @@ namespace SpreadsheetGUI
             AbstractNetworking.Send(_socketState, DISCONNECT);
             // disconnecting socket
             _socketState.Disconnect();
+        }
+
+        /// <summary>
+        /// Disconnect wrapper delegate so it may handle Elapsed events of Timers. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Disconnect(object sender, ElapsedEventArgs e)
+        {
+            Disconnect();
         }
     }
 }
