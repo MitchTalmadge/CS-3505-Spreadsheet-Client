@@ -240,7 +240,8 @@ namespace SpreadsheetGUI
         {
             Invoke(new MethodInvoker(() =>
             {
-                this._spreadsheet.SetContentsOfCell(cell, content);
+                RefreshCellValues(this._spreadsheet.SetContentsOfCell(cell, content));
+                spreadsheetPanel.cellInputTextBox.Text = _spreadsheet.GetCellContents(GetSelectedCellName()).ToString();
             }));
         }
 
