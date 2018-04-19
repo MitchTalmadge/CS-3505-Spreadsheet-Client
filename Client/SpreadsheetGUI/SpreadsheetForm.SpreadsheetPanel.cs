@@ -74,6 +74,7 @@ namespace SpreadsheetGUI
         {
             try
             {
+                if (_spreadsheet == null) return;
                 // Send edit message to Server
                 networkController.Edit(GetSelectedCellName(), spreadsheetPanel.cellInputTextBox.Text);
 
