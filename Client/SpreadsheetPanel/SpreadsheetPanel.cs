@@ -134,8 +134,6 @@ namespace SS
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
 
-            cellInputTextBox.Location = new Point(50, 50);
-
             // initializing Random generator
             rnd = new Random();
 
