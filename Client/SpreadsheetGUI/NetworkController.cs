@@ -251,6 +251,7 @@ namespace SpreadsheetGUI
 
                     // if serverTimer reaches 60s, disconnect from the Server
                     serverTimer.Enabled = true;
+                    serverTimer.AutoReset = false; 
                     serverTimer.Elapsed += new System.Timers.ElapsedEventHandler(Disconnect);
 
                     // every 10 seconds (10000 milliseconds) another ping is sent to the Server
@@ -356,6 +357,9 @@ namespace SpreadsheetGUI
             System.Diagnostics.Debug.WriteLine("Disconnecting");
             // Sending disconnect message to the server.
             AbstractNetworking.Send(_socketState, DISCONNECT);
+            // stopping timers
+            pingTimer.Stop();
+            serverTimer.Stop();
             // disconnecting socket
             _socketState.Disconnect();
         }
