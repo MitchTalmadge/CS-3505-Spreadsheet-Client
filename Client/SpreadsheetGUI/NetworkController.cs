@@ -310,13 +310,9 @@ namespace SpreadsheetGUI
         /// <param name="command"></param>
         private void ChangeDocument(string data)
         {
-            string[] cellContents = data.Replace(CHANGE_PREFIX, "").Replace(END_OF_TEXT, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            foreach (string content in cellContents)
-            {
-                string[] cellValue = content.Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                if (cellValue.Length < 2) return;
+            string[] cellValue = data.Replace(CHANGE_PREFIX, "").Replace(END_OF_TEXT, "").Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            if (cellValue.Length < 2)
                 this.SpreadsheetEditCallback(cellValue[0], cellValue[1]);
-            }
         }
 
         /// <summary>
