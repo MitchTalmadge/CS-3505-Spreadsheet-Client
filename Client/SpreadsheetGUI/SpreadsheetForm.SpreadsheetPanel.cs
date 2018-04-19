@@ -19,6 +19,7 @@ namespace SpreadsheetGUI
         /// <param name="sender">The Spreadsheet Panel containing the cell.</param>
         private void SpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
+            if (_spreadsheet == null) return;
             // Display the cell name in the editor.
             var cellName = GetSelectedCellName();
             editorNameTextBox.Text = cellName;
@@ -48,7 +49,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Edits GUI of spreadsheet panel to display cells being edited by other clients on the Server. 
+        /// Edits GUI of spreadsheet panel to display cells being edited by other clients on the Server.
         /// </summary>
         /// <param name="cell"></param>
         private void SpreadsheetPanel_Focus(string cell, string user)
@@ -58,7 +59,7 @@ namespace SpreadsheetGUI
 
         /// <summary>
         /// Edits GUI of spreadsheet panel to stop displaying cells no longer being
-        /// edited by other clients on the Server. 
+        /// edited by other clients on the Server.
         /// </summary>
         private void SpreadsheetPanel_Unfocus(string user)
         {
@@ -74,10 +75,12 @@ namespace SpreadsheetGUI
             try
             {
                 // Send edit message to Server
-                networkController.Edit(GetSelectedCellName());
+                networkController.Edit(GetSelectedCellName(), spreadsheetPanel.cellInputTextBox.Text);
 
                 // Set the contents of the cell, and update the values of any dependents.
                 RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), spreadsheetPanel.cellInputTextBox.Text));
+
+                // SEND EDIT SERVER MESSAGE
 
                 //// Moving cell selection down if cell edit is valid
                 spreadsheetPanel.MoveSelectionDown();

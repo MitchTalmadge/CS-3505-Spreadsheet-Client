@@ -30,12 +30,14 @@ namespace SpreadsheetGUI
 
             networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList,
                 this.SpreadsheetPanel_Focus, this.SpreadsheetPanel_Unfocus, this.EditSpreadsheet);
+            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList, this.CreateSpreadsheet, null /*FocusCallback*/, this.EditSpreadsheet);
             // this.spreadsheetPanel.ReadOnly(true);
             this.documentNameDropdown.Enabled = false;
+            this.spreadsheetPanel.ReadOnly = true;
             this.undoButton.Enabled = false;
             this.revertButton.Enabled = false;
             // Create a new, empty spreadsheet.
-            _spreadsheet = new Spreadsheet();
+            _spreadsheet = null;
             this.connectedServerTextBox.Focus();
             this.registerServerConnect_backgroundworker();
         }
@@ -140,8 +142,6 @@ namespace SpreadsheetGUI
             this.documentNameDropdown.Enabled = false;
             this.undoButton.Enabled = true;
             this.revertButton.Enabled = true;
-            _spreadsheet = new Spreadsheet();
-            // this.spreadsheetPanel.ReadOnly(false);
         }
 
         private void registerServerConnect_backgroundworker()
@@ -242,6 +242,18 @@ namespace SpreadsheetGUI
             Invoke(new MethodInvoker(() =>
             {
                 this._spreadsheet.SetContentsOfCell(cell, content);
+            }));
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        private void CreateSpreadsheet()
+        {
+            Invoke(new MethodInvoker(() =>
+            {
+                this._spreadsheet = new Spreadsheet();
+                this.spreadsheetPanel.ReadOnly = false;
             }));
         }
     }
