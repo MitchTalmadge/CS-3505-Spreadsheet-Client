@@ -15,9 +15,10 @@ namespace SpreadsheetGUI
     public class NetworkController
     {
         /// <summary>
-        /// String constants, specified by protocl, used in communication messages. 
+        /// String constants, specified by protocl, used in communication messages.
         /// </summary>
         private static readonly string END_OF_TEXT = AbstractNetworking.END_OF_TEXT;
+
         private static readonly string PING = "ping " + END_OF_TEXT; // "ping \3"
         private static readonly string PING_RESPONSE = "ping_response " + END_OF_TEXT; // "ping_response \3"
         private static readonly string FOCUS_PREFIX = "focus "; // “focus A9:unique_1\3”
@@ -26,35 +27,37 @@ namespace SpreadsheetGUI
         public static readonly string REVERT_PREFIX = "revert";
 
         /// <summary>
-        /// String constants, specified by protocl, used in Server's 
-        /// messages that are received. 
+        /// String constants, specified by protocl, used in Server's
+        /// messages that are received.
         /// </summary>
         private static readonly string CONNECTION_ACCEPTED_PREFIX = "connect_accepted "; // "connect_accepted sales\nmarketing ideas\nanother_sheet\3" or "connect_accepted\3"
+
         private static readonly string FULL_STATE_PREFIX = "full_State "; // "full_state A6:3\nA9:=A6/2\n\3" or "full_state \3"
         private static readonly string CHANGE_PREFIX = "change "; // "change A4:=A1+A3\3"
         private static readonly string FILE_LOAD_ERROR = "file_load_error " + END_OF_TEXT; // "file_load_error \3"
 
         /// <summary>
-        /// String constants, specified by protocl, used in Client's 
-        /// messages that are sent to the Server. 
+        /// String constants, specified by protocl, used in Client's
+        /// messages that are sent to the Server.
         /// </summary>
         public static readonly string REGISTER = "register " + END_OF_TEXT; // "register \3"
+
         public static readonly string DISCONNECT = "disconnect " + END_OF_TEXT; // "disconnect \3"
         public static readonly string UNDO = "undo" + END_OF_TEXT;
 
         /// <summary>
         /// Timer that ensures the Client pings the Server every 10 seconds
         /// </summary>
-        Stopwatch pingTimer = new Stopwatch();
+        private Stopwatch pingTimer = new Stopwatch();
 
         /// <summary>
-        /// Timer that ensures a Server's ping_response is received every 60 
+        /// Timer that ensures a Server's ping_response is received every 60
         /// seconds to validate Server is still up.
         /// </summary>
-        Stopwatch serverTimer = new Stopwatch();
+        private Stopwatch serverTimer = new Stopwatch();
 
         /// <summary>
-        /// Delegate called when an error is ocurrred in the connection. 
+        /// Delegate called when an error is ocurrred in the connection.
         /// </summary>
         private readonly Action<string> ErrorCallback;
 
@@ -66,15 +69,17 @@ namespace SpreadsheetGUI
         /// <summary>
         /// Delegate called to populate documents.
         /// </summary>
-        private readonly Action<string[]> PopulateDocuments;
+        private readonly Action<string[]> PopulateDocumentList;
 
         /// <summary>
         /// Delegate called when ????
         /// </summary>
         private readonly Action<string, string, bool> FocusCallback;
 
-        // This is the same Spreadsheet backing the original document.
-        private Spreadsheet backingSheet;
+        /// <summary>
+        /// This is how we'll be able to edit our spreadsheet.
+        /// </summary>
+        private readonly Action<string, string> SpreadsheetEditCallback;
 
         /// <summary>
         /// This event is fired when the connection to the server has been lost,
@@ -93,14 +98,14 @@ namespace SpreadsheetGUI
         /// </summary>
         /// <param name="ErrorCallback"> Whenever an error happens, this will be used to show the user a message describing the problem </param>
         /// <param name="SuccessfulConnection"> When a successful connection happens, we will notify the user that they were able to connect </param>
-        /// <param name="PopulateDocuments">triggers populating dropdown with options of documents </param>
-        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocuments, Action<string, string, bool> FocusCallback = null)
+        /// <param name="PopulateDocumentListCallback">triggers populating dropdown with options of documents </param>
+        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocumentListCallback, Action<string, string, bool> FocusCallback, Action<string, string> SpreadsheetEditCallback)
         {
             this.ErrorCallback = ErrorCallback;
             this.SuccessfulConnection = SuccessfulConnection;
-            this.PopulateDocuments = PopulateDocuments;
+            this.PopulateDocumentList = PopulateDocumentListCallback;
             this.FocusCallback = FocusCallback;
-            this.backingSheet = null;
+            this.SpreadsheetEditCallback = SpreadsheetEditCallback;
         }
 
         /// <summary>
@@ -188,7 +193,7 @@ namespace SpreadsheetGUI
             }
 
             // We know the first packet has been handled once the world is not null.
-            if (backingSheet == null)
+            if (data.Equals(FILE_LOAD_ERROR) || data.StartsWith(CONNECTION_ACCEPTED_PREFIX))
                 ParseFirstPacket(data);
             else
             {
@@ -243,20 +248,20 @@ namespace SpreadsheetGUI
                 FocusCallback(focusCell[0], focusCell[1], false);
             }
         }
-        
+
         /// <summary>
         /// Processes full_state message, receiving a complete spreadsheet's data and
-        /// loading it into the spreadsheet. 
+        /// loading it into the spreadsheet.
         /// </summary>
         /// <param name="data"></param>
         /// <param name="command"></param>
         private void PopulateDocument(string data, string command)
         {
-            string[] cellContents = data.Replace(command, "").Split('\n');
+            string[] cellContents = data.Replace(command, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
             foreach (string content in cellContents)
             {
-                string[] cellValue = content.Split(':');
-                backingSheet.SetContentsOfCell(cellValue[0], cellValue[1]);
+                string[] cellValue = content.Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                this.SpreadsheetEditCallback(cellValue[0], cellValue[1]);
             }
         }
 
@@ -284,16 +289,10 @@ namespace SpreadsheetGUI
             {
                 ErrorCallback("Unable to open or create requested spreadhseet. Try again or use a different name");
             }
-            else if (!data.StartsWith(CONNECTION_ACCEPTED_PREFIX))
-            {
-                Disconnect();
-                ErrorCallback("The server Handshake message didn't begin with 'connect_accepted'");
-            }
             else
             {
-                string[] documents = data.Replace(END_OF_TEXT, "").Replace(CONNECTION_ACCEPTED_PREFIX, "").Trim().Split('\n');
-                PopulateDocuments(documents);
-                backingSheet = new Spreadsheet();
+                string[] documents = data.Replace(END_OF_TEXT, "").Replace(CONNECTION_ACCEPTED_PREFIX, "").Trim().Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                PopulateDocumentList(documents);
             }
             // Notify the listener that the connection was established and the world is ready.
             //_connectionEstablishedCallback(this);
