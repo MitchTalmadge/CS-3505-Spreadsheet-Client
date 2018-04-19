@@ -28,7 +28,8 @@ namespace SpreadsheetGUI
         {
             InitializeComponent();
 
-            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList, this.CreateSpreadsheet, null /*FocusCallback*/, this.EditSpreadsheet);
+            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList,
+                this.CreateSpreadsheet, this.SpreadsheetPanel_Focus, this.SpreadsheetPanel_Unfocus, this.EditSpreadsheet);
             // this.spreadsheetPanel.ReadOnly(true);
             this.documentNameDropdown.Enabled = false;
             this.spreadsheetPanel.ReadOnly = true;
@@ -58,6 +59,7 @@ namespace SpreadsheetGUI
         private void DisconnectSpreadsheet()
         {
             ClearSpreadsheet();
+            // disconnecting from Server and cleanin up socket
             networkController.Disconnect();
         }
 

@@ -75,9 +75,16 @@ namespace SpreadsheetGUI
         private event Action CreateSpreadsheet;
 
         /// <summary>
-        /// Delegate called when ????
+        /// Delegate called when Focus GUI update must be done.
+        /// First parameter is cell id, second is user id.
         /// </summary>
-        private event Action<string, string, bool> FocusCallback;
+        private readonly Action<string, string> FocusCallback;
+
+        /// <summary>
+        /// Delegate called when Focus GUI update must be done.
+        /// Parameter is user id. 
+        /// </summary>
+        private readonly Action<string> UnfocusCallback;
 
         /// <summary>
         /// This is how we'll be able to edit our spreadsheet.
@@ -103,13 +110,15 @@ namespace SpreadsheetGUI
         /// <param name="ErrorCallback"> Whenever an error happens, this will be used to show the user a message describing the problem </param>
         /// <param name="SuccessfulConnection"> When a successful connection happens, we will notify the user that they were able to connect </param>
         /// <param name="PopulateDocumentListCallback">triggers populating dropdown with options of documents </param>
-        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocumentListCallback, Action CreateSpreadsheet, Action<string, string, bool> FocusCallback, Action<string, string> SpreadsheetEditCallback)
+        public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocumentListCallback,
+            Action CreateSpreadsheet, Action<string, string> FocusCallback, Action<string> UnfocusCallback, Action<string, string> SpreadsheetEditCallback)
         {
             this.ErrorCallback = ErrorCallback;
             this.SuccessfulConnection = SuccessfulConnection;
             this.PopulateDocumentListCallback = PopulateDocumentListCallback;
             this.CreateSpreadsheet = CreateSpreadsheet;
             this.FocusCallback = FocusCallback;
+            this.UnfocusCallback = UnfocusCallback;
             this.SpreadsheetEditCallback = SpreadsheetEditCallback;
         }
 
@@ -260,7 +269,9 @@ namespace SpreadsheetGUI
                 else if (data.StartsWith(CHANGE_PREFIX))
                     ChangeDocument(data);
                 else if (data.StartsWith(FOCUS_PREFIX))
-                    FocusUnfocus(data, UNFOCUS_PREFIX);// this needs to be changed.
+                    Focus_Cell(data, UNFOCUS_PREFIX);// this needs to be changed.
+                else if (data.StartsWith(UNFOCUS_PREFIX))
+                    Unfocus_Cell(data, UNFOCUS_PREFIX);
             }
 
             // Get new data.
@@ -268,26 +279,31 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Handles focusing or unfocusing cells being edited by other clients.
-        /// Will call the FocusCallback which is implemented in SpreadsheetForm.cs and passed in as a callback.
+        /// Calls the FocusCallback to update GUI display to reflect another client editing a cell. 
         /// </summary>
         /// <param name="data"></param>
         /// <param name="command"></param>
-        private void FocusUnfocus(string data, string command)
+        private void Focus_Cell(string data, string command)
         {
-            string[] focusCell = data.Replace(command, "").Replace(END_OF_TEXT, "").Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            if (command.Equals(FOCUS_PREFIX))
-            {
-                FocusCallback(focusCell[0], focusCell[1], true);
-            }
-            else if (command.Equals(UNFOCUS_PREFIX))
-            {
-                FocusCallback(focusCell[0], focusCell[1], false);
-            }
+            // first item should be cell id, second item should be user id
+            string[] focusCell = data.Replace(command, "").Split(':');
+            FocusCallback(focusCell[0], focusCell[1]);
         }
 
         /// <summary>
-        /// Processes full_state message, receiving a complete spreadsheet's data and
+        /// Calls the unFocusCallback to update GUI display to reflect another client has stopped editing a cell. 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="command"></param>
+        private void Unfocus_Cell(string data, string command)
+        {
+            // getting user id
+            string userid = data.Replace(command, "");
+            UnfocusCallback(userid);
+        }
+
+        /// <summary>
+        /// Processes full_state and change messages, receiving a complete spreadsheet's data and
         /// loading it into the spreadsheet.
         /// </summary>
         /// <param name="data"></param>

@@ -19,7 +19,6 @@ namespace SpreadsheetGUI
         private void NewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SpreadsheetApplicationContext.Instance.OpenSpreadsheet();
-            //TODO: Open a new instance of the client.
         }
 
         /// <summary>
