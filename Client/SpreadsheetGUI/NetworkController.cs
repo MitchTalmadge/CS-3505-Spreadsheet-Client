@@ -275,7 +275,7 @@ namespace SpreadsheetGUI
         /// <param name="command"></param>
         private void FocusUnfocus(string data, string command)
         {
-            string[] focusCell = data.Replace(command, "").Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            string[] focusCell = data.Replace(command, "").Replace(END_OF_TEXT, "").Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
             if (command.Equals(FOCUS_PREFIX))
             {
                 FocusCallback(focusCell[0], focusCell[1], true);
@@ -294,7 +294,7 @@ namespace SpreadsheetGUI
         /// <param name="command"></param>
         private void ChangeDocument(string data)
         {
-            string[] cellContents = data.Replace(CHANGE_PREFIX, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            string[] cellContents = data.Replace(CHANGE_PREFIX, "").Replace(END_OF_TEXT, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
             foreach (string content in cellContents)
             {
                 string[] cellValue = content.Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
