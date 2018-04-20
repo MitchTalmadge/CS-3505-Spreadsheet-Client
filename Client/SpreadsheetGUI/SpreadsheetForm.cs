@@ -118,9 +118,19 @@ namespace SpreadsheetGUI
             _spreadsheet = null;
         }
 
-        /////////////////// Events ////////////////////
+        /// <summary>
+        /// Event handler for when SpreadsheetForm is closed. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CloseSpreadsheet(object sender, FormClosingEventArgs e)
+        {
+            DisconnectSpreadsheet();
+        }
 
-        private void connectedServerTextBox_KeyUp(object sender, KeyEventArgs e)
+            /////////////////// Events ////////////////////
+
+            private void connectedServerTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             if (!((TextBox)sender).ReadOnly && e.KeyCode == Keys.Enter)
             {

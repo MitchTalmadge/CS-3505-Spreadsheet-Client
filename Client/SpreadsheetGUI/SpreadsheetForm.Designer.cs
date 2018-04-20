@@ -30,6 +30,7 @@ namespace SpreadsheetGUI
         /// </summary>
         private void InitializeComponent()
         {
+            // The SpreadsheetForm
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpreadsheetForm));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,6 +60,8 @@ namespace SpreadsheetGUI
             this.menuStrip.SuspendLayout();
             this.topTableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
+            // adding Disconnect call to close event
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CloseSpreadsheet);
             // 
             // menuStrip
             // 
