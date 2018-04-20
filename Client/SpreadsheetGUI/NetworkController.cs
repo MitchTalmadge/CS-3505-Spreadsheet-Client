@@ -232,7 +232,10 @@ namespace SpreadsheetGUI
             if (data.Equals(DISCONNECT)) Disconnect();
 
             // If a ping is received from the Server, send a ping_response back
-            if (data.Equals(PING)) AbstractNetworking.Send(_socketState, PING_RESPONSE);
+            if (data.Equals(PING))
+            {
+                AbstractNetworking.Send(_socketState, PING_RESPONSE);
+            }
 
             // If a ping response is received from the Server, the Server ping response timer is reset
             if (data.Equals(PING_RESPONSE))
@@ -263,7 +266,6 @@ namespace SpreadsheetGUI
                     // every 10 seconds (10000 milliseconds) another ping is sent to the Server
                     pingTimer = new Timer(10000);
                     pingTimer.Enabled = true;
-                    pingTimer.AutoReset = false;
                     pingTimer.Elapsed += new System.Timers.ElapsedEventHandler(Ping);
 
                     // ping loop begins as both timers are started
