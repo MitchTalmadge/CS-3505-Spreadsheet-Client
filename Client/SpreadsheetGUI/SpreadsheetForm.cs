@@ -20,6 +20,20 @@ namespace SpreadsheetGUI
 
         private NetworkController networkController;
 
+        /// <summary>
+        /// Delegate used to display unfocusing of other clients on the same server. 
+        /// </summary>
+        /// <param name=""></param>
+        //private Action<string> unfocus;
+        private delegate void Unfocus(string user);
+
+        /// <summary>
+        /// Delegate used to display unfocusing of other clients on the same server. 
+        /// </summary>
+        /// <param name=""></param>
+        //private Action<string, string> focus;
+        private delegate void Focus(string cell, string user);
+
         /// <inheritdoc />
         /// <summary>
         /// Creates a SpreadsheetForm with a new, empty spreadsheet.
@@ -30,13 +44,21 @@ namespace SpreadsheetGUI
 
             networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList,
                 this.CreateSpreadsheet, this.SpreadsheetPanel_Focus, this.SpreadsheetPanel_Unfocus, this.EditSpreadsheet);
+
             // this.spreadsheetPanel.ReadOnly(true);
             this.documentNameDropdown.Enabled = false;
             this.spreadsheetPanel.ReadOnly = true;
             this.undoButton.Enabled = false;
             this.revertButton.Enabled = false;
+
             // Create a new, empty spreadsheet.
             _spreadsheet = null;
+
+            // set focus and unfocus delegates
+            //focus = spreadsheetPanel.Focus;
+            //unfocus = spreadsheetPanel.Unfocus;
+
+            // start connection handshake with server
             this.connectedServerTextBox.Focus();
             this.registerServerConnect_backgroundworker();
         }

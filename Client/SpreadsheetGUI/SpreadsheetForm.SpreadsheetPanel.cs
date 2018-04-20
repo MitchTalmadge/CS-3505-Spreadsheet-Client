@@ -60,7 +60,8 @@ namespace SpreadsheetGUI
         /// <param name="cell"></param>
         private void SpreadsheetPanel_Focus(string cell, string user)
         {
-            spreadsheetPanel.Focus(cell, user);
+            this.Invoke(new Focus(spreadsheetPanel.Focus), new object[] { cell, user });
+            /*spreadsheetPanel.Focus(cell, user)*/;
         }
 
         /// <summary>
@@ -69,7 +70,8 @@ namespace SpreadsheetGUI
         /// </summary>
         private void SpreadsheetPanel_Unfocus(string user)
         {
-            spreadsheetPanel.Unfocus(user);
+            this.Invoke(new Unfocus(spreadsheetPanel.Unfocus), new object[] { user });
+            //spreadsheetPanel.Unfocus(user);
         }
 
         /// <summary>
