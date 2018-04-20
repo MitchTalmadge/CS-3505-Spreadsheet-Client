@@ -25,6 +25,12 @@ namespace SpreadsheetGUI
             editorNameTextBox.Text = cellName;
             GetColumnAndRowFromCellName(cellName, out var col, out var row);
 
+            // Tell Server to deselect whatever this Client was previously editing, allowing other Clients to access it
+            // If the Client hasn't edited/selected a cell before, this does nothing
+            networkController.Unfocus();
+            // Tell Server this client is editing selected cell, and other client's shouldn't have access
+            networkController.Focus(cellName);
+
             // Cell's contents aren't being set (yet)
             // Display the cell contents in the editor (and add an equals sign to formulas).
             var contents = _spreadsheet.GetCellContents(GetSelectedCellName());

@@ -75,10 +75,8 @@ namespace SpreadsheetGUI
                 return;
             }
             ClearSpreadsheet();
-            //TODO Open a new instance of the spreadsheet. Connect to the Server
             this.connectedServerTextBox.Text = serverAddress;
             this.connectedServerTextBox.ReadOnly = true;
-            // this.spreadsheetPanel.ReadOnly(true);
         }
 
         /// <summary>
