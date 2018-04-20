@@ -49,13 +49,13 @@ namespace SpreadsheetGUI
         /// <summary>
         /// Timer that ensures the Client pings the Server every 10 seconds (10000ms)
         /// </summary>
-        private Timer pingTimer = new Timer(10000);
+        private Timer pingTimer;
 
         /// <summary>
         /// Timer that ensures a Server's ping_response is received every 60
         /// seconds (60000ms) to validate Server is still up.
         /// </summary>
-        private Timer serverTimer = new Timer(60000);
+        private Timer serverTimer;
 
         /// <summary>
         /// Delegate called when an error is ocurrred in the connection.
@@ -237,6 +237,7 @@ namespace SpreadsheetGUI
             // If a ping response is received from the Server, the Server ping response timer is reset
             if (data.Equals(PING_RESPONSE))
             {
+                System.Diagnostics.Debug.WriteLine(data, "ping response received from the server");
                 // timer ensuring Server is still up resets, Server has another 60 seconds until
                 // another ping_response is necessary
                 serverTimer.Stop(); serverTimer.Start();
@@ -254,12 +255,15 @@ namespace SpreadsheetGUI
                     FullStateDocumentDocument(data);
 
                     // if serverTimer reaches 60s, disconnect from the Server
+                    serverTimer = new Timer(60000);
                     serverTimer.Enabled = true;
                     serverTimer.AutoReset = false;
                     serverTimer.Elapsed += new System.Timers.ElapsedEventHandler(Disconnect);
 
                     // every 10 seconds (10000 milliseconds) another ping is sent to the Server
+                    pingTimer = new Timer(10000);
                     pingTimer.Enabled = true;
+                    pingTimer.AutoReset = false;
                     pingTimer.Elapsed += new System.Timers.ElapsedEventHandler(Ping);
 
                     // ping loop begins as both timers are started
@@ -269,7 +273,7 @@ namespace SpreadsheetGUI
                 else if (data.StartsWith(CHANGE_PREFIX))
                     ChangeDocument(data);
                 else if (data.StartsWith(FOCUS_PREFIX))
-                    Focus_Cell(data, UNFOCUS_PREFIX);// this needs to be changed.
+                    Focus_Cell(data, UNFOCUS_PREFIX);
                 else if (data.StartsWith(UNFOCUS_PREFIX))
                     Unfocus_Cell(data, UNFOCUS_PREFIX);
             }
@@ -376,8 +380,11 @@ namespace SpreadsheetGUI
             // Sending disconnect message to the server.
             AbstractNetworking.Send(_socketState, DISCONNECT);
             // stopping timers
-            pingTimer.Stop();
-            serverTimer.Stop();
+            if (pingTimer != null && serverTimer != null)
+            {
+                pingTimer.Stop();
+                serverTimer.Stop();
+            }
             // disconnecting socket
             _socketState.Disconnect();
         }
