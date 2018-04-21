@@ -21,14 +21,14 @@ namespace SpreadsheetGUI
         private NetworkController networkController;
 
         /// <summary>
-        /// Delegate used to display unfocusing of other clients on the same server. 
+        /// Delegate used to display unfocusing of other clients on the same server.
         /// </summary>
         /// <param name=""></param>
         //private Action<string> unfocus;
         private delegate void Unfocus(string user);
 
         /// <summary>
-        /// Delegate used to display unfocusing of other clients on the same server. 
+        /// Delegate used to display unfocusing of other clients on the same server.
         /// </summary>
         /// <param name=""></param>
         //private Action<string, string> focus;
@@ -119,7 +119,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Event handler for when SpreadsheetForm is closed. 
+        /// Event handler for when SpreadsheetForm is closed.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -128,9 +128,9 @@ namespace SpreadsheetGUI
             DisconnectSpreadsheet();
         }
 
-            /////////////////// Events ////////////////////
+        /////////////////// Events ////////////////////
 
-            private void connectedServerTextBox_KeyUp(object sender, KeyEventArgs e)
+        private void connectedServerTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             if (!((TextBox)sender).ReadOnly && e.KeyCode == Keys.Enter)
             {
@@ -227,6 +227,7 @@ namespace SpreadsheetGUI
                 MessageBox.Show(reason,
                     "Error!",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (reason.Contains("Unable to open")) this.documentNameDropdown.Enabled = true;
             }));
         }
 
