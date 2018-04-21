@@ -379,16 +379,19 @@ namespace SpreadsheetGUI
         public void Disconnect()
         {
             System.Diagnostics.Debug.WriteLine("Disconnecting");
-            // Sending disconnect message to the server.
-            AbstractNetworking.Send(_socketState, DISCONNECT);
+            // Sending disconnect message to the server, if state isn't null
+            if (_socketState != null)
+            {
+                AbstractNetworking.Send(_socketState, DISCONNECT);
+                // disconnecting socket
+                _socketState.Disconnect();
+            }
             // stopping timers
             if (pingTimer != null && serverTimer != null)
             {
                 pingTimer.Stop();
                 serverTimer.Stop();
             }
-            // disconnecting socket
-            _socketState.Disconnect();
         }
 
         /// <summary>
