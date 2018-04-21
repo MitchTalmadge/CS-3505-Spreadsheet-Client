@@ -53,19 +53,6 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Called when the Help -> About Spreadsheet menu item is clicked.
-        /// </summary>
-        /// <param name="sender">The menu item clicked.</param>
-        /// <param name="e">A click event.</param>
-        private void AboutSpreadsheetToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var instructions = Resources.ResourceManager.GetObject("Instructions");
-            // ReSharper disable once PossibleNullReferenceException
-            MessageBox.Show(instructions.ToString(), Resources.SpreadsheetForm_About_Spreadsheet_Dialog_Caption,
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        /// <summary>
         /// Called when Upgrade -> Professional Version is clicked.
         /// </summary>
         /// <param name="sender"></param>

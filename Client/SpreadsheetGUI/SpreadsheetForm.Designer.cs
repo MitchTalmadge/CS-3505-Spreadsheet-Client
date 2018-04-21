@@ -38,8 +38,6 @@ namespace SpreadsheetGUI
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutSpreadsheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upgradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.professionalVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -70,7 +68,6 @@ namespace SpreadsheetGUI
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.helpToolStripMenuItem,
             this.upgradeToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -117,21 +114,6 @@ namespace SpreadsheetGUI
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(183, 30);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutSpreadsheetToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(61, 28);
-            this.helpToolStripMenuItem.Text = "Help";
-            // 
-            // aboutSpreadsheetToolStripMenuItem
-            // 
-            this.aboutSpreadsheetToolStripMenuItem.Name = "aboutSpreadsheetToolStripMenuItem";
-            this.aboutSpreadsheetToolStripMenuItem.Size = new System.Drawing.Size(249, 30);
-            this.aboutSpreadsheetToolStripMenuItem.Text = "About Spreadsheet";
-            this.aboutSpreadsheetToolStripMenuItem.Click += new System.EventHandler(this.AboutSpreadsheetToolStripMenuItem_Click);
             // 
             // upgradeToolStripMenuItem
             // 
@@ -367,8 +349,6 @@ namespace SpreadsheetGUI
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutSpreadsheetToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel topTableLayoutPanel;
         private System.Windows.Forms.TextBox editorValueTextBox;
         private System.Windows.Forms.TextBox editorNameTextBox;
