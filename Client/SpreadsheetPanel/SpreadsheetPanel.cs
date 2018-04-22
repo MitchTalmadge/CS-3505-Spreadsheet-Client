@@ -660,11 +660,9 @@ namespace SS
             /// </summary>
             private void FillFocusedCells(Graphics g, Region clip)
             {
-                System.Diagnostics.Debug.WriteLine("grr", "FillFocusedCells called");
                 // for all focused cells, fill them in with their user/editor's specific color
                 foreach (KeyValuePair<string, string> entry in _ssp.focusedCells)
                 {
-                    System.Diagnostics.Debug.WriteLine(entry.Key, "Iterating through focused cell");
                     // getting the cell's user's color
                     _ssp.users.TryGetValue(entry.Value, out var color);
                     Brush brush = new SolidBrush(color);

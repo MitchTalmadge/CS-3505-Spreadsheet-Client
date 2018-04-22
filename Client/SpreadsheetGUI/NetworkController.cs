@@ -226,8 +226,6 @@ namespace SpreadsheetGUI
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
-            System.Diagnostics.Debug.WriteLine(data, "data recieved from the server");
-
             // If a disconnect message is received, Disconnect the client
             if (data.Equals(DISCONNECT)) Disconnect();
 
@@ -240,7 +238,6 @@ namespace SpreadsheetGUI
             // If a ping response is received from the Server, the Server ping response timer is reset
             if (data.Equals(PING_RESPONSE))
             {
-                System.Diagnostics.Debug.WriteLine(data, "ping response received from the server");
                 // timer ensuring Server is still up resets, Server has another 60 seconds until
                 // another ping_response is necessary
                 serverTimer.Stop(); serverTimer.Start();
@@ -345,7 +342,7 @@ namespace SpreadsheetGUI
         /// <param name="data"></param>
         public void SendMessage(string data)
         {
-            System.Diagnostics.Debug.WriteLine(data);
+
             if (_socketState != null)
             {
                 data += END_OF_TEXT;
@@ -378,7 +375,6 @@ namespace SpreadsheetGUI
         /// </summary>
         public void Disconnect()
         {
-            System.Diagnostics.Debug.WriteLine("Disconnecting");
             // Sending disconnect message to the server, if state isn't null
             if (_socketState != null)
             {
