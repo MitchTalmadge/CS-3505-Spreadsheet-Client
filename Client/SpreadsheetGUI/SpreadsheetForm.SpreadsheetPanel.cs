@@ -20,10 +20,19 @@ namespace SpreadsheetGUI
         private void SpreadsheetPanel_SelectionChanged(SpreadsheetPanel sender)
         {
             if (_spreadsheet == null) return;
-            // Display the cell name in the editor.
+
             var cellName = GetSelectedCellName();
-            editorNameTextBox.Text = cellName;
             GetColumnAndRowFromCellName(cellName, out var col, out var row);
+
+            // If selected cell is being edited by another client, do nothing
+            if (spreadsheetPanel.focusedCells.TryGetValue(cellName, out var val))
+            {
+                return;
+            }
+
+            // Move the text cursor to the content edit text box IF it's not being edited by another client
+            // Display the cell name in the editor.                
+            editorNameTextBox.Text = cellName;
 
             // Tell Server to deselect whatever this Client was previously editing, allowing other Clients to access it
             // If the Client hasn't edited/selected a cell before, this does nothing
@@ -31,7 +40,9 @@ namespace SpreadsheetGUI
             // Tell Server this client is editing selected cell, and other client's shouldn't have access
             networkController.Focus(cellName);
 
-            // Cell's contents aren't being set (yet)
+            spreadsheetPanel.cellInputTextBox.Focus();
+            spreadsheetPanel.cellInputTextBox.SelectAll();
+
             // Display the cell contents in the editor (and add an equals sign to formulas).
             var contents = _spreadsheet.GetCellContents(GetSelectedCellName());
             if (contents is Formula)
@@ -40,12 +51,7 @@ namespace SpreadsheetGUI
             }
             spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
 
-            // Move the text cursor to the content edit text box.
-            spreadsheetPanel.cellInputTextBox.Focus();
-            spreadsheetPanel.cellInputTextBox.SelectAll();
-
             // Display the cell value in the editor.
-            // Currently, this doesn't return anything cause we aren't setting actual values in the spreadsheet
             var value = _spreadsheet.GetCellValue(cellName);
             if (value is FormulaError)
             {
@@ -60,8 +66,7 @@ namespace SpreadsheetGUI
         /// <param name="cell"></param>
         private void SpreadsheetPanel_Focus(string cell, string user)
         {
-            this.Invoke(new Focus(spreadsheetPanel.Focus), new object[] { cell, user });
-            /*spreadsheetPanel.Focus(cell, user)*/;
+            spreadsheetPanel.Focus(cell, user);
         }
 
         /// <summary>
@@ -70,8 +75,7 @@ namespace SpreadsheetGUI
         /// </summary>
         private void SpreadsheetPanel_Unfocus(string user)
         {
-            this.Invoke(new Unfocus(spreadsheetPanel.Unfocus), new object[] { user });
-            //spreadsheetPanel.Unfocus(user);
+            spreadsheetPanel.Unfocus(user);
         }
 
         /// <summary>

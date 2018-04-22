@@ -275,7 +275,7 @@ namespace SpreadsheetGUI
                 else if (data.StartsWith(CHANGE_PREFIX))
                     ChangeDocument(data);
                 else if (data.StartsWith(FOCUS_PREFIX))
-                    Focus_Cell(data, UNFOCUS_PREFIX);
+                    Focus_Cell(data, FOCUS_PREFIX);
                 else if (data.StartsWith(UNFOCUS_PREFIX))
                     Unfocus_Cell(data, UNFOCUS_PREFIX);
             }

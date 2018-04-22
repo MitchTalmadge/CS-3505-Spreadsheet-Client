@@ -54,10 +54,6 @@ namespace SpreadsheetGUI
             // Create a new, empty spreadsheet.
             _spreadsheet = null;
 
-            // set focus and unfocus delegates
-            //focus = spreadsheetPanel.Focus;
-            //unfocus = spreadsheetPanel.Unfocus;
-
             // start connection handshake with server
             this.connectedServerTextBox.Focus();
             this.registerServerConnect_backgroundworker();

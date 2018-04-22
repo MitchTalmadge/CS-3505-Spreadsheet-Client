@@ -8,7 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using System.Collections.Concurrent;
 
 namespace SS
 {
@@ -73,10 +73,22 @@ namespace SS
         private Random rnd;
         
         /// <summary>
-        /// Tracks which cells are being edited, and maps them by name to a textbox that will 
-        /// show a different color for each other Client.
+        /// Tracks which cells are being edited, and maps them by name to the user editing them.
         /// </summary>
-        private Dictionary<string, TextBox> focusedCells;
+        public ConcurrentDictionary<string, string> focusedCells
+        {
+            private set;
+            get;
+        }
+
+        /// <summary>
+        /// Tracks which users have edited cells, and maps them to their fill color. 
+        /// </summary>
+        public ConcurrentDictionary<string, Color> users
+        {
+            private set;
+            get;
+        }
 
         /// <summary>
         /// Determines if this spreadsheet can be edited or not.
@@ -136,8 +148,9 @@ namespace SS
             // initializing Random generator
             rnd = new Random();
 
-            // initializing focused cells map
-            focusedCells = new Dictionary<string, TextBox>();
+            // initializing focused cells map and user map
+            focusedCells = new ConcurrentDictionary<string, string>();
+            users = new ConcurrentDictionary<string, Color>();
         }
         
         /// <summary>
@@ -179,6 +192,10 @@ namespace SS
             return drawingPanel.GetValue(col, row, out value);
         }
 
+        private void GetCellName(int row, int col, out string cellName)
+        {
+           cellName = (char)('A' + col) + (++row).ToString();
+        }
 
         /// <summary>
         /// If the zero-based column and row are in range, uses them to set
@@ -187,7 +204,7 @@ namespace SS
         /// <param name="col"></param>
         /// <param name="row"></param>
         /// <returns></returns>
-        
+
         public bool SetSelection(int col, int row)
         {
             return drawingPanel.SetSelection(col, row);
@@ -334,48 +351,71 @@ namespace SS
         }
 
         /// <summary>
-        /// Creates a colored, uneditable text box at the location of the cell 
-        /// to indicate that another client is editing it. 
+        /// Adds cell to focusedCells map, indicating that another client is editing it. 
+        /// 
+        /// The OnPaint method will fill cell in with the color it's mapped to. 
         /// </summary>
         /// <param name="user"></param>
         /// <param name="cell"></param>
-        public void Focus(string user, string cell)
+        public void Focus(string cell, string user)
         {
-            //if the user already has a focus box just move it to the cell the user is editing
-            if (focusedCells.TryGetValue(user, out var box))
+            System.Diagnostics.Debug.WriteLine(user, "printed from within Focus of SpreadsheetPanel, user");
+            // if the cell isn't in focusedCells, add it
+            if (!focusedCells.TryGetValue(cell, out var u))
             {
-                // getting cell's location (and textbox's location) from cell name
-                GetColumnAndRowFromCellName(cell, out var col, out var row);
-                int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
-                int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
-
-                box.Location = new Point(cell_x, cell_y);
-            }
-            else  // create a new Textbox, give it a random color, and move it to cell the user is editing
-            {
-                // random color the textbox will be
-                Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-
-                // getting cell's location (and textbox's location) from cell name
-                GetColumnAndRowFromCellName(cell, out var col, out var row);
-                int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
-                int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
-
-                // creating focus display box and making it visible
-                TextBox focusBox = new TextBox()
+                // if user hasn't focused a cell before, assign a color and add to user map
+                if (!users.TryGetValue(user, out var color))
                 {
-                    Location = new Point(cell_x, cell_y),
-                    Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT),
-                    BackColor = randomColor,
-                    ReadOnly = true,
-                    Visible = true
-                };
-                Controls.Add(focusBox);
-                focusBox.BringToFront();
+                    // random color the textbox will be
+                    Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
 
-                // Adding textbox into map to track it
-                focusedCells.Add(user, focusBox);
+                    System.Diagnostics.Debug.WriteLine(user, "New color made for new user");
+
+                    users.TryAdd(user, randomColor);
+                }
+
+                focusedCells.TryAdd(cell, user);
+                System.Diagnostics.Debug.WriteLine(cell, "New cell added to focusedCells");
+                
             }
+            //System.Diagnostics.Debug.WriteLine(cell, "Focus in SpreadsheetPanel was called!");
+
+            ////if the user already has a focus box just move it to the cell the user is editing
+            //if (focusedCells.TryGetValue(user, out var box))
+            //{
+            //    // getting cell's location (and textbox's location) from cell name
+            //    GetColumnAndRowFromCellName(cell, out var col, out var row);
+            //    int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
+            //    int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
+
+            //    box.Location = new Point(cell_x, cell_y);
+            //}
+            //else  // create a new Textbox, give it a random color, and move it to cell the user is editing
+            //{
+            //    // random color the textbox will be
+            //    Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+
+            //    // getting cell's location (and textbox's location) from cell name
+            //    GetColumnAndRowFromCellName(cell, out var col, out var row);
+            //    int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
+            //    int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
+
+            //    // creating focus display box and making it visible
+            //    TextBox focusBox = new TextBox()
+            //    {
+            //        Location = new Point(cell_x, cell_y),
+            //        Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT),
+            //        BackColor = randomColor,
+            //        ReadOnly = true,
+            //        Visible = true
+            //    };
+            //    System.Diagnostics.Debug.WriteLine(cell, "New textbox made!!");
+            //    Controls.Add(focusBox);
+            //    focusBox.BringToFront();
+
+            // Adding textbox into map to track it
+            //focusedCells.Add(user, focusBox);
+            //}
         }
 
         /// <summary>
@@ -386,10 +426,10 @@ namespace SS
         public void Unfocus(string user)
         {
             // if a user has a corresponding focus display box, make it invisible
-            if (focusedCells.TryGetValue(user, out var box))
-            {
-                box.Visible = false;
-            }
+            //if (focusedCells.TryGetValue(user, out var box))
+            //{
+            //    box.Visible = false;
+            //}
         }
 
         /// <summary>
@@ -436,7 +476,7 @@ namespace SS
                 _values = new Dictionary<Address, String>();
                 _ssp = ss;
             }
-
+            
             private bool InvalidAddress(int col, int row)
             {
                 return col < 0 || row < 0 || col >= COL_COUNT || row >= ROW_COUNT;
@@ -492,7 +532,10 @@ namespace SS
             /// <returns></returns>
             public bool SetSelection(int col, int row)
             {
-                if (InvalidAddress(col, row))
+                // getting cell name
+                _ssp.GetCellName(col, row, out var cellName);
+                // if cell address is invalid or it's focused by another client, don't do anything
+                if (InvalidAddress(col, row) || _ssp.focusedCells.TryGetValue(cellName, out var val))
                 {
                     return false;
                 }
@@ -528,7 +571,6 @@ namespace SS
                 _firstRow = args.NewValue;
                 Invalidate();
             }
-
             
             protected override void OnPaint(PaintEventArgs e)
             {
@@ -551,6 +593,8 @@ namespace SS
                 Font regularFont = Font;
                 Font boldFont = new Font(regularFont, FontStyle.Bold);
 
+
+                
                 // Draw the column lines
                 int bottom = LABEL_ROW_HEIGHT + (ROW_COUNT - _firstRow) * DATA_ROW_HEIGHT;
                 e.Graphics.DrawLine(pen, new Point(0, 0), new Point(0, bottom));
@@ -587,6 +631,15 @@ namespace SS
                     DrawRowLabel(e.Graphics, y, f);
                 }
 
+                //Brush brush1 = new SolidBrush(Color.AliceBlue);
+                //e.Graphics.FillRectangle(
+                //        brush1,
+                //        new Rectangle(80,
+                //                      80,
+                //                      DATA_COL_WIDTH,
+                //                      DATA_ROW_HEIGHT));
+
+
                 // Highlight the selection, if it is visible
                 if ((_selectedCol - _firstColumn >= 0) && (_selectedRow - _firstRow >= 0))
                 {
@@ -597,8 +650,11 @@ namespace SS
                                       DATA_COL_WIDTH - 2,
                                       DATA_ROW_HEIGHT - 2));
                 }
-                
-                // Draw the text
+
+                // Fill in all focused cells
+                FillFocusedCells(e.Graphics, clip);
+
+                //// Draw the text
                 foreach (KeyValuePair<Address, String> address in _values)
                 {
                     String text = address.Value;
@@ -610,7 +666,7 @@ namespace SS
                     {
                         Region cellClip = new Region(new Rectangle(LABEL_COL_WIDTH + x * DATA_COL_WIDTH + PADDING,
                                                                    LABEL_ROW_HEIGHT + y * DATA_ROW_HEIGHT,
-                                                                   DATA_COL_WIDTH - 2*PADDING,
+                                                                   DATA_COL_WIDTH - 2 * PADDING,
                                                                    DATA_ROW_HEIGHT));
                         cellClip.Intersect(clip);
                         e.Graphics.Clip = cellClip;
@@ -622,11 +678,41 @@ namespace SS
                             LABEL_ROW_HEIGHT + y * DATA_ROW_HEIGHT + (DATA_ROW_HEIGHT - height) / 2);
                     }
                 }
-
-
             }
 
+            /// <summary>
+            /// Fills cells that are focused by other clients with color specific to each user. 
+            /// </summary>
+            private void FillFocusedCells(Graphics g, Region clip)
+            {
+                System.Diagnostics.Debug.WriteLine("grr", "FillFocusedCells called");
+                // for all focused cells, fill them in with their user/editor's specific color
+                foreach (KeyValuePair<string, string> entry in _ssp.focusedCells)
+                {
+                    System.Diagnostics.Debug.WriteLine(entry.Key, "Iterating through focused cell");
+                    // getting the cell's user's color
+                    _ssp.users.TryGetValue(entry.Value, out var color);
+                    Brush brush = new SolidBrush(color);
 
+                    // getting cell's location based on name
+                    GetColumnAndRowFromCellName(entry.Key, out int col, out int row);
+
+                    Region focusClip = new Region(new Rectangle((col * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
+                                      (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
+                                      DATA_COL_WIDTH,
+                                      DATA_ROW_HEIGHT));
+                    focusClip.Intersect(clip);
+                    g.Clip = focusClip;
+
+                    // Color in cell
+                    g.FillRectangle(
+                        brush,
+                        new Rectangle((col * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
+                                      (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
+                                      DATA_COL_WIDTH,
+                                      DATA_ROW_HEIGHT));
+                }
+            }
             /// <summary>
             /// Draws a column label.  The columns are indexed beginning with zero.
             /// </summary>
@@ -677,12 +763,21 @@ namespace SS
             protected override void OnMouseClick(MouseEventArgs e)
             {
                 base.OnClick(e);
-                _ssp.cellInputTextBox.Clear();
-                _ssp.cellInputTextBox.Focus();
 
                 // computes the column and row index 
                 int x = (e.X-LABEL_COL_WIDTH) / DATA_COL_WIDTH;
                 int y = (e.Y-LABEL_ROW_HEIGHT) / DATA_ROW_HEIGHT;
+
+                // getting cell name
+                _ssp.GetCellName(y, x, out string name);
+                // don't do anything if cell is focused by another client
+                if (_ssp.focusedCells.TryGetValue(name, out var user))
+                {
+                    return;
+                }
+                    
+                _ssp.cellInputTextBox.Clear();
+                _ssp.cellInputTextBox.Focus();
                 if (e.X > LABEL_COL_WIDTH && e.Y > LABEL_ROW_HEIGHT && (x + _firstColumn < COL_COUNT) && (y + _firstRow < ROW_COUNT))
                 {
                     _selectedCol = x + _firstColumn;
