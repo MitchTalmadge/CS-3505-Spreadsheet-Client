@@ -359,7 +359,9 @@ namespace SS
         /// <param name="cell"></param>
         public void Focus(string cell, string user)
         {
-            System.Diagnostics.Debug.WriteLine(user, "printed from within Focus of SpreadsheetPanel, user");
+            // Unfocus any cell the user was editing before
+            Unfocus(user);
+
             // if the cell isn't in focusedCells, add it
             if (!focusedCells.TryGetValue(cell, out var u))
             {
@@ -369,53 +371,13 @@ namespace SS
                     // random color the textbox will be
                     Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
 
-                    System.Diagnostics.Debug.WriteLine(user, "New color made for new user");
-
                     users.TryAdd(user, randomColor);
                 }
 
-                focusedCells.TryAdd(cell, user);
-                System.Diagnostics.Debug.WriteLine(cell, "New cell added to focusedCells");
-                
+                focusedCells.TryAdd(cell, user);            
             }
-            //System.Diagnostics.Debug.WriteLine(cell, "Focus in SpreadsheetPanel was called!");
-
-            ////if the user already has a focus box just move it to the cell the user is editing
-            //if (focusedCells.TryGetValue(user, out var box))
-            //{
-            //    // getting cell's location (and textbox's location) from cell name
-            //    GetColumnAndRowFromCellName(cell, out var col, out var row);
-            //    int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
-            //    int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
-
-            //    box.Location = new Point(cell_x, cell_y);
-            //}
-            //else  // create a new Textbox, give it a random color, and move it to cell the user is editing
-            //{
-            //    // random color the textbox will be
-            //    Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-
-            //    // getting cell's location (and textbox's location) from cell name
-            //    GetColumnAndRowFromCellName(cell, out var col, out var row);
-            //    int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
-            //    int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
-
-            //    // creating focus display box and making it visible
-            //    TextBox focusBox = new TextBox()
-            //    {
-            //        Location = new Point(cell_x, cell_y),
-            //        Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT),
-            //        BackColor = randomColor,
-            //        ReadOnly = true,
-            //        Visible = true
-            //    };
-            //    System.Diagnostics.Debug.WriteLine(cell, "New textbox made!!");
-            //    Controls.Add(focusBox);
-            //    focusBox.BringToFront();
-
-            // Adding textbox into map to track it
-            //focusedCells.Add(user, focusBox);
-            //}
+            // redrawing cells panel to reflect focus/unfocuses
+            drawingPanel.Redraw();
         }
 
         /// <summary>
@@ -425,11 +387,16 @@ namespace SS
         /// <param name="user"></param>
         public void Unfocus(string user)
         {
-            // if a user has a corresponding focus display box, make it invisible
-            //if (focusedCells.TryGetValue(user, out var box))
-            //{
-            //    box.Visible = false;
-            //}
+            // if a user has been editing a cell, remove the cell
+            if (users.TryGetValue(user, out var color))
+            {
+                // getting the cell to be unfocused (key corresponding to the value that is user in the focusedCells map) 
+                string cell = focusedCells.FirstOrDefault(x => x.Value.Contains(user)).Key;
+                if (cell != null)
+                {
+                    focusedCells.TryRemove(cell, out var u);
+                }
+            }
         }
 
         /// <summary>
@@ -572,6 +539,14 @@ namespace SS
                 Invalidate();
             }
             
+            /// <summary>
+            /// Allows spreasheet to call OnPaint on drawing panel. 
+            /// </summary>
+            internal void Redraw()
+            {
+               this.Invalidate();
+            }
+
             protected override void OnPaint(PaintEventArgs e)
             {
 
