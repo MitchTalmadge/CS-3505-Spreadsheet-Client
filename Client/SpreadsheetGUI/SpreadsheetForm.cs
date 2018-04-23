@@ -110,6 +110,8 @@ namespace SpreadsheetGUI
             this.documentNameDropdown.Enabled = false;
             this.connectedServerTextBox.Text = "";
             this.connectedServerTextBox.ReadOnly = false;
+            this.Text = "Untitled - Spreadsheet 3505";
+            this.documentNameLabel.Text = "Document Name: ";
 
             _spreadsheet = null;
         }
