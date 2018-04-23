@@ -30,12 +30,10 @@ namespace SpreadsheetGUI
         /// </summary>
         private void InitializeComponent()
         {
-            // The SpreadsheetForm
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpreadsheetForm));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upgradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,8 +56,6 @@ namespace SpreadsheetGUI
             this.menuStrip.SuspendLayout();
             this.topTableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
-            // adding Disconnect call to close event
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CloseSpreadsheet);
             // 
             // menuStrip
             // 
@@ -80,7 +76,6 @@ namespace SpreadsheetGUI
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
-            this.openToolStripMenuItem,
             this.disconnectToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -90,28 +85,21 @@ namespace SpreadsheetGUI
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(183, 30);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
-            // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(183, 30);
-            this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
             // 
             this.disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(183, 30);
+            this.disconnectToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
             this.disconnectToolStripMenuItem.Text = "Disconnect";
             this.disconnectToolStripMenuItem.Click += new System.EventHandler(this.DisconnectToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(183, 30);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
@@ -331,6 +319,7 @@ namespace SpreadsheetGUI
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SpreadsheetForm";
             this.Text = "Untitled - Spreadsheet 3505";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CloseSpreadsheet);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.topTableLayoutPanel.ResumeLayout(false);
@@ -346,7 +335,6 @@ namespace SpreadsheetGUI
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel topTableLayoutPanel;

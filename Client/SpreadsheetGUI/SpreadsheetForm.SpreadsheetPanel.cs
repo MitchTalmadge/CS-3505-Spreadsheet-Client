@@ -31,7 +31,7 @@ namespace SpreadsheetGUI
             }
 
             // Move the text cursor to the content edit text box IF it's not being edited by another client
-            // Display the cell name in the editor.                
+            // Display the cell name in the editor.
             editorNameTextBox.Text = cellName;
 
             // Tell Server to deselect whatever this Client was previously editing, allowing other Clients to access it
@@ -225,7 +225,10 @@ namespace SpreadsheetGUI
         /// </summary>
         private void ClearCellEditor()
         {
-            spreadsheetPanel.cellInputTextBox.Clear();
+            Invoke(new MethodInvoker(() =>
+            {
+                spreadsheetPanel.cellInputTextBox.Clear();
+            }));
         }
     }
 }

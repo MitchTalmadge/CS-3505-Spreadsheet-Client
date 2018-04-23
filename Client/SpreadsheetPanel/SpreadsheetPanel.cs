@@ -16,12 +16,12 @@ namespace SS
     /// The type of delegate used to register for SelectionChanged events
     /// </summary>
     /// <param name="sender"></param>
-    
+
     public delegate void SelectionChangedHandler(SpreadsheetPanel sender);
 
     /// <summary>
     /// The type of delegate used to register for CellEditEnter events
-    /// Triggered when the enter button is pressed while cell editor text box is selected. 
+    /// Triggered when the enter button is pressed while cell editor text box is selected.
     /// </summary>
     /// <param name="sender"></param>
 
@@ -29,7 +29,7 @@ namespace SS
 
     /// <summary>
     /// The type of delegate used to register for CellEditEnter events
-    /// Triggered when the enter button is pressed while cell editor text box is selected. 
+    /// Triggered when the enter button is pressed while cell editor text box is selected.
     /// </summary>
     /// <param name="sender"></param>
 
@@ -37,12 +37,12 @@ namespace SS
 
     /// <summary>
     /// A panel that displays a spreadsheet with 26 columns (labeled A-Z) and 99 rows
-    /// (labeled 1-99).  Each cell on the grid can display a non-editable string.  One 
-    /// of the cells is always selected (and highlighted).  When the selection changes, a 
+    /// (labeled 1-99).  Each cell on the grid can display a non-editable string.  One
+    /// of the cells is always selected (and highlighted).  When the selection changes, a
     /// SelectionChanged event is fired.  Clients can register to be notified of
     /// such events.
-    /// 
-    /// Cells are editable (for 3505 final project). 
+    ///
+    /// Cells are editable (for 3505 final project).
     /// </summary>
 
     public partial class SpreadsheetPanel : UserControl
@@ -50,6 +50,7 @@ namespace SS
         // The SpreadsheetPanel is composed of a DrawingPanel (where the grid is drawn),
         // a horizontal scroll bar, and a vertical scroll bar.
         private DrawingPanel drawingPanel;
+
         private HScrollBar hScroll;
         private VScrollBar vScroll;
 
@@ -59,6 +60,7 @@ namespace SS
         // These constants control the layout of the spreadsheet grid.  The height and
         // width measurements are in pixels.
         private const int DATA_COL_WIDTH = 80;
+
         private const int DATA_ROW_HEIGHT = 20;
         private const int LABEL_COL_WIDTH = 30;
         private const int LABEL_ROW_HEIGHT = 30;
@@ -71,7 +73,7 @@ namespace SS
         /// Used for random color selection for Focus display.
         /// </summary>
         private Random rnd;
-        
+
         /// <summary>
         /// Tracks which cells are being edited, and maps them by name to the user editing them.
         /// </summary>
@@ -82,7 +84,7 @@ namespace SS
         }
 
         /// <summary>
-        /// Tracks which users have edited cells, and maps them to their fill color. 
+        /// Tracks which users have edited cells, and maps them to their fill color.
         /// </summary>
         public ConcurrentDictionary<string, Color> users
         {
@@ -136,12 +138,13 @@ namespace SS
             // Cell input box is same size as a cell and starts out in the first cell
             cellInputTextBox = new TextBox
             {
-                Location = new Point(LABEL_COL_WIDTH, LABEL_ROW_HEIGHT), 
+                Location = new Point(LABEL_COL_WIDTH, LABEL_ROW_HEIGHT),
                 Size = new Size(DATA_COL_WIDTH, DATA_ROW_HEIGHT)
             };
             // Event handler for when enter is pressed while cell is being edited
             cellInputTextBox.KeyPress += new KeyPressEventHandler(cellInputTextBox_KeyPress);
             cellInputTextBox.KeyDown += new KeyEventHandler(cellInputTextBox_KeyDown);
+
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
 
@@ -152,11 +155,11 @@ namespace SS
             focusedCells = new ConcurrentDictionary<string, string>();
             users = new ConcurrentDictionary<string, Color>();
         }
-        
+
         /// <summary>
         /// Clears the display.
         /// </summary>
-        
+
         public void Clear()
         {
             drawingPanel.Clear();
@@ -170,12 +173,11 @@ namespace SS
         /// <param name="row"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        
+
         public bool SetValue(int col, int row, string value)
         {
             return drawingPanel.SetValue(col, row, value);
         }
-
 
         /// <summary>
         /// If the zero-based column and row are in range, assigns the value
@@ -186,7 +188,7 @@ namespace SS
         /// <param name="row"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        
+
         public bool GetValue(int col, int row, out string value)
         {
             return drawingPanel.GetValue(col, row, out value);
@@ -194,7 +196,7 @@ namespace SS
 
         private void GetCellName(int row, int col, out string cellName)
         {
-           cellName = (char)('A' + col) + (++row).ToString();
+            cellName = (char)('A' + col) + (++row).ToString();
         }
 
         /// <summary>
@@ -210,25 +212,24 @@ namespace SS
             return drawingPanel.SetSelection(col, row);
         }
 
-
         /// <summary>
         /// Assigns the column and row of the current selection to the
         /// out parameters.
         /// </summary>
         /// <param name="col"></param>
         /// <param name="row"></param>
-        
+
         public void GetSelection(out int col, out int row)
         {
             drawingPanel.GetSelection(out col, out row);
         }
-        
+
         /// <summary>
         /// When the SpreadsheetPanel is resized, we set the size and locations of the three
         /// components that make it up.
         /// </summary>
         /// <param name="eventargs"></param>
-        
+
         protected override void OnResize(EventArgs eventargs)
         {
             base.OnResize(eventargs);
@@ -243,8 +244,7 @@ namespace SS
                 hScroll.LargeChange = (Width - SCROLLBAR_WIDTH) / DATA_COL_WIDTH;
             }
         }
-        
-        
+
         /// <summary>
         /// The event used to send notifications of a selection change
         /// </summary>
@@ -341,19 +341,19 @@ namespace SS
 
             public override bool Equals(object obj)
             {
- 	            if ((obj == null) || !(obj is Address)) {
+                if ((obj == null) || !(obj is Address))
+                {
                     return false;
                 }
                 Address a = (Address)obj;
                 return Col == a.Col && Row == a.Row;
             }
-
         }
 
         /// <summary>
-        /// Adds cell to focusedCells map, indicating that another client is editing it. 
-        /// 
-        /// The OnPaint method will fill cell in with the color it's mapped to. 
+        /// Adds cell to focusedCells map, indicating that another client is editing it.
+        ///
+        /// The OnPaint method will fill cell in with the color it's mapped to.
         /// </summary>
         /// <param name="user"></param>
         /// <param name="cell"></param>
@@ -374,7 +374,7 @@ namespace SS
                     users.TryAdd(user, randomColor);
                 }
 
-                focusedCells.TryAdd(cell, user);            
+                focusedCells.TryAdd(cell, user);
             }
             // redrawing cells panel to reflect focus/unfocuses
             drawingPanel.Redraw();
@@ -382,7 +382,7 @@ namespace SS
 
         /// <summary>
         /// Makes colored text box at the location of the cell indicating that
-        /// another client is editing it invisible. 
+        /// another client is editing it invisible.
         /// </summary>
         /// <param name="user"></param>
         public void Unfocus(string user)
@@ -390,7 +390,7 @@ namespace SS
             // if a user has been editing a cell, remove the cell
             if (users.TryGetValue(user, out var color))
             {
-                // getting the cell to be unfocused (key corresponding to the value that is user in the focusedCells map) 
+                // getting the cell to be unfocused (key corresponding to the value that is user in the focusedCells map)
                 string cell = focusedCells.FirstOrDefault(x => x.Value.Contains(user)).Key;
                 if (cell != null)
                 {
@@ -425,14 +425,16 @@ namespace SS
             // Columns and rows are numbered beginning with 0.  This is the coordinate
             // of the selected cell.
             private int _selectedCol;
+
             private int _selectedRow;
 
             // Coordinate of cell in upper-left corner of display
             private int _firstColumn = 0;
+
             private int _firstRow = 0;
-            
+
             // The strings contained by the spreadsheet
-            private Dictionary<Address,String> _values;
+            private Dictionary<Address, String> _values;
 
             // The containing panel
             private SpreadsheetPanel _ssp;
@@ -443,7 +445,7 @@ namespace SS
                 _values = new Dictionary<Address, String>();
                 _ssp = ss;
             }
-            
+
             private bool InvalidAddress(int col, int row)
             {
                 return col < 0 || row < 0 || col >= COL_COUNT || row >= ROW_COUNT;
@@ -475,7 +477,6 @@ namespace SS
                 return true;
             }
 
-
             public bool GetValue(int col, int row, out string c)
             {
                 if (InvalidAddress(col, row))
@@ -492,7 +493,7 @@ namespace SS
 
             /// <summary>
             /// Sets selected cell to row and col location in parameters.
-            /// Also sets the location of the cell editor text box to the selected cell. 
+            /// Also sets the location of the cell editor text box to the selected cell.
             /// </summary>
             /// <param name="col"></param>
             /// <param name="row"></param>
@@ -519,13 +520,11 @@ namespace SS
                 return true;
             }
 
-
             public void GetSelection(out int col, out int row)
             {
                 col = _selectedCol;
                 row = _selectedRow;
             }
-
 
             public void HandleHScroll(Object sender, ScrollEventArgs args)
             {
@@ -538,18 +537,17 @@ namespace SS
                 _firstRow = args.NewValue;
                 Invalidate();
             }
-            
+
             /// <summary>
-            /// Allows spreasheet to call OnPaint on drawing panel. 
+            /// Allows spreasheet to call OnPaint on drawing panel.
             /// </summary>
             internal void Redraw()
             {
-               this.Invalidate();
+                this.Invalidate();
             }
 
             protected override void OnPaint(PaintEventArgs e)
             {
-
                 // Clip based on what needs to be refreshed.
                 Region clip = new Region(e.ClipRectangle);
                 e.Graphics.Clip = clip;
@@ -568,8 +566,6 @@ namespace SS
                 Font regularFont = Font;
                 Font boldFont = new Font(regularFont, FontStyle.Bold);
 
-
-                
                 // Draw the column lines
                 int bottom = LABEL_ROW_HEIGHT + (ROW_COUNT - _firstRow) * DATA_ROW_HEIGHT;
                 e.Graphics.DrawLine(pen, new Point(0, 0), new Point(0, bottom));
@@ -614,7 +610,6 @@ namespace SS
                 //                      DATA_COL_WIDTH,
                 //                      DATA_ROW_HEIGHT));
 
-
                 // Highlight the selection, if it is visible
                 if ((_selectedCol - _firstColumn >= 0) && (_selectedRow - _firstRow >= 0))
                 {
@@ -656,7 +651,7 @@ namespace SS
             }
 
             /// <summary>
-            /// Fills cells that are focused by other clients with color specific to each user. 
+            /// Fills cells that are focused by other clients with color specific to each user.
             /// </summary>
             private void FillFocusedCells(Graphics g, Region clip)
             {
@@ -686,6 +681,7 @@ namespace SS
                                       DATA_ROW_HEIGHT));
                 }
             }
+
             /// <summary>
             /// Draws a column label.  The columns are indexed beginning with zero.
             /// </summary>
@@ -701,10 +697,9 @@ namespace SS
                       label,
                       f,
                       new SolidBrush(Color.Black),
-                      LABEL_COL_WIDTH + x*DATA_COL_WIDTH + (DATA_COL_WIDTH - width)/2,
-                      (LABEL_ROW_HEIGHT - height)/2);
+                      LABEL_COL_WIDTH + x * DATA_COL_WIDTH + (DATA_COL_WIDTH - width) / 2,
+                      (LABEL_ROW_HEIGHT - height) / 2);
             }
-
 
             /// <summary>
             /// Draws a row label.  The rows are indexed beginning with zero.
@@ -721,15 +716,14 @@ namespace SS
                     label,
                     f,
                     new SolidBrush(Color.Black),
-                    LABEL_COL_WIDTH - width- PADDING,
-                    LABEL_ROW_HEIGHT + y * DATA_ROW_HEIGHT + (DATA_ROW_HEIGHT-height)/2);
+                    LABEL_COL_WIDTH - width - PADDING,
+                    LABEL_ROW_HEIGHT + y * DATA_ROW_HEIGHT + (DATA_ROW_HEIGHT - height) / 2);
             }
-
 
             /// <summary>
             /// Determines which cell, if any, was clicked.  Generates a SelectionChanged event.  All of
             /// the indexes are zero based.
-            /// Also activates the input text box in the position of the selected cell. 
+            /// Also activates the input text box in the position of the selected cell.
             /// </summary>
             /// <param name="e"></param>
 
@@ -737,9 +731,9 @@ namespace SS
             {
                 base.OnClick(e);
 
-                // computes the column and row index 
-                int x = (e.X-LABEL_COL_WIDTH) / DATA_COL_WIDTH;
-                int y = (e.Y-LABEL_ROW_HEIGHT) / DATA_ROW_HEIGHT;
+                // computes the column and row index
+                int x = (e.X - LABEL_COL_WIDTH) / DATA_COL_WIDTH;
+                int y = (e.Y - LABEL_ROW_HEIGHT) / DATA_ROW_HEIGHT;
 
                 // getting cell name
                 _ssp.GetCellName(y, x, out string name);
@@ -748,7 +742,7 @@ namespace SS
                 {
                     return;
                 }
-                    
+
                 _ssp.cellInputTextBox.Clear();
                 _ssp.cellInputTextBox.Focus();
                 if (e.X > LABEL_COL_WIDTH && e.Y > LABEL_ROW_HEIGHT && (x + _firstColumn < COL_COUNT) && (y + _firstRow < ROW_COUNT))
@@ -769,8 +763,6 @@ namespace SS
 
                 Invalidate();
             }
-
         }
-
     }
 }

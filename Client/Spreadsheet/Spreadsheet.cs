@@ -13,7 +13,7 @@ namespace SS
         private Dictionary<string, Cell> cells;
 
         /// <summary>
-        /// Dependency Graph mapping each cell to its dependents and dependees. 
+        /// Dependency Graph mapping each cell to its dependents and dependees.
         /// </summary>
         private DependencyGraph dependencyGraph;
 
@@ -31,7 +31,7 @@ namespace SS
         /// </summary>
         public Spreadsheet()
         {
-            cells =  new Dictionary<string, Cell>();
+            cells = new Dictionary<string, Cell>();
             dependencyGraph = new DependencyGraph();
         }
 
@@ -256,7 +256,7 @@ namespace SS
 
             //dependees are replaced with dependees (variables) of new formula
             dependencyGraph.ReplaceDependees(normalizedName, formula.GetVariables());
-            cells[normalizedName] =  new Cell(normalizedName, formula, LookupCellValue);
+            cells[normalizedName] = new Cell(normalizedName, formula, LookupCellValue);
 
             try
             {
@@ -286,14 +286,14 @@ namespace SS
 
         /// <summary>
         /// If name is null, throws an ArgumentNullException.
-        /// 
+        ///
         /// Otherwise, if name isn't a valid cell name, throws an InvalidNameException.
-        /// 
+        ///
         /// Otherwise, returns an enumeration, without duplicates, of the names of all cells whose
         /// values depend directly on the value of the named cell.  In other words, returns
         /// an enumeration, without duplicates, of the names of all cells that contain
         /// formulas containing name.
-        /// 
+        ///
         /// For example, suppose that
         /// A1 contains 3
         /// B1 contains the formula A1 * A1
@@ -311,7 +311,7 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-            //dependency graph's get dependents enumerates all unique dependents 
+            //dependency graph's get dependents enumerates all unique dependents
             //and returns an empty list if the cell does not have dependents
             return dependencyGraph.GetDependents(Normalize(name));
         }
@@ -348,7 +348,7 @@ namespace SS
                     }
                 }
             }
-            //don't add an empty cell 
+            //don't add an empty cell
             if (contents is string && (string)contents == "")
             {
                 if (oldContents != null)
@@ -357,7 +357,7 @@ namespace SS
                 }
                 return new HashSet<string>(GetCellsToRecalculate(name));
             }
-            
+
             cells[name] = new Cell(name, contents, LookupCellValue);
 
             //recalculating necessary cell values
@@ -365,7 +365,7 @@ namespace SS
             RecalculateCellValues(recalculatedCells);
 
             //successful return means spreadsheet is changed
-            return new HashSet<string>(recalculatedCells);            
+            return new HashSet<string>(recalculatedCells);
         }
 
         /// <summary>

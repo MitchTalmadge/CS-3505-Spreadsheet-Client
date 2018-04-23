@@ -43,7 +43,7 @@ namespace SpreadsheetGUI
             InitializeComponent();
 
             networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList,
-                this.CreateSpreadsheet, this.SpreadsheetPanel_Focus, this.SpreadsheetPanel_Unfocus, this.EditSpreadsheet);
+                this.CreateSpreadsheet, this.SpreadsheetPanel_Focus, this.SpreadsheetPanel_Unfocus, this.EditSpreadsheet, this.ClearSpreadsheet);
 
             // this.spreadsheetPanel.ReadOnly(true);
             this.documentNameDropdown.Enabled = false;
@@ -59,17 +59,6 @@ namespace SpreadsheetGUI
             this.registerServerConnect_backgroundworker();
         }
 
-        /// <inheritdoc />
-        /// <summary>
-        /// Creates a SpreadsheetForm by loading the provided file. Since to "open" we need to have access to the server,
-        /// that is a required argument here.
-        /// </summary>
-        /// <param name="serverAddress">The address of the server we need to connect to.</param>
-        public SpreadsheetForm(string serverAddress) : this()
-        {
-            OpenSpreadsheet(serverAddress);
-        }
-
         /// <summary>
         /// Disconnects the current client instance from the server it is connected to. This essentially resets this instance of the client to
         /// its startup state
@@ -82,38 +71,26 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// Clears the cells in this sheet and enables the user to edit the document textbox to open another document in the same server.
-        /// </summary>
-        /// <param name="serverAddress">The address of the server we need to connect to.</param>
-        private void OpenSpreadsheet(string serverAddress)
-        {
-            if (!this.connectedServerTextBox.ReadOnly)
-            {
-                ClearSpreadsheet();
-                return;
-            }
-            ClearSpreadsheet();
-            this.connectedServerTextBox.Text = serverAddress;
-            this.connectedServerTextBox.ReadOnly = true;
-        }
-
-        /// <summary>
         /// Clears all parts of the spreadsheet GUI, selects A1, and sets the spreadsheet to null.
         /// </summary>
         private void ClearSpreadsheet()
         {
-            ClearSpreadsheetPanel();
-            ClearCellEditor();
+            Invoke(new MethodInvoker(() =>
+            {
+                ClearSpreadsheetPanel();
+                ClearCellEditor();
+                this.networkController._socketState?.Disconnect();
 
-            this.documentNameDropdown.Text = "";
-            this.documentNameDropdown.Items.Clear();
-            this.documentNameDropdown.Enabled = false;
-            this.connectedServerTextBox.Text = "";
-            this.connectedServerTextBox.ReadOnly = false;
-            this.Text = "Untitled - Spreadsheet 3505";
-            this.documentNameLabel.Text = "Document Name: ";
+                this.documentNameDropdown.Text = "";
+                this.documentNameDropdown.Items.Clear();
+                this.documentNameDropdown.Enabled = false;
+                this.connectedServerTextBox.Text = "";
+                this.connectedServerTextBox.ReadOnly = false;
+                this.Text = "Untitled - Spreadsheet 3505";
+                this.documentNameLabel.Text = "Document Name: ";
 
-            _spreadsheet = null;
+                _spreadsheet = null;
+            }));
         }
 
         /// <summary>

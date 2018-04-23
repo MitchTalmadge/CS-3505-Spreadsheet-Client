@@ -26,16 +26,6 @@ namespace SpreadsheetGUI
         /// </summary>
         /// <param name="sender">The menu item clicked.</param>
         /// <param name="e">A click event.</param>
-        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenSpreadsheet(this.connectedServerTextBox.Text);
-        }
-
-        /// <summary>
-        /// Called when the File -> Open menu item is clicked.
-        /// </summary>
-        /// <param name="sender">The menu item clicked.</param>
-        /// <param name="e">A click event.</param>
         private void DisconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DisconnectSpreadsheet();

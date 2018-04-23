@@ -98,9 +98,14 @@ namespace SpreadsheetGUI
         public event Action Disconnected;
 
         /// <summary>
+        /// Is called upon whenever a Disconnect Method is called
+        /// </summary>
+        public event Action DisconnectSpreadsheetCallback;
+
+        /// <summary>
         /// Socket that the connection is made through.
         /// </summary>
-        private SocketState _socketState;
+        public SocketState _socketState;
 
         //if (this._spreadsheet == null) { this._spreadsheet = new Spreadsheet(); this.spreadsheetPanel.ReadOnly = false; }
         /// <summary>
@@ -111,7 +116,8 @@ namespace SpreadsheetGUI
         /// <param name="SuccessfulConnection"> When a successful connection happens, we will notify the user that they were able to connect </param>
         /// <param name="PopulateDocumentListCallback">triggers populating dropdown with options of documents </param>
         public NetworkController(Action<string> ErrorCallback, Action<string> SuccessfulConnection, Action<string[]> PopulateDocumentListCallback,
-            Action CreateSpreadsheet, Action<string, string> FocusCallback, Action<string> UnfocusCallback, Action<string, string> SpreadsheetEditCallback)
+            Action CreateSpreadsheet, Action<string, string> FocusCallback, Action<string> UnfocusCallback, Action<string, string> SpreadsheetEditCallback,
+            Action DisconnectSpreadsheetCallback)
         {
             this.ErrorCallback = ErrorCallback;
             this.SuccessfulConnection = SuccessfulConnection;
@@ -120,6 +126,7 @@ namespace SpreadsheetGUI
             this.FocusCallback = FocusCallback;
             this.UnfocusCallback = UnfocusCallback;
             this.SpreadsheetEditCallback = SpreadsheetEditCallback;
+            this.DisconnectSpreadsheetCallback = DisconnectSpreadsheetCallback;
         }
 
         /// <summary>
@@ -226,6 +233,7 @@ namespace SpreadsheetGUI
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
+            System.Diagnostics.Debug.WriteLine(data, "data recieved from from server ");
             // If a disconnect message is received, Disconnect the client
             if (data.Equals(DISCONNECT)) Disconnect();
 
@@ -342,7 +350,6 @@ namespace SpreadsheetGUI
         /// <param name="data"></param>
         public void SendMessage(string data)
         {
-
             if (_socketState != null)
             {
                 data += END_OF_TEXT;
@@ -379,8 +386,6 @@ namespace SpreadsheetGUI
             if (_socketState != null)
             {
                 AbstractNetworking.Send(_socketState, DISCONNECT);
-                // disconnecting socket
-                _socketState.Disconnect();
             }
             // stopping timers
             if (pingTimer != null && serverTimer != null)
@@ -388,6 +393,8 @@ namespace SpreadsheetGUI
                 pingTimer.Stop();
                 serverTimer.Stop();
             }
+
+            DisconnectSpreadsheetCallback();
         }
 
         /// <summary>
