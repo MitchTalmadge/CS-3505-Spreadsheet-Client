@@ -40,18 +40,25 @@ namespace SS
     /// </summary>
     public class CircularException : Exception
     {
+        /// <summary>
+        /// The cells that are part of the circular dependency.
+        /// </summary>
         public ICollection<string> InvolvedCells { get; }
-    
+
+        /// <summary>
+        /// The cells that have changed as result of the starting cell being modified.
+        /// </summary>
+        public ICollection<string> ChangedCells { get; }
+
         public CircularException()
         {
-
         }
 
-        public CircularException(ICollection<string> involvedCells)
+        public CircularException(ICollection<string> involvedCells, ICollection<string> changedCells)
         {
             InvolvedCells = involvedCells;
+            ChangedCells = changedCells;
         }
-
     }
 
     /// <summary>
@@ -289,7 +296,7 @@ namespace SS
                     }
                 }
 
-                throw new CircularException(visited);
+                throw new CircularException(visited, changed);
             }
 
             return changed;

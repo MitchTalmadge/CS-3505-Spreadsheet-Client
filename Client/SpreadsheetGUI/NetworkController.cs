@@ -1,10 +1,7 @@
 ﻿using Networking;
-using SS;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Timers;
 
 namespace SpreadsheetGUI
@@ -141,7 +138,7 @@ namespace SpreadsheetGUI
             ClientNetworking.ConnectToServer(server,
                 state =>
                 {
-                    SuccessfulConnection("Connected to host: " + server);
+                    SuccessfulConnection?.Invoke("Connected to host: " + server);
 
                     _socketState = state;
 
@@ -152,13 +149,13 @@ namespace SpreadsheetGUI
                     _socketState.Disconnected += () => { Disconnected?.Invoke(); };
 
                     // Send the register message with the server.
-                    System.Diagnostics.Debug.WriteLine(REGISTER, "sending register message");
+                    Debug.WriteLine(REGISTER, "sending register message");
                     AbstractNetworking.Send(state, REGISTER);
 
                     // Wait for data.
                     AbstractNetworking.GetData(state);
                 },
-                reason => ErrorCallback(reason));
+                reason => ErrorCallback?.Invoke(reason));
         }
 
         /// <summary>
@@ -168,7 +165,7 @@ namespace SpreadsheetGUI
         public void Load(String name)
         {
             // protocol-specified string for a load message to the Server
-            string loadMessage = LOAD_PREFIX + name + END_OF_TEXT;
+            var loadMessage = LOAD_PREFIX + name + END_OF_TEXT;
 
             // sending the message to the Server
             AbstractNetworking.Send(_socketState, loadMessage);
@@ -233,9 +230,9 @@ namespace SpreadsheetGUI
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
-            System.Diagnostics.Debug.WriteLine(data, "data recieved from from server ");
+            Debug.WriteLine(data, "data recieved from from server ");
             // If a disconnect message is received, Disconnect the client
-            if (data.Equals(DISCONNECT)) DisconnectSpreadsheetCallback();
+            if (data.Equals(DISCONNECT)) DisconnectSpreadsheetCallback?.Invoke();
 
             // If a ping is received from the Server, send a ping_response back
             if (data.Equals(PING))
@@ -263,15 +260,16 @@ namespace SpreadsheetGUI
                     FullStateDocumentDocument(data);
 
                     // if serverTimer reaches 60s, disconnect from the Server
-                    serverTimer = new Timer(60000);
-                    serverTimer.Enabled = true;
-                    serverTimer.AutoReset = false;
-                    serverTimer.Elapsed += new System.Timers.ElapsedEventHandler(Disconnect);
+                    serverTimer = new Timer(60000)
+                    {
+                        Enabled = true,
+                        AutoReset = false
+                    };
+                    serverTimer.Elapsed += Disconnect;
 
                     // every 10 seconds (10000 milliseconds) another ping is sent to the Server
-                    pingTimer = new Timer(10000);
-                    pingTimer.Enabled = true;
-                    pingTimer.Elapsed += new System.Timers.ElapsedEventHandler(Ping);
+                    pingTimer = new Timer(10000) {Enabled = true};
+                    pingTimer.Elapsed += Ping;
 
                     // ping loop begins as both timers are started
                     pingTimer.Start();
@@ -297,7 +295,7 @@ namespace SpreadsheetGUI
         private void Focus_Cell(string data, string command)
         {
             // first item should be cell id, second item should be user id
-            string[] focusCell = data.Replace(command, "").Split(':');
+            var focusCell = data.Replace(command, "").Split(':');
             FocusCallback(focusCell[0], focusCell[1]);
         }
 
@@ -309,7 +307,7 @@ namespace SpreadsheetGUI
         private void Unfocus_Cell(string data, string command)
         {
             // getting user id
-            string userid = data.Replace(command, "");
+            var userid = data.Replace(command, "");
             UnfocusCallback(userid);
         }
 
@@ -321,9 +319,9 @@ namespace SpreadsheetGUI
         /// <param name="command"></param>
         private void ChangeDocument(string data)
         {
-            string[] cellValue = data.Replace(CHANGE_PREFIX, "").Replace(END_OF_TEXT, "").Split(':').ToArray();
+            var cellValue = data.Replace(CHANGE_PREFIX, "").Replace(END_OF_TEXT, "").Split(':').ToArray();
             if (cellValue.Length >= 2)
-                this.SpreadsheetEditCallback(cellValue[0], cellValue[1]);
+                SpreadsheetEditCallback?.Invoke(cellValue[0], cellValue[1]);
         }
 
         /// <summary>
@@ -334,13 +332,13 @@ namespace SpreadsheetGUI
         /// <param name="command"></param>
         private void FullStateDocumentDocument(string data)
         {
-            string[] cellContents = data.Replace(END_OF_TEXT, "").Replace(FULL_STATE_PREFIX, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            this.CreateSpreadsheet();
+            var cellContents = data.Replace(END_OF_TEXT, "").Replace(FULL_STATE_PREFIX, "").Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            CreateSpreadsheet?.Invoke();
             if (cellContents.Length > 0)
-                foreach (string content in cellContents)
+                foreach (var content in cellContents)
                 {
-                    string[] cellValue = content.Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                    this.SpreadsheetEditCallback(cellValue[0], cellValue[1]);
+                    var cellValue = content.Split(':').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                    SpreadsheetEditCallback?.Invoke(cellValue[0], cellValue[1]);
                 }
         }
 
@@ -365,12 +363,12 @@ namespace SpreadsheetGUI
         {
             if (data.Equals(FILE_LOAD_ERROR))
             {
-                ErrorCallback("Unable to open or create requested spreadhseet. Try again or use a different name");
+                ErrorCallback?.Invoke("Unable to open or create requested spreadhseet. Try again or use a different name");
             }
             else
             {
-                string[] documents = data.Replace(END_OF_TEXT, "").Replace(CONNECTION_ACCEPTED_PREFIX, "").Trim().Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                PopulateDocumentListCallback(documents);
+                var documents = data.Replace(END_OF_TEXT, "").Replace(CONNECTION_ACCEPTED_PREFIX, "").Trim().Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                PopulateDocumentListCallback?.Invoke(documents);
             }
             // Notify the listener that the connection was established and the world is ready.
             //_connectionEstablishedCallback(this);
@@ -395,7 +393,7 @@ namespace SpreadsheetGUI
                 serverTimer.Stop();
             }
 
-            DisconnectSpreadsheetCallback();
+            DisconnectSpreadsheetCallback?.Invoke();
         }
 
         /// <summary>

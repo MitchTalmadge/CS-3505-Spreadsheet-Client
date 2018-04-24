@@ -1,6 +1,7 @@
 ﻿using SpreadsheetUtilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace SS
@@ -36,33 +37,6 @@ namespace SS
         }
 
         /// <summary>
-        /// Helper method that loads the Cell corresponding to the ame parameter.
-        /// Tries to add the Cell to the spreadsheet and throws a SpreadsheetReadWrite
-        /// Exception reporting the specific error if it fails to do so.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="contents"></param>
-        private void LoadCell(string name, string contents)
-        {
-            try
-            {
-                SetContentsOfCell(name, contents);
-            }
-            catch (InvalidNameException)
-            {
-                throw new SpreadsheetReadWriteException("An invalid cell name was in the XML file!");
-            }
-            catch (FormulaFormatException)
-            {
-                throw new SpreadsheetReadWriteException("An invalid formula was in the XML file!");
-            }
-            catch (CircularException)
-            {
-                throw new SpreadsheetReadWriteException("A Circular Dependency was found within a formula in this XML file!");
-            }
-        }
-
-        /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
         ///
         /// Otherwise, returns the contents (as opposed to the value) of the named cell.  The return
@@ -95,7 +69,7 @@ namespace SS
                 throw new InvalidNameException();
             }
 
-            string normalizedName = Normalize(name);
+            var normalizedName = Normalize(name);
             //an empty or umapped cell should have a value of an empty string
             if (!cells.TryGetValue(normalizedName, out var cell))
             {
@@ -155,9 +129,9 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-            string normalizedName = Normalize(name);
+            var normalizedName = Normalize(name);
 
-            if (Double.TryParse(content, out var num) == true)
+            if (double.TryParse(content, out var num))
             {
                 return SetCellContents(normalizedName, num);
             }
@@ -165,10 +139,8 @@ namespace SS
             {
                 return SetCellContents(normalizedName, new Formula(content.Substring(1), Normalize, ValidVariable));
             }
-            else
-            {
-                return SetCellContents(normalizedName, content);
-            }
+
+            return SetCellContents(normalizedName, content);
         }
 
         /// <summary>
@@ -261,6 +233,7 @@ namespace SS
             {
                 var recalculatedCells = new List<string>(GetCellsToRecalculate(normalizedName));
 
+                // There was no circular dependency, so wipe clean any circular flags.
                 foreach (var cell in recalculatedCells)
                 {
                     cells[cell].Circular = false;
@@ -272,14 +245,23 @@ namespace SS
             }
             catch (CircularException e)
             {
+                // Initially set all changed cells to not be part of the circular dependency.
+                foreach (var cell in e.ChangedCells)
+                {
+                    cells[cell].Circular = false;
+                }
+
+                // Then set all involved cells to be part of the circular dependency.
                 foreach (var cell in e.InvolvedCells)
                 {
                     cells[cell].Circular = true;
                 }
 
+                // Recalculate the cell values of all involved & changed cells.
+                RecalculateCellValues(e.ChangedCells);
                 RecalculateCellValues(e.InvolvedCells);
 
-                return new HashSet<string>(e.InvolvedCells);
+                return new HashSet<string>(e.ChangedCells.Concat(e.InvolvedCells));
             }
         }
 
@@ -353,7 +335,7 @@ namespace SS
                 //dependencies must be removed if the old contents are a formula with variables
                 if (oldContents.Contents is Formula)
                 {
-                    Formula oldFormula = (Formula)oldContents.Contents;
+                    var oldFormula = (Formula)oldContents.Contents;
 
                     foreach (var oldCell in oldFormula.GetVariables())
                     {
@@ -374,7 +356,14 @@ namespace SS
             cells[name] = new Cell(name, contents, LookupCellValue);
 
             //recalculating necessary cell values
-            List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(name));
+            var recalculatedCells = new List<string>(GetCellsToRecalculate(name));
+
+            // There was no circular dependency, so wipe clean any circular flags.
+            foreach (var cell in recalculatedCells)
+            {
+                cells[cell].Circular = false;
+            }
+
             RecalculateCellValues(recalculatedCells);
 
             //successful return means spreadsheet is changed
@@ -390,7 +379,7 @@ namespace SS
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private bool ValidVariable(String name)
+        private bool ValidVariable(string name)
         {
             return Regex.IsMatch(Normalize(name), @"^[A-Za-z]+\d+$") && IsValid(Normalize(name));
         }
@@ -401,7 +390,7 @@ namespace SS
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        private double LookupCellValue(String name)
+        private double LookupCellValue(string name)
         {
             //an empty or umapped cell should have a value of an empty string
             if (cells.TryGetValue(Normalize(name), out var cell))
