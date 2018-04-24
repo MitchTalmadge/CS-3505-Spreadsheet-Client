@@ -155,6 +155,10 @@ namespace SS
         public void Clear()
         {
             drawingPanel.Clear();
+
+            // clearing cell focus display
+            focusedCells.Clear();
+            drawingPanel.Redraw();
         }
 
         /// <summary>
