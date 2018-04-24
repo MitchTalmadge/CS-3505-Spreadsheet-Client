@@ -24,12 +24,6 @@ namespace SpreadsheetGUI
             var cellName = GetSelectedCellName();
             GetColumnAndRowFromCellName(cellName, out var col, out var row);
 
-            // If selected cell is being edited by another client, do nothing
-            if (spreadsheetPanel.focusedCells.TryGetValue(cellName, out var val))
-            {
-                return;
-            }
-
             // Move the text cursor to the content edit text box IF it's not being edited by another client
             // Display the cell name in the editor.
             editorNameTextBox.Text = cellName;

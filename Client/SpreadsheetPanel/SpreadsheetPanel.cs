@@ -504,12 +504,8 @@ namespace SS
             {
                 // getting cell name
                 _ssp.GetCellName(col, row, out var cellName);
-                // if cell address is invalid or it's focused by another client, don't do anything
-                if (InvalidAddress(col, row) /*|| _ssp.focusedCells.TryGetValue(cellName, out var val)*/)
-                {
-                    return false;
-                }
-                if (_ssp.focusedCells.TryGetValue(cellName, out var val))
+                // if cell address is invalid 
+                if (InvalidAddress(col, row) )
                 {
                     return false;
                 }
@@ -741,11 +737,6 @@ namespace SS
 
                 // getting cell name
                 _ssp.GetCellName(y, x, out string name);
-                // don't do anything if cell is focused by another client
-                if (_ssp.focusedCells.TryGetValue(name, out var user))
-                {
-                    return;
-                }
 
                 _ssp.cellInputTextBox.Clear();
                 _ssp.cellInputTextBox.Focus();
