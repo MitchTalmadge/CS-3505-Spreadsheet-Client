@@ -33,6 +33,11 @@ namespace SS
         private Func<string, double> Lookup;
 
         /// <summary>
+        /// For formula cells, determines if the cell is involved in a circular dependency.
+        /// </summary>
+        public bool Circular { get; set; }
+
+        /// <summary>
         ///Sets cell's contents property to parameter, which
         ///can be a double, string, or Formula.
         /// </summary>
@@ -56,7 +61,7 @@ namespace SS
         {
             if (Contents is Formula formula)
             {
-                Value = formula.Evaluate(Lookup);
+                Value = Circular ? new FormulaError(true) : formula.Evaluate(Lookup);
             }
             else
             {

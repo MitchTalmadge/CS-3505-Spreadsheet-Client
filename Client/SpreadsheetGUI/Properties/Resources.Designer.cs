@@ -120,6 +120,15 @@ namespace SpreadsheetGUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #CIRCULAR_REF.
+        /// </summary>
+        internal static string SpreadsheetForm_Formula_Circular_Value {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_Formula_Circular_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #ERROR.
         /// </summary>
         internal static string SpreadsheetForm_Formula_Error_Value {

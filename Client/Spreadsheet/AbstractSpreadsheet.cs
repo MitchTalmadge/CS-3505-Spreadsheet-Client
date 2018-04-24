@@ -26,17 +26,32 @@
 ///// Jiahui Chen
 ///// u0980890
 ///// CS 3500 PS5
+
 using SpreadsheetUtilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SS
 {
+    /// <inheritdoc />
     /// <summary>
     /// Thrown to indicate that a change to a cell will cause a circular dependency.
     /// </summary>
     public class CircularException : Exception
     {
+        public ICollection<string> InvolvedCells { get; }
+    
+        public CircularException()
+        {
+
+        }
+
+        public CircularException(ICollection<string> involvedCells)
+        {
+            InvolvedCells = involvedCells;
+        }
+
     }
 
     /// <summary>
@@ -129,12 +144,12 @@ namespace SS
         /// Otherwise, returns the value (as opposed to the contents) of the named cell.  The return
         /// value should be either a string, a double, or a SpreadsheetUtilities.FormulaError.
         /// </summary>
-        public abstract object GetCellValue(String name);
+        public abstract object GetCellValue(string name);
 
         /// <summary>
         /// Enumerates the names of all the non-empty cells in the spreadsheet.
         /// </summary>
-        public abstract IEnumerable<String> GetNamesOfAllNonemptyCells();
+        public abstract IEnumerable<string> GetNamesOfAllNonemptyCells();
 
         /// <summary>
         /// If name is null or invalid, throws an InvalidNameException.
@@ -142,7 +157,7 @@ namespace SS
         /// Otherwise, returns the contents (as opposed to the value) of the named cell.  The return
         /// value should be either a string, a double, or a Formula.
         /// </summary>
-        public abstract object GetCellContents(String name);
+        public abstract object GetCellContents(string name);
 
         // ADDED FOR PS5
         /// <summary>
@@ -174,7 +189,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        public abstract ISet<String> SetContentsOfCell(String name, String content);
+        public abstract ISet<string> SetContentsOfCell(string name, string content);
 
         // MODIFIED PROTECTION FOR PS5
         /// <summary>
@@ -187,7 +202,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        protected abstract ISet<String> SetCellContents(String name, double number);
+        protected abstract ISet<string> SetCellContents(string name, double number);
 
         // MODIFIED PROTECTION FOR PS5
         /// <summary>
@@ -202,7 +217,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        protected abstract ISet<String> SetCellContents(String name, String text);
+        protected abstract ISet<string> SetCellContents(string name, string text);
 
         // MODIFIED PROTECTION FOR PS5
         /// <summary>
@@ -220,7 +235,7 @@ namespace SS
         /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
         /// set {A1, B1, C1} is returned.
         /// </summary>
-        protected abstract ISet<String> SetCellContents(String name, Formula formula);
+        protected abstract ISet<string> SetCellContents(string name, Formula formula);
 
         /// <summary>
         /// If name is null, throws an ArgumentNullException.
@@ -239,77 +254,67 @@ namespace SS
         /// D1 contains the formula B1 - C1
         /// The direct dependents of A1 are B1 and C1
         /// </summary>
-        protected abstract IEnumerable<String> GetDirectDependents(String name);
+        protected abstract IEnumerable<string> GetDirectDependents(string name);
 
         /// <summary>
-        /// Requires that names be non-null.  Also requires that if names contains s,
-        /// then s must be a valid non-null cell name.
-        /// 
-        /// If any of the named cells are involved in a circular dependency,
-        /// throws a CircularException.
-        /// 
-        /// Otherwise, returns an enumeration of the names of all cells whose values must
-        /// be recalculated, assuming that the contents of each cell named in names has changed.
-        /// The names are enumerated in the order in which the calculations should be done.  
-        /// 
-        /// For example, suppose that 
-        /// A1 contains 5
-        /// B1 contains 7
-        /// C1 contains the formula A1 + B1
-        /// D1 contains the formula A1 * C1
-        /// E1 contains 15
-        /// 
-        /// If A1 and B1 have changed, then A1, B1, and C1, and D1 must be recalculated,
-        /// and they must be recalculated in either the order A1,B1,C1,D1 or B1,A1,C1,D1.
-        /// The method will produce one of those enumerations.
-        /// 
-        /// Please note that this method depends on the abstract GetDirectDependents.
-        /// It won't work until GetDirectDependents is implemented correctly.
+        /// Returns an enumeration, without duplicates, of the names of all cells which this cell depends directly upon.
+        /// In other words, returns an enumeration, without duplicates, of the names of all cells that are contained in this
+        /// cell's formula.
         /// </summary>
-        protected IEnumerable<String> GetCellsToRecalculate(ISet<String> names)
-        {
-            LinkedList<String> changed = new LinkedList<String>();
-            HashSet<String> visited = new HashSet<String>();
-            foreach (String name in names)
-            {
-                if (!visited.Contains(name))
-                {
-                    Visit(name, name, visited, changed);
-                }
-            }
-            return changed;
-        }
+        protected abstract IEnumerable<string> GetDirectDependees(string name);
 
         /// <summary>
         /// A convenience method for invoking the other version of GetCellsToRecalculate
         /// with a singleton set of names.  See the other version for details.
         /// </summary>
-        protected IEnumerable<String> GetCellsToRecalculate(String name)
+        protected IEnumerable<string> GetCellsToRecalculate(string name)
         {
-            return GetCellsToRecalculate(new HashSet<String>() { name });
+            var visited = new List<string>();
+            var changed = new LinkedList<string>();
+
+            try
+            {
+                Visit(name, name, visited, changed);
+            }
+            catch (CircularException)
+            {
+                // Determine which cells made up the circular dependency.
+                for (var i = visited.Count - 1; i >= 1; i--)
+                {
+                    // If the next cell is not a dependee of the current cell, remove it and re-check.
+                    while (!GetDirectDependees(visited.ElementAt(i)).Contains(visited.ElementAt(i - 1)))
+                    {
+                        visited.RemoveAt(i - 1);
+                        i--;
+                    }
+                }
+
+                throw new CircularException(visited);
+            }
+
+            return changed;
         }
 
         /// <summary>
         /// A helper for the GetCellsToRecalculate method.
         /// </summary>
-        private void Visit(String start, String name, ISet<String> visited, LinkedList<String> changed)
+        private void Visit(string start, string name, ICollection<string> visited, LinkedList<string> changed)
         {
             visited.Add(name);
-            foreach (String n in GetDirectDependents(name))
+            foreach (var dependent in GetDirectDependents(name))
             {
-                if (n.Equals(start))
+                if (dependent.Equals(start))
                 {
-                    // change value of cell with name n to #REF 
-                    // as indicator of Circular Exception
-                    // then keep iterating and do it for all found n before
-                    // set a boolean circularExecption to true, at end of method, if true throw
+                    // Circular dependency detected.
                     throw new CircularException();
                 }
-                else if (!visited.Contains(n))
+
+                if (!visited.Contains(dependent))
                 {
-                    Visit(start, n, visited, changed);
+                    Visit(start, dependent, visited, changed);
                 }
             }
+
             changed.AddFirst(name);
         }
     }

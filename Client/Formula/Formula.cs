@@ -28,19 +28,20 @@ namespace SpreadsheetUtilities
     public struct FormulaError
     {
         /// <summary>
-        /// Constructs a FormulaError containing the explanatory reason.
+        /// True if this formula error is caused by a circular dependency.
         /// </summary>
-        /// <param name="reason"></param>
-        public FormulaError(String reason)
-            : this()
-        {
-            Reason = reason;
-        }
+        public bool Circular { get; }
 
         /// <summary>
-        ///  The reason why this FormulaError was created.
+        /// Constructs a FormulaError containing the explanatory reason.
         /// </summary>
-        public string Reason { get; private set; }
+        /// <param name="circular">Whether this is caused by a circular dependency or not.</param>
+        public FormulaError(bool circular = false)
+            : this()
+        {
+            Circular = circular;
+        }
+       
     }
 
     /// <summary>
@@ -322,11 +323,11 @@ namespace SpreadsheetUtilities
             }
             catch (DivideByZeroException)
             {
-                return new FormulaError("Can't divide by zero!");
+                return new FormulaError();
             }
             catch (ArgumentException)
             {
-                return new FormulaError("Lookup method did not find a value for a variable in the formula!");
+                return new FormulaError();
             }
         }
 
