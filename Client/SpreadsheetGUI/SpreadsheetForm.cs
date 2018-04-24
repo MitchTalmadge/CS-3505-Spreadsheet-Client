@@ -65,9 +65,9 @@ namespace SpreadsheetGUI
         /// </summary>
         private void DisconnectSpreadsheet()
         {
-            ClearSpreadsheet();
             // disconnecting from Server and cleanin up socket
             networkController.Disconnect();
+            ClearSpreadsheet();
         }
 
         /// <summary>

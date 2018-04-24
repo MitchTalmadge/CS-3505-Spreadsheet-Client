@@ -116,6 +116,7 @@ namespace Networking
         /// <param name="data">The data to send.</param>
         public static void Send(SocketState state, string data)
         {
+            //state.Socket.Blocking = true;
             var dataBytes = Encoding.UTF8.GetBytes(data);
 
             try
