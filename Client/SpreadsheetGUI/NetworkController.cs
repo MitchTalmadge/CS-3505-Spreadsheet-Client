@@ -415,6 +415,7 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         public void Disconnect(object sender, ElapsedEventArgs e)
         {
+            Debug.WriteLine("Client disconnecting because timer pings timed out");
             Disconnect();
         }
     }

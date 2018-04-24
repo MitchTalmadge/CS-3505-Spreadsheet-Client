@@ -217,6 +217,8 @@ namespace SpreadsheetGUI
         /// </summary>
         private void ClearSpreadsheetPanel()
         {
+            editorNameTextBox.Clear();
+            editorValueTextBox.Clear();
             spreadsheetPanel.SetSelection(0, 0);
             spreadsheetPanel.Clear();
         }
