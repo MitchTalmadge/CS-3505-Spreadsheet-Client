@@ -398,6 +398,8 @@ namespace SS
                     focusedCells.TryRemove(cell, out var u);
                 }
             }
+            // redrawing cells panel to reflect focus/unfocuses
+            drawingPanel.Redraw();
         }
 
         /// <summary>
