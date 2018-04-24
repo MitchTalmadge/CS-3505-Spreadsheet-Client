@@ -248,7 +248,6 @@ namespace SpreadsheetGUI
             Invoke(new MethodInvoker(() =>
             {
                 RefreshCellValues(_spreadsheet.SetContentsOfCell(cell, content));
-                spreadsheetPanel.cellInputTextBox.Text = _spreadsheet.GetCellContents(GetSelectedCellName()).ToString();
             }));
         }
 
