@@ -42,21 +42,21 @@ namespace SpreadsheetGUI
         {
             InitializeComponent();
 
-            networkController = new NetworkController(this.ConnectionFailed, this.ConnectionSucceded, this.RecieveDocumentsList,
-                this.CreateSpreadsheet, this.SpreadsheetPanel_Focus, this.SpreadsheetPanel_Unfocus, this.EditSpreadsheet, this.ClearSpreadsheet);
+            networkController = new NetworkController(ConnectionFailed, ConnectionSucceded, RecieveDocumentsList,
+                CreateSpreadsheet, SpreadsheetPanel_Focus, SpreadsheetPanel_Unfocus, EditSpreadsheet, ClearSpreadsheet);
 
             // this.spreadsheetPanel.ReadOnly(true);
-            this.documentNameDropdown.Enabled = false;
-            this.spreadsheetPanel.ReadOnly = true;
-            this.undoButton.Enabled = false;
-            this.revertButton.Enabled = false;
+            documentNameDropdown.Enabled = false;
+            spreadsheetPanel.ReadOnly = true;
+            undoButton.Enabled = false;
+            revertButton.Enabled = false;
 
             // Create a new, empty spreadsheet.
             _spreadsheet = null;
 
             // start connection handshake with server
-            this.connectedServerTextBox.Focus();
-            this.registerServerConnect_backgroundworker();
+            connectedServerTextBox.Focus();
+            registerServerConnect_backgroundworker();
         }
 
         /// <summary>
@@ -79,15 +79,16 @@ namespace SpreadsheetGUI
             {
                 ClearSpreadsheetPanel();
                 ClearCellEditor();
-                this.networkController._socketState?.Disconnect();
+                networkController._socketState?.Disconnect();
 
-                this.documentNameDropdown.Text = "";
-                this.documentNameDropdown.Items.Clear();
-                this.documentNameDropdown.Enabled = false;
-                this.connectedServerTextBox.Text = "";
-                this.connectedServerTextBox.ReadOnly = false;
-                this.Text = "Untitled - Spreadsheet 3505";
-                this.documentNameLabel.Text = "Document Name: ";
+                documentNameDropdown.Text = "";
+                documentNameDropdown.Items.Clear();
+                documentNameDropdown.Enabled = false;
+                spreadsheetPanel.cellInputTextBox.ReadOnly = true;
+                connectedServerTextBox.Text = "";
+                connectedServerTextBox.ReadOnly = false;
+                Text = "Untitled - Spreadsheet 3505";
+                documentNameLabel.Text = "Document Name: ";
 
                 _spreadsheet = null;
             }));
@@ -109,7 +110,7 @@ namespace SpreadsheetGUI
         {
             if (!((TextBox)sender).ReadOnly && e.KeyCode == Keys.Enter)
             {
-                this.connectedServerTextBox.ReadOnly = true;
+                connectedServerTextBox.ReadOnly = true;
                 serverConnect_backgroundworker.RunWorkerAsync(connectedServerTextBox.Text);
             }
         }
@@ -129,8 +130,8 @@ namespace SpreadsheetGUI
                     "New Document on " + connectedServerTextBox.Text);
                 if (input.Length > 0)
                 {
-                    this.Text = input + " - Spreadsheet 3505";
-                    this.documentNameLabel.Text = "Document Name: " + input;
+                    Text = input + " - Spreadsheet 3505";
+                    documentNameLabel.Text = "Document Name: " + input;
                     networkController.Load(input);
                 }
             }
@@ -138,14 +139,14 @@ namespace SpreadsheetGUI
             {
                 // sending load message to the Server, to retreive the selected spreadsheet
                 networkController.Load(documentNameDropdown.SelectedItem.ToString());
-                this.Text = documentNameDropdown.SelectedItem.ToString() + " - Spreadsheet 3505";
-                this.documentNameLabel.Text = "Document Name: " + documentNameDropdown.SelectedItem.ToString();
-                this.spreadsheetPanel.cellInputTextBox.Focus();
+                Text = documentNameDropdown.SelectedItem.ToString() + " - Spreadsheet 3505";
+                documentNameLabel.Text = "Document Name: " + documentNameDropdown.SelectedItem.ToString();
+                spreadsheetPanel.cellInputTextBox.Focus();
             }
 
-            this.documentNameDropdown.Enabled = false;
-            this.undoButton.Enabled = true;
-            this.revertButton.Enabled = true;
+            documentNameDropdown.Enabled = false;
+            undoButton.Enabled = true;
+            revertButton.Enabled = true;
         }
 
         private void registerServerConnect_backgroundworker()
@@ -162,7 +163,7 @@ namespace SpreadsheetGUI
                 {
                     MessageBox.Show(backgroundWorker_e.Error.Message + "\nTry again!", "Error!", MessageBoxButtons.OK,
                         MessageBoxIcon.Stop);
-                    this.connectedServerTextBox.ReadOnly = false;
+                    connectedServerTextBox.ReadOnly = false;
                 }
             };
         }
@@ -174,7 +175,7 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void undoButton_MouseClick(object sender, MouseEventArgs e)
         {
-            this.networkController.Undo();
+            networkController.Undo();
         }
 
         /// <summary>
@@ -184,8 +185,8 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void revertButton_Click(object sender, EventArgs e)
         {
-            this.spreadsheetPanel.GetSelection(out int column, out int row);
-            this.networkController.Revert(((char)(column + 'A')).ToString() + (row + 1).ToString());
+            spreadsheetPanel.GetSelection(out int column, out int row);
+            networkController.Revert(((char)(column + 'A')).ToString() + (row + 1).ToString());
         }
 
         ////////////////////////// Network Controller Delegates /////////////////////////////////////////
@@ -198,11 +199,11 @@ namespace SpreadsheetGUI
         {
             Invoke(new MethodInvoker(() =>
             {
-                this.connectedServerTextBox.ReadOnly = false;
+                connectedServerTextBox.ReadOnly = false;
                 MessageBox.Show(reason,
                     "Error!",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                if (reason.Contains("Unable to open")) this.documentNameDropdown.Enabled = true;
+                if (reason.Contains("Unable to open")) documentNameDropdown.Enabled = true;
             }));
         }
 
@@ -229,10 +230,10 @@ namespace SpreadsheetGUI
         {
             Invoke(new MethodInvoker(() =>
             {
-                this.documentNameDropdown.Enabled = true;
-                this.documentNameDropdown.Focus();
-                this.documentNameDropdown.Items.AddRange(documents);
-                this.documentNameDropdown.Items.Add("New...");
+                documentNameDropdown.Enabled = true;
+                documentNameDropdown.Focus();
+                documentNameDropdown.Items.AddRange(documents);
+                documentNameDropdown.Items.Add("New...");
             }));
         }
 
@@ -246,7 +247,7 @@ namespace SpreadsheetGUI
         {
             Invoke(new MethodInvoker(() =>
             {
-                RefreshCellValues(this._spreadsheet.SetContentsOfCell(cell, content));
+                RefreshCellValues(_spreadsheet.SetContentsOfCell(cell, content));
                 spreadsheetPanel.cellInputTextBox.Text = _spreadsheet.GetCellContents(GetSelectedCellName()).ToString();
             }));
         }
@@ -258,8 +259,8 @@ namespace SpreadsheetGUI
         {
             Invoke(new MethodInvoker(() =>
             {
-                this._spreadsheet = new Spreadsheet();
-                this.spreadsheetPanel.ReadOnly = false;
+                _spreadsheet = new Spreadsheet();
+                spreadsheetPanel.ReadOnly = false;
             }));
         }
     }
