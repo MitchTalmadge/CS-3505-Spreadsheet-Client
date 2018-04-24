@@ -242,7 +242,7 @@ namespace SS
         {
             if (formula == null)
             {
-                throw new ArgumentNullException("A cell can't have a null value!);");
+                throw new ArgumentNullException("A cell can't have a null value!");
             }
             if (name == null || !ValidVariable(name))
             {
@@ -279,9 +279,6 @@ namespace SS
                 dependencyGraph.ReplaceDependees(normalizedName, oldDependees);
                 throw;
             }
-
-            /// TODO: get and return all cells that need to be changed (from Server)
-            return new HashSet<string>();
         }
 
         /// <summary>
