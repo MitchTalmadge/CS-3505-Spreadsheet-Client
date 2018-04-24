@@ -102,6 +102,15 @@ namespace SpreadsheetGUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About Spreadsheet.
+        /// </summary>
+        internal static string SpreadsheetForm_About_Spreadsheet_Dialog_Caption {
+            get {
+                return ResourceManager.GetString("SpreadsheetForm_About_Spreadsheet_Dialog_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Spreadsheet files (*.sprd)|*.sprd|All files (*.*)|*.*.
         /// </summary>
         internal static string SpreadsheetForm_File_Extension_Filter {
@@ -111,7 +120,7 @@ namespace SpreadsheetGUI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to N O !.
+        ///   Looks up a localized string similar to #ERROR.
         /// </summary>
         internal static string SpreadsheetForm_Formula_Error_Value {
             get {

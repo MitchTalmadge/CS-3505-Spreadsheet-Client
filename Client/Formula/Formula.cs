@@ -83,7 +83,12 @@ namespace SpreadsheetUtilities
         ///
         /// Storing variables here makes GetVariables() much more efficient.
         /// </summary>
-        private string[] variables;
+        private string[] variables = new string[0];
+
+        /// <summary>
+        /// Determines if this formula is invalid, such as "=cat" which is not formatted correctly.
+        /// </summary>
+        private bool invalid;
 
         /// <summary>
         /// Creates a Formula from a string that consists of an infix expression written as
@@ -122,16 +127,19 @@ namespace SpreadsheetUtilities
         /// </summary>
         public Formula(String formula, Func<string, string> normalize, Func<string, bool> isValid)
         {
-            if (formula == null)
-            {
-                throw new FormulaFormatException("Input formula can't be null!");
-            }
             tokens = GetTokens(formula).ToArray();
             normalizer = normalize;
             validator = isValid;
 
-            //All syntax and delegate normalizing/validating is done in this method
-            ValidateSyntax(tokens);
+            try
+            {
+                //All syntax and delegate normalizing/validating is done in this method
+                ValidateSyntax(tokens);
+            }
+            catch (FormulaFormatException)
+            {
+                invalid = true;
+            }
         }
 
         /// <summary>
@@ -222,6 +230,9 @@ namespace SpreadsheetUtilities
         /// </summary>
         public object Evaluate(Func<string, double> lookup)
         {
+            if (invalid)
+                return new FormulaError();
+
             Stack<String> operatorStack = new Stack<String>();
             Stack<double> valueStack = new Stack<double>();
 
