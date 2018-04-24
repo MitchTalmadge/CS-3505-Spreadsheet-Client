@@ -69,6 +69,8 @@ namespace SS
         private const int COL_COUNT = 26;
         private const int ROW_COUNT = 99;
 
+        private static Color[] USER_COLORS = new Color[] { Color.FromArgb(100, 255, 179, 186), Color.FromArgb(100, 255, 223, 186), Color.FromArgb(100, 255, 255, 186), Color.FromArgb(100, 186, 255, 201), Color.FromArgb(100, 186, 225, 255) };
+
         /// <summary>
         /// Used for random color selection for Focus display.
         /// </summary>
@@ -78,15 +80,6 @@ namespace SS
         /// Tracks which cells are being edited, and maps them by name to the user editing them.
         /// </summary>
         public ConcurrentDictionary<string, string> focusedCells
-        {
-            private set;
-            get;
-        }
-
-        /// <summary>
-        /// Tracks which users have edited cells, and maps them to their fill color.
-        /// </summary>
-        public ConcurrentDictionary<string, Color> users
         {
             private set;
             get;
@@ -149,11 +142,10 @@ namespace SS
             cellInputTextBox.BringToFront();
 
             // initializing Random generator
-            rnd = new Random();
+            rnd = new Random(8008137);
 
             // initializing focused cells map and user map
             focusedCells = new ConcurrentDictionary<string, string>();
-            users = new ConcurrentDictionary<string, Color>();
         }
 
         /// <summary>
@@ -365,15 +357,6 @@ namespace SS
             // if the cell isn't in focusedCells, add it
             if (!focusedCells.TryGetValue(cell, out var u))
             {
-                // if user hasn't focused a cell before, assign a color and add to user map
-                if (!users.TryGetValue(user, out var color))
-                {
-                    // random color the textbox will be
-                    Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-
-                    users.TryAdd(user, randomColor);
-                }
-
                 focusedCells.TryAdd(cell, user);
             }
             // redrawing cells panel to reflect focus/unfocuses
@@ -387,16 +370,14 @@ namespace SS
         /// <param name="user"></param>
         public void Unfocus(string user)
         {
-            // if a user has been editing a cell, remove the cell
-            if (users.TryGetValue(user, out var color))
+          
+            // getting the cell to be unfocused (key corresponding to the value that is user in the focusedCells map)
+            string cell = focusedCells.FirstOrDefault(x => x.Value.Contains(user)).Key;
+            if (cell != null)
             {
-                // getting the cell to be unfocused (key corresponding to the value that is user in the focusedCells map)
-                string cell = focusedCells.FirstOrDefault(x => x.Value.Contains(user)).Key;
-                if (cell != null)
-                {
-                    focusedCells.TryRemove(cell, out var u);
-                }
+                focusedCells.TryRemove(cell, out var u);
             }
+           
             // redrawing cells panel to reflect focus/unfocuses
             drawingPanel.Redraw();
         }
@@ -665,9 +646,9 @@ namespace SS
                 // for all focused cells, fill them in with their user/editor's specific color
                 foreach (KeyValuePair<string, string> entry in _ssp.focusedCells)
                 {
-                    // getting the cell's user's color
-                    _ssp.users.TryGetValue(entry.Value, out var color);
-                    Brush brush = new SolidBrush(color);
+                    // Determine the user's color
+                    int uniqueUserId = Math.Abs(entry.Value.GetHashCode());
+                    Brush brush = new SolidBrush(USER_COLORS[uniqueUserId % 5]);
 
                     // getting cell's location based on name
                     GetColumnAndRowFromCellName(entry.Key, out int col, out int row);
