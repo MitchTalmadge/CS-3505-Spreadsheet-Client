@@ -512,14 +512,25 @@ namespace SS
                 _selectedCol = col;
                 _selectedRow = row;
 
-                // Moving cell cellInputTextBox to selected cell's location
-                // computing location the cell text input box should be placed at (top left corner point)
-                int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
-                int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
-                _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
-
+                UpdateCellInputTextBoxLocation();
+                
                 Invalidate();
                 return true;
+            }
+
+            /// <summary>
+            /// Updates the position of the cell input text box.
+            /// </summary>
+            private void UpdateCellInputTextBoxLocation()
+            {
+                int cell_x = ((_selectedCol - _firstColumn) * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
+                int cell_y = ((_selectedRow - _firstRow) * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
+                _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
+            }
+
+            private void UpdateCellFocusLocations()
+            {
+
             }
 
             public void GetSelection(out int col, out int row)
@@ -531,12 +542,14 @@ namespace SS
             public void HandleHScroll(Object sender, ScrollEventArgs args)
             {
                 _firstColumn = args.NewValue;
+                UpdateCellInputTextBoxLocation();
                 Invalidate();
             }
 
             public void HandleVScroll(Object sender, ScrollEventArgs args)
             {
                 _firstRow = args.NewValue;
+                UpdateCellInputTextBoxLocation();
                 Invalidate();
             }
 
@@ -659,24 +672,19 @@ namespace SS
                     // getting cell's location based on name
                     GetColumnAndRowFromCellName(entry.Key, out int col, out int row);
 
-                    // only draw if focused cell is in bound
-                    if ((col - _firstColumn < 0) && (col >= COL_COUNT) &&(row - _firstRow < 0) && (row >= ROW_COUNT))
-                    {
-                        return;
-                    }
-
-                        Region focusClip = new Region(new Rectangle((col * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
-                                      (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
+                        Region focusClip = new Region(new Rectangle(((col - _firstColumn) * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
+                                      ((row - _firstRow) * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
                                       DATA_COL_WIDTH,
                                       DATA_ROW_HEIGHT));
+
                     focusClip.Intersect(clip);
                     g.Clip = focusClip;
 
                     // Color in cell
                     g.FillRectangle(
                         brush,
-                        new Rectangle((col * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
-                                      (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
+                        new Rectangle(((col - _firstColumn) * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
+                                      ((row - _firstRow) * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
                                       DATA_COL_WIDTH,
                                       DATA_ROW_HEIGHT));
                 }
@@ -750,10 +758,7 @@ namespace SS
                     int cell_y = (y * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
                     _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
 
-                    if (_ssp.SelectionChanged != null)
-                    {
-                        _ssp.SelectionChanged(_ssp);
-                    }
+                    _ssp.SelectionChanged?.Invoke(_ssp);
                 }
 
                 Invalidate();
