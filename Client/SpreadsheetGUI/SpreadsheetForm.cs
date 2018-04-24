@@ -259,8 +259,9 @@ namespace SpreadsheetGUI
         {
             Invoke(new MethodInvoker(() =>
             {
-                _spreadsheet = new Spreadsheet();
-                spreadsheetPanel.ReadOnly = false;
+                this._spreadsheet = new Spreadsheet();
+                this.spreadsheetPanel.ReadOnly = false;
+                networkController.Focus(GetSelectedCellName());
             }));
         }
     }

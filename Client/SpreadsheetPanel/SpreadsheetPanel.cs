@@ -69,6 +69,8 @@ namespace SS
         private const int COL_COUNT = 26;
         private const int ROW_COUNT = 99;
 
+        private static Color[] USER_COLORS = new Color[] { Color.FromArgb(100, 255, 179, 186), Color.FromArgb(100, 255, 223, 186), Color.FromArgb(100, 255, 255, 186), Color.FromArgb(100, 186, 255, 201), Color.FromArgb(100, 186, 225, 255) };
+
         /// <summary>
         /// Used for random color selection for Focus display.
         /// </summary>
@@ -78,15 +80,6 @@ namespace SS
         /// Tracks which cells are being edited, and maps them by name to the user editing them.
         /// </summary>
         public ConcurrentDictionary<string, string> focusedCells
-        {
-            private set;
-            get;
-        }
-
-        /// <summary>
-        /// Tracks which users have edited cells, and maps them to their fill color.
-        /// </summary>
-        public ConcurrentDictionary<string, Color> users
         {
             private set;
             get;
@@ -143,17 +136,16 @@ namespace SS
             };
             // Event handler for when enter is pressed while cell is being edited
             cellInputTextBox.KeyPress += new KeyPressEventHandler(cellInputTextBox_KeyPress);
-            cellInputTextBox.KeyDown += new KeyEventHandler(cellInputTextBox_KeyDown);
+            cellInputTextBox.KeyDown += new KeyEventHandler(cellInputTextBox_KeyUp);
 
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
 
             // initializing Random generator
-            rnd = new Random();
+            rnd = new Random(8008137);
 
             // initializing focused cells map and user map
             focusedCells = new ConcurrentDictionary<string, string>();
-            users = new ConcurrentDictionary<string, Color>();
         }
 
         /// <summary>
@@ -299,9 +291,8 @@ namespace SS
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cellInputTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void cellInputTextBox_KeyUp(object sender, KeyEventArgs e)
         {
-            // NEED KEY UP FOR CONTINUOUS SENDS OF FOCUS
             if (e.KeyCode == Keys.Down)
             {
                 CellEditDown(this);
@@ -366,15 +357,6 @@ namespace SS
             // if the cell isn't in focusedCells, add it
             if (!focusedCells.TryGetValue(cell, out var u))
             {
-                // if user hasn't focused a cell before, assign a color and add to user map
-                if (!users.TryGetValue(user, out var color))
-                {
-                    // random color the textbox will be
-                    Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-
-                    users.TryAdd(user, randomColor);
-                }
-
                 focusedCells.TryAdd(cell, user);
             }
             // redrawing cells panel to reflect focus/unfocuses
@@ -388,16 +370,14 @@ namespace SS
         /// <param name="user"></param>
         public void Unfocus(string user)
         {
-            // if a user has been editing a cell, remove the cell
-            if (users.TryGetValue(user, out var color))
+          
+            // getting the cell to be unfocused (key corresponding to the value that is user in the focusedCells map)
+            string cell = focusedCells.FirstOrDefault(x => x.Value.Contains(user)).Key;
+            if (cell != null)
             {
-                // getting the cell to be unfocused (key corresponding to the value that is user in the focusedCells map)
-                string cell = focusedCells.FirstOrDefault(x => x.Value.Contains(user)).Key;
-                if (cell != null)
-                {
-                    focusedCells.TryRemove(cell, out var u);
-                }
+                focusedCells.TryRemove(cell, out var u);
             }
+           
             // redrawing cells panel to reflect focus/unfocuses
             drawingPanel.Redraw();
         }
@@ -505,22 +485,33 @@ namespace SS
             {
                 // getting cell name
                 _ssp.GetCellName(col, row, out var cellName);
-                // if cell address is invalid or it's focused by another client, don't do anything
-                if (InvalidAddress(col, row) || _ssp.focusedCells.TryGetValue(cellName, out var val))
+                // if cell address is invalid 
+                if (InvalidAddress(col, row) )
                 {
                     return false;
                 }
                 _selectedCol = col;
                 _selectedRow = row;
 
-                // Moving cell cellInputTextBox to selected cell's location
-                // computing location the cell text input box should be placed at (top left corner point)
-                int cell_x = (col * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
-                int cell_y = (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
-                _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
-
+                UpdateCellInputTextBoxLocation();
+                
                 Invalidate();
                 return true;
+            }
+
+            /// <summary>
+            /// Updates the position of the cell input text box.
+            /// </summary>
+            private void UpdateCellInputTextBoxLocation()
+            {
+                int cell_x = ((_selectedCol - _firstColumn) * DATA_COL_WIDTH) + LABEL_COL_WIDTH;
+                int cell_y = ((_selectedRow - _firstRow) * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
+                _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
+            }
+
+            private void UpdateCellFocusLocations()
+            {
+
             }
 
             public void GetSelection(out int col, out int row)
@@ -532,12 +523,14 @@ namespace SS
             public void HandleHScroll(Object sender, ScrollEventArgs args)
             {
                 _firstColumn = args.NewValue;
+                UpdateCellInputTextBoxLocation();
                 Invalidate();
             }
 
             public void HandleVScroll(Object sender, ScrollEventArgs args)
             {
                 _firstRow = args.NewValue;
+                UpdateCellInputTextBoxLocation();
                 Invalidate();
             }
 
@@ -653,31 +646,26 @@ namespace SS
                 // for all focused cells, fill them in with their user/editor's specific color
                 foreach (KeyValuePair<string, string> entry in _ssp.focusedCells)
                 {
-                    // getting the cell's user's color
-                    _ssp.users.TryGetValue(entry.Value, out var color);
-                    Brush brush = new SolidBrush(color);
+                    // Determine the user's color
+                    int uniqueUserId = Math.Abs(entry.Value.GetHashCode());
+                    Brush brush = new SolidBrush(USER_COLORS[uniqueUserId % 5]);
 
                     // getting cell's location based on name
                     GetColumnAndRowFromCellName(entry.Key, out int col, out int row);
 
-                    // only draw if focused cell is in bound
-                    if ((col - _firstColumn < 0) && (col >= COL_COUNT) &&(row - _firstRow < 0) && (row >= ROW_COUNT))
-                    {
-                        return;
-                    }
-
-                        Region focusClip = new Region(new Rectangle((col * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
-                                      (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
+                        Region focusClip = new Region(new Rectangle(((col - _firstColumn) * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
+                                      ((row - _firstRow) * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
                                       DATA_COL_WIDTH,
                                       DATA_ROW_HEIGHT));
+
                     focusClip.Intersect(clip);
                     g.Clip = focusClip;
 
                     // Color in cell
                     g.FillRectangle(
                         brush,
-                        new Rectangle((col * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
-                                      (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
+                        new Rectangle(((col - _firstColumn) * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
+                                      ((row - _firstRow) * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
                                       DATA_COL_WIDTH,
                                       DATA_ROW_HEIGHT));
                 }
@@ -738,11 +726,6 @@ namespace SS
 
                 // getting cell name
                 _ssp.GetCellName(y, x, out string name);
-                // don't do anything if cell is focused by another client
-                if (_ssp.focusedCells.TryGetValue(name, out var user))
-                {
-                    return;
-                }
 
                 _ssp.cellInputTextBox.Clear();
                 _ssp.cellInputTextBox.Focus();
@@ -756,10 +739,7 @@ namespace SS
                     int cell_y = (y * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT;
                     _ssp.cellInputTextBox.Location = new Point(cell_x, cell_y);
 
-                    if (_ssp.SelectionChanged != null)
-                    {
-                        _ssp.SelectionChanged(_ssp);
-                    }
+                    _ssp.SelectionChanged?.Invoke(_ssp);
                 }
 
                 Invalidate();
