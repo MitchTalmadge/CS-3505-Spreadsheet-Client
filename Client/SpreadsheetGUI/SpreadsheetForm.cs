@@ -260,6 +260,7 @@ namespace SpreadsheetGUI
             {
                 this._spreadsheet = new Spreadsheet();
                 this.spreadsheetPanel.ReadOnly = false;
+                networkController.Focus(GetSelectedCellName());
             }));
         }
     }
