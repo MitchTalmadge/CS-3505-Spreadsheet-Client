@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<spreadsheet version ="default">
-  <cell>
-    <name>a1</name>
-    <contents>= 5 * 8 - 9) </contents>
-  </cell>
-</spreadsheet>
