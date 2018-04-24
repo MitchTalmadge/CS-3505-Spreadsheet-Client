@@ -235,7 +235,7 @@ namespace SpreadsheetGUI
         {
             System.Diagnostics.Debug.WriteLine(data, "data recieved from from server ");
             // If a disconnect message is received, Disconnect the client
-            if (data.Equals(DISCONNECT)) Disconnect();
+            if (data.Equals(DISCONNECT)) DisconnectSpreadsheetCallback();
 
             // If a ping is received from the Server, send a ping_response back
             if (data.Equals(PING))
@@ -382,6 +382,7 @@ namespace SpreadsheetGUI
         /// </summary>
         public void Disconnect()
         {
+            Debug.WriteLine("disconnecting");
             // Sending disconnect message to the server, if state isn't null
             if (_socketState != null)
             {

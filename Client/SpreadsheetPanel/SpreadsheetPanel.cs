@@ -602,14 +602,6 @@ namespace SS
                     DrawRowLabel(e.Graphics, y, f);
                 }
 
-                //Brush brush1 = new SolidBrush(Color.AliceBlue);
-                //e.Graphics.FillRectangle(
-                //        brush1,
-                //        new Rectangle(80,
-                //                      80,
-                //                      DATA_COL_WIDTH,
-                //                      DATA_ROW_HEIGHT));
-
                 // Highlight the selection, if it is visible
                 if ((_selectedCol - _firstColumn >= 0) && (_selectedRow - _firstRow >= 0))
                 {
@@ -620,9 +612,6 @@ namespace SS
                                       DATA_COL_WIDTH - 2,
                                       DATA_ROW_HEIGHT - 2));
                 }
-
-                // Fill in all focused cells
-                FillFocusedCells(e.Graphics, clip);
 
                 //// Draw the text
                 foreach (KeyValuePair<Address, String> address in _values)
@@ -648,6 +637,9 @@ namespace SS
                             LABEL_ROW_HEIGHT + y * DATA_ROW_HEIGHT + (DATA_ROW_HEIGHT - height) / 2);
                     }
                 }
+
+                // Fill in all focused cells
+                FillFocusedCells(e.Graphics, clip);
             }
 
             /// <summary>
