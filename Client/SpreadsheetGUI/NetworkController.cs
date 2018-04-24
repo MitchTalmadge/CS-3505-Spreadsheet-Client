@@ -230,22 +230,28 @@ namespace SpreadsheetGUI
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
-            String[] commands = data.Split((char)3);
+            var commands = data.Split(Convert.ToChar(END_OF_TEXT));
 
-            foreach ( string message in commands)
+            foreach (var message in commands)
             {
-                System.Diagnostics.Debug.WriteLine(data, "data recieved from from server ");
+                if (message.Trim() == "")
+                    continue;
+
+                // Add back EOT after being split.
+                var eotMessage = message + END_OF_TEXT;
+
+                Debug.WriteLine(eotMessage, "data recieved from from server ");
                 // If a disconnect message is received, Disconnect the client
-                if (message.Equals(DISCONNECT)) DisconnectSpreadsheetCallback();
+                if (eotMessage.Equals(DISCONNECT)) DisconnectSpreadsheetCallback?.Invoke();
 
                 // If a ping is received from the Server, send a ping_response back
-                if (message.Equals(PING))
+                if (eotMessage.Equals(PING))
                 {
                     AbstractNetworking.Send(_socketState, PING_RESPONSE);
                 }
 
                 // If a ping response is received from the Server, the Server ping response timer is reset
-                if (message.Equals(PING_RESPONSE))
+                if (eotMessage.Equals(PING_RESPONSE))
                 {
                     // timer ensuring Server is still up resets, Server has another 60 seconds until
                     // another ping_response is necessary
@@ -253,15 +259,15 @@ namespace SpreadsheetGUI
                 }
 
                 // We know the first packet has been handled once the world is not null.
-                if (message.Equals(FILE_LOAD_ERROR) || message.StartsWith(CONNECTION_ACCEPTED_PREFIX))
-                    ParseFirstPacket(message);
+                if (eotMessage.Equals(FILE_LOAD_ERROR) || eotMessage.StartsWith(CONNECTION_ACCEPTED_PREFIX))
+                    ParseFirstPacket(eotMessage);
                 else
                 {
                     // full_state is only received upon initial loading of spreadsheet
                     // and the ping loop begins after the full_state message is received
-                    if (message.StartsWith(FULL_STATE_PREFIX))
+                    if (eotMessage.StartsWith(FULL_STATE_PREFIX))
                     {
-                        FullStateDocumentDocument(message);
+                        FullStateDocumentDocument(eotMessage);
 
                     // if serverTimer reaches 60s, disconnect from the Server
                     serverTimer = new Timer(60000)
@@ -279,12 +285,12 @@ namespace SpreadsheetGUI
                         pingTimer.Start();
                         serverTimer.Start();
                     }
-                    else if (message.StartsWith(CHANGE_PREFIX))
-                        ChangeDocument(message);
-                    else if (message.StartsWith(FOCUS_PREFIX))
-                        Focus_Cell(message, FOCUS_PREFIX);
-                    else if (message.StartsWith(UNFOCUS_PREFIX))
-                        Unfocus_Cell(message, UNFOCUS_PREFIX);
+                    else if (eotMessage.StartsWith(CHANGE_PREFIX))
+                        ChangeDocument(eotMessage);
+                    else if (eotMessage.StartsWith(FOCUS_PREFIX))
+                        Focus_Cell(eotMessage, FOCUS_PREFIX);
+                    else if (eotMessage.StartsWith(UNFOCUS_PREFIX))
+                        Unfocus_Cell(eotMessage, UNFOCUS_PREFIX);
                 }
             
             }

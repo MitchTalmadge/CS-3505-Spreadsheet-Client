@@ -68,10 +68,7 @@ namespace SpreadsheetGUI
         /// <param name="cell"></param>
         private void SpreadsheetPanel_Focus(string cell, string user)
         {
-            if (cell.Equals(GetSelectedCellName()))
-            {
-                return;
-            }
+          
             spreadsheetPanel.Focus(cell, user);
         }
 
