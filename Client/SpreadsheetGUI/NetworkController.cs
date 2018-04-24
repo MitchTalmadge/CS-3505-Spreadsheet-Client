@@ -242,7 +242,12 @@ namespace SpreadsheetGUI
 
                 Debug.WriteLine(eotMessage, "data recieved from from server ");
                 // If a disconnect message is received, Disconnect the client
-                if (eotMessage.Equals(DISCONNECT)) DisconnectSpreadsheetCallback?.Invoke();
+                if (eotMessage.Equals(DISCONNECT))
+                {
+                    pingTimer.Stop();
+                    serverTimer.Stop();
+                    DisconnectSpreadsheetCallback?.Invoke();
+                }
 
                 // If a ping is received from the Server, send a ping_response back
                 if (eotMessage.Equals(PING))
@@ -399,11 +404,8 @@ namespace SpreadsheetGUI
                 AbstractNetworking.Send(_socketState, DISCONNECT);
             }
             // stopping timers
-            if (pingTimer != null && serverTimer != null)
-            {
-                pingTimer.Stop();
-                serverTimer.Stop();
-            }
+            pingTimer?.Stop();
+            serverTimer?.Stop();
 
             DisconnectSpreadsheetCallback?.Invoke();
         }
