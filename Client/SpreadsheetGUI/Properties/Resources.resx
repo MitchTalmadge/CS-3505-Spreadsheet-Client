@@ -168,4 +168,7 @@
   <data name="SpreadsheetForm_OpenSpreadsheet_LoadFailTitle" xml:space="preserve">
     <value>Cannot load Spreadsheet</value>
   </data>
+  <data name="SpreadsheetForm_Formula_Circular_Value" xml:space="preserve">
+    <value>#CIRCULAR_REF</value>
+  </data>
 </root>

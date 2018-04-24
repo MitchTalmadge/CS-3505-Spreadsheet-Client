@@ -181,10 +181,11 @@ namespace SS
         /// <param name="recalculatedCells"></param>
         private void RecalculateCellValues(IEnumerable<string> recalculatedCells)
         {
-            foreach (string cellName in recalculatedCells)
+            foreach (var cellName in recalculatedCells)
             {
-                cells.TryGetValue(cellName, out Cell recalcCell);
-                recalcCell.Recalculate();
+                cells.TryGetValue(cellName, out var cell);
+
+                cell?.Recalculate();
             }
         }
 
@@ -248,36 +249,37 @@ namespace SS
             {
                 throw new InvalidNameException();
             }
-            string normalizedName = Normalize(name);
 
-            //saving old dependees and contents in case a circular dependency is found
-            List<string> oldDependees = new List<string>(dependencyGraph.GetDependees(normalizedName));
-            cells.TryGetValue(normalizedName, out var oldContents);
+            var normalizedName = Normalize(name);
 
-            //dependees are replaced with dependees (variables) of new formula
+            // Dependees are replaced with dependees (variables) of new formula
             dependencyGraph.ReplaceDependees(normalizedName, formula.GetVariables());
             cells[normalizedName] = new Cell(normalizedName, formula, LookupCellValue);
 
+            // Recalculating necessary cell values
             try
             {
-                //recalculating necessary cell values
-                List<string> recalculatedCells = new List<string>(GetCellsToRecalculate(normalizedName));
+                var recalculatedCells = new List<string>(GetCellsToRecalculate(normalizedName));
+
+                foreach (var cell in recalculatedCells)
+                {
+                    cells[cell].Circular = false;
+                }
+
                 RecalculateCellValues(recalculatedCells);
-                //successful return means spreadsheet is changed
+                
                 return new HashSet<string>(recalculatedCells);
             }
-            catch (CircularException)
+            catch (CircularException e)
             {
-                if (oldContents != null)
+                foreach (var cell in e.InvolvedCells)
                 {
-                    cells[normalizedName] = new Cell(normalizedName, oldContents.Contents, LookupCellValue);
+                    cells[cell].Circular = true;
                 }
-                else //if the cell was empty before setting to this invalid formula, leave it empty
-                {
-                    cells.Remove(normalizedName);
-                }
-                dependencyGraph.ReplaceDependees(normalizedName, oldDependees);
-                throw;
+
+                RecalculateCellValues(e.InvolvedCells);
+
+                return new HashSet<string>(e.InvolvedCells);
             }
         }
 
@@ -311,6 +313,20 @@ namespace SS
             //dependency graph's get dependents enumerates all unique dependents
             //and returns an empty list if the cell does not have dependents
             return dependencyGraph.GetDependents(Normalize(name));
+        }
+
+        protected override IEnumerable<string> GetDirectDependees(string name)
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (!ValidVariable(name))
+            {
+                throw new InvalidNameException();
+            }
+
+            return dependencyGraph.GetDependees(Normalize(name));
         }
 
         /// <summary>

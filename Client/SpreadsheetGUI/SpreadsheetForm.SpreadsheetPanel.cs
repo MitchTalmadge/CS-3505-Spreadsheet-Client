@@ -49,6 +49,7 @@ namespace SpreadsheetGUI
             {
                 contents = "=" + contents;
             }
+
             spreadsheetPanel.cellInputTextBox.Text = contents.ToString();
 
             // Display the cell value in the editor.
@@ -57,6 +58,7 @@ namespace SpreadsheetGUI
             {
                 value = Resources.SpreadsheetForm_Formula_Error_Value;
             }
+
             editorValueTextBox.Text = value.ToString();
         }
 
@@ -91,7 +93,8 @@ namespace SpreadsheetGUI
                 networkController.Edit(GetSelectedCellName(), spreadsheetPanel.cellInputTextBox.Text);
 
                 // Set the contents of the cell, and update the values of any dependents.
-                RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(), spreadsheetPanel.cellInputTextBox.Text));
+                RefreshCellValues(_spreadsheet.SetContentsOfCell(GetSelectedCellName(),
+                    spreadsheetPanel.cellInputTextBox.Text));
 
                 // Moving cell selection down if cell edit is valid
                 spreadsheetPanel.MoveSelectionDown();
@@ -185,7 +188,7 @@ namespace SpreadsheetGUI
         private string GetSelectedCellName()
         {
             spreadsheetPanel.GetSelection(out var col, out var row);
-            var cellName = (char)('A' + col) + (++row).ToString();
+            var cellName = (char) ('A' + col) + (++row).ToString();
 
             return cellName;
         }
@@ -202,7 +205,9 @@ namespace SpreadsheetGUI
                 var value = _spreadsheet.GetCellValue(cell);
                 if (value is FormulaError)
                 {
-                    value = Resources.SpreadsheetForm_Formula_Error_Value;
+                    value = ((FormulaError) value).Circular
+                        ? Resources.SpreadsheetForm_Formula_Circular_Value
+                        : Resources.SpreadsheetForm_Formula_Error_Value;
                 }
 
                 // Update the value in the spreadsheet panel.
@@ -225,10 +230,7 @@ namespace SpreadsheetGUI
         /// </summary>
         private void ClearCellEditor()
         {
-            Invoke(new MethodInvoker(() =>
-            {
-                spreadsheetPanel.cellInputTextBox.Clear();
-            }));
+            Invoke(new MethodInvoker(() => { spreadsheetPanel.cellInputTextBox.Clear(); }));
         }
     }
 }
