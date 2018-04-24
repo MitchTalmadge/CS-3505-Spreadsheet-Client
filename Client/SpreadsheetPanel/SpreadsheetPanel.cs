@@ -143,7 +143,7 @@ namespace SS
             };
             // Event handler for when enter is pressed while cell is being edited
             cellInputTextBox.KeyPress += new KeyPressEventHandler(cellInputTextBox_KeyPress);
-            cellInputTextBox.KeyDown += new KeyEventHandler(cellInputTextBox_KeyDown);
+            cellInputTextBox.KeyDown += new KeyEventHandler(cellInputTextBox_KeyUp);
 
             Controls.Add(cellInputTextBox);
             cellInputTextBox.BringToFront();
@@ -299,9 +299,8 @@ namespace SS
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cellInputTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void cellInputTextBox_KeyUp(object sender, KeyEventArgs e)
         {
-            // NEED KEY UP FOR CONTINUOUS SENDS OF FOCUS
             if (e.KeyCode == Keys.Down)
             {
                 CellEditDown(this);
@@ -506,7 +505,11 @@ namespace SS
                 // getting cell name
                 _ssp.GetCellName(col, row, out var cellName);
                 // if cell address is invalid or it's focused by another client, don't do anything
-                if (InvalidAddress(col, row) || _ssp.focusedCells.TryGetValue(cellName, out var val))
+                if (InvalidAddress(col, row) /*|| _ssp.focusedCells.TryGetValue(cellName, out var val)*/)
+                {
+                    return false;
+                }
+                if (_ssp.focusedCells.TryGetValue(cellName, out var val))
                 {
                     return false;
                 }
