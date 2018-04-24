@@ -301,6 +301,7 @@ namespace SS
         /// <param name="e"></param>
         private void cellInputTextBox_KeyDown(object sender, KeyEventArgs e)
         {
+            // NEED KEY UP FOR CONTINUOUS SENDS OF FOCUS
             if (e.KeyCode == Keys.Down)
             {
                 CellEditDown(this);
@@ -657,7 +658,13 @@ namespace SS
                     // getting cell's location based on name
                     GetColumnAndRowFromCellName(entry.Key, out int col, out int row);
 
-                    Region focusClip = new Region(new Rectangle((col * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
+                    // only draw if focused cell is in bound
+                    if ((col - _firstColumn < 0) && (col >= COL_COUNT) &&(row - _firstRow < 0) && (row >= ROW_COUNT))
+                    {
+                        return;
+                    }
+
+                        Region focusClip = new Region(new Rectangle((col * DATA_COL_WIDTH) + LABEL_COL_WIDTH,
                                       (row * DATA_ROW_HEIGHT) + LABEL_ROW_HEIGHT,
                                       DATA_COL_WIDTH,
                                       DATA_ROW_HEIGHT));

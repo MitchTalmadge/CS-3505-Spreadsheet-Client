@@ -233,56 +233,62 @@ namespace SpreadsheetGUI
         /// <param name="data">The data that was received.</param>
         public void DataReceived(string data)
         {
-            System.Diagnostics.Debug.WriteLine(data, "data recieved from from server ");
-            // If a disconnect message is received, Disconnect the client
-            if (data.Equals(DISCONNECT)) DisconnectSpreadsheetCallback();
+            String[] commands = data.Split((char)3);
 
-            // If a ping is received from the Server, send a ping_response back
-            if (data.Equals(PING))
+            foreach ( string message in commands)
             {
-                AbstractNetworking.Send(_socketState, PING_RESPONSE);
-            }
+                System.Diagnostics.Debug.WriteLine(data, "data recieved from from server ");
+                // If a disconnect message is received, Disconnect the client
+                if (message.Equals(DISCONNECT)) DisconnectSpreadsheetCallback();
 
-            // If a ping response is received from the Server, the Server ping response timer is reset
-            if (data.Equals(PING_RESPONSE))
-            {
-                // timer ensuring Server is still up resets, Server has another 60 seconds until
-                // another ping_response is necessary
-                serverTimer.Stop(); serverTimer.Start();
-            }
-
-            // We know the first packet has been handled once the world is not null.
-            if (data.Equals(FILE_LOAD_ERROR) || data.StartsWith(CONNECTION_ACCEPTED_PREFIX))
-                ParseFirstPacket(data);
-            else
-            {
-                // full_state is only received upon initial loading of spreadsheet
-                // and the ping loop begins after the full_state message is received
-                if (data.StartsWith(FULL_STATE_PREFIX))
+                // If a ping is received from the Server, send a ping_response back
+                if (message.Equals(PING))
                 {
-                    FullStateDocumentDocument(data);
-
-                    // if serverTimer reaches 60s, disconnect from the Server
-                    serverTimer = new Timer(60000);
-                    serverTimer.Enabled = true;
-                    serverTimer.AutoReset = false;
-                    serverTimer.Elapsed += new System.Timers.ElapsedEventHandler(Disconnect);
-
-                    // every 10 seconds (10000 milliseconds) another ping is sent to the Server
-                    pingTimer = new Timer(10000);
-                    pingTimer.Enabled = true;
-                    pingTimer.Elapsed += new System.Timers.ElapsedEventHandler(Ping);
-
-                    // ping loop begins as both timers are started
-                    pingTimer.Start();
-                    serverTimer.Start();
+                    AbstractNetworking.Send(_socketState, PING_RESPONSE);
                 }
-                else if (data.StartsWith(CHANGE_PREFIX))
-                    ChangeDocument(data);
-                else if (data.StartsWith(FOCUS_PREFIX))
-                    Focus_Cell(data, FOCUS_PREFIX);
-                else if (data.StartsWith(UNFOCUS_PREFIX))
-                    Unfocus_Cell(data, UNFOCUS_PREFIX);
+
+                // If a ping response is received from the Server, the Server ping response timer is reset
+                if (message.Equals(PING_RESPONSE))
+                {
+                    // timer ensuring Server is still up resets, Server has another 60 seconds until
+                    // another ping_response is necessary
+                    serverTimer.Stop(); serverTimer.Start();
+                }
+
+                // We know the first packet has been handled once the world is not null.
+                if (message.Equals(FILE_LOAD_ERROR) || message.StartsWith(CONNECTION_ACCEPTED_PREFIX))
+                    ParseFirstPacket(message);
+                else
+                {
+                    // full_state is only received upon initial loading of spreadsheet
+                    // and the ping loop begins after the full_state message is received
+                    if (message.StartsWith(FULL_STATE_PREFIX))
+                    {
+                        FullStateDocumentDocument(message);
+
+                        // if serverTimer reaches 60s, disconnect from the Server
+                        serverTimer = new Timer(60000);
+                        serverTimer.Enabled = true;
+                        serverTimer.AutoReset = false;
+                        serverTimer.Elapsed += new System.Timers.ElapsedEventHandler(Disconnect);
+
+                        // every 10 seconds (10000 milliseconds) another ping is sent to the Server
+                        pingTimer = new Timer(10000);
+                        pingTimer.Enabled = true;
+                        pingTimer.Elapsed += new System.Timers.ElapsedEventHandler(Ping);
+
+                        // ping loop begins as both timers are started
+                        pingTimer.Start();
+                        serverTimer.Start();
+                    }
+                    else if (message.StartsWith(CHANGE_PREFIX))
+                        ChangeDocument(message);
+                    else if (message.StartsWith(FOCUS_PREFIX))
+                        Focus_Cell(message, FOCUS_PREFIX);
+                    else if (message.StartsWith(UNFOCUS_PREFIX))
+                        Unfocus_Cell(message, UNFOCUS_PREFIX);
+                }
+            
             }
 
             // Get new data.
